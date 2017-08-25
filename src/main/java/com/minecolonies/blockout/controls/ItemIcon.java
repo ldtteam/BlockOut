@@ -32,6 +32,7 @@ public class ItemIcon extends Pane
 
     /**
      * Constructor instantiating the itemIcon with specified parameters.
+     *
      * @param params the parameters.
      */
     public ItemIcon(final PaneParams params)
@@ -69,7 +70,7 @@ public class ItemIcon extends Pane
     /**
      * Modified from GuiContainer
      */
-    private void drawItemStack(ItemStack stack, int x, int y)
+    private void drawItemStack(final ItemStack stack, final int x, final int y)
     {
         final RenderItem itemRender = mc.getRenderItem();
 
@@ -79,7 +80,7 @@ public class ItemIcon extends Pane
         FontRenderer font = stack.getItem().getFontRenderer(stack);
         if (font == null)
         {
-            font = mc.fontRendererObj;
+            font = mc.fontRenderer;
         }
         itemRender.renderItemAndEffectIntoGUI(stack, x, y);
         itemRender.renderItemOverlayIntoGUI(font, stack, x, y, null);
