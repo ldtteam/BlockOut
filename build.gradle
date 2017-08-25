@@ -86,11 +86,7 @@ dependencies {
 group = "com.minecolonies.blockout"
 archivesBaseName = "blockout"
 
-if (project.hasProperty("teamcity")) {
-    config.buildnumber = project.teamcity["teamcity.build.id"]
-}
-
-version = "${config.minecraft_version}-${config.blockout_major}.${config.blockout_patch}.${config.buildnumber} - $System.getenv()['BUILD_NUMBER']"
+version = config.minecraft_version.toString() + "-" + config.mod_version.toString() + "-" + System.getenv().BUILDID.toString()
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
