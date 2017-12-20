@@ -96,7 +96,7 @@ minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "run"
 	
-	mappings = "${config.blockout_mappings}"
+	mappings = config.blockout_mappings
 
     replaceIn "lib/Constants.java"
     replace "@VERSION@", project.version
