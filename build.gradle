@@ -186,7 +186,7 @@ task("createChangelog") {
     group = 'upload'
 
     doLast {
-        def teamCityURL = "http://teamcity.minecolonies.com/"
+        def teamCityURL = "https://teamcity.minecolonies.com/"
         def file = new FileOutputStream("build/changelog.md")
         def out = new BufferedOutputStream(file)
         def changesXML = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/changes?locator=build:(id:" + teamcity["teamcity.build.id"] + ")")
@@ -194,7 +194,7 @@ task("createChangelog") {
         def changes = changesXML.change
         println("createChangelog: Identified " + changes.size() + " changes to be written into the changelog.")
 
-        out << "# Blockout Changelog \n"
+        out << "# BlockOut Changelog \n"
         out << "## Version: _" + version + "_ \n"
 
         if (changes.size() > 0) {
