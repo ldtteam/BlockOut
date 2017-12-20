@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -125,7 +124,6 @@ public final class Loader
      * @param parent parent view.
      * @return the new pane.
      */
-    @SideOnly(Side.CLIENT)
     public static Pane createFromPaneParams(final PaneParams params, final View parent)
     {
         if ("layout".equalsIgnoreCase(params.getType()))
@@ -157,7 +155,6 @@ public final class Loader
      * @param doc    xml document.
      * @param parent parent view.
      */
-    @SideOnly(Side.CLIENT)
     private static void createFromXML(final Document doc, final View parent)
     {
         doc.getDocumentElement().normalize();
@@ -180,7 +177,6 @@ public final class Loader
      * @param input  xml file.
      * @param parent parent view.
      */
-    @SideOnly(Side.CLIENT)
     private static void createFromXML(final InputSource input, final View parent)
     {
         try
@@ -203,7 +199,6 @@ public final class Loader
      * @param xmlString the xml data.
      * @param parent    parent view.
      */
-    @SideOnly(Side.CLIENT)
     public static void createFromXML(final String xmlString, final View parent)
     {
         createFromXML(new InputSource(new StringReader(xmlString)), parent);
@@ -215,7 +210,6 @@ public final class Loader
      * @param filename the xml file.
      * @param parent   parent view.
      */
-    @SideOnly(Side.CLIENT)
     public static void createFromXMLFile(final String filename, final View parent)
     {
         createFromXMLFile(new ResourceLocation(filename), parent);
@@ -227,7 +221,6 @@ public final class Loader
      * @param resource xml as a {@link ResourceLocation}.
      * @param parent   parent view.
      */
-    @SideOnly(Side.CLIENT)
     public static void createFromXMLFile(final ResourceLocation resource, final View parent)
     {
         createFromXML(new InputSource(createInputStream(resource)), parent);
@@ -239,7 +232,6 @@ public final class Loader
      * @param res ResourceLocation to get an InputStream from.
      * @return the InputStream created from the ResourceLocation.
      */
-    @SideOnly(Side.CLIENT)
     private static InputStream createInputStream(final ResourceLocation res)
     {
         try

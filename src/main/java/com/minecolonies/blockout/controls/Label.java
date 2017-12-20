@@ -42,7 +42,7 @@ public class Label extends AbstractTextElement
 
         if (width == 0)
         {
-            width = Math.min(mc.fontRenderer.getStringWidth(labelText), params.getParentWidth());
+            width = Math.min(mc.fontRendererObj.getStringWidth(labelText), params.getParentWidth());
         }
     }
 
@@ -103,27 +103,25 @@ public class Label extends AbstractTextElement
         GlStateManager.translate((double) (getX() + offsetX), (double) (getY() + offsetY), 0);
         GlStateManager.scale((float) scale, (float) scale, (float) scale);
         mc.renderEngine.bindTexture(TEXTURE);
-        mc.fontRenderer.drawString(labelText, 0, 0, color, shadow);
+        mc.fontRendererObj.drawString(labelText, 0, 0, color, shadow);
         GlStateManager.popMatrix();
     }
 
     /**
      * Getter of the width of the string.
-     *
      * @return the width.
      */
     public int getStringWidth()
     {
-        return (int) (mc.fontRenderer.getStringWidth(labelText) * scale);
+        return (int) (mc.fontRendererObj.getStringWidth(labelText) * scale);
     }
 
     /**
      * Getter of the text height.
-     *
      * @return the text height.
      */
     public int getTextHeight()
     {
-        return (int) (mc.fontRenderer.FONT_HEIGHT * scale);
+        return (int) (mc.fontRendererObj.FONT_HEIGHT * scale);
     }
 }

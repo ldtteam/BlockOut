@@ -4,8 +4,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -33,7 +31,6 @@ public final class Render
      * @param y2    upper y
      * @param color color
      */
-    @SideOnly(Side.CLIENT)
     public static void drawOutlineRect(final int x1, final int y1, final int x2, final int y2, final int color)
     {
         drawOutlineRect(x1, y1, x2, y2, 1.0F, color);
@@ -49,7 +46,6 @@ public final class Render
      * @param lineWidth line thickness, default of 1.0
      * @param color     color
      */
-    @SideOnly(Side.CLIENT)
     public static void drawOutlineRect(final int x1, final int y1, final int x2, final int y2, final float lineWidth, final int color)
     {
         if (lineWidth <= 0.0F)

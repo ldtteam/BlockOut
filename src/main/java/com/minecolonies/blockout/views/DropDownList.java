@@ -32,7 +32,7 @@ public class DropDownList extends View implements ButtonHandler
     /**
      * date required to fill the list.
      */
-    protected DataProvider dataProvider;
+    protected DataProvider  dataProvider;
 
     /**
      * handler for the accept method.

@@ -3,8 +3,6 @@ package com.minecolonies.blockout;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
@@ -52,13 +50,11 @@ public class PaneParams
         parentView = parent;
     }
 
-    @SideOnly(Side.CLIENT)
     public int getParentWidth()
     {
         return parentView != null ? parentView.getInteriorWidth() : 0;
     }
 
-    @SideOnly(Side.CLIENT)
     public int getParentHeight()
     {
         return parentView != null ? parentView.getInteriorHeight() : 0;
@@ -93,14 +89,12 @@ public class PaneParams
         return node.getTextContent().trim();
     }
 
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedText()
     {
         return localize(node.getTextContent().trim());
     }
 
-    @SideOnly(Side.CLIENT)
     @Nullable
     private static String localize(final String str)
     {
@@ -171,7 +165,6 @@ public class PaneParams
      * @param name the name.
      * @return the string attribute.
      */
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedStringAttribute(final String name)
     {
@@ -185,7 +178,6 @@ public class PaneParams
      * @param def  the definition.
      * @return the string.
      */
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedStringAttribute(final String name, final String def)
     {
@@ -307,11 +299,10 @@ public class PaneParams
 
     /**
      * Get the boolean attribute from name and class and definition..
-     *
-     * @param name  the name.
+     * @param name the name.
      * @param clazz the class.
-     * @param def   the definition.
-     * @param <T>   the type of class.
+     * @param def the definition.
+     * @param <T> the type of class.
      * @return the enum attribute.
      */
     public <T extends Enum<T>> T getEnumAttribute(final String name, final Class<T> clazz, final T def)
@@ -355,7 +346,7 @@ public class PaneParams
 
             if ("%".equals(m.group(2)))
             {
-                value = scale * MathHelper.clamp(value, 0, 100) / 100;
+                value = scale * MathHelper.clamp_int(value, 0, 100) / 100;
             }
             //  DO NOT attempt to do a "value < 0" treated as (100% of parent) - abs(size)
             //  without differentiating between 'size' and 'position' value types
@@ -441,16 +432,16 @@ public class PaneParams
 
     private static int getRGBA(final String attr, final Matcher m)
     {
-        final int r = MathHelper.clamp(Integer.parseInt(m.group(1)), 0, 255);
-        final int g = MathHelper.clamp(Integer.parseInt(m.group(2)), 0, 255);
-        final int b = MathHelper.clamp(Integer.parseInt(m.group(3)), 0, 255);
+        final int r = MathHelper.clamp_int(Integer.parseInt(m.group(1)), 0, 255);
+        final int g = MathHelper.clamp_int(Integer.parseInt(m.group(2)), 0, 255);
+        final int b = MathHelper.clamp_int(Integer.parseInt(m.group(3)), 0, 255);
 
         int color = ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
 
         if (attr.startsWith("rgba"))
         {
             final int alpha = (int) (Double.parseDouble(m.group(4)) * 255.0F);
-            color |= MathHelper.clamp(alpha, 0, 255) << 24;
+            color |= MathHelper.clamp_int(alpha, 0, 255) << 24;
         }
 
         return color;

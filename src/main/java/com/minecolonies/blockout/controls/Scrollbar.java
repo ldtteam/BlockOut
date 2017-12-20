@@ -14,7 +14,7 @@ public class Scrollbar extends Pane
     /**
      * Max height of the scrollbar.
      */
-    private static final int MAXIMUM_HEIGHT = 20;
+    private static final int MAXIMUM_HEIGHT      = 20;
 
     /**
      * Background of the scrollbar.
@@ -39,7 +39,7 @@ public class Scrollbar extends Pane
     /**
      * The height the bar is clicked.
      */
-    protected int barClickY = 0;
+    protected int     barClickY  = 0;
 
     /**
      * True if the bar is clicked at the moment.
@@ -48,9 +48,8 @@ public class Scrollbar extends Pane
 
     /**
      * Instantiates the scrollbar with certain parameters.
-     *
      * @param container the container of the scrollbar.
-     * @param params    the parameters.
+     * @param params the parameters.
      */
     public Scrollbar(final ScrollingContainer container, final PaneParams params)
     {
@@ -60,7 +59,6 @@ public class Scrollbar extends Pane
 
     /**
      * Instantiates a simple scrollbar.
-     *
      * @param container the container of the scrollbar.
      */
     public Scrollbar(final ScrollingContainer container)
@@ -71,7 +69,6 @@ public class Scrollbar extends Pane
 
     /**
      * Called when the scrollbar has been clicked.
-     *
      * @param my the y it is clicked on.
      */
     public void dragScroll(final int my)
@@ -89,7 +86,7 @@ public class Scrollbar extends Pane
 
         if (container.getScrollY() == 0 || container.getScrollY() == container.getMaxScrollY())
         {
-            barClickY = MathHelper.clamp(my - getScrollBarYPos(), 0, getBarHeight() - 1);
+            barClickY = MathHelper.clamp_int(my - getScrollBarYPos(), 0, getBarHeight() - 1);
         }
     }
 

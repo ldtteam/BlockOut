@@ -17,7 +17,7 @@ public class Text extends AbstractTextElement
     /**
      * String content of the text area.
      */
-    protected String textContent;
+    protected String       textContent;
 
     /**
      * List of string elements.
@@ -65,7 +65,6 @@ public class Text extends AbstractTextElement
 
     /**
      * Getter of the textContent.
-     *
      * @return the string content.
      */
     public String getTextContent()
@@ -81,7 +80,6 @@ public class Text extends AbstractTextElement
 
     /**
      * Getter of the lineSpace.
-     *
      * @return the lineSpace.
      */
     public int getLineSpace()
@@ -91,7 +89,6 @@ public class Text extends AbstractTextElement
 
     /**
      * Setter of the lineSpace.
-     *
      * @param l the new lineSpace.
      */
     public void setLineSpace(final int l)
@@ -101,17 +98,15 @@ public class Text extends AbstractTextElement
 
     /**
      * Getter of the lineHeight.
-     *
      * @return the line height.
      */
     public int getLineHeight()
     {
-        return (int) (mc.fontRenderer.FONT_HEIGHT * scale);
+        return (int) (mc.fontRendererObj.FONT_HEIGHT * scale);
     }
 
     /**
      * Getter of the textheight.
-     *
      * @return the text height.
      */
     public int getTextHeight()
@@ -129,12 +124,11 @@ public class Text extends AbstractTextElement
      */
     public int getStringWidth(final String s)
     {
-        return (int) (mc.fontRenderer.getStringWidth(s) * scale);
+        return (int) (mc.fontRendererObj.getStringWidth(s) * scale);
     }
 
     /**
      * Getter for the formattedText, instantiates it if not already.
-     *
      * @return the list of strings.
      */
     public List<String> getFormattedText()
@@ -148,7 +142,7 @@ public class Text extends AbstractTextElement
             else
             {
                 formattedText = Collections.unmodifiableList(
-                  mc.fontRenderer.listFormattedStringToWidth(textContent, (int) (getWidth() / scale))
+                  mc.fontRendererObj.listFormattedStringToWidth(textContent, (int) (getWidth() / scale))
                     .stream()
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList()));
@@ -210,7 +204,7 @@ public class Text extends AbstractTextElement
             GlStateManager.translate((float) (getX() + offsetX), (float) (getY() + offsetY), 0);
             GlStateManager.scale((float) scale, (float) scale, (float) scale);
             mc.renderEngine.bindTexture(TEXTURE);
-            mc.fontRenderer.drawString(s, 0, 0, textColor, shadow);
+            mc.fontRendererObj.drawString(s, 0, 0, textColor, shadow);
             GlStateManager.popMatrix();
 
             offsetY += getLineHeight() + scaledLinespace;
