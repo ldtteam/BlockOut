@@ -30,9 +30,9 @@ public class Pane extends Gui
     protected            int                 y                 = 0;
     protected            int                 width             = 0;
     protected            int                 height            = 0;
-    protected        Alignment           alignment         = Alignment.TOP_LEFT;
-    protected        boolean             visible           = true;
-    protected        boolean             enabled           = true;
+    protected            Alignment           alignment         = Alignment.TOP_LEFT;
+    protected            boolean             visible           = true;
+    protected            boolean             enabled           = true;
     //  Runtime
     protected Window window;
     protected View   parent;

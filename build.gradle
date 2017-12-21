@@ -31,7 +31,7 @@ sonarqube {
         property "sonar.host.url", "http://home.kk-sc.de:9000"
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.projectName", "BlockOut"
-        property "sonar.branch", System.getenv()['TEAMCITY_BRANCH'] != null ? System.getenv()['TEAMCITY_BRANCH'] : System.getenv()['TRAVIS_BRANCH']
+        property "sonar.branch", System.getenv()['TEAMCITY_BRANCH']
     }
 }
 
@@ -86,11 +86,7 @@ dependencies {
 group = "com.minecolonies.blockout"
 archivesBaseName = "blockout"
 
-if (project.hasProperty("teamcity")) {
-    config.buildnumber = project.teamcity["teamcity.build.id"]
-}
-
-version = "${config.minecraft_version}-${config.blockout_major}.${config.blockout_patch}.${config.buildnumber} - $System.getenv()['BUILD_NUMBER']"
+version = config.minecraft_version.toString() + "-" + config.mod_version.toString() + "-" + System.getenv()['BUILD_NUMBER']
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -100,7 +96,7 @@ minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "run"
 	
-	mappings = "${config.blockout_mappings}"
+	mappings = config.blockout_mappings
 
     replaceIn "lib/Constants.java"
     replace "@VERSION@", project.version
@@ -171,7 +167,7 @@ curseforge {
         apiKey = System.getenv().CURSEAPIKEY
 
         project {
-            id = '245506'
+            id = '275314'
 
             changelog = file('build/changelog.md')
             changelogType = 'markdown'
@@ -190,7 +186,7 @@ task("createChangelog") {
     group = 'upload'
 
     doLast {
-        def teamCityURL = "http://teamcity.minecolonies.com/"
+        def teamCityURL = "https://teamcity.minecolonies.com/"
         def file = new FileOutputStream("build/changelog.md")
         def out = new BufferedOutputStream(file)
         def changesXML = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/changes?locator=build:(id:" + teamcity["teamcity.build.id"] + ")")
@@ -198,7 +194,7 @@ task("createChangelog") {
         def changes = changesXML.change
         println("createChangelog: Identified " + changes.size() + " changes to be written into the changelog.")
 
-        out << "# Blockout Changelog \n"
+        out << "# BlockOut Changelog \n"
         out << "## Version: _" + version + "_ \n"
 
         if (changes.size() > 0) {

@@ -13,7 +13,7 @@ public abstract class AbstractTextElement extends Pane
     /**
      * Texture of the abstractTextElement.
      */
-    protected static final ResourceLocation TEXTURE       = new ResourceLocation("textures/gui/widgets.png");
+    protected static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/widgets.png");
 
     /**
      * The scale of the element.
