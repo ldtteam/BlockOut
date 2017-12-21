@@ -23,12 +23,13 @@ public class Image extends Pane
     public static final int MINECRAFT_DEFAULT_TEXTURE_MAP_SIZE = 256;
 
     protected ResourceLocation resourceLocation;
-    protected int imageOffsetX = 0;
-    protected int imageOffsetY = 0;
-    protected int imageWidth   = 0;
-    protected int imageHeight  = 0;
-    protected int mapWidth     = MINECRAFT_DEFAULT_TEXTURE_MAP_SIZE;
-    protected int mapHeight    = MINECRAFT_DEFAULT_TEXTURE_MAP_SIZE;
+    protected int     imageOffsetX = 0;
+    protected int     imageOffsetY = 0;
+    protected int     imageWidth   = 0;
+    protected int     imageHeight  = 0;
+    protected int     mapWidth     = MINECRAFT_DEFAULT_TEXTURE_MAP_SIZE;
+    protected int     mapHeight    = MINECRAFT_DEFAULT_TEXTURE_MAP_SIZE;
+    protected boolean customSized  = true;
 
     /**
      * Default Constructor.
@@ -156,6 +157,28 @@ public class Image extends Pane
     /**
      * Set the image.
      *
+     * @param loc         ResourceLocation for the image.
+     * @param offsetX     image x offset.
+     * @param offsetY     image y offset.
+     * @param w           image width.
+     * @param h           image height.
+     * @param customSized is it custom sized.
+     */
+    public void setImage(final ResourceLocation loc, final int offsetX, final int offsetY, final int w, final int h, final boolean customSized)
+    {
+        this.customSized = customSized;
+        resourceLocation = loc;
+        imageOffsetX = offsetX;
+        imageOffsetY = offsetY;
+        imageWidth = w;
+        imageHeight = h;
+
+        loadMapDimensions();
+    }
+
+    /**
+     * Set the image.
+     *
      * @param loc ResourceLocation for the image.
      */
     public void setImage(final ResourceLocation loc)
@@ -175,10 +198,22 @@ public class Image extends Pane
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         this.mc.getTextureManager().bindTexture(resourceLocation);
-        //Draw
-        drawTexturedModalRect(x, y,
-          imageOffsetX, imageOffsetY,
-          imageWidth != 0 ? imageWidth : getWidth(),
-          imageHeight != 0 ? imageHeight : getHeight());
+
+        if (this.customSized)
+        {
+            // /Draw
+            drawModalRectWithCustomSizedTexture(x, y,
+              imageOffsetX, imageOffsetY,
+              imageWidth != 0 ? imageWidth : getWidth(),
+              imageHeight != 0 ? imageHeight : getHeight(),
+              mapWidth, mapHeight);
+        }
+        else
+        {
+            drawTexturedModalRect(x, y,
+              imageOffsetX, imageOffsetY,
+              imageWidth != 0 ? imageWidth : getWidth(),
+              imageHeight != 0 ? imageHeight : getHeight());
+        }
     }
 }

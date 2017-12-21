@@ -36,7 +36,11 @@ public class Screen extends GuiScreen
     private static void setScale(final Minecraft mc)
     {
         //Seems to work without the sides now
-        scale = new ScaledResolution(mc).getScaleFactor();
+        //Failsave
+        if (mc != null)
+        {
+            scale = new ScaledResolution(mc).getScaleFactor();
+        }
     }
 
     @Override
@@ -100,11 +104,14 @@ public class Screen extends GuiScreen
     @Override
     public void updateScreen()
     {
-        window.onUpdate();
-
-        if (!mc.player.isEntityAlive() || mc.player.isDead)
+        if (mc != null)
         {
-            mc.player.closeScreen();
+            window.onUpdate();
+
+            if (!mc.player.isEntityAlive() || mc.player.isDead)
+            {
+                mc.player.closeScreen();
+            }
         }
     }
 
