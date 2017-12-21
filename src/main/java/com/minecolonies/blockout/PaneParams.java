@@ -3,8 +3,6 @@ package com.minecolonies.blockout;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
@@ -52,13 +50,11 @@ public class PaneParams
         parentView = parent;
     }
 
-    @SideOnly(Side.CLIENT)
     public int getParentWidth()
     {
         return parentView != null ? parentView.getInteriorWidth() : 0;
     }
 
-    @SideOnly(Side.CLIENT)
     public int getParentHeight()
     {
         return parentView != null ? parentView.getInteriorHeight() : 0;
@@ -93,14 +89,12 @@ public class PaneParams
         return node.getTextContent().trim();
     }
 
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedText()
     {
         return localize(node.getTextContent().trim());
     }
 
-    @SideOnly(Side.CLIENT)
     @Nullable
     private static String localize(final String str)
     {
@@ -171,7 +165,6 @@ public class PaneParams
      * @param name the name.
      * @return the string attribute.
      */
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedStringAttribute(final String name)
     {
@@ -185,7 +178,6 @@ public class PaneParams
      * @param def  the definition.
      * @return the string.
      */
-    @SideOnly(Side.CLIENT)
     @Nullable
     public String getLocalizedStringAttribute(final String name, final String def)
     {
