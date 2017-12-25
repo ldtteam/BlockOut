@@ -98,8 +98,9 @@ minecraft {
 	
 	mappings = "${config.blockout_mappings}"
 
-    replaceIn "lib/Constants.java"
     replace "@VERSION@", project.version
+    replace "@MCVERSION@", config.minecraft_version
+    replace "@FORGEVERSION@", config.forge_version
 
     // Set the jar signature in code prior to compilation, if it exists as a build property
     if (project.hasProperty("signature")) {

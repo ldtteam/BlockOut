@@ -12,7 +12,7 @@ import java.util.Set;
 public final class LoaderManager
 {
 
-    public static final Set<ILoader> loaders = new HashSet<>();
+    private static final Set<ILoader> loaders = new HashSet<>();
 
     public static void registerLoader(@NotNull final ILoader loader)
     {

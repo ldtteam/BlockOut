@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 public final class XMLLoader implements ILoader
 {
 
-    private XMLLoader()
+    public XMLLoader()
     {
         // Hides default constructor.
     }
