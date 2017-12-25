@@ -1,7 +1,7 @@
-package com.minecolonies.blockout.controls;
+package com.minecolonies.blockout.controls.text;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;

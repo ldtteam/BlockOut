@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
-import com.minecolonies.blockout.views.ScrollingContainer;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.views.scrolling.ScrollingContainer;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 

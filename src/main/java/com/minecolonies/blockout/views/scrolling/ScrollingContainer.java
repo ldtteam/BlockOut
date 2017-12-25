@@ -1,7 +1,8 @@
-package com.minecolonies.blockout.views;
+package com.minecolonies.blockout.views.scrolling;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.views.View;
 import net.minecraft.client.renderer.GlStateManager;
 import org.jetbrains.annotations.NotNull;
 

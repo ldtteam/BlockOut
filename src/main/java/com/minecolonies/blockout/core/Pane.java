@@ -1,5 +1,9 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.core;
 
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.screen.Screen;
+import com.minecolonies.blockout.util.Alignment;
+import com.minecolonies.blockout.util.Render;
 import com.minecolonies.blockout.views.View;
 import com.minecolonies.blockout.views.Window;
 import net.minecraft.client.Minecraft;

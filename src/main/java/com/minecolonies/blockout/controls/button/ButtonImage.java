@@ -1,7 +1,8 @@
-package com.minecolonies.blockout.controls;
+package com.minecolonies.blockout.controls.button;
 
-import com.minecolonies.blockout.Alignment;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.controls.Image;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.util.Alignment;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;

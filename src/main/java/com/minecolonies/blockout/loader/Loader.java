@@ -1,7 +1,17 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.loader;
 
-import com.minecolonies.blockout.controls.*;
+import com.minecolonies.blockout.controls.Image;
+import com.minecolonies.blockout.controls.ItemIcon;
+import com.minecolonies.blockout.controls.Label;
+import com.minecolonies.blockout.controls.button.ButtonImage;
+import com.minecolonies.blockout.controls.button.ButtonVanilla;
+import com.minecolonies.blockout.controls.text.Text;
+import com.minecolonies.blockout.controls.text.TextFieldVanilla;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.views.*;
+import com.minecolonies.blockout.views.scrolling.ScrollingGroup;
+import com.minecolonies.blockout.views.scrolling.ScrollingList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;

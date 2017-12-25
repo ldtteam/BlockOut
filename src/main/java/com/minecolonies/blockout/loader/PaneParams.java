@@ -1,5 +1,6 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.loader;
 
+import com.minecolonies.blockout.util.Color;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.minecolonies.blockout.Log.getLogger;
+import static com.minecolonies.blockout.util.Log.getLogger;
 
 /**
  * Special parameters for the panes.

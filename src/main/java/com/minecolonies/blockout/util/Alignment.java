@@ -1,4 +1,4 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.util;
 
 import org.jetbrains.annotations.NotNull;
 

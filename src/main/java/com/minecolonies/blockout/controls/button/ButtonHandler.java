@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.controls;
+package com.minecolonies.blockout.controls.button;
 
 import java.util.function.Consumer;
 

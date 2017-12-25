@@ -1,4 +1,4 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.screen;
 
 import com.minecolonies.blockout.views.Window;
 import net.minecraft.client.Minecraft;

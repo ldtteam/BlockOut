@@ -1,8 +1,8 @@
-package com.minecolonies.blockout.views;
+package com.minecolonies.blockout.views.scrolling;
 
-import com.minecolonies.blockout.Loader;
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.Loader;
+import com.minecolonies.blockout.loader.PaneParams;
 
 /**
  * A Blockout pane that contains a scrolling line of other panes.

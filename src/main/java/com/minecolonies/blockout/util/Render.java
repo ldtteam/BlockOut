@@ -1,4 +1,4 @@
-package com.minecolonies.blockout;
+package com.minecolonies.blockout.util;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

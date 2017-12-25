@@ -128,14 +128,24 @@ compileJava {
 }
 
 task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    appendix = 'deobf'
+    from(sourceSets.main.output) {
+        include '**'
+    }
+
+    extension = 'jar'
+    classifier "deobf"
+}
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from "build/docs/javadoc"
+    classifier "javadoc"
 }
 
 jar {
     from sourceSets.main.output
 
     dependsOn deobfJar
+    dependsOn javadocJar
 }
 
 idea {

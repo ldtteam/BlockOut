@@ -1,39 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
-           elementFormDefault="qualified">
+<xs:schema
+        xmlns:util="http://blockout/util"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:import schemaLocation="util.xsd"/>
+
     <xs:element name="window" type="windowType"/>
     <xs:element name="layout" type="layoutType"/>
-
-    <xs:simpleType name="align">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="TOP_LEFT"/>
-            <xs:enumeration value="TOP_MIDDLE"/>
-            <xs:enumeration value="TOP_RIGHT"/>
-            <xs:enumeration value="MIDDLE_LEFT"/>
-            <xs:enumeration value="MIDDLE"/>
-            <xs:enumeration value="MIDDLE_RIGHT"/>
-            <xs:enumeration value="BOTTOM_LEFT"/>
-            <xs:enumeration value="BOTTOM_MIDDLE"/>
-            <xs:enumeration value="BOTTOM_RIGHT"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="sizePair">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="([-+]?\d+)(%|px)?( +([-+]?\d+)(%|px)?)?"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="fixedSizePair">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(-)?\d+( +\d+)?"/>
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:complexType name="windowType">
         <xs:group ref="paneContainerGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:attribute name="inherit" type="xs:string"/>
-        <xs:attribute name="size" type="sizePair"/>
+        <xs:attribute name="size" type="util:sizePair"/>
         <xs:attribute name="width" type="xs:string"/>
         <xs:attribute name="height" type="xs:string"/>
         <xs:attribute name="lightbox" type="xs:boolean"/>
@@ -48,11 +27,11 @@
     <xs:complexType name="paneType">
         <xs:attribute name="id" type="xs:string"/>
 
-        <xs:attribute name="align" type="align"/>
-        <xs:attribute name="size" type="sizePair"/>
+        <xs:attribute name="align" type="util:align"/>
+        <xs:attribute name="size" type="util:sizePair"/>
         <xs:attribute name="width" type="xs:string"/>
         <xs:attribute name="height" type="xs:string"/>
-        <xs:attribute name="pos" type="sizePair"/>
+        <xs:attribute name="pos" type="util:sizePair"/>
         <xs:attribute name="x" type="xs:string"/>
         <xs:attribute name="y" type="xs:string"/>
 
@@ -130,7 +109,7 @@
     <xs:complexType name="listType">
         <xs:complexContent>
             <xs:extension base="paneType">
-                <xs:group ref="paneContainerGroup" minOccurs="1" maxOccurs="1"/>
+                <xs:group ref="paneContainerGroup"/>
                 <xs:attribute name="padding" type="xs:integer"/>
             </xs:extension>
         </xs:complexContent>
@@ -151,7 +130,7 @@
             <xs:extension base="paneType">
                 <xs:attribute name="label" type="xs:string"/>
                 <xs:attribute name="textscale" type="xs:string"/>
-                <xs:attribute name="textalign" type="align"/>
+                <xs:attribute name="textalign" type="util:align"/>
                 <xs:attribute name="color" type="xs:string"/>
                 <xs:attribute name="hovercolor" type="xs:string"/>
                 <xs:attribute name="shadow" type="xs:boolean"/>
@@ -165,7 +144,7 @@
             <xs:extension base="paneType">
                 <xs:attribute name="linespace" type="xs:integer"/>
                 <xs:attribute name="textscale" type="xs:string"/>
-                <xs:attribute name="textalign" type="align"/>
+                <xs:attribute name="textalign" type="util:align"/>
                 <xs:attribute name="color" type="xs:string"/>
                 <xs:attribute name="shadow" type="xs:boolean"/>
             </xs:extension>
@@ -187,19 +166,19 @@
             <xs:extension base="paneType">
                 <!-- Image and Highlight -->
                 <xs:attribute name="source" type="xs:string" use="required"/>
-                <xs:attribute name="imageoffset" type="fixedSizePair"/>
-                <xs:attribute name="imagesize" type="fixedSizePair"/>
+                <xs:attribute name="imageoffset" type="util:fixedSizePair"/>
+                <xs:attribute name="imagesize" type="util:fixedSizePair"/>
                 <xs:attribute name="highlight" type="xs:string"/>
-                <xs:attribute name="highlightoffset" type="fixedSizePair"/>
-                <xs:attribute name="highlightsize" type="fixedSizePair"/>
+                <xs:attribute name="highlightoffset" type="util:fixedSizePair"/>
+                <xs:attribute name="highlightsize" type="util:fixedSizePair"/>
                 <xs:attribute name="disabled" type="xs:string"/>
-                <xs:attribute name="disabledoffset" type="fixedSizePair"/>
-                <xs:attribute name="disabledsize" type="fixedSizePair"/>
+                <xs:attribute name="disabledoffset" type="util:fixedSizePair"/>
+                <xs:attribute name="disabledsize" type="util:fixedSizePair"/>
                 <!-- Label (optional) -->
                 <xs:attribute name="label" type="xs:string"/>
                 <xs:attribute name="textscale" type="xs:string"/>
-                <xs:attribute name="textalign" type="align"/>
-                <xs:attribute name="textoffset" type="fixedSizePair"/>
+                <xs:attribute name="textalign" type="util:align"/>
+                <xs:attribute name="textoffset" type="util:fixedSizePair"/>
                 <xs:attribute name="textcolor" type="xs:string"/>
                 <xs:attribute name="texthovercolor" type="xs:string"/>
                 <xs:attribute name="textdisabledcolor" type="xs:string"/>
@@ -213,8 +192,8 @@
         <xs:complexContent>
             <xs:extension base="paneType">
                 <xs:attribute name="source" type="xs:string"/>
-                <xs:attribute name="imageoffset" type="fixedSizePair"/>
-                <xs:attribute name="imagesize" type="fixedSizePair"/>
+                <xs:attribute name="imageoffset" type="util:fixedSizePair"/>
+                <xs:attribute name="imagesize" type="util:fixedSizePair"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -237,10 +216,10 @@
     <xs:complexType name="dropdownType">
         <xs:complexContent>
             <xs:extension base="paneType">
-                <xs:group ref="paneContainerGroup" minOccurs="1" maxOccurs="1"/>
+                <xs:group ref="paneContainerGroup"/>
                 <xs:attribute name="padding" type="xs:integer"/>
                 <xs:attribute name="maxContentHeight" type="xs:integer"/>
-                <xs:attribute name="dropDownSize" type="fixedSizePair"/>
+                <xs:attribute name="dropDownSize" type="util:fixedSizePair"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -1,11 +1,12 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
-import com.minecolonies.blockout.controls.Button;
-import com.minecolonies.blockout.controls.ButtonHandler;
-import com.minecolonies.blockout.controls.ButtonVanilla;
 import com.minecolonies.blockout.controls.Label;
+import com.minecolonies.blockout.controls.button.Button;
+import com.minecolonies.blockout.controls.button.ButtonHandler;
+import com.minecolonies.blockout.controls.button.ButtonVanilla;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.views.scrolling.ScrollingList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

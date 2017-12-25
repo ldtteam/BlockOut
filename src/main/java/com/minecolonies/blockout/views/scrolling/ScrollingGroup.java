@@ -1,7 +1,7 @@
-package com.minecolonies.blockout.views;
+package com.minecolonies.blockout.views.scrolling;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
 
 /**
  * A Group is a View which enforces the position of children to be

@@ -1,6 +1,7 @@
-package com.minecolonies.blockout.controls;
+package com.minecolonies.blockout.controls.text;
 
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.controls.AbstractTextElement;
+import com.minecolonies.blockout.loader.PaneParams;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;

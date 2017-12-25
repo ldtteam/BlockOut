@@ -1,6 +1,6 @@
-package com.minecolonies.blockout.controls;
+package com.minecolonies.blockout.controls.button;
 
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.loader.PaneParams;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;

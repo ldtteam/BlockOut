@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.Loader;
-import com.minecolonies.blockout.PaneParams;
-import com.minecolonies.blockout.Screen;
+import com.minecolonies.blockout.loader.Loader;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.screen.Screen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;

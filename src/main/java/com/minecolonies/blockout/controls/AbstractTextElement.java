@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.Alignment;
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.util.Alignment;
 import net.minecraft.util.ResourceLocation;
 
 /**
