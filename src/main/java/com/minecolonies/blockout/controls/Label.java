@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import net.minecraft.client.renderer.GlStateManager;
 
 /**
@@ -32,7 +32,7 @@ public class Label extends AbstractTextElement
      *
      * @param params xml parameters.
      */
-    public Label(final PaneParams params)
+    public Label(final XMLPaneParams params)
     {
         super(params);
         labelText = params.getLocalizedStringAttribute("label", labelText);

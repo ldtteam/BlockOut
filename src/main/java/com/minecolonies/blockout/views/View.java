@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.Loader;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLLoader;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.util.Alignment;
 import net.minecraft.client.renderer.GlStateManager;
 import org.jetbrains.annotations.NotNull;
@@ -30,11 +30,11 @@ public class View extends Pane
     }
 
     /**
-     * Constructs a View from PaneParams.
+     * Constructs a View from XMLPaneParams.
      *
      * @param params Params for the View.
      */
-    public View(final PaneParams params)
+    public View(final XMLPaneParams params)
     {
         super(params);
         padding = params.getIntegerAttribute("padding", padding);
@@ -47,17 +47,17 @@ public class View extends Pane
     }
 
     @Override
-    public void parseChildren(final PaneParams params)
+    public void parseChildren(final XMLPaneParams params)
     {
-        final List<PaneParams> childNodes = params.getChildren();
+        final List<XMLPaneParams> childNodes = params.getChildren();
         if (childNodes == null)
         {
             return;
         }
 
-        for (final PaneParams node : childNodes)
+        for (final XMLPaneParams node : childNodes)
         {
-            Loader.createFromPaneParams(node, this);
+            XMLLoader.createFromPaneParams(node, this);
         }
     }
 

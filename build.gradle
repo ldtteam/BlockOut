@@ -86,7 +86,7 @@ dependencies {
 group = "com.minecolonies.blockout"
 archivesBaseName = "blockout"
 
-version = config.minecraft_version.toString() + "-" + config.mod_version.toString() + "-" + System.getenv()['BUILD_NUMBER']
+version = config.minecraft_version.toString() + "-" + System.getenv()["version"]
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'

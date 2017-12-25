@@ -1,9 +1,10 @@
 package com.minecolonies.blockout.core;
 
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.screen.Screen;
 import com.minecolonies.blockout.util.Alignment;
 import com.minecolonies.blockout.util.Render;
+import com.minecolonies.blockout.util.SizePair;
 import com.minecolonies.blockout.views.View;
 import com.minecolonies.blockout.views.Window;
 import net.minecraft.client.Minecraft;
@@ -53,17 +54,17 @@ public class Pane extends Gui
     }
 
     /**
-     * Constructs a Pane from PaneParams.
+     * Constructs a Pane from XMLPaneParams.
      *
      * @param params Params for the Pane.
      */
-    public Pane(@NotNull final PaneParams params)
+    public Pane(@NotNull final XMLPaneParams params)
     {
         super();
         id = params.getStringAttribute("id", id);
 
-        @NotNull final PaneParams.SizePair parentSizePair = new PaneParams.SizePair(params.getParentWidth(), params.getParentHeight());
-        PaneParams.SizePair sizePair = params.getSizePairAttribute("size", null, parentSizePair);
+        @NotNull final SizePair parentSizePair = new SizePair(params.getParentWidth(), params.getParentHeight());
+        SizePair sizePair = params.getSizePairAttribute("size", null, parentSizePair);
         if (sizePair != null)
         {
             width = sizePair.getX();
@@ -131,7 +132,7 @@ public class Pane extends Gui
      *
      * @param params the parameter.
      */
-    public void parseChildren(final PaneParams params)
+    public void parseChildren(final XMLPaneParams params)
     {
         // Can be overloaded
     }

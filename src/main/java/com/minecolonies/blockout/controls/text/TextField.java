@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls.text;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -55,7 +55,7 @@ public class TextField extends Pane
      *
      * @param params the parameters for the textField.
      */
-    public TextField(@NotNull final PaneParams params)
+    public TextField(@NotNull final XMLPaneParams params)
     {
         super(params);
         maxTextLength = params.getIntegerAttribute("maxlength", maxTextLength);

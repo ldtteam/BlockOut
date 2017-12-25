@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views.scrolling;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 
 /**
  * A Group is a View which enforces the position of children to be
@@ -24,7 +24,7 @@ public class ScrollingGroup extends ScrollingView
      *
      * @param params xml parameters.
      */
-    public ScrollingGroup(final PaneParams params)
+    public ScrollingGroup(final XMLPaneParams params)
     {
         super(params);
     }

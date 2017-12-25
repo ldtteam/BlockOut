@@ -1,6 +1,8 @@
-package com.minecolonies.blockout.loader;
+package com.minecolonies.blockout.loader.xml;
 
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.Color;
+import com.minecolonies.blockout.util.SizePair;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
@@ -18,7 +20,7 @@ import static com.minecolonies.blockout.util.Log.getLogger;
 /**
  * Special parameters for the panes.
  */
-public class PaneParams
+public class XMLPaneParams implements IPaneParams
 {
     private static final Pattern PERCENTAGE_PATTERN = Pattern.compile("([-+]?\\d+)(%|px)?", Pattern.CASE_INSENSITIVE);
     private static final Pattern RGBA_PATTERN       =
@@ -31,40 +33,46 @@ public class PaneParams
      *
      * @param n the node.
      */
-    public PaneParams(final Node n)
+    public XMLPaneParams(final Node n)
     {
         node = n;
     }
 
+    @Override
     public String getType()
     {
         return node.getNodeName();
     }
 
+    @Override
     public View getParentView()
     {
         return parentView;
     }
 
+    @Override
     public void setParentView(final View parent)
     {
         parentView = parent;
     }
 
+    @Override
     public int getParentWidth()
     {
         return parentView != null ? parentView.getInteriorWidth() : 0;
     }
 
+    @Override
     public int getParentHeight()
     {
         return parentView != null ? parentView.getInteriorHeight() : 0;
     }
 
+    @Override
     @Nullable
-    public List<PaneParams> getChildren()
+    public List<XMLPaneParams> getChildren()
     {
-        List<PaneParams> list = null;
+        List<XMLPaneParams> list = null;
 
         Node child = node.getFirstChild();
         while (child != null)
@@ -76,7 +84,7 @@ public class PaneParams
                     list = new ArrayList<>();
                 }
 
-                list.add(new PaneParams(child));
+                list.add(new XMLPaneParams(child));
             }
             child = child.getNextSibling();
         }
@@ -84,12 +92,14 @@ public class PaneParams
         return list;
     }
 
+    @Override
     @NotNull
     public String getText()
     {
         return node.getTextContent().trim();
     }
 
+    @Override
     @Nullable
     public String getLocalizedText()
     {
@@ -137,6 +147,7 @@ public class PaneParams
      * @param name the name to search.
      * @return the attribute.
      */
+    @Override
     public String getStringAttribute(final String name)
     {
         return getStringAttribute(name, "");
@@ -149,6 +160,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the String.
      */
+    @Override
     public String getStringAttribute(final String name, final String def)
     {
         final Node attr = getAttribute(name);
@@ -166,6 +178,7 @@ public class PaneParams
      * @param name the name.
      * @return the string attribute.
      */
+    @Override
     @Nullable
     public String getLocalizedStringAttribute(final String name)
     {
@@ -179,6 +192,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the string.
      */
+    @Override
     @Nullable
     public String getLocalizedStringAttribute(final String name, final String def)
     {
@@ -191,6 +205,7 @@ public class PaneParams
      * @param name the name.
      * @return the integer.
      */
+    @Override
     public int getIntegerAttribute(final String name)
     {
         return getIntegerAttribute(name, 0);
@@ -203,6 +218,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the int.
      */
+    @Override
     public int getIntegerAttribute(final String name, final int def)
     {
         final String attr = getStringAttribute(name, null);
@@ -219,6 +235,7 @@ public class PaneParams
      * @param name the name.
      * @return the float.
      */
+    @Override
     public float getFloatAttribute(final String name)
     {
         return getFloatAttribute(name, 0);
@@ -231,6 +248,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the float.
      */
+    @Override
     public float getFloatAttribute(final String name, final float def)
     {
         final String attr = getStringAttribute(name, null);
@@ -247,6 +265,7 @@ public class PaneParams
      * @param name the name.
      * @return the double.
      */
+    @Override
     public double getDoubleAttribute(final String name)
     {
         return getDoubleAttribute(name, 0);
@@ -259,6 +278,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the double.
      */
+    @Override
     public double getDoubleAttribute(final String name, final double def)
     {
         final String attr = getStringAttribute(name, null);
@@ -276,6 +296,7 @@ public class PaneParams
      * @param name the name.
      * @return the boolean.
      */
+    @Override
     public boolean getBooleanAttribute(final String name)
     {
         return getBooleanAttribute(name, false);
@@ -288,6 +309,7 @@ public class PaneParams
      * @param def  the definition.
      * @return the boolean.
      */
+    @Override
     public boolean getBooleanAttribute(final String name, final boolean def)
     {
         final String attr = getStringAttribute(name, null);
@@ -307,6 +329,7 @@ public class PaneParams
      * @param <T>   the type of class.
      * @return the enum attribute.
      */
+    @Override
     public <T extends Enum<T>> T getEnumAttribute(final String name, final Class<T> clazz, final T def)
     {
         final String attr = getStringAttribute(name, null);
@@ -325,6 +348,7 @@ public class PaneParams
      * @param scale the scale.
      * @return the integer.
      */
+    @Override
     public int getScalableIntegerAttribute(final String name, final int def, final int scale)
     {
         final String attr = getStringAttribute(name, null);
@@ -372,24 +396,25 @@ public class PaneParams
      * @param scale the scale.
      * @return the SizePair.
      */
+    @Override
     @Nullable
     public SizePair getSizePairAttribute(final String name, final SizePair def, final SizePair scale)
     {
         final String attr = getStringAttribute(name, null);
         if (attr != null)
         {
-            int w = def != null ? def.x : 0;
-            int h = def != null ? def.y : 0;
+            int w = def != null ? def.getX() : 0;
+            int h = def != null ? def.getY() : 0;
 
             final Matcher m = PERCENTAGE_PATTERN.matcher(attr);
             if (m.find())
             {
-                w = parseScalableIntegerRegexMatch(m, w, scale != null ? scale.x : 0);
+                w = parseScalableIntegerRegexMatch(m, w, scale != null ? scale.getX() : 0);
 
                 if (m.find() || m.find(0))
                 {
                     //  If no second value is passed, use the first value
-                    h = parseScalableIntegerRegexMatch(m, h, scale != null ? scale.y : 0);
+                    h = parseScalableIntegerRegexMatch(m, h, scale != null ? scale.getY() : 0);
                 }
             }
 
@@ -406,6 +431,7 @@ public class PaneParams
      * @param def  the definition
      * @return int color value.
      */
+    @Override
     public int getColorAttribute(final String name, final int def)
     {
         final String attr = getStringAttribute(name, null);
@@ -458,37 +484,6 @@ public class PaneParams
         catch (final NumberFormatException ex)
         {
             return Color.getByName(attr, def);
-        }
-    }
-
-    /**
-     * Size pair of width and height.
-     */
-    public static class SizePair
-    {
-        private final int x;
-        private final int y;
-
-        /**
-         * Instantiates a SizePair object.
-         *
-         * @param w width.
-         * @param h height.
-         */
-        public SizePair(final int w, final int h)
-        {
-            x = w;
-            y = h;
-        }
-
-        public int getX()
-        {
-            return x;
-        }
-
-        public int getY()
-        {
-            return y;
         }
     }
 }

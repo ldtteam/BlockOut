@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,11 +23,11 @@ public class Group extends View
     }
 
     /**
-     * Constructs a View from PaneParams.
+     * Constructs a View from XMLPaneParams.
      *
      * @param params Params for the Pane.
      */
-    public Group(@NotNull final PaneParams params)
+    public Group(@NotNull final XMLPaneParams params)
     {
         super(params);
         spacing = params.getIntegerAttribute("spacing", spacing);

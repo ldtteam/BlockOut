@@ -1,8 +1,9 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.loader.Loader;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLLoader;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.screen.Screen;
+import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -48,7 +49,7 @@ public class Window extends View
     public Window(final ResourceLocation resource)
     {
         this();
-        Loader.createFromXMLFile(resource, this);
+        XMLLoader.createFromXMLFile(resource, this);
     }
 
     /**
@@ -83,7 +84,7 @@ public class Window extends View
     public Window(final String resource)
     {
         this();
-        Loader.createFromXMLFile(resource, this);
+        XMLLoader.createFromXMLFile(resource, this);
     }
 
     /**
@@ -91,15 +92,15 @@ public class Window extends View
      *
      * @param params xml parameters.
      */
-    public void loadParams(@NotNull final PaneParams params)
+    public void loadParams(@NotNull final XMLPaneParams params)
     {
         final String inherit = params.getStringAttribute("inherit", null);
         if (inherit != null)
         {
-            Loader.createFromXMLFile(new ResourceLocation(inherit), this);
+            XMLLoader.createFromXMLFile(new ResourceLocation(inherit), this);
         }
 
-        final PaneParams.SizePair size = params.getSizePairAttribute("size", null, null);
+        final SizePair size = params.getSizePairAttribute("size", null, null);
         if (size == null)
         {
             final int w = params.getIntegerAttribute("width", width);
@@ -116,7 +117,7 @@ public class Window extends View
     }
 
     @Override
-    public void parseChildren(final PaneParams params)
+    public void parseChildren(final XMLPaneParams params)
     {
         // Can be overridden
     }

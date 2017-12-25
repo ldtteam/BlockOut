@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls.button;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +26,9 @@ public class Button extends Pane
     /**
      * Constructor used when loading from xml.
      *
-     * @param params PaneParams from xml file.
+     * @param params XMLPaneParams from xml file.
      */
-    public Button(@NotNull final PaneParams params)
+    public Button(@NotNull final XMLPaneParams params)
     {
         super(params);
         label = params.getLocalizedStringAttribute("label", label);

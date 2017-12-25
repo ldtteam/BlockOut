@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls.text;
 
 import com.minecolonies.blockout.controls.AbstractTextElement;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class Text extends AbstractTextElement
      *
      * @param params xml parameters.
      */
-    public Text(final PaneParams params)
+    public Text(final XMLPaneParams params)
     {
         super(params);
 

@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,17 +22,17 @@ public class SwitchView extends View
     }
 
     /**
-     * Constructs a View from PaneParams.
+     * Constructs a View from XMLPaneParams.
      *
      * @param params Params for the Pane.
      */
-    public SwitchView(final PaneParams params)
+    public SwitchView(final XMLPaneParams params)
     {
         super(params);
     }
 
     @Override
-    public void parseChildren(@NotNull final PaneParams params)
+    public void parseChildren(@NotNull final XMLPaneParams params)
     {
         super.parseChildren(params);
 

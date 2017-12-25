@@ -1,22 +1,14 @@
-package com.minecolonies.blockout.loader;
+package com.minecolonies.blockout.loader.xml;
 
-import com.minecolonies.blockout.controls.Image;
-import com.minecolonies.blockout.controls.ItemIcon;
-import com.minecolonies.blockout.controls.Label;
-import com.minecolonies.blockout.controls.button.ButtonImage;
-import com.minecolonies.blockout.controls.button.ButtonVanilla;
-import com.minecolonies.blockout.controls.text.Text;
-import com.minecolonies.blockout.controls.text.TextFieldVanilla;
 import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.ComponentConstructionController;
 import com.minecolonies.blockout.util.Log;
-import com.minecolonies.blockout.views.*;
-import com.minecolonies.blockout.views.scrolling.ScrollingGroup;
-import com.minecolonies.blockout.views.scrolling.ScrollingList;
+import com.minecolonies.blockout.views.View;
+import com.minecolonies.blockout.views.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -29,85 +21,29 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Utilities to load xml files.
  */
-public final class Loader
+public final class XMLLoader
 {
-    private static final Map<String, Constructor<? extends Pane>> paneConstructorMap = new HashMap<>();
-    static
-    {
-        register("view", View.class);
-        register("group", Group.class);
-        register("scrollgroup", ScrollingGroup.class);
-        register("list", ScrollingList.class);
-        register("text", Text.class);
-        register("button", ButtonVanilla.class);
-        register("buttonimage", ButtonImage.class);
-        register("label", Label.class);
-        register("input", TextFieldVanilla.class);
-        register("image", Image.class);
-        register("box", Box.class);
-        register("itemicon", ItemIcon.class);
-        register("switch", SwitchView.class);
-        register("dropdown", DropDownList.class);
-        register("overlay", OverlayView.class);
-    }
-    private Loader()
+
+    private XMLLoader()
     {
         // Hides default constructor.
     }
 
-    private static void register(final String name, final Class<? extends Pane> paneClass)
-    {
-        register(name, null, paneClass);
-    }
 
-    private static void register(final String name, final String style, final Class<? extends Pane> paneClass)
-    {
-        final String key = makeFactoryKey(name, style);
-
-        if (paneConstructorMap.containsKey(key))
-        {
-            throw new IllegalArgumentException("Duplicate pane type '"
-                                                 + name + "' of style '"
-                                                 + style + "' when registering Pane class mapping for "
-                                                 + paneClass.getName());
-        }
-
-        try
-        {
-            final Constructor<? extends Pane> constructor = paneClass.getDeclaredConstructor(PaneParams.class);
-            paneConstructorMap.put(key, constructor);
-        }
-        catch (final NoSuchMethodException exception)
-        {
-            throw new IllegalArgumentException("Missing (XMLNode) constructor for type '"
-                                                 + name + "' when adding Pane class mapping for " + paneClass.getName(), exception);
-        }
-    }
-
-    @NotNull
-    private static String makeFactoryKey(final String name, final String style)
-    {
-        return name + ":" + (style != null ? style : "");
-    }
-
-    private static Pane createFromPaneParams(final PaneParams params)
+    private static Pane createFromPaneParams(final XMLPaneParams params)
     {
         //  Parse Attributes first, to full construct
         final String paneType = params.getType();
         final String style = params.getStringAttribute("style", null);
 
-        String key = makeFactoryKey(paneType, style);
-        Constructor<? extends Pane> constructor = paneConstructorMap.get(key);
+        Constructor<? extends Pane> constructor = ComponentConstructionController.getConstructorForTypeAndStyle(paneType, style);
         if (constructor == null && style != null)
         {
-            key = makeFactoryKey(paneType, null);
-            constructor = paneConstructorMap.get(key);
+            constructor = ComponentConstructionController.getConstructorForTypeAndStyle(paneType, null);
         }
 
         if (constructor != null)
@@ -134,7 +70,7 @@ public final class Loader
      * @param parent parent view.
      * @return the new pane.
      */
-    public static Pane createFromPaneParams(final PaneParams params, final View parent)
+    public static Pane createFromPaneParams(final XMLPaneParams params, final View parent)
     {
         if ("layout".equalsIgnoreCase(params.getType()))
         {
@@ -169,13 +105,13 @@ public final class Loader
     {
         doc.getDocumentElement().normalize();
 
-        final PaneParams root = new PaneParams(doc.getDocumentElement());
+        final XMLPaneParams root = new XMLPaneParams(doc.getDocumentElement());
         if (parent instanceof Window)
         {
             ((Window) parent).loadParams(root);
         }
 
-        for (final PaneParams child : root.getChildren())
+        for (final XMLPaneParams child : root.getChildren())
         {
             createFromPaneParams(child, parent);
         }
@@ -252,12 +188,12 @@ public final class Loader
             }
             else
             {
-                return Loader.class.getResourceAsStream(String.format("/assets/%s/%s", res.getResourceDomain(), res.getResourcePath()));
+                return XMLLoader.class.getResourceAsStream(String.format("/assets/%s/%s", res.getResourceDomain(), res.getResourcePath()));
             }
         }
         catch (final IOException e)
         {
-            Log.getLogger().error("IOException Loader.java", e);
+            Log.getLogger().error("IOException XMLLoader.java", e);
         }
         return null;
     }

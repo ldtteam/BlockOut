@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.util.Alignment;
 import net.minecraft.util.ResourceLocation;
 
@@ -49,7 +49,7 @@ public abstract class AbstractTextElement extends Pane
      *
      * @param params xml parameters.
      */
-    public AbstractTextElement(final PaneParams params)
+    public AbstractTextElement(final XMLPaneParams params)
     {
         super(params);
 

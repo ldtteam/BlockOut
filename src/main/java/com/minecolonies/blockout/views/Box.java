@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.util.Render;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public class Box extends View
      *
      * @param params xml parameters.
      */
-    public Box(@NotNull final PaneParams params)
+    public Box(@NotNull final XMLPaneParams params)
     {
         super(params);
         lineWidth = params.getFloatAttribute("linewidth", lineWidth);

@@ -1,8 +1,9 @@
 package com.minecolonies.blockout.controls.button;
 
 import com.minecolonies.blockout.controls.Image;
-import com.minecolonies.blockout.loader.PaneParams;
+import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.util.Alignment;
+import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -62,9 +63,9 @@ public class ButtonImage extends Button
     /**
      * Constructor called by the xml loader.
      *
-     * @param params PaneParams provided in the xml.
+     * @param params XMLPaneParams provided in the xml.
      */
-    public ButtonImage(final PaneParams params)
+    public ButtonImage(final XMLPaneParams params)
     {
         super(params);
 
@@ -78,9 +79,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the normal image.
      *
-     * @param params PaneParams provided in the xml.
+     * @param params XMLPaneParams provided in the xml.
      */
-    private void loadImageInfo(final PaneParams params)
+    private void loadImageInfo(final XMLPaneParams params)
     {
         final String path = params.getStringAttribute("source", null);
         if (path != null)
@@ -89,7 +90,7 @@ public class ButtonImage extends Button
             loadImageDimensions();
         }
 
-        PaneParams.SizePair size = params.getSizePairAttribute("imageoffset", null, null);
+        SizePair size = params.getSizePairAttribute("imageoffset", null, null);
         if (size != null)
         {
             imageOffsetX = size.getX();
@@ -107,9 +108,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the hover image.
      *
-     * @param params PaneParams provided in the xml.
+     * @param params XMLPaneParams provided in the xml.
      */
-    private void loadHighlightInfo(final PaneParams params)
+    private void loadHighlightInfo(final XMLPaneParams params)
     {
         final String path = params.getStringAttribute("highlight", null);
         if (path != null)
@@ -118,7 +119,7 @@ public class ButtonImage extends Button
             loadImageHighlightDimensions();
         }
 
-        PaneParams.SizePair size = params.getSizePairAttribute("highlightoffset", null, null);
+        SizePair size = params.getSizePairAttribute("highlightoffset", null, null);
         if (size != null)
         {
             highlightOffsetX = size.getX();
@@ -136,9 +137,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the disabled image.
      *
-     * @param params PaneParams provided in the xml.
+     * @param params XMLPaneParams provided in the xml.
      */
-    private void loadDisabledInfo(final PaneParams params)
+    private void loadDisabledInfo(final XMLPaneParams params)
     {
         final String path = params.getStringAttribute("disabled", null);
         if (path != null)
@@ -147,7 +148,7 @@ public class ButtonImage extends Button
             loadImageDisabledDimensions();
         }
 
-        PaneParams.SizePair size = params.getSizePairAttribute("disabledoffset", null, null);
+        SizePair size = params.getSizePairAttribute("disabledoffset", null, null);
         if (size != null)
         {
             disabledOffsetX = size.getX();
@@ -165,9 +166,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the button textContent.
      *
-     * @param params PaneParams provided in the xml.
+     * @param params XMLPaneParams provided in the xml.
      */
-    private void loadTextInfo(final PaneParams params)
+    private void loadTextInfo(final XMLPaneParams params)
     {
         textScale = params.getDoubleAttribute("scale", textScale);
         textAlignment = params.getEnumAttribute("textalign", Alignment.class, textAlignment);
@@ -178,7 +179,7 @@ public class ButtonImage extends Button
         textDisabledColor = params.getColorAttribute("textdisabledcolor", textColor);
         shadow = params.getBooleanAttribute("shadow", shadow);
 
-        final PaneParams.SizePair size = params.getSizePairAttribute("textoffset", null, null);
+        final SizePair size = params.getSizePairAttribute("textoffset", null, null);
         if (size != null)
         {
             textOffsetX = size.getX();
