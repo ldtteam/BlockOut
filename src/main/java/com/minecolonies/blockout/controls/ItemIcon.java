@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.IPaneParams;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -35,7 +35,7 @@ public class ItemIcon extends Pane
      *
      * @param params the parameters.
      */
-    public ItemIcon(final PaneParams params)
+    public ItemIcon(final IPaneParams params)
     {
         super(params);
 

@@ -1,11 +1,13 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
-import com.minecolonies.blockout.controls.Button;
-import com.minecolonies.blockout.controls.ButtonHandler;
-import com.minecolonies.blockout.controls.ButtonVanilla;
 import com.minecolonies.blockout.controls.Label;
+import com.minecolonies.blockout.controls.button.Button;
+import com.minecolonies.blockout.controls.button.ButtonHandler;
+import com.minecolonies.blockout.controls.button.ButtonVanilla;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.util.SizePair;
+import com.minecolonies.blockout.views.scrolling.ScrollingList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -63,14 +65,14 @@ public class DropDownList extends View implements ButtonHandler
     }
 
     /**
-     * Constructs a DropDownList from PaneParams.
+     * Constructs a DropDownList from IPaneParams.
      *
      * @param params Params for the ScrollingList
      */
-    public DropDownList(final PaneParams params)
+    public DropDownList(final IPaneParams params)
     {
         super(params);
-        final PaneParams.SizePair dropDownSize = params.getSizePairAttribute("dropDownSize", null, null);
+        final SizePair dropDownSize = params.getSizePairAttribute("dropDownSize", null, null);
         dropDownWidth = dropDownSize == null ? width : dropDownSize.getX();
         //When unknown, we use the same height as it is wide.
         dropDownHeight = dropDownSize == null ? width : dropDownSize.getY();

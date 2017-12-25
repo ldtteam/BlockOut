@@ -1,7 +1,8 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -13,7 +14,7 @@ import javax.imageio.stream.ImageInputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static com.minecolonies.blockout.Log.getLogger;
+import static com.minecolonies.blockout.util.Log.getLogger;
 
 /**
  * Simple image element.
@@ -42,9 +43,9 @@ public class Image extends Pane
     /**
      * Constructor used by the xml loader.
      *
-     * @param params PaneParams loaded from the xml.
+     * @param params IPaneParams loaded from the xml.
      */
-    public Image(final PaneParams params)
+    public Image(final IPaneParams params)
     {
         super(params);
         final String source = params.getStringAttribute("source", null);
@@ -54,7 +55,7 @@ public class Image extends Pane
             loadMapDimensions();
         }
 
-        PaneParams.SizePair size = params.getSizePairAttribute("imageoffset", null, null);
+        SizePair size = params.getSizePairAttribute("imageoffset", null, null);
         if (size != null)
         {
             imageOffsetX = size.getX();

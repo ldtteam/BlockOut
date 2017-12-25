@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.controls;
 
-import com.minecolonies.blockout.Pane;
-import com.minecolonies.blockout.PaneParams;
-import com.minecolonies.blockout.views.ScrollingContainer;
+import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.views.scrolling.ScrollingContainer;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 
@@ -52,7 +52,7 @@ public class Scrollbar extends Pane
      * @param container the container of the scrollbar.
      * @param params    the parameters.
      */
-    public Scrollbar(final ScrollingContainer container, final PaneParams params)
+    public Scrollbar(final ScrollingContainer container, final IPaneParams params)
     {
         this(container);
         //  TODO: Parse Scrollbar-specific Params
