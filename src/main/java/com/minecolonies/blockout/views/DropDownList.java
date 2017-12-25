@@ -5,7 +5,7 @@ import com.minecolonies.blockout.controls.button.Button;
 import com.minecolonies.blockout.controls.button.ButtonHandler;
 import com.minecolonies.blockout.controls.button.ButtonVanilla;
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.SizePair;
 import com.minecolonies.blockout.views.scrolling.ScrollingList;
 import org.jetbrains.annotations.NotNull;
@@ -65,11 +65,11 @@ public class DropDownList extends View implements ButtonHandler
     }
 
     /**
-     * Constructs a DropDownList from XMLPaneParams.
+     * Constructs a DropDownList from IPaneParams.
      *
      * @param params Params for the ScrollingList
      */
-    public DropDownList(final XMLPaneParams params)
+    public DropDownList(final IPaneParams params)
     {
         super(params);
         final SizePair dropDownSize = params.getSizePairAttribute("dropDownSize", null, null);

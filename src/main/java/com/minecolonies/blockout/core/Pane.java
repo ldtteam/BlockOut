@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.core;
 
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.screen.Screen;
 import com.minecolonies.blockout.util.Alignment;
 import com.minecolonies.blockout.util.Render;
@@ -54,11 +54,11 @@ public class Pane extends Gui
     }
 
     /**
-     * Constructs a Pane from XMLPaneParams.
+     * Constructs a Pane from IPaneParams.
      *
      * @param params Params for the Pane.
      */
-    public Pane(@NotNull final XMLPaneParams params)
+    public Pane(@NotNull final IPaneParams params)
     {
         super();
         id = params.getStringAttribute("id", id);
@@ -132,7 +132,7 @@ public class Pane extends Gui
      *
      * @param params the parameter.
      */
-    public void parseChildren(final XMLPaneParams params)
+    public void parseChildren(final IPaneParams params)
     {
         // Can be overloaded
     }

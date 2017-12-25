@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views.scrolling;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.renderer.GlStateManager;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class ScrollingContainer extends View
     }
 
     @Override
-    public void parseChildren(final XMLPaneParams params)
+    public void parseChildren(final IPaneParams params)
     {
         super.parseChildren(params);
         computeContentHeight();

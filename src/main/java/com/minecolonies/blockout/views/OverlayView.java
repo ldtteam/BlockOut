@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.Log;
 import org.lwjgl.input.Keyboard;
 
@@ -19,11 +19,11 @@ public class OverlayView extends View
     }
 
     /**
-     * Constructs a OverlayView from XMLPaneParams.
+     * Constructs a OverlayView from IPaneParams.
      *
      * @param params Params for the View.
      */
-    public OverlayView(final XMLPaneParams params)
+    public OverlayView(final IPaneParams params)
     {
         super(params);
     }

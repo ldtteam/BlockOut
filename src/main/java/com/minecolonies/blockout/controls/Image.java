@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -43,9 +43,9 @@ public class Image extends Pane
     /**
      * Constructor used by the xml loader.
      *
-     * @param params XMLPaneParams loaded from the xml.
+     * @param params IPaneParams loaded from the xml.
      */
-    public Image(final XMLPaneParams params)
+    public Image(final IPaneParams params)
     {
         super(params);
         final String source = params.getStringAttribute("source", null);

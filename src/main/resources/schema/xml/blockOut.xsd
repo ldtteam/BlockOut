@@ -5,9 +5,7 @@
         targetNamespace="http://blockout/blockout"
         elementFormDefault="qualified">
 
-    <xs:import schemaLocation="types.xsd"/>
-    <xs:import schemaLocation="groups.xsd"/>
-    <xs:import schemaLocation="util.xsd"/>
+    <xs:import schemaLocation="types.xsd" namespace="http://blockout/types"/>
 
     <xs:element name="window" type="types:windowType"/>
     <xs:element name="layout" type="types:layoutType"/>

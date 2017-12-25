@@ -8,7 +8,6 @@ import com.minecolonies.blockout.controls.button.ButtonVanilla;
 import com.minecolonies.blockout.controls.text.Text;
 import com.minecolonies.blockout.controls.text.TextFieldVanilla;
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
 import com.minecolonies.blockout.views.*;
 import com.minecolonies.blockout.views.scrolling.ScrollingGroup;
 import com.minecolonies.blockout.views.scrolling.ScrollingList;
@@ -70,7 +69,7 @@ public class ComponentConstructionController
 
         try
         {
-            final Constructor<? extends Pane> constructor = paneClass.getDeclaredConstructor(XMLPaneParams.class);
+            final Constructor<? extends Pane> constructor = paneClass.getDeclaredConstructor(IPaneParams.class);
             paneConstructorMap.put(key, constructor);
         }
         catch (final NoSuchMethodException exception)

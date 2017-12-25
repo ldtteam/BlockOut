@@ -1,0 +1,2178 @@
+{
+  "id": "http://blockout/groups#",
+  "definitions": {
+    "ListType": {
+      "required": [
+        "layout",
+        "view",
+        "group",
+        "list",
+        "button",
+        "buttonimage",
+        "text",
+        "label",
+        "input",
+        "image",
+        "box",
+        "itemicon",
+        "_switch",
+        "dropdown"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ListType",
+          "properties": {
+            "layout": {
+              "title": "layout",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/LayoutElementType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "layout",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "view": {
+              "title": "view",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ViewType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "view",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "group": {
+              "title": "group",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/GroupType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "group",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "list": {
+              "title": "list",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ListType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "list",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "button": {
+              "title": "button",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ButtonType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "button",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "buttonimage": {
+              "title": "buttonimage",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ButtonImageType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "buttonimage",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "text": {
+              "title": "text",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/TextType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "text",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "label": {
+              "title": "label",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/LabelType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "label",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "input": {
+              "title": "input",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InputType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "input",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "image": {
+              "title": "image",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ImageType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "image",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "box": {
+              "title": "box",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/BoxType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "box",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "itemicon": {
+              "title": "itemicon",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ItemIconType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "itemicon",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "_switch": {
+              "title": "_switch",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/SwitchType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "switch",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "dropdown": {
+              "title": "dropdown",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/DropdownType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "dropdown",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "padding": {
+              "title": "padding",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "padding",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "listType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "layout",
+        "view",
+        "group",
+        "list",
+        "button",
+        "buttonimage",
+        "text",
+        "label",
+        "input",
+        "image",
+        "box",
+        "itemicon",
+        "_switch",
+        "dropdown",
+        "padding"
+      ]
+    },
+    "ButtonImageType": {
+      "required": [
+        "source"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ButtonImageType",
+          "properties": {
+            "source": {
+              "title": "source",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "source",
+                "namespaceURI": ""
+              }
+            },
+            "imageoffset": {
+              "title": "imageoffset",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "imageoffset",
+                "namespaceURI": ""
+              }
+            },
+            "imagesize": {
+              "title": "imagesize",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "imagesize",
+                "namespaceURI": ""
+              }
+            },
+            "highlight": {
+              "title": "highlight",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "highlight",
+                "namespaceURI": ""
+              }
+            },
+            "highlightoffset": {
+              "title": "highlightoffset",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "highlightoffset",
+                "namespaceURI": ""
+              }
+            },
+            "highlightsize": {
+              "title": "highlightsize",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "highlightsize",
+                "namespaceURI": ""
+              }
+            },
+            "disabled": {
+              "title": "disabled",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "disabled",
+                "namespaceURI": ""
+              }
+            },
+            "disabledoffset": {
+              "title": "disabledoffset",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "disabledoffset",
+                "namespaceURI": ""
+              }
+            },
+            "disabledsize": {
+              "title": "disabledsize",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "disabledsize",
+                "namespaceURI": ""
+              }
+            },
+            "label": {
+              "title": "label",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "label",
+                "namespaceURI": ""
+              }
+            },
+            "textscale": {
+              "title": "textscale",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textscale",
+                "namespaceURI": ""
+              }
+            },
+            "textalign": {
+              "title": "textalign",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Align"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textalign",
+                "namespaceURI": ""
+              }
+            },
+            "textoffset": {
+              "title": "textoffset",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textoffset",
+                "namespaceURI": ""
+              }
+            },
+            "textcolor": {
+              "title": "textcolor",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textcolor",
+                "namespaceURI": ""
+              }
+            },
+            "texthovercolor": {
+              "title": "texthovercolor",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "texthovercolor",
+                "namespaceURI": ""
+              }
+            },
+            "textdisabledcolor": {
+              "title": "textdisabledcolor",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textdisabledcolor",
+                "namespaceURI": ""
+              }
+            },
+            "shadow": {
+              "title": "shadow",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "shadow",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "buttonImageType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "source",
+        "imageoffset",
+        "imagesize",
+        "highlight",
+        "highlightoffset",
+        "highlightsize",
+        "disabled",
+        "disabledoffset",
+        "disabledsize",
+        "label",
+        "textscale",
+        "textalign",
+        "textoffset",
+        "textcolor",
+        "texthovercolor",
+        "textdisabledcolor",
+        "shadow"
+      ]
+    },
+    "LayoutType": {
+      "type": "object",
+      "title": "LayoutType",
+      "properties": {
+        "paneContainerGroup": {
+          "title": "paneContainerGroup",
+          "allOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/LayoutElementType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "layout",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ViewType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "view",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/GroupType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "group",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ListType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "list",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ButtonType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "button",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ButtonImageType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "buttonimage",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/TextType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "text",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/LabelType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "label",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/InputType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "input",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ImageType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "image",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/BoxType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "box",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ItemIconType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "itemicon",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/SwitchType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "switch",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/DropdownType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "dropdown",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  }
+                ]
+              },
+              "minItems": 0
+            }
+          ],
+          "propertyType": "elements"
+        }
+      },
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "layoutType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "paneContainerGroup"
+      ]
+    },
+    "TextType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "TextType",
+          "properties": {
+            "linespace": {
+              "title": "linespace",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "linespace",
+                "namespaceURI": ""
+              }
+            },
+            "textscale": {
+              "title": "textscale",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textscale",
+                "namespaceURI": ""
+              }
+            },
+            "textalign": {
+              "title": "textalign",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Align"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textalign",
+                "namespaceURI": ""
+              }
+            },
+            "color": {
+              "title": "color",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "color",
+                "namespaceURI": ""
+              }
+            },
+            "shadow": {
+              "title": "shadow",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "shadow",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "textType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "linespace",
+        "textscale",
+        "textalign",
+        "color",
+        "shadow"
+      ]
+    },
+    "SwitchType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ViewType"
+        },
+        {
+          "type": "object",
+          "title": "SwitchType",
+          "properties": {
+            "_default": {
+              "title": "_default",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "default",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "switchType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "_default"
+      ]
+    },
+    "ItemIconType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ItemIconType",
+          "properties": {
+            "item": {
+              "title": "item",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "item",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "itemIconType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "item"
+      ]
+    },
+    "ViewType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ViewType",
+          "properties": {
+            "paneContainerGroup": {
+              "title": "paneContainerGroup",
+              "allOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/LayoutElementType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "layout",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ViewType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "view",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/GroupType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "group",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ListType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "list",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ButtonType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "button",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ButtonImageType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "buttonimage",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/TextType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "text",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/LabelType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "label",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/InputType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "input",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ImageType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "image",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/BoxType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "box",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/ItemIconType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "itemicon",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/SwitchType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "switch",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      },
+                      {
+                        "anyOf": [
+                          {
+                            "$ref": "#/definitions/DropdownType"
+                          }
+                        ],
+                        "elementName": {
+                          "localPart": "dropdown",
+                          "namespaceURI": "http://blockout/groups"
+                        }
+                      }
+                    ]
+                  },
+                  "minItems": 0
+                }
+              ],
+              "propertyType": "elements"
+            },
+            "padding": {
+              "title": "padding",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "padding",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "viewType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "paneContainerGroup",
+        "padding"
+      ]
+    },
+    "PaneType": {
+      "type": "object",
+      "title": "PaneType",
+      "properties": {
+        "id": {
+          "title": "id",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "id",
+            "namespaceURI": ""
+          }
+        },
+        "align": {
+          "title": "align",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Align"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "align",
+            "namespaceURI": ""
+          }
+        },
+        "size": {
+          "title": "size",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "size",
+            "namespaceURI": ""
+          }
+        },
+        "width": {
+          "title": "width",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "width",
+            "namespaceURI": ""
+          }
+        },
+        "height": {
+          "title": "height",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "height",
+            "namespaceURI": ""
+          }
+        },
+        "pos": {
+          "title": "pos",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "pos",
+            "namespaceURI": ""
+          }
+        },
+        "x": {
+          "title": "x",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "x",
+            "namespaceURI": ""
+          }
+        },
+        "y": {
+          "title": "y",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "y",
+            "namespaceURI": ""
+          }
+        },
+        "visible": {
+          "title": "visible",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "visible",
+            "namespaceURI": ""
+          }
+        },
+        "enabled": {
+          "title": "enabled",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "enabled",
+            "namespaceURI": ""
+          }
+        },
+        "style": {
+          "title": "style",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "style",
+            "namespaceURI": ""
+          }
+        }
+      },
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "paneType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "id",
+        "align",
+        "size",
+        "width",
+        "height",
+        "pos",
+        "x",
+        "y",
+        "visible",
+        "enabled",
+        "style"
+      ]
+    },
+    "ButtonType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ButtonType",
+          "properties": {
+            "label": {
+              "title": "label",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "label",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "buttonType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "label"
+      ]
+    },
+    "DropdownType": {
+      "required": [
+        "layout",
+        "view",
+        "group",
+        "list",
+        "button",
+        "buttonimage",
+        "text",
+        "label",
+        "input",
+        "image",
+        "box",
+        "itemicon",
+        "_switch",
+        "dropdown"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "DropdownType",
+          "properties": {
+            "layout": {
+              "title": "layout",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/LayoutElementType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "layout",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "view": {
+              "title": "view",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ViewType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "view",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "group": {
+              "title": "group",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/GroupType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "group",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "list": {
+              "title": "list",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ListType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "list",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "button": {
+              "title": "button",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ButtonType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "button",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "buttonimage": {
+              "title": "buttonimage",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ButtonImageType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "buttonimage",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "text": {
+              "title": "text",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/TextType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "text",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "label": {
+              "title": "label",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/LabelType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "label",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "input": {
+              "title": "input",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InputType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "input",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "image": {
+              "title": "image",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ImageType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "image",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "box": {
+              "title": "box",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/BoxType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "box",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "itemicon": {
+              "title": "itemicon",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/ItemIconType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "itemicon",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "_switch": {
+              "title": "_switch",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/SwitchType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "switch",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "dropdown": {
+              "title": "dropdown",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/DropdownType"
+                }
+              ],
+              "propertyType": "element",
+              "elementName": {
+                "localPart": "dropdown",
+                "namespaceURI": "http://blockout/groups"
+              }
+            },
+            "padding": {
+              "title": "padding",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "padding",
+                "namespaceURI": ""
+              }
+            },
+            "maxContentHeight": {
+              "title": "maxContentHeight",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "maxContentHeight",
+                "namespaceURI": ""
+              }
+            },
+            "dropDownSize": {
+              "title": "dropDownSize",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "dropDownSize",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "dropdownType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "layout",
+        "view",
+        "group",
+        "list",
+        "button",
+        "buttonimage",
+        "text",
+        "label",
+        "input",
+        "image",
+        "box",
+        "itemicon",
+        "_switch",
+        "dropdown",
+        "padding",
+        "maxContentHeight",
+        "dropDownSize"
+      ]
+    },
+    "InputType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "InputType",
+          "properties": {
+            "text": {
+              "title": "text",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "text",
+                "namespaceURI": ""
+              }
+            },
+            "maxlength": {
+              "title": "maxlength",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "maxlength",
+                "namespaceURI": ""
+              }
+            },
+            "color": {
+              "title": "color",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "color",
+                "namespaceURI": ""
+              }
+            },
+            "colordisabled": {
+              "title": "colordisabled",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "colordisabled",
+                "namespaceURI": ""
+              }
+            },
+            "shadow": {
+              "title": "shadow",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "shadow",
+                "namespaceURI": ""
+              }
+            },
+            "tab": {
+              "title": "tab",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "tab",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "inputType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "text",
+        "maxlength",
+        "color",
+        "colordisabled",
+        "shadow",
+        "tab"
+      ]
+    },
+    "ImageType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "ImageType",
+          "properties": {
+            "source": {
+              "title": "source",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "source",
+                "namespaceURI": ""
+              }
+            },
+            "imageoffset": {
+              "title": "imageoffset",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "imageoffset",
+                "namespaceURI": ""
+              }
+            },
+            "imagesize": {
+              "title": "imagesize",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "imagesize",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "imageType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "source",
+        "imageoffset",
+        "imagesize"
+      ]
+    },
+    "LayoutElementType": {
+      "type": "object",
+      "title": "LayoutElementType",
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "title": "source",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/anySimpleType"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "source",
+            "namespaceURI": ""
+          }
+        }
+      },
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "layoutElementType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "source"
+      ]
+    },
+    "LabelType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/PaneType"
+        },
+        {
+          "type": "object",
+          "title": "LabelType",
+          "properties": {
+            "label": {
+              "title": "label",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "label",
+                "namespaceURI": ""
+              }
+            },
+            "textscale": {
+              "title": "textscale",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textscale",
+                "namespaceURI": ""
+              }
+            },
+            "textalign": {
+              "title": "textalign",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Align"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "textalign",
+                "namespaceURI": ""
+              }
+            },
+            "color": {
+              "title": "color",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "color",
+                "namespaceURI": ""
+              }
+            },
+            "hovercolor": {
+              "title": "hovercolor",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "hovercolor",
+                "namespaceURI": ""
+              }
+            },
+            "shadow": {
+              "title": "shadow",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "shadow",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "labelType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "label",
+        "textscale",
+        "textalign",
+        "color",
+        "hovercolor",
+        "shadow"
+      ]
+    },
+    "GroupType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ViewType"
+        },
+        {
+          "type": "object",
+          "title": "GroupType",
+          "properties": {
+            "spacing": {
+              "title": "spacing",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "spacing",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "groupType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "spacing"
+      ]
+    },
+    "WindowType": {
+      "type": "object",
+      "title": "WindowType",
+      "properties": {
+        "paneContainerGroup": {
+          "title": "paneContainerGroup",
+          "allOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/LayoutElementType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "layout",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ViewType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "view",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/GroupType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "group",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ListType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "list",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ButtonType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "button",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ButtonImageType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "buttonimage",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/TextType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "text",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/LabelType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "label",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/InputType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "input",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ImageType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "image",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/BoxType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "box",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/ItemIconType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "itemicon",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/SwitchType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "switch",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "$ref": "#/definitions/DropdownType"
+                      }
+                    ],
+                    "elementName": {
+                      "localPart": "dropdown",
+                      "namespaceURI": "http://blockout/groups"
+                    }
+                  }
+                ]
+              },
+              "minItems": 0
+            }
+          ],
+          "propertyType": "elements"
+        },
+        "inherit": {
+          "title": "inherit",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "inherit",
+            "namespaceURI": ""
+          }
+        },
+        "size": {
+          "title": "size",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "size",
+            "namespaceURI": ""
+          }
+        },
+        "width": {
+          "title": "width",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "width",
+            "namespaceURI": ""
+          }
+        },
+        "height": {
+          "title": "height",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "height",
+            "namespaceURI": ""
+          }
+        },
+        "lightbox": {
+          "title": "lightbox",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "lightbox",
+            "namespaceURI": ""
+          }
+        },
+        "pause": {
+          "title": "pause",
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/boolean"
+            }
+          ],
+          "propertyType": "attribute",
+          "attributeName": {
+            "localPart": "pause",
+            "namespaceURI": ""
+          }
+        }
+      },
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "windowType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "paneContainerGroup",
+        "inherit",
+        "size",
+        "width",
+        "height",
+        "lightbox",
+        "pause"
+      ]
+    },
+    "BoxType": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/ViewType"
+        },
+        {
+          "type": "object",
+          "title": "BoxType",
+          "properties": {
+            "color": {
+              "title": "color",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/string"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "color",
+                "namespaceURI": ""
+              }
+            },
+            "linewidth": {
+              "title": "linewidth",
+              "allOf": [
+                {
+                  "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/decimal"
+                }
+              ],
+              "propertyType": "attribute",
+              "attributeName": {
+                "localPart": "linewidth",
+                "namespaceURI": ""
+              }
+            }
+          }
+        }
+      ],
+      "typeType": "classInfo",
+      "typeName": {
+        "localPart": "boxType",
+        "namespaceURI": "http://blockout/types"
+      },
+      "propertiesOrder": [
+        "color",
+        "linewidth"
+      ]
+    }
+  }
+}

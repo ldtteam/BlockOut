@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.loader.xml.XMLLoader;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.LoaderManager;
 import com.minecolonies.blockout.screen.Screen;
 import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.gui.GuiScreen;
@@ -49,7 +49,7 @@ public class Window extends View
     public Window(final ResourceLocation resource)
     {
         this();
-        XMLLoader.createFromXMLFile(resource, this);
+        LoaderManager.createFromFile(resource, this);
     }
 
     /**
@@ -84,7 +84,7 @@ public class Window extends View
     public Window(final String resource)
     {
         this();
-        XMLLoader.createFromXMLFile(resource, this);
+        LoaderManager.createFromFile(resource, this);
     }
 
     /**
@@ -92,12 +92,12 @@ public class Window extends View
      *
      * @param params xml parameters.
      */
-    public void loadParams(@NotNull final XMLPaneParams params)
+    public void loadParams(@NotNull final IPaneParams params)
     {
         final String inherit = params.getStringAttribute("inherit", null);
         if (inherit != null)
         {
-            XMLLoader.createFromXMLFile(new ResourceLocation(inherit), this);
+            LoaderManager.createFromFile(new ResourceLocation(inherit), this);
         }
 
         final SizePair size = params.getSizePairAttribute("size", null, null);
@@ -117,7 +117,7 @@ public class Window extends View
     }
 
     @Override
-    public void parseChildren(final XMLPaneParams params)
+    public void parseChildren(final IPaneParams params)
     {
         // Can be overridden
     }

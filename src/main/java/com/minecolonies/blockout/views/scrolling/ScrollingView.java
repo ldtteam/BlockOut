@@ -2,7 +2,7 @@ package com.minecolonies.blockout.views.scrolling;
 
 import com.minecolonies.blockout.controls.Scrollbar;
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.views.View;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ public class ScrollingView extends View
      *
      * @param params xml parameters.
      */
-    public ScrollingView(final XMLPaneParams params)
+    public ScrollingView(final IPaneParams params)
     {
         super(params);
         setup();
@@ -77,7 +77,7 @@ public class ScrollingView extends View
      * @param params the xml parameters.
      */
     @Override
-    public void parseChildren(final XMLPaneParams params)
+    public void parseChildren(final IPaneParams params)
     {
         container.parseChildren(params);
     }

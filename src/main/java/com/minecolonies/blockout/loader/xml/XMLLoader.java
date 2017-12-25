@@ -2,6 +2,8 @@ package com.minecolonies.blockout.loader.xml;
 
 import com.minecolonies.blockout.core.Pane;
 import com.minecolonies.blockout.loader.ComponentConstructionController;
+import com.minecolonies.blockout.loader.ILoader;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.views.View;
 import com.minecolonies.blockout.views.Window;
@@ -9,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -18,14 +21,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * Utilities to load xml files.
  */
-public final class XMLLoader
+public final class XMLLoader implements ILoader
 {
 
     private XMLLoader()
@@ -33,8 +35,7 @@ public final class XMLLoader
         // Hides default constructor.
     }
 
-
-    private static Pane createFromPaneParams(final XMLPaneParams params)
+    private Pane createFromPaneParams(final IPaneParams params)
     {
         //  Parse Attributes first, to full construct
         final String paneType = params.getType();
@@ -63,6 +64,18 @@ public final class XMLLoader
         return null;
     }
 
+    @Override
+    public boolean accepts(@NotNull final ResourceLocation location)
+    {
+        return location.getResourcePath().toLowerCase().endsWith(".xml");
+    }
+
+    @Override
+    public boolean accepts(@NotNull final IPaneParams paneParams)
+    {
+        return paneParams instanceof XMLPaneParams;
+    }
+
     /**
      * Create a pane from its xml parameters.
      *
@@ -70,14 +83,15 @@ public final class XMLLoader
      * @param parent parent view.
      * @return the new pane.
      */
-    public static Pane createFromPaneParams(final XMLPaneParams params, final View parent)
+    @Override
+    public Pane createFromPaneParams(final IPaneParams params, final View parent)
     {
         if ("layout".equalsIgnoreCase(params.getType()))
         {
             final String resource = params.getStringAttribute("source", null);
             if (resource != null)
             {
-                createFromXMLFile(resource, parent);
+                createFromFile(new ResourceLocation(resource), parent);
             }
 
             return null;
@@ -96,12 +110,24 @@ public final class XMLLoader
     }
 
     /**
+     * Parse XML contains in a ResourceLocation into contents for a Window.
+     *
+     * @param resource xml as a {@link ResourceLocation}.
+     * @param parent   parent view.
+     */
+    @Override
+    public void createFromFile(final ResourceLocation resource, final View parent)
+    {
+        createFromXML(new InputSource(createInputStream(resource)), parent);
+    }
+
+    /**
      * Parse an XML Document into contents for a View.
      *
      * @param doc    xml document.
      * @param parent parent view.
      */
-    private static void createFromXML(final Document doc, final View parent)
+    private void createFromXML(final Document doc, final View parent)
     {
         doc.getDocumentElement().normalize();
 
@@ -111,10 +137,10 @@ public final class XMLLoader
             ((Window) parent).loadParams(root);
         }
 
-        for (final XMLPaneParams child : root.getChildren())
-        {
-            createFromPaneParams(child, parent);
-        }
+        root.getChildren().stream()
+          .filter(o -> o instanceof XMLPaneParams)
+          .map(XMLPaneParams.class::cast)
+          .forEach(p -> createFromPaneParams(p, parent));
     }
 
     /**
@@ -123,7 +149,7 @@ public final class XMLLoader
      * @param input  xml file.
      * @param parent parent view.
      */
-    private static void createFromXML(final InputSource input, final View parent)
+    private void createFromXML(final InputSource input, final View parent)
     {
         try
         {
@@ -140,45 +166,12 @@ public final class XMLLoader
     }
 
     /**
-     * Parse an XML String into contents for a View.
-     *
-     * @param xmlString the xml data.
-     * @param parent    parent view.
-     */
-    public static void createFromXML(final String xmlString, final View parent)
-    {
-        createFromXML(new InputSource(new StringReader(xmlString)), parent);
-    }
-
-    /**
-     * Parse XML contains in a ResourceLocation into contents for a Window.
-     *
-     * @param filename the xml file.
-     * @param parent   parent view.
-     */
-    public static void createFromXMLFile(final String filename, final View parent)
-    {
-        createFromXMLFile(new ResourceLocation(filename), parent);
-    }
-
-    /**
-     * Parse XML contains in a ResourceLocation into contents for a Window.
-     *
-     * @param resource xml as a {@link ResourceLocation}.
-     * @param parent   parent view.
-     */
-    public static void createFromXMLFile(final ResourceLocation resource, final View parent)
-    {
-        createFromXML(new InputSource(createInputStream(resource)), parent);
-    }
-
-    /**
      * Create an InputStream from a ResourceLocation.
      *
      * @param res ResourceLocation to get an InputStream from.
      * @return the InputStream created from the ResourceLocation.
      */
-    private static InputStream createInputStream(final ResourceLocation res)
+    private InputStream createInputStream(final ResourceLocation res)
     {
         try
         {

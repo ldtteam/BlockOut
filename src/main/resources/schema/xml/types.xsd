@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
+        xmlns:types="http://blockout/types"
         xmlns:util="http://blockout/util"
         xmlns:groups="http://blockout/groups"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         targetNamespace="http://blockout/types"
         elementFormDefault="qualified">
 
-    <xs:import schemaLocation="groups.xsd"/>
-    <xs:import schemaLocation="util.xsd"/>
+    <xs:import schemaLocation="groups.xsd" namespace="http://blockout/groups"/>
+    <xs:import schemaLocation="util.xsd" namespace="http://blockout/util"/>
 
     <xs:complexType name="windowType">
         <xs:group ref="groups:paneContainerGroup" minOccurs="0" maxOccurs="unbounded"/>
@@ -44,7 +45,7 @@
     <!-- View basic attributes and contents -->
     <xs:complexType name="viewType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:group ref="groups:paneContainerGroup" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:attribute name="padding" type="xs:integer"/>
             </xs:extension>
@@ -59,7 +60,7 @@
     <!-- <group> -->
     <xs:complexType name="groupType">
         <xs:complexContent>
-            <xs:extension base="viewType">
+            <xs:extension base="types:viewType">
                 <xs:attribute name="spacing" type="xs:integer"/>
             </xs:extension>
         </xs:complexContent>
@@ -68,7 +69,7 @@
     <!-- <switch> -->
     <xs:complexType name="switchType">
         <xs:complexContent>
-            <xs:extension base="viewType">
+            <xs:extension base="types:viewType">
                 <xs:attribute name="default" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
@@ -77,7 +78,7 @@
     <!-- <box> -->
     <xs:complexType name="boxType">
         <xs:complexContent>
-            <xs:extension base="viewType">
+            <xs:extension base="types:viewType">
                 <xs:attribute name="color" type="xs:string"/>
                 <xs:attribute name="linewidth" type="xs:decimal"/>
             </xs:extension>
@@ -87,7 +88,7 @@
     <!-- <list> -->
     <xs:complexType name="listType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:group ref="groups:paneContainerGroup"/>
                 <xs:attribute name="padding" type="xs:integer"/>
             </xs:extension>
@@ -97,7 +98,7 @@
     <!-- <button> -->
     <xs:complexType name="buttonType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:attribute name="label" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
@@ -106,7 +107,7 @@
     <!-- <label> -->
     <xs:complexType name="labelType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:attribute name="label" type="xs:string"/>
                 <xs:attribute name="textscale" type="xs:string"/>
                 <xs:attribute name="textalign" type="util:align"/>
@@ -119,21 +120,21 @@
 
     <!-- <text> -->
     <xs:complexType name="textType">
-        <xs:simpleContent>
-            <xs:extension base="paneType">
+        <xs:complexContent>
+            <xs:extension base="types:paneType">
                 <xs:attribute name="linespace" type="xs:integer"/>
                 <xs:attribute name="textscale" type="xs:string"/>
                 <xs:attribute name="textalign" type="util:align"/>
                 <xs:attribute name="color" type="xs:string"/>
                 <xs:attribute name="shadow" type="xs:boolean"/>
             </xs:extension>
-        </xs:simpleContent>
+        </xs:complexContent>
     </xs:complexType>
 
     <!-- <itemicon> -->
     <xs:complexType name="itemIconType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:attribute name="item" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
@@ -142,7 +143,7 @@
     <!-- <buttonimage> -->
     <xs:complexType name="buttonImageType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <!-- Image and Highlight -->
                 <xs:attribute name="source" type="xs:string" use="required"/>
                 <xs:attribute name="imageoffset" type="util:fixedSizePair"/>
@@ -169,7 +170,7 @@
     <!-- <image> -->
     <xs:complexType name="imageType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:attribute name="source" type="xs:string"/>
                 <xs:attribute name="imageoffset" type="util:fixedSizePair"/>
                 <xs:attribute name="imagesize" type="util:fixedSizePair"/>
@@ -180,7 +181,7 @@
     <!-- <input> -->
     <xs:complexType name="inputType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:attribute name="text" type="xs:string"/>
                 <xs:attribute name="maxlength" type="xs:integer"/>
                 <xs:attribute name="color" type="xs:string"/>
@@ -194,7 +195,7 @@
     <!-- <dropdown> -->
     <xs:complexType name="dropdownType">
         <xs:complexContent>
-            <xs:extension base="paneType">
+            <xs:extension base="types:paneType">
                 <xs:group ref="groups:paneContainerGroup"/>
                 <xs:attribute name="padding" type="xs:integer"/>
                 <xs:attribute name="maxContentHeight" type="xs:integer"/>

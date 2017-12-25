@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls.button;
 
 import com.minecolonies.blockout.controls.Image;
-import com.minecolonies.blockout.loader.xml.XMLPaneParams;
+import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.util.Alignment;
 import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.renderer.GlStateManager;
@@ -63,9 +63,9 @@ public class ButtonImage extends Button
     /**
      * Constructor called by the xml loader.
      *
-     * @param params XMLPaneParams provided in the xml.
+     * @param params IPaneParams provided in the xml.
      */
-    public ButtonImage(final XMLPaneParams params)
+    public ButtonImage(final IPaneParams params)
     {
         super(params);
 
@@ -79,9 +79,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the normal image.
      *
-     * @param params XMLPaneParams provided in the xml.
+     * @param params IPaneParams provided in the xml.
      */
-    private void loadImageInfo(final XMLPaneParams params)
+    private void loadImageInfo(final IPaneParams params)
     {
         final String path = params.getStringAttribute("source", null);
         if (path != null)
@@ -108,9 +108,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the hover image.
      *
-     * @param params XMLPaneParams provided in the xml.
+     * @param params IPaneParams provided in the xml.
      */
-    private void loadHighlightInfo(final XMLPaneParams params)
+    private void loadHighlightInfo(final IPaneParams params)
     {
         final String path = params.getStringAttribute("highlight", null);
         if (path != null)
@@ -137,9 +137,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the disabled image.
      *
-     * @param params XMLPaneParams provided in the xml.
+     * @param params IPaneParams provided in the xml.
      */
-    private void loadDisabledInfo(final XMLPaneParams params)
+    private void loadDisabledInfo(final IPaneParams params)
     {
         final String path = params.getStringAttribute("disabled", null);
         if (path != null)
@@ -166,9 +166,9 @@ public class ButtonImage extends Button
     /**
      * Loads the parameters for the button textContent.
      *
-     * @param params XMLPaneParams provided in the xml.
+     * @param params IPaneParams provided in the xml.
      */
-    private void loadTextInfo(final XMLPaneParams params)
+    private void loadTextInfo(final IPaneParams params)
     {
         textScale = params.getDoubleAttribute("scale", textScale);
         textAlignment = params.getEnumAttribute("textalign", Alignment.class, textAlignment);
