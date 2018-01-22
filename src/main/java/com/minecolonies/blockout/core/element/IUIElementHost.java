@@ -5,13 +5,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public interface IUIElementHost extends Map<ResourceLocation, IUIElement>, IUIElement
 {
 
     @NotNull
-    Optional<IUIElement> searchElementById(@NotNull final ResourceLocation id);
+    Optional<IUIElement> searchExactElementById(@NotNull final ResourceLocation id);
 
     @NotNull
-    Optional<IUIElement> searchElementByCoord(final int localX, final int localY);
+    Optional<IUIElement> searchDeepestElementByCoord(final int localX, final int localY);
+
+    @NotNull
+    Optional<IUIElement> searchFirstElementByPredicate(@NotNull final Predicate<IUIElement> predicate);
 }
