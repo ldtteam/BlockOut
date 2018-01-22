@@ -1,12 +1,11 @@
 package com.minecolonies.blockout.network;
 
-import com.minecolonies.blockout.network.message.IBlockOutNetworkMessage;
+import com.minecolonies.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.minecolonies.blockout.util.Log;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.*;
 
@@ -96,24 +95,11 @@ class BlockOutNetworkMessageWrapper implements IMessage, IMessageHandler<BlockOu
             return null;
         }
 
-        if (ctx.side == Side.CLIENT)
+        final IBlockOutNetworkMessage result = message.message.onMessage(ctx);
+
+        if (result != null)
         {
-            final IBlockOutNetworkMessage result = message.message.onMessageArricalAtServer(ctx);
-
-            if (result != null)
-            {
-                return new BlockOutNetworkMessageWrapper(result);
-            }
-        }
-
-        if (ctx.side == Side.CLIENT)
-        {
-            final IBlockOutNetworkMessage result = message.message.onMessageArrivalAtClient(ctx);
-
-            if (result != null)
-            {
-                return new BlockOutNetworkMessageWrapper(result);
-            }
+            return new BlockOutNetworkMessageWrapper(result);
         }
 
         return null;

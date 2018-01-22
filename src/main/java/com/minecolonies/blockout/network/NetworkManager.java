@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.network;
 
-import com.minecolonies.blockout.network.message.IBlockOutNetworkMessage;
+import com.minecolonies.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;

@@ -1,7 +1,6 @@
 package com.minecolonies.blockout.loader;
 
-import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.views.View;
+import com.minecolonies.blockout.core.element.IUIElement;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,19 +27,11 @@ public interface ILoader
     boolean accepts(@NotNull final IPaneParams paneParams);
 
     /**
-     * Creates a {@link Pane} from a given {@link IPaneParams}
+     * Creates a {@link IUIElement} from a given {@link IPaneParams}
      *
      * @param params The params to create a pane from.
-     * @param parent The parent view.
-     * @return The pane.
+     * @param parent The parent {@link IUIElement}.
+     * @return The element.
      */
-    Pane createFromPaneParams(@NotNull final IPaneParams params, @NotNull final View parent);
-
-    /**
-     * Creates {@link Pane} from a raw string and inserts it into the given view.
-     *
-     * @param resource The name of the file to create a Pane from.
-     * @param parent   The parent view.
-     */
-    void createFromFile(ResourceLocation resource, View parent);
+    IUIElement createFromPaneParams(@NotNull final IPaneParams params, @NotNull final IUIElement parent);
 }

@@ -1,6 +1,9 @@
 package com.minecolonies.blockout.views;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.core.Pane;
+import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.loader.LoaderManager;
 import com.minecolonies.blockout.util.Alignment;
@@ -41,9 +44,10 @@ public class View extends Pane
     }
 
     @NotNull
-    public List<Pane> getChildren()
+    @Override
+    public ImmutableCollection<IUIElement> getChildren()
     {
-        return children;
+        return ImmutableList.copyOf(children);
     }
 
     public void parseChildren(final IPaneParams params)

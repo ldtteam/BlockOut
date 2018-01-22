@@ -1,5 +1,8 @@
 package com.minecolonies.blockout.core;
 
+import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
+import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.loader.IPaneParams;
 import com.minecolonies.blockout.screen.Screen;
 import com.minecolonies.blockout.util.Alignment;
@@ -15,18 +18,13 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
-import java.util.Deque;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
  * A Pane is the root of all UI objects.
  */
-public class Pane extends Gui
+public class Pane extends Gui implements IUIElement
 {
-    @NotNull
-    private static final Deque<ScissorsInfo> scissorsInfoStack = new ConcurrentLinkedDeque<>();
-    private static final int                 SCISSOR_X_INDEX   = 12;
-    private static final int                 SCISSOR_Y_INDEX   = 13;
+
     protected static Pane lastClickedPane;
     protected static Pane focus;
     protected static boolean   debugging = false;
@@ -391,6 +389,18 @@ public class Pane extends Gui
         return this.id.equals(id) ? this : null;
     }
 
+    @Override
+    public SizePair getPosition()
+    {
+        return new SizePair(x, y);
+    }
+
+    @Override
+    public SizePair getSize()
+    {
+        return new SizePair(width, height);
+    }
+
     /**
      * Return the Pane that contains this one.
      *
@@ -399,6 +409,24 @@ public class Pane extends Gui
     public final View getParent()
     {
         return parent;
+    }
+
+    @Override
+    public ImmutableCollection<IUIElement> getChildren()
+    {
+        return ImmutableList.of();
+    }
+
+    @Override
+    public void addChild(@NotNull final IUIElement child)
+    {
+        //Noop
+    }
+
+    @Override
+    public void removeChild(@NotNull final IUIElement child)
+    {
+        //Noop
     }
 
     /**
