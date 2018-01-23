@@ -1,7 +1,6 @@
 package com.minecolonies.blockout.element.management.input;
 
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.input.IClickAcceptingUIElement;
 import com.minecolonies.blockout.core.element.input.IKeyAcceptingUIElement;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.input.IKeyManager;
@@ -19,7 +18,10 @@ public class KeyManager extends AbstractInputManager implements IKeyManager
     @Override
     public void onKeyPressed(final int character, final KeyboardKey key)
     {
-
+        attemptInputInteraction(
+          t -> t.canAcceptKeyInput(character, key),
+          t -> t.onKeyPressed(character, key)
+        );
     }
 
     protected void attemptInputInteraction(
@@ -28,7 +30,7 @@ public class KeyManager extends AbstractInputManager implements IKeyManager
     {
         @Nullable final IUIElement currentFocus = getManager().getFocusManager().getFocusedElement();
 
-        if (currentFocus instanceof IClickAcceptingUIElement)
+        if (currentFocus instanceof IKeyAcceptingUIElement)
         {
             if (attemptMouseInteractionWith(currentFocus, acceptanceCallback, executionCallback))
             {
@@ -37,15 +39,6 @@ public class KeyManager extends AbstractInputManager implements IKeyManager
         }
 
         onAcceptanceFailure();
-
-
-        if (target.isPresent() && target.get() instanceof IClickAcceptingUIElement)
-        {
-            if (attemptMouseInteractionWith(target.get(), localX, localY, acceptanceCallback, executionCallback))
-            {
-                getManager().getFocusManager().setFocusedElement(target.get());
-            }
-        }
     }
 
     private boolean attemptMouseInteractionWith(

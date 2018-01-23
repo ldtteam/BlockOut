@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.element.management;
+package com.minecolonies.blockout.element.management.focus;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.management.IUIManager;

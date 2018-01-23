@@ -4,7 +4,7 @@ import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 
 public interface IKeyAcceptingUIElement
 {
-    boolean canAcceptKeyInput(final char character, final KeyboardKey key);
+    boolean canAcceptKeyInput(final int character, final KeyboardKey key);
 
     void onKeyPressed(final int character, final KeyboardKey key);
 }
