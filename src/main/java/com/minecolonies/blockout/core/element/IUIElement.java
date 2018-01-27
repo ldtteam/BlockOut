@@ -1,10 +1,18 @@
 package com.minecolonies.blockout.core.element;
 
 import com.minecolonies.blockout.util.math.BoundingBox;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIElement
 {
+
+    /**
+     * The unique identifier of the element in the UI.
+     * @return The id of the element.
+     */
+    @NotNull
+    ResourceLocation getId();
 
     /**
      * Method to get the local {@link BoundingBox} of this {@link IUIElement}
@@ -20,7 +28,7 @@ public interface IUIElement
     void setLocalBoundingBox(@NotNull final BoundingBox box);
 
     /**
-     * Gets the absolute {@link BoundingBox} in terms of screen coordinates.
+     * Gets the absolute {@link BoundingBox} in terms of gui coordinates.
      *
      * @return The absolute {@link BoundingBox}.
      */

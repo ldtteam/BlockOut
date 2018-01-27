@@ -1,11 +1,13 @@
 package com.minecolonies.blockout;
 
-import com.minecolonies.blockout.loader.LoaderManager;
+import com.minecolonies.blockout.connector.core.ILoaderManager;
 import com.minecolonies.blockout.loader.json.JsonLoader;
 import com.minecolonies.blockout.loader.xml.XMLLoader;
 import com.minecolonies.blockout.network.NetworkManager;
+import com.minecolonies.blockout.proxy.IProxy;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,22 @@ import org.jetbrains.annotations.NotNull;
   dependencies = Constants.FORGE_VERSION, acceptedMinecraftVersions = Constants.MC_VERSION)
 public class BlockOut
 {
+
+    public static BlockOut getBlockOut()
+    {
+        return blockOut;
+    }
+
+    @SidedProxy(clientSide = Constants.PROXY_CLIENT, serverSide = Constants.PROXY_COMMON)
+    private static IProxy proxy;
+
+    @Mod.Instance
+    private static BlockOut blockOut;
+
+    public IProxy getProxy()
+    {
+        return proxy;
+    }
 
     /**
      * Event handler for forge pre init event.
@@ -27,8 +45,8 @@ public class BlockOut
 
         if (event.getSide() == Side.CLIENT)
         {
-            LoaderManager.registerLoader(new XMLLoader());
-            LoaderManager.registerLoader(new JsonLoader());
+            ILoaderManager.registerLoader(new XMLLoader());
+            ILoaderManager.registerLoader(new JsonLoader());
         }
     }
 }

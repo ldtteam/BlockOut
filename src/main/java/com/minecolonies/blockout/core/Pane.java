@@ -3,8 +3,7 @@ package com.minecolonies.blockout.core;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.loader.IPaneParams;
-import com.minecolonies.blockout.screen.Screen;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Alignment;
 import com.minecolonies.blockout.util.Render;
 import com.minecolonies.blockout.util.SizePair;
@@ -52,11 +51,11 @@ public class Pane extends Gui implements IUIElement
     }
 
     /**
-     * Constructs a Pane from IPaneParams.
+     * Constructs a Pane from IUIElementData.
      *
      * @param params Params for the Pane.
      */
-    public Pane(@NotNull final IPaneParams params)
+    public Pane(@NotNull final IUIElementData params)
     {
         super();
         id = params.getStringAttribute("id", id);
@@ -130,7 +129,7 @@ public class Pane extends Gui implements IUIElement
      *
      * @param params the parameter.
      */
-    public void parseChildren(final IPaneParams params)
+    public void parseChildren(final IUIElementData params)
     {
         // Can be overloaded
     }

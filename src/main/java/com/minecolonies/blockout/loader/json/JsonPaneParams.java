@@ -3,7 +3,7 @@ package com.minecolonies.blockout.loader.json;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Localization;
 import com.minecolonies.blockout.views.View;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class JsonPaneParams implements IPaneParams
+public class JsonPaneParams implements IUIElementData
 {
     private final JsonObject object;
     private       View       parent;
@@ -53,7 +53,7 @@ public class JsonPaneParams implements IPaneParams
 
     @Nullable
     @Override
-    public List<IPaneParams> getChildren()
+    public List<IUIElementData> getChildren()
     {
         if (!object.has("children"))
         {

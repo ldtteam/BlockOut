@@ -204,7 +204,7 @@ public class RenderingController implements IRenderingController
     /**
      * Draws a vertical gradient rectangle in the given position.
      *
-     * @param box        The plane to fill on the screen
+     * @param box        The plane to fill on the gui
      * @param z          The Z-Level to render on.
      * @param colorStart The left color
      * @param colorEnd   The right color.

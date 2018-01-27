@@ -1,12 +1,12 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Log;
 import org.lwjgl.input.Keyboard;
 
 /**
- * An OverlayView is a full screen View which is displayed on top of the window.
+ * An OverlayView is a full gui View which is displayed on top of the window.
  */
 public class OverlayView extends View
 {
@@ -19,11 +19,11 @@ public class OverlayView extends View
     }
 
     /**
-     * Constructs a OverlayView from IPaneParams.
+     * Constructs a OverlayView from IUIElementData.
      *
      * @param params Params for the View.
      */
-    public OverlayView(final IPaneParams params)
+    public OverlayView(final IUIElementData params)
     {
         super(params);
     }

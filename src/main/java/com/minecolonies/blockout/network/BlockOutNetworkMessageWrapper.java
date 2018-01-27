@@ -90,16 +90,9 @@ class BlockOutNetworkMessageWrapper implements IMessage, IMessageHandler<BlockOu
     @Override
     public BlockOutNetworkMessageWrapper onMessage(final BlockOutNetworkMessageWrapper message, final MessageContext ctx)
     {
-        if (!message.loaded)
+        if (message.loaded)
         {
-            return null;
-        }
-
-        final IBlockOutNetworkMessage result = message.message.onMessage(ctx);
-
-        if (result != null)
-        {
-            return new BlockOutNetworkMessageWrapper(result);
+            message.message.onMessage(ctx);
         }
 
         return null;

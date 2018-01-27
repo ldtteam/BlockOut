@@ -69,7 +69,7 @@ public class ComponentConstructionController
 
         try
         {
-            final Constructor<? extends Pane> constructor = paneClass.getDeclaredConstructor(IPaneParams.class);
+            final Constructor<? extends Pane> constructor = paneClass.getDeclaredConstructor(IUIElementData.class);
             paneConstructorMap.put(key, constructor);
         }
         catch (final NoSuchMethodException exception)

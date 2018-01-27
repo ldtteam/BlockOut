@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.core.Pane;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.loader.IPaneParams;
-import com.minecolonies.blockout.loader.LoaderManager;
+import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.connector.CommonLoaderManager;
 import com.minecolonies.blockout.util.Alignment;
 import net.minecraft.client.renderer.GlStateManager;
 import org.jetbrains.annotations.NotNull;
@@ -33,11 +33,11 @@ public class View extends Pane
     }
 
     /**
-     * Constructs a View from IPaneParams.
+     * Constructs a View from IUIElementData.
      *
      * @param params Params for the View.
      */
-    public View(final IPaneParams params)
+    public View(final IUIElementData params)
     {
         super(params);
         padding = params.getIntegerAttribute("padding", padding);
@@ -50,17 +50,17 @@ public class View extends Pane
         return ImmutableList.copyOf(children);
     }
 
-    public void parseChildren(final IPaneParams params)
+    public void parseChildren(final IUIElementData params)
     {
-        final List<IPaneParams> childNodes = params.getChildren();
+        final List<IUIElementData> childNodes = params.getChildren();
         if (childNodes == null)
         {
             return;
         }
 
-        for (final IPaneParams node : childNodes)
+        for (final IUIElementData node : childNodes)
         {
-            LoaderManager.createFromPaneParams(node, this);
+            CommonLoaderManager.createFromPaneParams(node, this);
         }
     }
 

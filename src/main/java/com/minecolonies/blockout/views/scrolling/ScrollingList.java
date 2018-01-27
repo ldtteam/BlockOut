@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views.scrolling;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.function.IntSupplier;
 public class ScrollingList extends ScrollingView
 {
     //  Runtime
-    protected DataProvider dataProvider;
-    private   IPaneParams  listNodeParams;
+    protected DataProvider   dataProvider;
+    private   IUIElementData listNodeParams;
 
     /**
      * Default constructor required by Blockout.
@@ -28,11 +28,11 @@ public class ScrollingList extends ScrollingView
     }
 
     /**
-     * Constructs a ScrollingList from IPaneParams.
+     * Constructs a ScrollingList from IUIElementData.
      *
      * @param params Params for the ScrollingList
      */
-    public ScrollingList(final IPaneParams params)
+    public ScrollingList(final IUIElementData params)
     {
         super(params);
     }
@@ -84,15 +84,15 @@ public class ScrollingList extends ScrollingView
     }
 
     @Override
-    public void parseChildren(@NotNull final IPaneParams params)
+    public void parseChildren(@NotNull final IUIElementData params)
     {
-        final List<IPaneParams> childNodes = params.getChildren();
+        final List<IUIElementData> childNodes = params.getChildren();
         if (childNodes == null)
         {
             return;
         }
 
-        //  Get the IPaneParams for this child, because we'll need it in the future
+        //  Get the IUIElementData for this child, because we'll need it in the future
         //  to create more nodes
         listNodeParams = childNodes.get(0);
     }

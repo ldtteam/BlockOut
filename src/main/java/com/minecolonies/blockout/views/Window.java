@@ -1,8 +1,7 @@
 package com.minecolonies.blockout.views;
 
-import com.minecolonies.blockout.loader.IPaneParams;
-import com.minecolonies.blockout.loader.LoaderManager;
-import com.minecolonies.blockout.screen.Screen;
+import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.connector.CommonLoaderManager;
 import com.minecolonies.blockout.util.SizePair;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +26,7 @@ public class Window extends View
     private static final int DEFAULT_HEIGHT = 240;
 
     /**
-     * The screen of the window.
+     * The gui of the window.
      */
     protected Screen screen;
 
@@ -49,7 +48,7 @@ public class Window extends View
     public Window(final ResourceLocation resource)
     {
         this();
-        LoaderManager.createFromFile(resource, this);
+        CommonLoaderManager.createFromFile(resource, this);
     }
 
     /**
@@ -84,7 +83,7 @@ public class Window extends View
     public Window(final String resource)
     {
         this();
-        LoaderManager.createFromFile(resource, this);
+        CommonLoaderManager.createFromFile(resource, this);
     }
 
     /**
@@ -92,12 +91,12 @@ public class Window extends View
      *
      * @param params xml parameters.
      */
-    public void loadParams(@NotNull final IPaneParams params)
+    public void loadParams(@NotNull final IUIElementData params)
     {
         final String inherit = params.getStringAttribute("inherit", null);
         if (inherit != null)
         {
-            LoaderManager.createFromFile(new ResourceLocation(inherit), this);
+            CommonLoaderManager.createFromFile(new ResourceLocation(inherit), this);
         }
 
         final SizePair size = params.getSizePairAttribute("size", null, null);
@@ -117,7 +116,7 @@ public class Window extends View
     }
 
     @Override
-    public void parseChildren(final IPaneParams params)
+    public void parseChildren(final IUIElementData params)
     {
         // Can be overridden
     }

@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,11 +23,11 @@ public class Group extends View
     }
 
     /**
-     * Constructs a View from IPaneParams.
+     * Constructs a View from IUIElementData.
      *
      * @param params Params for the Pane.
      */
-    public Group(@NotNull final IPaneParams params)
+    public Group(@NotNull final IUIElementData params)
     {
         super(params);
         spacing = params.getIntegerAttribute("spacing", spacing);

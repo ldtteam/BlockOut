@@ -3,7 +3,7 @@ package com.minecolonies.blockout.loader.xml;
 import com.minecolonies.blockout.core.Pane;
 import com.minecolonies.blockout.loader.ComponentConstructionController;
 import com.minecolonies.blockout.loader.ILoader;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.views.View;
 import com.minecolonies.blockout.views.Window;
@@ -35,7 +35,7 @@ public final class XMLLoader implements ILoader
         // Hides default constructor.
     }
 
-    private Pane createFromPaneParams(final IPaneParams params)
+    private Pane createFromPaneParams(final IUIElementData params)
     {
         //  Parse Attributes first, to full construct
         final String paneType = params.getType();
@@ -71,7 +71,7 @@ public final class XMLLoader implements ILoader
     }
 
     @Override
-    public boolean accepts(@NotNull final IPaneParams paneParams)
+    public boolean accepts(@NotNull final IUIElementData paneParams)
     {
         return paneParams instanceof XMLPaneParams;
     }
@@ -84,7 +84,7 @@ public final class XMLLoader implements ILoader
      * @return the new pane.
      */
     @Override
-    public Pane createFromPaneParams(final IPaneParams params, final View parent)
+    public Pane createFromPaneParams(final IUIElementData params, final View parent)
     {
         if ("layout".equalsIgnoreCase(params.getType()))
         {

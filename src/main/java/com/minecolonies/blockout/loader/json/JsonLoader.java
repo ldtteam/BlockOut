@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import com.minecolonies.blockout.core.Pane;
 import com.minecolonies.blockout.loader.ComponentConstructionController;
 import com.minecolonies.blockout.loader.ILoader;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.xml.XMLLoader;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.views.View;
@@ -31,14 +31,14 @@ public class JsonLoader implements ILoader
     }
 
     @Override
-    public boolean accepts(@NotNull final IPaneParams paneParams)
+    public boolean accepts(@NotNull final IUIElementData paneParams)
     {
         return paneParams instanceof JsonPaneParams;
     }
 
     @Override
     public Pane createFromPaneParams(
-      @NotNull final IPaneParams params, @NotNull final View parent)
+      @NotNull final IUIElementData params, @NotNull final View parent)
     {
         if ("layout".equalsIgnoreCase(params.getType()))
         {
@@ -69,7 +69,7 @@ public class JsonLoader implements ILoader
         createFromJson(createInputStream(resource), parent);
     }
 
-    private Pane createFromPaneParams(final IPaneParams params)
+    private Pane createFromPaneParams(final IUIElementData params)
     {
         //  Parse Attributes first, to full construct
         final String paneType = params.getType();

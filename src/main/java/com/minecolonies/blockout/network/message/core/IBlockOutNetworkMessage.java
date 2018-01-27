@@ -1,22 +1,24 @@
 package com.minecolonies.blockout.network.message.core;
 
+import com.minecolonies.blockout.BlockOut;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public interface IBlockOutNetworkMessage
+import java.io.Externalizable;
+import java.io.Serializable;
+
+public interface IBlockOutNetworkMessage extends Serializable
 {
-    default IBlockOutNetworkMessage onMessage(final MessageContext ctx)
+    default void onMessage(final MessageContext ctx)
     {
         if (ctx.side == Side.CLIENT && this instanceof IBlockOutClientToServerMessage)
         {
-            return ((IBlockOutClientToServerMessage) this).onMessageArrivalAtServer(ctx);
+            BlockOut.getBlockOut().getProxy().getTaskExecutorForMessage(ctx).addScheduledTask(() -> ((IBlockOutClientToServerMessage) this).onMessageArrivalAtServer(ctx));
         }
 
         if (ctx.side == Side.CLIENT && this instanceof IBlockOutServerToClientMessage)
         {
-            return ((IBlockOutServerToClientMessage) this).onMessageArrivalAtClient(ctx);
+            BlockOut.getBlockOut().getProxy().getTaskExecutorForMessage(ctx).addScheduledTask(() -> ((IBlockOutServerToClientMessage) this).onMessageArrivalAtClient(ctx));
         }
-
-        return null;
     }
 }

@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.controls.text;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.views.View;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -55,7 +55,7 @@ public class TextField extends Pane
      *
      * @param params the parameters for the textField.
      */
-    public TextField(@NotNull final IPaneParams params)
+    public TextField(@NotNull final IUIElementData params)
     {
         super(params);
         maxTextLength = params.getIntegerAttribute("maxlength", maxTextLength);
@@ -329,7 +329,7 @@ public class TextField extends Pane
         final int drawX = x;
         final int drawY = y;
 
-        //  Determine the portion of the string that is visible on screen
+        //  Determine the portion of the string that is visible on gui
         final String visibleString = mc.fontRenderer.trimStringToWidth(text.substring(scrollOffset), drawWidth);
 
         final int relativeCursorPosition = cursorPosition - scrollOffset;

@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.views.scrolling;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
-import com.minecolonies.blockout.loader.LoaderManager;
+import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.connector.CommonLoaderManager;
 
 /**
  * A Blockout pane that contains a scrolling line of other panes.
@@ -22,7 +22,7 @@ public class ScrollingListContainer extends ScrollingContainer
      * @param dataProvider   data provider object, shouldn't be null.
      * @param listNodeParams the xml parameters for this pane.
      */
-    public void refreshElementPanes(final ScrollingList.DataProvider dataProvider, final IPaneParams listNodeParams)
+    public void refreshElementPanes(final ScrollingList.DataProvider dataProvider, final IUIElementData listNodeParams)
     {
         if (dataProvider != null)
         {
@@ -35,7 +35,7 @@ public class ScrollingListContainer extends ScrollingContainer
                 }
                 else
                 {
-                    child = LoaderManager.createFromPaneParams(listNodeParams, this);
+                    child = CommonLoaderManager.createFromPaneParams(listNodeParams, this);
                     if (child == null)
                     {
                         continue;

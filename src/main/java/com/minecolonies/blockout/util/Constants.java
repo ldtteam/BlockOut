@@ -10,4 +10,7 @@ public class Constants
     public static final String FORGE_VERSION = "required:forge@[@FORGEVERSION@,);";
     public static final String NETWORK_NAME  = MOD_ID + ":network";
 
+    public static final String PROXY_CLIENT = "com.minecolonies.blockout.proxy.ClientProxy";
+    public static final String PROXY_COMMON = "com.minecolonies.blockout.proxy.CommonProxy";
+
 }

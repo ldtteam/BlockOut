@@ -19,19 +19,10 @@ public interface ILoader
     boolean accepts(@NotNull final ResourceLocation location);
 
     /**
-     * Method used to detect if this {@link ILoader} accepts the {@link IPaneParams} to load.
+     * Creates a {@link IUIElement} from a given {@link ResourceLocation}.
      *
-     * @param paneParams The {@link IPaneParams} to check.
-     * @return True when the loader accepts, false when not.
-     */
-    boolean accepts(@NotNull final IPaneParams paneParams);
-
-    /**
-     * Creates a {@link IUIElement} from a given {@link IPaneParams}
-     *
-     * @param params The params to create a pane from.
-     * @param parent The parent {@link IUIElement}.
+     * @param location The location to load the UI from.
      * @return The element.
      */
-    IUIElement createFromPaneParams(@NotNull final IPaneParams params, @NotNull final IUIElement parent);
+    IUIElementData createFromFile(@NotNull final ResourceLocation location);
 }

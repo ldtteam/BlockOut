@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.loader.xml;
 
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Localization;
 import com.minecolonies.blockout.views.View;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Special parameters for the panes.
  */
-public class XMLPaneParams implements IPaneParams
+public class XMLPaneParams implements IUIElementData
 {
 
     private final Node node;
@@ -61,9 +61,9 @@ public class XMLPaneParams implements IPaneParams
 
     @Override
     @Nullable
-    public List<IPaneParams> getChildren()
+    public List<IUIElementData> getChildren()
     {
-        List<IPaneParams> list = null;
+        List<IUIElementData> list = null;
 
         Node child = node.getFirstChild();
         while (child != null)

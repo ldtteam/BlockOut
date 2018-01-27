@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.controls.button;
 
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -39,9 +39,9 @@ public class ButtonVanilla extends Button
     /**
      * Constructor called when loaded from xml.
      *
-     * @param params IPaneParams from xml file.
+     * @param params IUIElementData from xml file.
      */
-    public ButtonVanilla(final IPaneParams params)
+    public ButtonVanilla(final IUIElementData params)
     {
         super(params);
         if (width == 0)

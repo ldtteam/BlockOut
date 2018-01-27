@@ -1,6 +1,6 @@
 package com.minecolonies.blockout.controls.text;
 
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatAllowedCharacters;
 
@@ -31,7 +31,7 @@ public class TextFieldVanilla extends TextField
      *
      * @param params xml parameters.
      */
-    public TextFieldVanilla(final IPaneParams params)
+    public TextFieldVanilla(final IUIElementData params)
     {
         super(params);
         backgroundEnabled = params.getBooleanAttribute("background", backgroundEnabled);

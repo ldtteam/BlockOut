@@ -1,7 +1,7 @@
 package com.minecolonies.blockout.views;
 
 import com.minecolonies.blockout.core.Pane;
-import com.minecolonies.blockout.loader.IPaneParams;
+import com.minecolonies.blockout.loader.IUIElementData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,17 +22,17 @@ public class SwitchView extends View
     }
 
     /**
-     * Constructs a View from IPaneParams.
+     * Constructs a View from IUIElementData.
      *
      * @param params Params for the Pane.
      */
-    public SwitchView(final IPaneParams params)
+    public SwitchView(final IUIElementData params)
     {
         super(params);
     }
 
     @Override
-    public void parseChildren(@NotNull final IPaneParams params)
+    public void parseChildren(@NotNull final IUIElementData params)
     {
         super.parseChildren(params);
 

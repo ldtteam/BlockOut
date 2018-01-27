@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.element.management.focus;
+package com.minecolonies.blockout.management.focus;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.management.IUIManager;
@@ -32,9 +32,8 @@ public class FocusManager implements IFocusManager
             return;
         }
 
-        final IUIElement oldElement = this.focusedElement;
         this.focusedElement = focusedElement;
 
-        manager.getNetworkManager().onFocusChanged(oldElement, focusedElement);
+        manager.getNetworkManager().onFocusChanged(focusedElement);
     }
 }

@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IPaneParams
+public interface IUIElementData
 {
     /**
-     * Method to get the type name of the Pane that is to be constructed from these {@link IPaneParams}
+     * Method to get the type name of the Pane that is to be constructed from these {@link IUIElementData}
      *
      * @return The pane type.
      */
@@ -43,11 +43,11 @@ public interface IPaneParams
     int getParentHeight();
 
     /**
-     * Method used to get a list of {@link IPaneParams} of children of the Pane that is to be constructed.
-     * @return A list with {@link IPaneParams} to construct the children.
+     * Method used to get a list of {@link IUIElementData} of children of the Pane that is to be constructed.
+     * @return A list with {@link IUIElementData} to construct the children.
      */
     @Nullable
-    List<IPaneParams> getChildren();
+    List<IUIElementData> getChildren();
 
     /**
      * Method used to get the text for the pane.

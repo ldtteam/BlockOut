@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.element.management;
+package com.minecolonies.blockout.management;
 
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.management.IUIManager;
@@ -7,6 +7,7 @@ import com.minecolonies.blockout.core.management.input.IClickManager;
 import com.minecolonies.blockout.core.management.input.IKeyManager;
 import com.minecolonies.blockout.core.management.input.IScrollManager;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
+import com.minecolonies.blockout.management.network.ServerNetworkManager;
 import org.jetbrains.annotations.NotNull;
 
 public class UIManager implements IUIManager
@@ -15,7 +16,7 @@ public class UIManager implements IUIManager
     @NotNull
     private final IUIElementHost host;
     @NotNull
-    private final INetworkManager networkManager = new NetworkManager();
+    private final INetworkManager networkManager = new ServerNetworkManager();
 
 
     public UIManager(@NotNull final IUIElementHost host) {

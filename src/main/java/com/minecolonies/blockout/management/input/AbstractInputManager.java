@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.element.management.input;
+package com.minecolonies.blockout.management.input;
 
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.input.IInputManager;
