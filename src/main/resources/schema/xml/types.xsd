@@ -13,7 +13,7 @@
     <xs:complexType name="windowType">
         <xs:group ref="groups:paneContainerGroup" minOccurs="0" maxOccurs="unbounded"/>
         <xs:attribute name="inherit" type="xs:string"/>
-        <xs:attribute name="size" type="util:sizePair"/>
+        <xs:attribute name="elementSize" type="util:sizePair"/>
         <xs:attribute name="width" type="xs:string"/>
         <xs:attribute name="height" type="xs:string"/>
         <xs:attribute name="lightbox" type="xs:boolean"/>
@@ -29,7 +29,7 @@
         <xs:attribute name="id" type="xs:string"/>
 
         <xs:attribute name="align" type="util:align"/>
-        <xs:attribute name="size" type="util:sizePair"/>
+        <xs:attribute name="elementSize" type="util:sizePair"/>
         <xs:attribute name="width" type="xs:string"/>
         <xs:attribute name="height" type="xs:string"/>
         <xs:attribute name="pos" type="util:sizePair"/>

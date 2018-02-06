@@ -2,6 +2,7 @@ package com.minecolonies.blockout.render.core;
 
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +21,7 @@ public interface IRenderingController
 
     void bindTexture(@NotNull ResourceLocation textureLocation);
 
-    void drawTexturedModalRect(int x, int y, int z, int u, int v, int w, int h);
+    void drawTexturedModalRect(@NotNull final BoundingBox box, @NotNull final Vector2d textureSize);
 
     void drawFluid(@Nullable FluidStack fluid, int x, int y, int z, int w, int h);
 

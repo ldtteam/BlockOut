@@ -5,6 +5,7 @@ import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.ILoaderManager;
 import com.minecolonies.blockout.connector.core.IUIElementFactoryController;
 import com.minecolonies.blockout.connector.server.ServerGuiController;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
@@ -52,5 +53,12 @@ public class CommonProxy implements IProxy
 
         final Object mod = Loader.instance().getIndexedModList().get(modId).getMod();
         return mod.getClass().getResourceAsStream(path);
+    }
+
+    @NotNull
+    @Override
+    public Vector2d getImageSize(@NotNull final ResourceLocation location)
+    {
+        return new Vector2d();
     }
 }

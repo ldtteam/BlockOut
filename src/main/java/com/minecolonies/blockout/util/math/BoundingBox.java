@@ -23,7 +23,7 @@ public final class BoundingBox
 
     public BoundingBox(@NotNull final BoundingBox other)
     {
-        this(other.getLocalOrigin(), other.getSize());
+        this(new Vector2d(other.getLocalOrigin()), new Vector2d(other.getSize()));
     }
 
     @NotNull

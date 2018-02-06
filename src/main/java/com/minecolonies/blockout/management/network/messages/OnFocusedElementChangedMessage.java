@@ -1,21 +1,20 @@
 package com.minecolonies.blockout.management.network.messages;
 
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.minecolonies.blockout.gui.BlockOutGui;
+import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMessage
 {
-    private ResourceLocation focusedElementId;
+    private String focusedElementId;
 
     public OnFocusedElementChangedMessage() {
-        focusedElementId = null;
+        focusedElementId = "";
     }
 
     public OnFocusedElementChangedMessage(@Nullable final IUIElement focusedElement)

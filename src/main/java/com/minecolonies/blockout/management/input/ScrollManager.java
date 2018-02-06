@@ -48,7 +48,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
 
         onAcceptanceFailure();
 
-        final Optional<IUIElement> target = getManager().getHost().searchDeepestElementByCoord(localX, localY);
+        final Optional<IUIElement> target = getManager().getHost().searchDeepestElementByCoord(new Vector2d(localX, localY));
         if (target.isPresent() && target.get() instanceof IScrollAcceptingUIElement)
         {
             if (attemptMouseInteractionWith(target.get(), localX, localY, acceptanceCallback, executionCallback))

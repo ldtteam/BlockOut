@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.core.element;
 
+import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -22,6 +23,34 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
     {
         return getParent().getUiManager();
     }
+
+    /**
+     * Method used to get the padding of the child elements.
+     *
+     * @return The padding of child elements
+     */
+    AxisDistance getPadding();
+
+    /**
+     * Method to set the padding of the child elements.
+     *
+     * @param padding The new padding.
+     */
+    void setPadding(@NotNull final AxisDistance padding);
+
+    /**
+     * Method to get the local internal bounding box in which the children reside.
+     *
+     * @return The local internal bounding box.
+     */
+    BoundingBox getLocalInternalBoundingBox();
+
+    /**
+     * Method to get the absolute internal bounding box in which the children reside.
+     *
+     * @return The absolute internal bounding box.
+     */
+    BoundingBox getAbsoluteInternalBoundingBox();
 
     /**
      * Finds a child {@link IUIElement} using recursion that has the given id and is an instance of the given class.
@@ -99,11 +128,9 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
             return Optional.empty();
         }
 
-        final Vector2d internalPoint = localPoint.move(getLocalInternalBoundingBox().getLocalOrigin().invert());
-
         for (IUIElement element : values())
         {
-            final Vector2d elementLocalCoord = internalPoint.move(element.getLocalBoundingBox().getLocalOrigin().invert());
+            final Vector2d elementLocalCoord = localPoint.move(element.getLocalBoundingBox().getLocalOrigin().invert());
             if (element instanceof IUIElementHost)
             {
                 final IUIElementHost elementHost = (IUIElementHost) element;
@@ -132,27 +159,5 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
         }
     }
 
-    @NotNull
-    default BoundingBox getAbsoluteInternalBoundingBox()
-    {
-        final BoundingBox absoluteBox = getAbsoluteBoundingBox();
 
-        final Vector2d size = absoluteBox.getSize().move(getLocalInternalBoundingBox().getLocalOrigin().invert()).nullifyNegatives();
-        return new BoundingBox(absoluteBox.getLocalOrigin().move(getLocalInternalBoundingBox().getLocalOrigin()), size);
-    }
-
-    /**
-     * Method to get the internal bounding box.
-     *
-     * @return The internal bounding box.
-     */
-    @NotNull
-    BoundingBox getLocalInternalBoundingBox();
-
-    /**
-     * Method to set the internal bounding box.
-     *
-     * @param box The internal bouding box.
-     */
-    void setLocalInternalBoundingBox(@NotNull final BoundingBox box);
 }

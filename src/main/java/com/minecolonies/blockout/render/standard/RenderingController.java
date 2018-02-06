@@ -4,6 +4,7 @@ import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.render.core.IScissoringController;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.*;
@@ -55,37 +56,34 @@ public class RenderingController implements IRenderingController
         Minecraft.getMinecraft().getTextureManager().bindTexture(textureLocation);
     }
 
-    /**
-     * Helper function copied from the gui class to make it possible to use it outside of a gui class.
-     * <p>
-     * TRhe function comes with regards to the Minecraft Team
-     *
-     * @param x The x offset
-     * @param y The y offset
-     * @param z The z offset
-     * @param w The total Width
-     * @param h The total Height
-     * @param u The X Offset in the currently loaded GL Image.
-     * @param v The Y Offset in the currently loaded GL Iamge
-     */
     @Override
-    public void drawTexturedModalRect(int x, int y, int z, int u, int v, int w, int h)
+    public void drawTexturedModalRect(@NotNull final BoundingBox box, @NotNull final Vector2d textureSize)
     {
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
+        final double x = box.getLocalOrigin().getX();
+        final double y = box.getLocalOrigin().getY();
+        final double z = 1d;
+        final double w = box.getSize().getX();
+        final double h = box.getSize().getY();
+        final double u = textureSize.getX();
+        final double v = textureSize.getY();
+
+        double f = 0.00390625;
+        double f1 = 0.00390625;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z)
-          .tex((double) ((float) (u + 0) * f), (double) ((float) (v + h) * f1))
+        worldrenderer.pos(x, y + h, z)
+          .tex(u * f, (v + h) * f1)
           .endVertex();
-        worldrenderer.pos((double) (x + w), (double) (y + h), (double) z)
-          .tex((double) ((float) (u + w) * f), (double) ((float) (v + h) * f1))
+        worldrenderer.pos(x + w, y + h, z)
+          .tex((u + w) * f, (v + h) * f1)
           .endVertex();
-        worldrenderer.pos((double) (x + w), (double) (y + 0), (double) z)
-          .tex((double) ((float) (u + w) * f), (double) ((float) (v + 0) * f1))
+        worldrenderer.pos(x + w, y, z)
+          .tex((u + w) * f, v * f1)
           .endVertex();
-        worldrenderer.pos((double) (x + 0), (double) (y + 0), (double) z).tex((double) ((float) (u + 0) * f), (double) ((float) (v + 0) * f1)).endVertex();
+        worldrenderer.pos(x, y, z)
+          .tex(u * f, v * f1)
+          .endVertex();
         tessellator.draw();
     }
 
