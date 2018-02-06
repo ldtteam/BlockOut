@@ -164,7 +164,7 @@ public class Parsing
         }
         catch (final NumberFormatException ex)
         {
-            return Color.getByName(attr, def);
+            return 0;
         }
     }
 }

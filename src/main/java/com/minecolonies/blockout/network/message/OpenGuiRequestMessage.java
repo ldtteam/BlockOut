@@ -1,8 +1,9 @@
 package com.minecolonies.blockout.network.message;
 
+import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.network.message.core.IBlockOutClientToServerMessage;
-import com.minecolonies.blockout.network.message.core.IBlockOutNetworkMessage;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,17 +11,34 @@ import org.jetbrains.annotations.Nullable;
 public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
 {
 
-    private ResourceLocation requestedGuiLocation;
+    @NotNull
+    private IGuiKey key;
 
-    public OpenGuiRequestMessage(final ResourceLocation requestedGuiLocation)
+    public OpenGuiRequestMessage()
     {
-        this.requestedGuiLocation = requestedGuiLocation;
+    }
+
+    public OpenGuiRequestMessage(@NotNull final IGuiKey key)
+    {
+        this.key = key;
     }
 
     @Nullable
     @Override
-    public IBlockOutNetworkMessage onMessageArrivalAtServer(@NotNull final MessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final MessageContext ctx)
     {
-        return null;
+        final EntityPlayerMP playerMP = ctx.getServerHandler().player;
+        BlockOut.getBlockOut().getProxy().getGuiController().openUI(getKey(), playerMP.getUniqueID());
+    }
+
+    @NotNull
+    public IGuiKey getKey()
+    {
+        return key;
+    }
+
+    public void setKey(@NotNull final IGuiKey key)
+    {
+        this.key = key;
     }
 }

@@ -1,16 +1,56 @@
 package com.minecolonies.blockout.proxy;
 
-import net.minecraft.util.IThreadListener;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.minecolonies.blockout.connector.common.CommonLoaderManager;
+import com.minecolonies.blockout.connector.core.IGuiController;
+import com.minecolonies.blockout.connector.core.ILoaderManager;
+import com.minecolonies.blockout.connector.core.IUIElementFactoryController;
+import com.minecolonies.blockout.connector.server.ServerGuiController;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.InputStream;
 
 public class CommonProxy implements IProxy
 {
+    private final ServerGuiController controller;
+    private final CommonLoaderManager commonLoaderManager;
 
+    public CommonProxy()
+    {
+        controller = new ServerGuiController();
+        commonLoaderManager = new CommonLoaderManager();
+    }
+
+    @NotNull
+    @Override
+    public IGuiController getGuiController()
+    {
+        return controller;
+    }
+
+    @NotNull
+    @Override
+    public ILoaderManager getLoaderManager()
+    {
+        return commonLoaderManager;
+    }
+
+    @NotNull
+    @Override
+    public IUIElementFactoryController getFactoryController()
+    {
+        return null;
+    }
 
     @Override
-    public IThreadListener getTaskExecutorForMessage(@NotNull final MessageContext ctx)
+    @NotNull
+    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
-        return ctx.getServerHandler().player.getServerWorld();
+        final String modId = location.getResourceDomain().toLowerCase();
+        final String path = "assets/" + modId + "/" + location.getResourcePath();
+
+        final Object mod = Loader.instance().getIndexedModList().get(modId).getMod();
+        return mod.getClass().getResourceAsStream(path);
     }
 }

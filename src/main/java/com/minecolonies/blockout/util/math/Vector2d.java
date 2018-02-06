@@ -119,6 +119,12 @@ public final class Vector2d
     }
 
     @NotNull
+    public Vector2d nullifyNegatives()
+    {
+        return invert().nullifyPositives().invert();
+    }
+
+    @NotNull
     public Vector2d clamp(@NotNull final Vector2d min, @NotNull final Vector2d max)
     {
         return new Vector2d(

@@ -41,27 +41,27 @@ public class UIManager implements IUIManager
     @Override
     public IFocusManager getFocusManager()
     {
-        return focusManager;
+        return null;
     }
 
     @NotNull
     @Override
     public IClickManager getClickManager()
     {
-        return clickManager;
+        return null;
     }
 
     @NotNull
     @Override
     public IKeyManager getKeyManager()
     {
-        return keyManager;
+        return null;
     }
 
     @NotNull
     @Override
     public IScrollManager getScrollManager()
     {
-        return scrollManager;
+        return null;
     }
 }

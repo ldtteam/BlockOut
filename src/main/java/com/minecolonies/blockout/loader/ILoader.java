@@ -11,7 +11,7 @@ public interface ILoader
 {
 
     /**
-     * Method used to detect if this {@link ILoader} accepts the file in the {@link ResourceLocation}
+     * Method used to detect if this {@link ILoader} accepts the file in the {@link String}
      *
      * @param location The location to check.
      * @return True when the loader accepts. false when not.
@@ -19,7 +19,7 @@ public interface ILoader
     boolean accepts(@NotNull final ResourceLocation location);
 
     /**
-     * Creates a {@link IUIElement} from a given {@link ResourceLocation}.
+     * Creates a {@link IUIElement} from a given {@link String}.
      *
      * @param location The location to load the UI from.
      * @return The element.

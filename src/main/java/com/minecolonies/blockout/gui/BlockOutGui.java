@@ -1,16 +1,19 @@
 package com.minecolonies.blockout.gui;
 
+import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 
 public class BlockOutGui extends GuiContainer
 {
+    private final IGuiKey        key;
     private final IUIElementHost root;
 
-    public BlockOutGui(final Container inventorySlotsIn)
+    public BlockOutGui(final Container inventorySlotsIn, final IGuiKey key)
     {
         super(inventorySlotsIn);
+        this.key = key;
         root = null;
     }
 
@@ -23,5 +26,10 @@ public class BlockOutGui extends GuiContainer
     public IUIElementHost getRoot()
     {
         return root;
+    }
+
+    public IGuiKey getKey()
+    {
+        return key;
     }
 }

@@ -2,7 +2,6 @@ package com.minecolonies.blockout.management.network;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
-import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,7 @@ public class ServerNetworkManager implements INetworkManager
     @Override
     public void onFocusChanged(@Nullable final IUIElement newElement)
     {
-        NetworkManager.
+
     }
 
     @Override

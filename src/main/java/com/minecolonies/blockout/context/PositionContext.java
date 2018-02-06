@@ -3,7 +3,6 @@ package com.minecolonies.blockout.context;
 import com.minecolonies.blockout.context.core.IContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 public class PositionContext implements IContext
@@ -28,9 +27,6 @@ public class PositionContext implements IContext
 
     public PositionContext(@NotNull final World world, @NotNull final BlockPos pos)
     {
-        Validate.notNull(world);
-        Validate.notNull(pos);
-
         this.dimensionId = world.provider.getDimension();
         this.x = pos.getX();
         this.y = pos.getY();

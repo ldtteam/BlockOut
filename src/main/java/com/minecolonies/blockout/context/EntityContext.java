@@ -2,7 +2,6 @@ package com.minecolonies.blockout.context;
 
 import com.minecolonies.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
-import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -17,15 +16,11 @@ public class EntityContext implements IContext
     }
 
     public EntityContext(@NotNull final UUID entityId) {
-        Validate.notNull(entityId);
-
         this.entityId = entityId;
     }
 
     public EntityContext(@NotNull final Entity entity)
     {
-        Validate.notNull(entity);
-
         this.entityId = entity.getPersistentID();
     }
 

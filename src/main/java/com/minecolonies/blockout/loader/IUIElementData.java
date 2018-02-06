@@ -1,8 +1,8 @@
 package com.minecolonies.blockout.loader;
 
+import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.util.Parsing;
 import com.minecolonies.blockout.util.SizePair;
-import com.minecolonies.blockout.views.View;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,29 +18,29 @@ public interface IUIElementData
     String getType();
 
     /**
-     * Method used to get the parent {@link View} if it exists.
+     * Method used to get the parent {@link IUIElementHost} if it exists.
      */
     @Nullable
-    View getParentView();
+    IUIElementHost getParentView();
 
     /**
-     * Method used to set the parent {@link View} if it exists.
-     * @param parent The parent {@link View} for the Pane that is to be constructed, null if none exists.
+     * Method used to set the parent {@link IUIElementHost} if it exists.
+     * @param parent The parent {@link IUIElementHost} for the Pane that is to be constructed, null if none exists.
      */
-    void setParentView(@Nullable final View parent);
+    void setParentView(@Nullable final IUIElementHost parent);
 
     /**
      * Method used to get the parents width if it exists.
      *
      * @return The parents width, if no parents exists 0 is returned.
      */
-    int getParentWidth();
+    double getParentWidth();
 
     /**
      * Method used to get the parents height if it exists.
      * @return The parents height, if no parents exists 0 is returned.
      */
-    int getParentHeight();
+    double getParentHeight();
 
     /**
      * Method used to get a list of {@link IUIElementData} of children of the Pane that is to be constructed.

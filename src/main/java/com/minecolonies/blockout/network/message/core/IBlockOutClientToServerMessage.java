@@ -2,7 +2,6 @@ package com.minecolonies.blockout.network.message.core;
 
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface IBlockOutClientToServerMessage extends IBlockOutNetworkMessage
 {
@@ -13,4 +12,10 @@ public interface IBlockOutClientToServerMessage extends IBlockOutNetworkMessage
      * @param ctx The {@link MessageContext} in which the {@link IBlockOutNetworkMessage} arrived.
      */
     void onMessageArrivalAtServer(@NotNull final MessageContext ctx);
+
+    @Override
+    default void onArrived(final MessageContext ctx)
+    {
+        onMessageArrivalAtServer(ctx);
+    }
 }

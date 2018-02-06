@@ -1,7 +1,6 @@
 package com.minecolonies.blockout.core.element;
 
 import com.minecolonies.blockout.util.math.BoundingBox;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIElement
@@ -12,7 +11,7 @@ public interface IUIElement
      * @return The id of the element.
      */
     @NotNull
-    ResourceLocation getId();
+    String getId();
 
     /**
      * Method to get the local {@link BoundingBox} of this {@link IUIElement}

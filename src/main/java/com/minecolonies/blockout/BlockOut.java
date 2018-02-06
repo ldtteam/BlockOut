@@ -1,8 +1,5 @@
 package com.minecolonies.blockout;
 
-import com.minecolonies.blockout.connector.core.ILoaderManager;
-import com.minecolonies.blockout.loader.json.JsonLoader;
-import com.minecolonies.blockout.loader.xml.XMLLoader;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.proxy.IProxy;
 import com.minecolonies.blockout.util.Constants;
@@ -45,8 +42,8 @@ public class BlockOut
 
         if (event.getSide() == Side.CLIENT)
         {
-            ILoaderManager.registerLoader(new XMLLoader());
-            ILoaderManager.registerLoader(new JsonLoader());
+            //ILoaderManager.registerLoader(new XMLLoader());
+            //ILoaderManager.registerLoader(new JsonLoader());
         }
     }
 }
