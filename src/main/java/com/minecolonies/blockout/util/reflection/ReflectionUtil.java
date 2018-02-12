@@ -1,6 +1,9 @@
 package com.minecolonies.blockout.util.reflection;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableSet;
+import com.minecolonies.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,9 +12,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public final class ReflectionUtil
 {
+
+    private static final Cache<Class<?>, Set<Field>> FIELD_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
 
     private ReflectionUtil()
     {
@@ -23,7 +29,7 @@ public final class ReflectionUtil
         return Arrays.stream(clz.getDeclaredMethods()).filter(method -> method.getName().equals(name)).findFirst();
     }
 
-    public static Set<Field> getAllFields(@Nullable Class<?> clz)
+    private static Set<Field> getAllFields(@Nullable Class<?> clz)
     {
         if (clz == null)
         {
@@ -36,5 +42,18 @@ public final class ReflectionUtil
         fieldBuilder.addAll(getAllFields(clz.getSuperclass()));
 
         return fieldBuilder.build();
+    }
+
+    public static final Set<Field> getFields(@NotNull final Class<?> targetClass)
+    {
+        try
+        {
+            return FIELD_CACHE.get(targetClass, () -> getAllFields(targetClass));
+        }
+        catch (ExecutionException e)
+        {
+            Log.getLogger().error("Failed to retrieve fields from: " + targetClass.getName(), e);
+            return ImmutableSet.of();
+        }
     }
 }

@@ -1,24 +1,17 @@
 package com.minecolonies.blockout.binding.dependency.injection;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableSet;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.reflection.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 public final class DependencyObjectInjector
 {
 
-    private static final Cache<Class<?>, Set<Field>> FIELD_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
 
     private DependencyObjectInjector()
     {
@@ -27,7 +20,7 @@ public final class DependencyObjectInjector
 
     public static void inject(@NotNull final Object target, @NotNull final IDependencyDataProvider provider)
     {
-        getFields(target.getClass())
+        ReflectionUtil.getFields(target.getClass())
           .stream()
           .filter(field -> field.getType().equals(IDependencyObject.class))
           .forEach(field -> {
@@ -93,18 +86,5 @@ public final class DependencyObjectInjector
                   }
               }
           });
-    }
-
-    private static final Set<Field> getFields(@NotNull final Class<?> targetClass)
-    {
-        try
-        {
-            return FIELD_CACHE.get(targetClass, () -> ReflectionUtil.getAllFields(targetClass));
-        }
-        catch (ExecutionException e)
-        {
-            Log.getLogger().error("Failed to retrieve fields from: " + targetClass.getName(), e);
-            return ImmutableSet.of();
-        }
     }
 }

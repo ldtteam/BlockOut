@@ -6,10 +6,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
-import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
-import com.minecolonies.blockout.loader.IUIElementData;
-import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
@@ -31,23 +28,6 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     {
         super(id);
         setIcon(icon);
-    }
-
-    public static final class Factory implements IUIElementFactory<Image>
-    {
-
-        @NotNull
-        @Override
-        public Image readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            return null;
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Image element, @NotNull final IUIElementDataBuilder builder)
-        {
-
-        }
     }
 
     @SideOnly(Side.CLIENT)
