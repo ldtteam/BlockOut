@@ -46,6 +46,28 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         updateBoundingBoxes();
     }
 
+    public AbstractSimpleUIElement(
+      @NotNull final String id,
+      @NotNull final EnumSet<Alignment> alignments,
+      @NotNull final Dock dock,
+      @NotNull final AxisDistance margin,
+      @NotNull final Vector2d elementSize,
+      @NotNull final IUIElementHost parent,
+      final boolean visible,
+      final boolean enabled)
+    {
+        this.id = id;
+        this.alignments = alignments;
+        this.dock = dock;
+        this.margin = margin;
+        this.elementSize = elementSize;
+        this.parent = parent;
+        this.visible = visible;
+        this.enabled = enabled;
+
+        updateBoundingBoxes();
+    }
+
     private void updateLocalBoundingBox()
     {
         //If we have no parent we see our default elementSize as parent.
@@ -80,24 +102,6 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
         final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
         this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
-    }
-
-    public AbstractSimpleUIElement(
-      @NotNull final String id,
-      @NotNull final EnumSet<Alignment> alignments,
-      @NotNull final Dock dock,
-      @NotNull final AxisDistance margin, @NotNull final Vector2d elementSize, @NotNull final IUIElementHost parent, final boolean visible, final boolean enabled)
-    {
-        this.id = id;
-        this.alignments = alignments;
-        this.dock = dock;
-        this.margin = margin;
-        this.elementSize = elementSize;
-        this.parent = parent;
-        this.visible = visible;
-        this.enabled = enabled;
-
-        updateBoundingBoxes();
     }
 
     @Override

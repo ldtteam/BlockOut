@@ -32,6 +32,21 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         setIcon(icon);
     }
 
+    public Image(
+      @NotNull final String id,
+      @NotNull final EnumSet<Alignment> alignments,
+      @NotNull final Dock dock,
+      @NotNull final AxisDistance margin,
+      @NotNull final Vector2d elementSize,
+      @NotNull final IUIElementHost parent,
+      final boolean visible,
+      final boolean enabled,
+      @NotNull final ResourceLocation icon)
+    {
+        super(id, alignments, dock, margin, elementSize, parent, visible, enabled);
+        setIcon(icon);
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
@@ -65,20 +80,5 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     public Vector2d getImageSize()
     {
         return imageSize.get(getDataContext());
-    }
-
-    public Image(
-      @NotNull final String id,
-      @NotNull final EnumSet<Alignment> alignments,
-      @NotNull final Dock dock,
-      @NotNull final AxisDistance margin,
-      @NotNull final Vector2d elementSize,
-      @NotNull final IUIElementHost parent,
-      final boolean visible,
-      final boolean enabled,
-      @NotNull final ResourceLocation icon)
-    {
-        super(id, alignments, dock, margin, elementSize, parent, visible, enabled);
-        setIcon(icon);
     }
 }
