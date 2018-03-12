@@ -6,6 +6,7 @@ import com.minecolonies.blockout.util.SizePair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public interface IUIElementData
@@ -169,6 +170,20 @@ public interface IUIElementData
             return Enum.valueOf(clazz, attr);
         }
         return def;
+    }
+
+    default <T extends Enum<T>> EnumSet<T> getEnumSetAttributes(String name, Class<T> clazz)
+    {
+        final String attr = getStringAttribute(name, "");
+        final String[] splitted = attr.split(",");
+
+        final EnumSet<T> result = EnumSet.noneOf(clazz);
+        for (String e : splitted)
+        {
+            result.add(Enum.valueOf(clazz, e.trim()));
+        }
+
+        return result;
     }
 
     /**

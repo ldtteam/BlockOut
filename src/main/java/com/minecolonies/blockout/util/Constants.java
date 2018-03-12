@@ -13,4 +13,14 @@ public class Constants
     public static final String PROXY_CLIENT = "com.minecolonies.blockout.proxy.ClientProxy";
     public static final String PROXY_COMMON = "com.minecolonies.blockout.proxy.CommonProxy";
 
+    public static class Controls
+    {
+
+        public static class General
+        {
+            public static final String CONST_ID         = "id";
+            public static final String CONST_ALLIGNMENT = "allignment";
+        }
+    }
+
 }
