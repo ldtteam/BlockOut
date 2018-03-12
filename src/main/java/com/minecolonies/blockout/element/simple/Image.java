@@ -1,6 +1,8 @@
 package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -20,9 +22,9 @@ import java.util.EnumSet;
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    private ResourceLocation icon;
+    private IDependencyObject<Object, ResourceLocation> icon;
     @NotNull
-    private Vector2d         imageSize;
+    private IDependencyObject<Object, Vector2d>         imageSize;
 
     public Image(@NotNull final String id, @NotNull final ResourceLocation icon)
     {
@@ -35,8 +37,8 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         GlStateManager.pushMatrix();
-        controller.bindTexture(icon);
-        controller.drawTexturedModalRect(getLocalBoundingBox(), imageSize);
+        controller.bindTexture(getIcon());
+        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
         GlStateManager.popMatrix();
     }
 
@@ -50,19 +52,19 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     @NotNull
     public ResourceLocation getIcon()
     {
-        return icon;
+        return icon.get(getDataContext());
     }
 
     public void setIcon(@NotNull final ResourceLocation icon)
     {
-        this.icon = icon;
-        this.imageSize = BlockOut.getBlockOut().getProxy().getImageSize(icon);
+        this.icon = DependencyObjectHelper.createFromValue(icon);
+        this.imageSize = DependencyObjectHelper.createFromValue(BlockOut.getBlockOut().getProxy().getImageSize(icon));
     }
 
     @NotNull
     public Vector2d getImageSize()
     {
-        return imageSize;
+        return imageSize.get(getDataContext());
     }
 
     public Image(

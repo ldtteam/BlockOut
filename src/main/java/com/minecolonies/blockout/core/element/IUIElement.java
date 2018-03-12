@@ -6,6 +6,7 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -18,6 +19,22 @@ public interface IUIElement
      */
     @NotNull
     String getId();
+
+    /**
+     * Method to get the data context of this {@link IUIElement}.
+     * This object is used during data binding.
+     *
+     * @return The current data context.
+     */
+    @Nullable
+    Object getDataContext();
+
+    /**
+     * Method to set the new data context of this {@link IUIElement}
+     *
+     * @param dataContext The new data context.
+     */
+    void setDataContext(@Nullable final Object dataContext);
 
     /**
      * Sets the visibility of this {@link IUIElement}

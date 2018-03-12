@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -40,6 +41,9 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     private BoundingBox localInternalBoundingBox;
     @NotNull
     private BoundingBox absoluteInternalBoundingBox;
+
+    @Nullable
+    private Object dataContext;
 
     private boolean visible = true;
     private boolean enabled = true;
@@ -286,4 +290,16 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         this.enabled = enabled;
     }
 
+    @Nullable
+    @Override
+    public Object getDataContext()
+    {
+        return dataContext;
+    }
+
+    @Override
+    public void setDataContext(@Nullable final Object dataContext)
+    {
+        this.dataContext = dataContext;
+    }
 }

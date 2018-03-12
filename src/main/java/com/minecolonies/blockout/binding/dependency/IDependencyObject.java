@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A interface that describes a object that handles binding to a Object of type {@link T}
  *
+ * @param <C> The context type.
  * @param <T> The type that is bound too.
  */
 public interface IDependencyObject<C, T>

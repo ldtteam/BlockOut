@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -31,6 +32,9 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private BoundingBox localBoundingBox;
     @NotNull
     private BoundingBox absoluteBoundingBox;
+
+    @Nullable
+    private Object dataContext;
 
     private boolean visible = true;
     private boolean enabled = true;
@@ -205,5 +209,18 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     public void setEnabled(final boolean enabled)
     {
         this.enabled = enabled;
+    }
+
+    @Nullable
+    @Override
+    public Object getDataContext()
+    {
+        return dataContext;
+    }
+
+    @Override
+    public void setDataContext(@Nullable final Object dataContext)
+    {
+        this.dataContext = dataContext;
     }
 }
