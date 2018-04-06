@@ -20,13 +20,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private       IUIElementHost parent;
 
     @NotNull
-    private EnumSet<Alignment> alignments  = EnumSet.of(Alignment.NONE);
+    private EnumSet<Alignment> alignments;
     @NotNull
-    private Dock               dock        = Dock.NONE;
+    private Dock               dock;
     @NotNull
-    private AxisDistance       margin      = new AxisDistance();
+    private AxisDistance       margin;
     @NotNull
-    private Vector2d           elementSize = new Vector2d();
+    private Vector2d           elementSize;
 
     @NotNull
     private BoundingBox localBoundingBox;
@@ -36,15 +36,8 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Nullable
     private Object dataContext;
 
-    private boolean visible = true;
-    private boolean enabled = true;
-
-    public AbstractSimpleUIElement(@NotNull final String id)
-    {
-        this.id = id;
-
-        updateBoundingBoxes();
-    }
+    private boolean visible;
+    private boolean enabled;
 
     public AbstractSimpleUIElement(
       @NotNull final String id,
@@ -84,13 +77,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom));
 
         this.localBoundingBox = new BoundingBox(origin, size);
-    }
-
-    @NotNull
-    @Override
-    public String getId()
-    {
-        return id;
+        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
     }
 
     private void updateAbsoluteBoundingBox()
@@ -102,6 +89,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
         final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
         this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
+    }
+
+    @NotNull
+    @Override
+    public String getId()
+    {
+        return id;
     }
 
     @Override

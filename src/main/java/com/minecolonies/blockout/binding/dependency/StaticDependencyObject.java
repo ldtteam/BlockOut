@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> The type on which is depended.
  */
-public final class StaticDependencyObject<C, T> implements IDependencyObject<C, T>
+public final class StaticDependencyObject<T> implements IDependencyObject<T>
 {
     @Nullable
     private T value;
@@ -16,13 +16,13 @@ public final class StaticDependencyObject<C, T> implements IDependencyObject<C, 
 
     @Nullable
     @Override
-    public T get(@Nullable final C context)
+    public T get(@Nullable final Object context)
     {
         return value;
     }
 
     @Override
-    public void set(@Nullable final C context, @Nullable final T value)
+    public void set(@Nullable final Object context, @Nullable final T value)
     {
         this.value = value;
     }

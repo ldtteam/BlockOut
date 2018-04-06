@@ -42,7 +42,7 @@ public class ObjectUIElementData implements IUIElementData, Serializable
 
     @Nullable
     @Override
-    public IUIElementHost getParentView()
+    public IUIElementHost getParent()
     {
         return parent;
     }
@@ -56,13 +56,13 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     @Override
     public double getParentWidth()
     {
-        return Objects.isNull(getParentView()) ? 0 : getParentView().getAbsoluteInternalBoundingBox().getSize().getX();
+        return Objects.isNull(getParent()) ? 0 : getParent().getAbsoluteInternalBoundingBox().getSize().getX();
     }
 
     @Override
     public double getParentHeight()
     {
-        return Objects.isNull(getParentView()) ? 0 : getParentView().getAbsoluteInternalBoundingBox().getSize().getY();
+        return Objects.isNull(getParent()) ? 0 : getParent().getAbsoluteInternalBoundingBox().getSize().getY();
     }
 
     @Nullable

@@ -1,7 +1,6 @@
 package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.BlockOut;
-import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
@@ -26,15 +25,7 @@ import java.util.EnumSet;
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    private IDependencyObject<Object, ResourceLocation> icon;
-    @NotNull
-    private IDependencyObject<Object, Vector2d>         imageSize;
-
-    public Image(@NotNull final String id, @NotNull final ResourceLocation icon)
-    {
-        super(id);
-        setIcon(icon);
-    }
+    private IDependencyObject<ResourceLocation> icon;
 
     public Image(
       @NotNull final String id,
@@ -45,20 +36,15 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IUIElementHost parent,
       final boolean visible,
       final boolean enabled,
-      @NotNull final ResourceLocation icon)
+      @NotNull final IDependencyObject<ResourceLocation> icon)
     {
         super(id, alignments, dock, margin, elementSize, parent, visible, enabled);
         setIcon(icon);
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void drawBackground(@NotNull final IRenderingController controller)
+    public void setIcon(@NotNull final IDependencyObject<ResourceLocation> icon)
     {
-        GlStateManager.pushMatrix();
-        controller.bindTexture(getIcon());
-        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
-        GlStateManager.popMatrix();
+        this.icon = icon;
     }
 
     @SideOnly(Side.CLIENT)
@@ -74,16 +60,32 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         return icon.get(getDataContext());
     }
 
-    public void setIcon(@NotNull final ResourceLocation icon)
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void drawBackground(@NotNull final IRenderingController controller)
     {
-        this.icon = DependencyObjectHelper.createFromValue(icon);
-        this.imageSize = DependencyObjectHelper.createFromValue(BlockOut.getBlockOut().getProxy().getImageSize(icon));
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(getDrawScale().getX(), getDrawScale().getY(), 1f);
+
+        controller.bindTexture(getIcon());
+        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
+
+        GlStateManager.popMatrix();
     }
 
     @NotNull
     public Vector2d getImageSize()
     {
-        return imageSize.get(getDataContext());
+        return BlockOut.getBlockOut().getProxy().getImageSize(getIcon());
+    }
+
+    @NotNull
+    Vector2d getDrawScale()
+    {
+        final double xScale = getImageSize().getX() / getElementSize().getX();
+        final double yScale = getImageSize().getY() / getElementSize().getY();
+
+        return new Vector2d(xScale, yScale);
     }
 
     public class Factory implements IUIElementFactory<Image>
@@ -94,9 +96,10 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         public Image readFromElementData(@NotNull final IUIElementData elementData)
         {
             final String id = elementData.getStringAttribute(Constants.Controls.General.CONST_ID);
-            final EnumSet<Alignment> alignments = Alignment.fromString(elementData.getStringAttribute(Constants.Controls.General.CONST_ALLIGNMENT));
-            final Dock dock = elementData.getEnumAttribute("dock", Dock.class, Dock.NONE);
-            final AxisDistance margin = AxisDistance.
+            final EnumSet<Alignment> alignments = elementData.getAlignmentAttribute(Constants.Controls.General.CONST_ALLIGNMENT);
+            final Dock dock = elementData.getDockAttribute(Constants.Controls.General.CONST_DOCK, Dock.NONE);
+            final AxisDistance margin = elementData.getAxisDistanceAttribute(Constants.Controls.General.CONST_MARGIN);
+            final Vector2d elementSize = elementData.getSizePairAttribute()
         }
 
         @Override

@@ -36,7 +36,7 @@ public class XMLUIElementData implements IUIElementData
     }
 
     @Override
-    public IUIElementHost getParentView()
+    public IUIElementHost getParent()
     {
         return parentView;
     }

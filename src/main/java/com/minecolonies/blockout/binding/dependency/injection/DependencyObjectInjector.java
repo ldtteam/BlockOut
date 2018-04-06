@@ -26,10 +26,10 @@ public final class DependencyObjectInjector
           .forEach(field -> {
               field.setAccessible(true);
 
-              final IDependencyObject<?, ?> current;
+              final IDependencyObject<?> current;
               try
               {
-                  current = (IDependencyObject<?, ?>) field.get(target);
+                  current = (IDependencyObject<?>) field.get(target);
               }
               catch (IllegalAccessException e)
               {
@@ -43,7 +43,7 @@ public final class DependencyObjectInjector
                   final ParameterizedType parameterizedType = (ParameterizedType) fieldType;
                   final Type containedType = parameterizedType.getActualTypeArguments()[0];
 
-                  if (provider.has(field.getName()))
+                  if (provider.hasDependencyData(field.getName()))
                   {
                       try
                       {

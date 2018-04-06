@@ -28,7 +28,7 @@ public class JsonUIElementData implements IUIElementData
 
     @Nullable
     @Override
-    public IUIElementHost getParentView()
+    public IUIElementHost getParent()
     {
         return parent;
     }
@@ -42,13 +42,13 @@ public class JsonUIElementData implements IUIElementData
     @Override
     public double getParentWidth()
     {
-        return getParentView() != null ? (int) getParentView().getAbsoluteInternalBoundingBox().getSize().getX() : 0;
+        return getParent() != null ? (int) getParent().getAbsoluteInternalBoundingBox().getSize().getX() : 0;
     }
 
     @Override
     public double getParentHeight()
     {
-        return getParentView() != null ? (int) getParentView().getAbsoluteInternalBoundingBox().getSize().getY() : 0;
+        return getParent() != null ? (int) getParent().getAbsoluteInternalBoundingBox().getSize().getY() : 0;
     }
 
     @Nullable

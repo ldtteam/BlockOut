@@ -20,6 +20,8 @@ public class Constants
         {
             public static final String CONST_ID         = "id";
             public static final String CONST_ALLIGNMENT = "allignment";
+            public static final String CONST_DOCK       = "dock";
+            public static final String CONST_MARGIN     = "margin";
         }
     }
 

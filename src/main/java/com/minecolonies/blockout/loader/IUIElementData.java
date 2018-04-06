@@ -1,8 +1,9 @@
 package com.minecolonies.blockout.loader;
 
 import com.minecolonies.blockout.core.element.IUIElementHost;
-import com.minecolonies.blockout.util.Parsing;
-import com.minecolonies.blockout.util.SizePair;
+import com.minecolonies.blockout.core.element.values.Alignment;
+import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.core.element.values.Dock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +23,7 @@ public interface IUIElementData
      * Method used to get the parent {@link IUIElementHost} if it exists.
      */
     @Nullable
-    IUIElementHost getParentView();
+    IUIElementHost getParent();
 
     /**
      * Method used to set the parent {@link IUIElementHost} if it exists.
@@ -162,29 +163,56 @@ public interface IUIElementData
      */
     boolean getBooleanAttribute(@NotNull final String name, final boolean def);
 
-    default <T extends Enum<T>> T getEnumAttribute(String name, Class<T> clazz, T def)
-    {
-        final String attr = getStringAttribute(name, null);
-        if (attr != null)
-        {
-            return Enum.valueOf(clazz, attr);
-        }
-        return def;
-    }
+    /**
+     * Get the dock attribute from the name.
+     *
+     * @param name The name of the attribute.
+     * @return The value stored in the dock attribute with the given name.
+     */
+    Dock getDockAttribute(@NotNull final String name);
 
-    default <T extends Enum<T>> EnumSet<T> getEnumSetAttributes(String name, Class<T> clazz)
-    {
-        final String attr = getStringAttribute(name, "");
-        final String[] splitted = attr.split(",");
+    /**
+     * Get the dock attribute from the name and the default value.
+     *
+     * @param name The name of the attribute.
+     * @param def  The default value.
+     * @return The value stored in the dock attribute with the given name.
+     */
+    Dock getDockAttribute(@NotNull final String name, final Dock def);
 
-        final EnumSet<T> result = EnumSet.noneOf(clazz);
-        for (String e : splitted)
-        {
-            result.add(Enum.valueOf(clazz, e.trim()));
-        }
+    /**
+     * Get the axis distance attribute from the name and the default value.
+     *
+     * @param name The name of the attribute.
+     * @return The value stored in the axis distance attribute with the given name.
+     */
+    AxisDistance getAxisDistanceAttribute(@NotNull final String name);
 
-        return result;
-    }
+    /**
+     * Get the axis distance attribute from the name and the default value.
+     *
+     * @param name The name of the attribute.
+     * @param def  The default value.
+     * @return The value stored in the axis distance attribute with the given name.
+     */
+    AxisDistance getAxisDistanceAttribute(@NotNull final String name, @NotNull final AxisDistance def);
+
+    /**
+     * Get the alignment attribute from the name.
+     *
+     * @param name The name of the attribute.
+     * @return The value stored in the alignment attribute with the given name.
+     */
+    EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name);
+
+    /**
+     * Get the alignment attribute from the name and the default value.
+     *
+     * @param name The name of the attribute.
+     * @param def  The default value.
+     * @return The value stored in the alignment attribute with the given name.
+     */
+    EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name, final Alignment def);
 
     /**
      * Get the String attribute from the name and definition.
@@ -196,46 +224,5 @@ public interface IUIElementData
     @Nullable
     String getStringAttribute(@NotNull final String name, @Nullable final String def);
 
-    /**
-     * Get the scalable integer attribute from name and definition.
-     *
-     * @param name  the name.
-     * @param def   the definition.
-     * @param scale the scale.
-     * @return the integer.
-     */
-    default int getScalableIntegerAttribute(@NotNull final String name, final int def, final int scale)
-    {
-        final String attr = getStringAttribute(name, null);
-        return Parsing.parseScalableInteger(attr, def, scale);
-    }
 
-    /**
-     * Get the size pair attribute.
-     *
-     * @param name  the name.
-     * @param def   the definition.
-     * @param scale the scale.
-     * @return the SizePair.
-     */
-    @Nullable
-    default SizePair getSizePairAttribute(@NotNull final String name, @Nullable final SizePair def, @Nullable final SizePair scale)
-    {
-        final String attr = getStringAttribute(name, null);
-        return Parsing.parseSizePairAttribute(attr, def, scale);
-    }
-
-
-    /**
-     * Get the color attribute from name and definition.
-     *
-     * @param name the name.
-     * @param def  the definition
-     * @return int color value.
-     */
-    default int getColorAttribute(@NotNull final String name, final int def)
-    {
-        final String attr = getStringAttribute(name, null);
-        return Parsing.parseColor(attr, def);
-    }
 }

@@ -25,33 +25,28 @@ public final class PropertyCreationHelper
         throw new IllegalArgumentException("Utility Class");
     }
 
-    public static <S, T> Property<S, T> createFromNonOptional(@NotNull final Function<S, T> getter, @NotNull final BiConsumer<S, T> setter)
+    public static <T> Property<T> createFromNonOptional(@NotNull final Function<Object, T> getter, @NotNull final BiConsumer<Object, T> setter)
     {
         return createFromNonOptional(Optional.of(getter), Optional.of(setter));
     }
 
-    public static <S, T> Property<S, T> createFromNonOptional(@NotNull final Optional<Function<S, T>> getter, @NotNull final Optional<BiConsumer<S, T>> setter)
+    public static <T> Property<T> createFromNonOptional(@NotNull final Optional<Function<Object, T>> getter, @NotNull final Optional<BiConsumer<Object, T>> setter)
     {
         return create(getter.map(tSupplier -> s -> Optional.ofNullable(tSupplier.apply(s))),
           setter.map(tConsumer -> (s, t) -> tConsumer.accept(s, t.orElse(null))));
     }
 
-    public static <S, T> Property<S, T> create(@NotNull final Optional<Function<S, Optional<T>>> getter, @NotNull final Optional<BiConsumer<S, Optional<T>>> setter)
+    public static <T> Property<T> create(@NotNull final Optional<Function<Object, Optional<T>>> getter, @NotNull final Optional<BiConsumer<Object, Optional<T>>> setter)
     {
         return new Property<>(getter, setter);
     }
 
-    public static <S, T> Property<S, T> create(@NotNull final Function<S, Optional<T>> getter, @NotNull final BiConsumer<S, Optional<T>> setter)
+    public static <T> Property<T> createFromName(@NotNull final Class<T> targetClass, @NotNull final Optional<String> getSetMethodName)
     {
-        return create(Optional.of(getter), Optional.of(setter));
+        return createFromName(targetClass, getSetMethodName.map(name -> "get" + name), getSetMethodName.map(name -> "set" + name));
     }
 
-    public static <S, T> Property<S, T> createFromMethod(@NotNull final Optional<Method> getter, @NotNull final Optional<Method> setter)
-    {
-        return create(new ReflectiveSupplier<>(getter), new ReflectiveConsumer<>(setter));
-    }
-
-    public static <S, T> Property<S, T> createFromName(
+    public static <T> Property<T> createFromName(
       @NotNull final Class<T> targetClass,
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)
@@ -60,9 +55,14 @@ public final class PropertyCreationHelper
           , setMethodName.map(name -> getSetter(targetClass, name).orElse(null)));
     }
 
-    public static <S, T> Property<S, T> createFromName(@NotNull final Class<T> targetClass, @NotNull final Optional<String> getSetMethodName)
+    public static <T> Property<T> createFromMethod(@NotNull final Optional<Method> getter, @NotNull final Optional<Method> setter)
     {
-        return createFromName(targetClass, getSetMethodName.map(name -> "get" + name), getSetMethodName.map(name -> "set" + name));
+        return create(new ReflectiveSupplier<>(getter), new ReflectiveConsumer<>(setter));
+    }
+
+    public static <T> Property<T> create(@NotNull final Function<Object, Optional<T>> getter, @NotNull final BiConsumer<Object, Optional<T>> setter)
+    {
+        return create(Optional.of(getter), Optional.of(setter));
     }
 
     private static Optional<Method> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)

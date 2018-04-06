@@ -12,12 +12,12 @@ public final class DependencyObjectHelper
         throw new IllegalArgumentException("Utility Class");
     }
 
-    public static <C, T> IDependencyObject<C, T> createFromValue(@Nullable T value)
+    public static <T> IDependencyObject<T> createFromValue(@Nullable T value)
     {
         return new StaticDependencyObject<>(value);
     }
 
-    public static <C, T> IDependencyObject<C, T> createFromProperty(@NotNull Property<C, T> property, @Nullable T def)
+    public static <T> IDependencyObject<T> createFromProperty(@NotNull Property<T> property, @Nullable T def)
     {
         return new PropertyBasedDependencyObject<>(property, def);
     }

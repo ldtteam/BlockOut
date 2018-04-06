@@ -6,19 +6,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class PropertyBasedDependencyObject<C, T> implements IDependencyObject<C, T>
+public class PropertyBasedDependencyObject<T> implements IDependencyObject<T>
 {
     @NotNull
-    private final Property<C, T> property;
+    private final Property<T> property;
     @Nullable
-    private final T              def;
+    private final T           def;
 
-    public PropertyBasedDependencyObject(@NotNull final Property<C, T> property)
+    public PropertyBasedDependencyObject(@NotNull final Property<T> property)
     {
         this(property, null);
     }
 
-    public PropertyBasedDependencyObject(@NotNull final Property<C, T> property, final T def)
+    public PropertyBasedDependencyObject(@NotNull final Property<T> property, final T def)
     {
         this.property = property;
         this.def = def;
@@ -26,7 +26,7 @@ public class PropertyBasedDependencyObject<C, T> implements IDependencyObject<C,
 
     @Nullable
     @Override
-    public T get(@Nullable final C context)
+    public T get(@Nullable final Object context)
     {
         if (context == null)
         {
@@ -37,7 +37,7 @@ public class PropertyBasedDependencyObject<C, T> implements IDependencyObject<C,
     }
 
     @Override
-    public void set(@Nullable final C context, @Nullable final T value)
+    public void set(@Nullable final Object context, @Nullable final T value)
     {
         if (context == null)
         {

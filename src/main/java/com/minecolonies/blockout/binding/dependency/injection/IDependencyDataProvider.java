@@ -8,8 +8,8 @@ import java.lang.reflect.Type;
 public interface IDependencyDataProvider
 {
 
-    boolean has(@NotNull final String name);
+    boolean hasDependencyData(@NotNull final String name);
 
     @NotNull
-    <C, T> IDependencyObject<C, T> get(@NotNull final String name, @NotNull final IDependencyObject<C, T> current, @NotNull final Type requestedType);
+    <T> IDependencyObject<T> get(@NotNull final String name, @NotNull final IDependencyObject<T> current, @NotNull final Type requestedType);
 }
