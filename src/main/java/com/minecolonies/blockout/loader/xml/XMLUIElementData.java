@@ -2,7 +2,8 @@ package com.minecolonies.blockout.loader.xml;
 
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.loader.IUIElementData;
-import com.minecolonies.blockout.util.Localization;
+import com.minecolonies.blockout.util.Constants;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
@@ -17,51 +18,36 @@ public class XMLUIElementData implements IUIElementData
 {
 
     private final Node           node;
-    private       IUIElementHost parentView;
+    private final IUIElementHost parent;
 
     /**
      * Instantiates the pane parameters.
      *
      * @param n the node.
+     * @param parent
      */
-    public XMLUIElementData(final Node n)
+    public XMLUIElementData(final Node n, final IUIElementHost parent)
     {
         node = n;
+        this.parent = parent;
     }
 
     @Override
-    public String getType()
+    public ResourceLocation getType()
     {
-        return node.getNodeName();
+        return new ResourceLocation(Constants.MOD_ID, node.getNodeName());
     }
 
+    @Nullable
     @Override
-    public IUIElementHost getParent()
+    public IUIElementHost getParentView()
     {
-        return parentView;
-    }
-
-    @Override
-    public void setParentView(final IUIElementHost parent)
-    {
-        parentView = parent;
-    }
-
-    @Override
-    public double getParentWidth()
-    {
-        return parentView != null ? (int) parentView.getAbsoluteInternalBoundingBox().getSize().getX() : 0;
-    }
-
-    @Override
-    public double getParentHeight()
-    {
-        return parentView != null ? (int) parentView.getAbsoluteInternalBoundingBox().getSize().getY() : 0;
+        return parent;
     }
 
     @Override
     @Nullable
-    public List<IUIElementData> getChildren()
+    public List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren)
     {
         List<IUIElementData> list = null;
 
@@ -75,40 +61,12 @@ public class XMLUIElementData implements IUIElementData
                     list = new ArrayList<>();
                 }
 
-                list.add(new XMLUIElementData(child));
+                list.add(new XMLUIElementData(child, parentOfChildren));
             }
             child = child.getNextSibling();
         }
 
         return list;
-    }
-
-    @Override
-    @NotNull
-    public String getText()
-    {
-        return node.getTextContent().trim();
-    }
-
-    @Override
-    @Nullable
-    public String getLocalizedText()
-    {
-        return Localization.localize(node.getTextContent().trim());
-    }
-
-
-
-    /**
-     * Get the string attribute.
-     *
-     * @param name the name to search.
-     * @return the attribute.
-     */
-    @Override
-    public String getStringAttribute(final String name)
-    {
-        return getStringAttribute(name, "");
     }
 
     /**
@@ -131,45 +89,6 @@ public class XMLUIElementData implements IUIElementData
     }
 
     /**
-     * Get the localized string attribute from the name.
-     *
-     * @param name the name.
-     * @return the string attribute.
-     */
-    @Override
-    @Nullable
-    public String getLocalizedStringAttribute(final String name)
-    {
-        return getLocalizedStringAttribute(name, "");
-    }
-
-    /**
-     * Get the localized String attribute from the name and definition.
-     *
-     * @param name the name.
-     * @param def  the definition.
-     * @return the string.
-     */
-    @Override
-    @Nullable
-    public String getLocalizedStringAttribute(final String name, final String def)
-    {
-        return Localization.localize(getStringAttribute(name, def));
-    }
-
-    /**
-     * Get the integer attribute from the name.
-     *
-     * @param name the name.
-     * @return the integer.
-     */
-    @Override
-    public int getIntegerAttribute(final String name)
-    {
-        return getIntegerAttribute(name, 0);
-    }
-
-    /**
      * Get the integer attribute from name and definition.
      *
      * @param name the name.
@@ -185,18 +104,6 @@ public class XMLUIElementData implements IUIElementData
             return Integer.parseInt(attr);
         }
         return def;
-    }
-
-    /**
-     * Get the float attribute from name.
-     *
-     * @param name the name.
-     * @return the float.
-     */
-    @Override
-    public float getFloatAttribute(final String name)
-    {
-        return getFloatAttribute(name, 0);
     }
 
     /**
@@ -218,18 +125,6 @@ public class XMLUIElementData implements IUIElementData
     }
 
     /**
-     * Get the double attribute from name.
-     *
-     * @param name the name.
-     * @return the double.
-     */
-    @Override
-    public double getDoubleAttribute(final String name)
-    {
-        return getDoubleAttribute(name, 0);
-    }
-
-    /**
      * Get the double attribute from name and definition.
      *
      * @param name the name.
@@ -246,18 +141,6 @@ public class XMLUIElementData implements IUIElementData
         }
 
         return def;
-    }
-
-    /**
-     * Get the boolean attribute from name.
-     *
-     * @param name the name.
-     * @return the boolean.
-     */
-    @Override
-    public boolean getBooleanAttribute(final String name)
-    {
-        return getBooleanAttribute(name, false);
     }
 
     /**

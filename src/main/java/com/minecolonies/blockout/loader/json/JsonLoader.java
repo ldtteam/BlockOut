@@ -43,6 +43,6 @@ public class JsonLoader implements ILoader
             return null;
         }
 
-        return new JsonUIElementData(element.getAsJsonObject());
+        return new JsonUIElementData(element.getAsJsonObject(), null);
     }
 }

@@ -58,7 +58,7 @@ public final class XMLLoader implements ILoader
         final IUIElementData result;
         try
         {
-            result = new XMLUIElementData(documentBuilder.parse(inputStream));
+            result = new XMLUIElementData(documentBuilder.parse(inputStream), parent);
         }
         catch (Exception e)
         {

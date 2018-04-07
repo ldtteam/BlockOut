@@ -33,7 +33,7 @@ public interface IUIElementData
      * @return A list with {@link IUIElementData} to construct the children.
      */
     @Nullable
-    List<IUIElementData> getChildren();
+    List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren);
 
     /**
      * Get the integer attribute from the name.

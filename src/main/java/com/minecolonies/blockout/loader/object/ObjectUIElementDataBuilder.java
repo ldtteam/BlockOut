@@ -2,6 +2,7 @@ package com.minecolonies.blockout.loader.object;
 
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -12,22 +13,15 @@ import java.util.Map;
 
 public class ObjectUIElementDataBuilder implements IUIElementDataBuilder
 {
-
     private final List<ObjectUIElementData> children   = new ArrayList<>();
     private final Map<String, Serializable> attributes = new HashMap<>();
-    private String type;
+    private ResourceLocation type;
 
     @Override
-    public IUIElementDataBuilder setType(final String type)
+    public IUIElementDataBuilder setType(final ResourceLocation type)
     {
         this.type = type;
         return this;
-    }
-
-    @Override
-    public IUIElementDataBuilder addChild(@NotNull final IUIElementDataBuilder builder)
-    {
-        return addChild(builder.build());
     }
 
     @Override
@@ -52,6 +46,6 @@ public class ObjectUIElementDataBuilder implements IUIElementDataBuilder
     @Override
     public IUIElementData build()
     {
-        return new ObjectUIElementData(type, children, attributes);
+        return new ObjectUIElementData(type, children, attributes, null);
     }
 }

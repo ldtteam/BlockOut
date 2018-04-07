@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.loader.IUIElementData;
-import com.minecolonies.blockout.util.Localization;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,44 +16,28 @@ import java.util.stream.StreamSupport;
 public class JsonUIElementData implements IUIElementData
 {
     private final JsonObject     object;
-    private       IUIElementHost parent;
+    private final IUIElementHost parent;
 
-    public JsonUIElementData(final JsonObject object) {this.object = object;}
-
-    @Override
-    public String getType()
-    {
-        return object.get("type").getAsString();
-    }
-
-    @Nullable
-    @Override
-    public IUIElementHost getParent()
-    {
-        return parent;
-    }
-
-    @Override
-    public void setParentView(@Nullable final IUIElementHost parent)
-    {
+    public JsonUIElementData(final JsonObject object, final IUIElementHost parent) {this.object = object;
         this.parent = parent;
     }
 
     @Override
-    public double getParentWidth()
+    public ResourceLocation getType()
     {
-        return getParent() != null ? (int) getParent().getAbsoluteInternalBoundingBox().getSize().getX() : 0;
-    }
-
-    @Override
-    public double getParentHeight()
-    {
-        return getParent() != null ? (int) getParent().getAbsoluteInternalBoundingBox().getSize().getY() : 0;
+        return new ResourceLocation(object.get("type").getAsString());
     }
 
     @Nullable
     @Override
-    public List<IUIElementData> getChildren()
+    public IUIElementHost getParentView()
+    {
+        return parent;
+    }
+
+    @Nullable
+    @Override
+    public List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren)
     {
         if (!object.has("children"))
         {
@@ -63,34 +47,13 @@ public class JsonUIElementData implements IUIElementData
         return StreamSupport.stream(object.get("children").getAsJsonArray().spliterator(), false)
                  .filter(JsonElement::isJsonObject)
                  .map(JsonElement::getAsJsonObject)
-                 .map(JsonUIElementData::new)
+                 .map(childData -> new JsonUIElementData(childData, parentOfChildren))
                  .collect(Collectors.toList());
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public String getText()
-    {
-        return getStringAttribute("text");
-    }
-
-    @Nullable
-    @Override
-    public String getLocalizedText()
-    {
-        return Localization.localize(getText());
-    }
-
-    @Nullable
-    @Override
-    public String getStringAttribute(@NotNull final String name)
-    {
-        return getStringAttribute(name, null);
-    }
-
-    @Nullable
-    @Override
-    public String getStringAttribute(@NotNull final String name, @Nullable final String def)
+    public String getStringAttribute(@NotNull final String name, @NotNull final String def)
     {
         if (!object.has(name))
         {
@@ -98,26 +61,6 @@ public class JsonUIElementData implements IUIElementData
         }
 
         return object.get(name).getAsString();
-    }
-
-    @Nullable
-    @Override
-    public String getLocalizedStringAttribute(@NotNull final String name)
-    {
-        return getLocalizedStringAttribute(name, null);
-    }
-
-    @Nullable
-    @Override
-    public String getLocalizedStringAttribute(@NotNull final String name, @Nullable final String def)
-    {
-        return Localization.localize(getStringAttribute(name, def));
-    }
-
-    @Override
-    public int getIntegerAttribute(@NotNull final String name)
-    {
-        return getIntegerAttribute(name, 0);
     }
 
     @Override
@@ -132,12 +75,6 @@ public class JsonUIElementData implements IUIElementData
     }
 
     @Override
-    public float getFloatAttribute(@NotNull final String name)
-    {
-        return getFloatAttribute(name, 0f);
-    }
-
-    @Override
     public float getFloatAttribute(@NotNull final String name, final float def)
     {
         if (!object.has(name))
@@ -149,12 +86,6 @@ public class JsonUIElementData implements IUIElementData
     }
 
     @Override
-    public double getDoubleAttribute(@NotNull final String name)
-    {
-        return getDoubleAttribute(name, 0d);
-    }
-
-    @Override
     public double getDoubleAttribute(@NotNull final String name, final double def)
     {
         if (!object.has(name))
@@ -163,12 +94,6 @@ public class JsonUIElementData implements IUIElementData
         }
 
         return object.get(name).getAsDouble();
-    }
-
-    @Override
-    public boolean getBooleanAttribute(@NotNull final String name)
-    {
-        return getBooleanAttribute(name, false);
     }
 
     @Override
