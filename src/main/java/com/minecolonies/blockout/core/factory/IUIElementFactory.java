@@ -3,6 +3,7 @@ package com.minecolonies.blockout.core.factory;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,6 +13,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface IUIElementFactory<U extends IUIElement>
 {
+
+    /**
+     * Returns the type that this factory builds.
+     * @return The type.
+     */
+    @NotNull
+    ResourceLocation getType();
 
     /**
      * Creates a new {@link U} from the given {@link IUIElementData}.

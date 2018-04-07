@@ -16,6 +16,15 @@ public final class Vector2d
     }
 
     /**
+     * Creates a new vector that points to d,d.
+     * @param d The x and y value.
+     */
+    public Vector2d(final double d)
+    {
+        this(d, d);
+    }
+
+    /**
      * Creation constructor. Creates a new {@link Vector2d} from the given x, y, z.
      *
      * @param x The X-Coordinate.
@@ -187,9 +196,6 @@ public final class Vector2d
     @Override
     public String toString()
     {
-        return "Vector2d{" +
-                 "x=" + x +
-                 ", y=" + y +
-                 '}';
+        return String.format("%s,%s", x, y);
     }
 }

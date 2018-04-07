@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
@@ -12,7 +13,6 @@ import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
-import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -22,6 +22,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
+import static com.minecolonies.blockout.util.Constants.Controls.General.*;
+import static com.minecolonies.blockout.util.Constants.Controls.Image.CONST_ICON;
+import static com.minecolonies.blockout.util.Constants.Controls.Image.KEY_ICON;
+
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
@@ -29,22 +33,42 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public Image(
       @NotNull final String id,
-      @NotNull final EnumSet<Alignment> alignments,
-      @NotNull final Dock dock,
-      @NotNull final AxisDistance margin,
-      @NotNull final Vector2d elementSize,
       @NotNull final IUIElementHost parent,
-      final boolean visible,
-      final boolean enabled,
       @NotNull final IDependencyObject<ResourceLocation> icon)
     {
-        super(id, alignments, dock, margin, elementSize, parent, visible, enabled);
-        setIcon(icon);
+        super(id, parent);
+        this.icon = icon;
     }
 
-    public void setIcon(@NotNull final IDependencyObject<ResourceLocation> icon)
+    public Image(
+      @NotNull final String id,
+      @NotNull final IUIElementHost parent,
+      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+      @NotNull final IDependencyObject<Dock> dock,
+      @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
+      @NotNull final IDependencyObject<Object> dataContext,
+      @NotNull final IDependencyObject<Boolean> visible,
+      @NotNull final IDependencyObject<Boolean> enabled,
+      @NotNull final IDependencyObject<ResourceLocation> icon)
     {
+        super(id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.icon = icon;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void drawBackground(@NotNull final IRenderingController controller)
+    {
+        final Vector2d scalingFactor = getScalingFactor();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
+
+        controller.bindTexture(getIcon());
+        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
+
+        GlStateManager.popMatrix();
     }
 
     @SideOnly(Side.CLIENT)
@@ -60,17 +84,9 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         return icon.get(getDataContext());
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void drawBackground(@NotNull final IRenderingController controller)
+    public void setIcon(@NotNull final ResourceLocation icon)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(getDrawScale().getX(), getDrawScale().getY(), 1f);
-
-        controller.bindTexture(getIcon());
-        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
-
-        GlStateManager.popMatrix();
+        this.icon = DependencyObjectHelper.createFromValue(icon);
     }
 
     @NotNull
@@ -80,32 +96,60 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    Vector2d getDrawScale()
+    public Vector2d getScalingFactor()
     {
-        final double xScale = getImageSize().getX() / getElementSize().getX();
-        final double yScale = getImageSize().getY() / getElementSize().getY();
+        final Vector2d imageSize = getImageSize();
+        final Vector2d elementSize = getElementSize();
 
-        return new Vector2d(xScale, yScale);
+        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
     }
 
     public class Factory implements IUIElementFactory<Image>
     {
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return KEY_ICON;
+        }
 
         @NotNull
         @Override
         public Image readFromElementData(@NotNull final IUIElementData elementData)
         {
-            final String id = elementData.getStringAttribute(Constants.Controls.General.CONST_ID);
-            final EnumSet<Alignment> alignments = elementData.getAlignmentAttribute(Constants.Controls.General.CONST_ALLIGNMENT);
-            final Dock dock = elementData.getDockAttribute(Constants.Controls.General.CONST_DOCK, Dock.NONE);
-            final AxisDistance margin = elementData.getAxisDistanceAttribute(Constants.Controls.General.CONST_MARGIN);
-            final Vector2d elementSize = elementData.getSizePairAttribute()
+            final String id = elementData.getStringAttribute(CONST_ID);
+            final EnumSet<Alignment> alignments = elementData.getAlignmentAttribute(CONST_ALIGNMENT);
+            final Dock dock = elementData.getEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final AxisDistance margin = elementData.getAxisDistanceAttribute(CONST_MARGIN);
+            final Vector2d elementSize = elementData.getVector2dAttribute(CONST_ELEMENT_SIZE);
+            final Object dataContext = new Object();
+            final Boolean visible = elementData.getBooleanAttribute(CONST_VISIBLE);
+            final Boolean enabled = elementData.getBooleanAttribute(CONST_ENABLED);
+            final ResourceLocation icon = elementData.getResourceLocationAttribute(CONST_ICON);
+
+            return new Image(id,
+              elementData.getParentView(),
+              DependencyObjectHelper.createFromValue(alignments),
+              DependencyObjectHelper.createFromValue(dock),
+              DependencyObjectHelper.createFromValue(margin),
+              DependencyObjectHelper.createFromValue(elementSize),
+              DependencyObjectHelper.createFromValue(dataContext),
+              DependencyObjectHelper.createFromValue(visible),
+              DependencyObjectHelper.createFromValue(enabled),
+              DependencyObjectHelper.createFromValue(icon));
         }
 
         @Override
         public void writeToElementData(@NotNull final Image element, @NotNull final IUIElementDataBuilder builder)
         {
-
+            builder
+              .addAlignment(CONST_ALIGNMENT, getAlignment())
+              .addEnum(CONST_DOCK, getDock())
+              .addAxisDistance(CONST_MARGIN, getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, getElementSize())
+              .addBoolean(CONST_VISIBLE, isVisible())
+              .addBoolean(CONST_ENABLED, isEnabled())
+              .addResourceLocation(CONST_ICON, getIcon());
         }
     }
 }

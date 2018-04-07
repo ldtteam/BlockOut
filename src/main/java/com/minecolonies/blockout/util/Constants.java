@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.util;
 
+import net.minecraft.util.ResourceLocation;
+
 public class Constants
 {
     public static final String MOD_ID   = "blockout";
@@ -19,9 +21,19 @@ public class Constants
         public static class General
         {
             public static final String CONST_ID         = "id";
-            public static final String CONST_ALLIGNMENT = "allignment";
-            public static final String CONST_DOCK       = "dock";
-            public static final String CONST_MARGIN     = "margin";
+            public static final String CONST_ALIGNMENT = "alignment";
+            public static final String CONST_DOCK = "dock";
+            public static final String CONST_MARGIN = "margin";
+            public static final String CONST_ELEMENT_SIZE = "size";
+            public static final String CONST_VISIBLE = "visible";
+            public static final String CONST_ENABLED = "enabled";
+        }
+
+        public static class Image
+        {
+            public static final ResourceLocation KEY_ICON = new ResourceLocation(MOD_ID, "image");
+
+            public static final String CONST_ICON = "icon";
         }
     }
 

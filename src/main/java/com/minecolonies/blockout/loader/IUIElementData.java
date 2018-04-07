@@ -3,7 +3,10 @@ package com.minecolonies.blockout.loader;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
-import com.minecolonies.blockout.core.element.values.Dock;
+import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
+import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,32 +20,13 @@ public interface IUIElementData
      *
      * @return The pane type.
      */
-    String getType();
+    ResourceLocation getType();
 
     /**
      * Method used to get the parent {@link IUIElementHost} if it exists.
      */
     @Nullable
-    IUIElementHost getParent();
-
-    /**
-     * Method used to set the parent {@link IUIElementHost} if it exists.
-     * @param parent The parent {@link IUIElementHost} for the Pane that is to be constructed, null if none exists.
-     */
-    void setParentView(@Nullable final IUIElementHost parent);
-
-    /**
-     * Method used to get the parents width if it exists.
-     *
-     * @return The parents width, if no parents exists 0 is returned.
-     */
-    double getParentWidth();
-
-    /**
-     * Method used to get the parents height if it exists.
-     * @return The parents height, if no parents exists 0 is returned.
-     */
-    double getParentHeight();
+    IUIElementHost getParentView();
 
     /**
      * Method used to get a list of {@link IUIElementData} of children of the Pane that is to be constructed.
@@ -52,56 +36,15 @@ public interface IUIElementData
     List<IUIElementData> getChildren();
 
     /**
-     * Method used to get the text for the pane.
-     *
-     * @return The text.
-     */
-    @Nullable
-    String getText();
-
-    /**
-     * Method used to get a translated version of {@link #getText()}.
-     *
-     * @return The localised version of the text.
-     */
-    @Nullable
-    String getLocalizedText();
-
-    /**
-     * Get the string attribute.
-     *
-     * @param name the name to search.
-     * @return the attribute.
-     */
-    @Nullable
-    String getStringAttribute(@NotNull final String name);
-
-    /**
-     * Get the localized string attribute from the name.
-     *
-     * @param name the name.
-     * @return the string attribute.
-     */
-    @Nullable
-    String getLocalizedStringAttribute(@NotNull final String name);
-
-    /**
-     * Get the localized String attribute from the name and definition.
-     *
-     * @param name the name.
-     * @param def  the definition.
-     * @return the string.
-     */
-    @Nullable
-    String getLocalizedStringAttribute(@NotNull final String name, @Nullable final String def);
-
-    /**
      * Get the integer attribute from the name.
      *
      * @param name the name.
      * @return the integer.
      */
-    int getIntegerAttribute(@NotNull final String name);
+    default int getIntegerAttribute(@NotNull final String name)
+    {
+        return getIntegerAttribute(name, 0);
+    }
 
     /**
      * Get the integer attribute from name and definition.
@@ -118,7 +61,10 @@ public interface IUIElementData
      * @param name the name.
      * @return the float.
      */
-    float getFloatAttribute(@NotNull final String name);
+    default float getFloatAttribute(@NotNull final String name)
+    {
+        return getFloatAttribute(name, 0f);
+    }
 
     /**
      * Get the float attribute from name and definition.
@@ -135,7 +81,10 @@ public interface IUIElementData
      * @param name the name.
      * @return the double.
      */
-    double getDoubleAttribute(@NotNull final String name);
+    default double getDoubleAttribute(@NotNull final String name)
+    {
+        return getDoubleAttribute(name, 0d);
+    }
 
     /**
      * Get the double attribute from name and definition.
@@ -152,7 +101,10 @@ public interface IUIElementData
      * @param name the name.
      * @return the boolean.
      */
-    boolean getBooleanAttribute(@NotNull final String name);
+    default boolean getBooleanAttribute(@NotNull final String name)
+    {
+        return getBooleanAttribute(name, false);
+    }
 
     /**
      * Get the boolean attribute from name and definition.
@@ -162,57 +114,36 @@ public interface IUIElementData
      * @return the boolean.
      */
     boolean getBooleanAttribute(@NotNull final String name, final boolean def);
+    
+    default <T extends Enum<T>> T getEnumAttribute(String name, Class<T> clazz, T def)
+    {
+        final String attr = getStringAttribute(name, null);
+        if (attr != null)
+        {
+            return Enum.valueOf(clazz, attr);
+        }
+        return def;
+    }
 
-    /**
-     * Get the dock attribute from the name.
-     *
-     * @param name The name of the attribute.
-     * @return The value stored in the dock attribute with the given name.
-     */
-    Dock getDockAttribute(@NotNull final String name);
+    default <T extends Enum<T>> EnumSet<T> getEnumSetAttributes(String name, Class<T> clazz)
+    {
+        final String attr = getStringAttribute(name, "");
+        final String[] splitted = attr.split(",");
 
-    /**
-     * Get the dock attribute from the name and the default value.
-     *
-     * @param name The name of the attribute.
-     * @param def  The default value.
-     * @return The value stored in the dock attribute with the given name.
-     */
-    Dock getDockAttribute(@NotNull final String name, final Dock def);
+        final EnumSet<T> result = EnumSet.noneOf(clazz);
+        for (String e : splitted)
+        {
+            result.add(Enum.valueOf(clazz, e.trim()));
+        }
 
-    /**
-     * Get the axis distance attribute from the name and the default value.
-     *
-     * @param name The name of the attribute.
-     * @return The value stored in the axis distance attribute with the given name.
-     */
-    AxisDistance getAxisDistanceAttribute(@NotNull final String name);
+        return result;
+    }
 
-    /**
-     * Get the axis distance attribute from the name and the default value.
-     *
-     * @param name The name of the attribute.
-     * @param def  The default value.
-     * @return The value stored in the axis distance attribute with the given name.
-     */
-    AxisDistance getAxisDistanceAttribute(@NotNull final String name, @NotNull final AxisDistance def);
-
-    /**
-     * Get the alignment attribute from the name.
-     *
-     * @param name The name of the attribute.
-     * @return The value stored in the alignment attribute with the given name.
-     */
-    EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name);
-
-    /**
-     * Get the alignment attribute from the name and the default value.
-     *
-     * @param name The name of the attribute.
-     * @param def  The default value.
-     * @return The value stored in the alignment attribute with the given name.
-     */
-    EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name, final Alignment def);
+    @NotNull
+    default String getStringAttribute(@NotNull final String name)
+    {
+        return getStringAttribute(name, "");
+    }
 
     /**
      * Get the String attribute from the name and definition.
@@ -221,8 +152,95 @@ public interface IUIElementData
      * @param def  the definition.
      * @return the String.
      */
-    @Nullable
-    String getStringAttribute(@NotNull final String name, @Nullable final String def);
+    @NotNull
+    String getStringAttribute(@NotNull final String name, @NotNull final String def);
 
+    @NotNull
+    default AxisDistance getAxisDistanceAttribute(@NotNull final String name)
+    {
+        return getAxisDistanceAttribute(name, new AxisDistance());
+    }
 
+    @NotNull
+    default AxisDistance getAxisDistanceAttribute(@NotNull final String name, @NotNull final AxisDistance def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        final AxisDistanceBuilder builder = new AxisDistanceBuilder();
+        builder.readFromString(getParentView().getElementSize(), attribute);
+        
+        return builder.create();
+    }
+
+    @NotNull
+    default EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name)
+    {
+        return getAlignmentAttribute(name, EnumSet.of(Alignment.NONE));
+    }
+
+    @NotNull
+    default EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name, @NotNull final EnumSet<Alignment> def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        return Alignment.fromString(attribute);
+    }
+
+    @NotNull
+    default Vector2d getVector2dAttribute(@NotNull final String name)
+    {
+        return getVector2dAttribute(name, new Vector2d());
+    }
+
+    @NotNull
+    default Vector2d getVector2dAttribute(@NotNull final String name, @NotNull final Vector2d def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        final String[] components = attribute.split(",");
+        if (components.length == 1)
+        {
+            return new Vector2d(Double.parseDouble(components[0]));
+        }
+        else if(components.length == 2)
+        {
+            return new Vector2d(Double.parseDouble(components[0]), Double.parseDouble(components[1]));
+        }
+        else
+        {
+            return def;
+        }
+    }
+
+    @NotNull
+    default ResourceLocation getResourceLocationAttribute(@NotNull final String name)
+    {
+        return getResourceLocationAttribute(name, TextureMap.LOCATION_MISSING_TEXTURE);
+    }
+
+    @NotNull
+    default ResourceLocation getResourceLocationAttribute(@NotNull final String name, @NotNull final ResourceLocation def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        return new ResourceLocation(attribute);
+    }
+    
+    
 }

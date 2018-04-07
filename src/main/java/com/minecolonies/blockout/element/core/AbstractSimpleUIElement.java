@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.element.core;
 
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -17,48 +19,57 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private final String         id;
     @NotNull
-    private       IUIElementHost parent;
+    private IUIElementHost parent;
 
     @NotNull
-    private EnumSet<Alignment> alignments;
+    private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private Dock               dock;
+    private IDependencyObject<Dock>             dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
-    private AxisDistance       margin;
+    private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
-    private Vector2d           elementSize;
+    private IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
 
     @NotNull
     private BoundingBox localBoundingBox;
     @NotNull
     private BoundingBox absoluteBoundingBox;
 
-    @Nullable
-    private Object dataContext;
+    @NotNull
+    private IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
 
-    private boolean visible;
-    private boolean enabled;
+    @NotNull
+    private IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    @NotNull
+    private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
+
+    public AbstractSimpleUIElement(@NotNull final String id, @NotNull final IUIElementHost parent)
+    {
+        this.id = id;
+        this.parent = parent;
+    }
 
     public AbstractSimpleUIElement(
       @NotNull final String id,
-      @NotNull final EnumSet<Alignment> alignments,
-      @NotNull final Dock dock,
-      @NotNull final AxisDistance margin,
-      @NotNull final Vector2d elementSize,
       @NotNull final IUIElementHost parent,
-      final boolean visible,
-      final boolean enabled)
+      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+      @NotNull final IDependencyObject<Dock> dock,
+      @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
+      @NotNull final IDependencyObject<Object> dataContext,
+      @NotNull final IDependencyObject<Boolean> visible,
+      @NotNull final IDependencyObject<Boolean> enabled)
     {
         this.id = id;
+        this.parent = parent;
         this.alignments = alignments;
         this.dock = dock;
         this.margin = margin;
         this.elementSize = elementSize;
-        this.parent = parent;
+        this.dataContext = dataContext;
         this.visible = visible;
         this.enabled = enabled;
-
-        updateBoundingBoxes();
+        
     }
 
     private void updateLocalBoundingBox()
@@ -101,53 +112,49 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public EnumSet<Alignment> getAlignment()
     {
-        return alignments;
+        return alignments.get(getDataContext());
     }
 
     @Override
     public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
     {
-        this.alignments = alignment;
-        updateBoundingBoxes();
+        this.alignments = DependencyObjectHelper.createFromValue(alignment);
     }
 
     @Override
     public Dock getDock()
     {
-        return dock;
+        return dock.get(getDataContext());
     }
 
     @Override
     public void setDock(@NotNull final Dock dock)
     {
-        this.dock = dock;
-        updateBoundingBoxes();
+        this.dock = DependencyObjectHelper.createFromValue(dock);
     }
 
     @Override
     public AxisDistance getMargin()
     {
-        return margin;
+        return margin.get(getDataContext());
     }
 
     @Override
     public void setMargin(@NotNull final AxisDistance margin)
     {
-        this.margin = margin;
-        updateBoundingBoxes();
+        this.margin = DependencyObjectHelper.createFromValue(margin);
     }
 
     @Override
     public Vector2d getElementSize()
     {
-        return elementSize;
+        return elementSize.get(getDataContext());
     }
 
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize = elementSize;
-        updateBoundingBoxes();
+        this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
     }
 
     @Override
@@ -182,43 +189,48 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     public void setParent(@NotNull final IUIElementHost parent)
     {
         this.parent = parent;
-        updateBoundingBoxes();
     }
 
     @Override
     public boolean isVisible()
     {
-        return visible;
+        return visible.get(getDataContext());
     }
 
     @Override
     public void setVisible(final boolean visible)
     {
-        this.visible = visible;
+        this.visible = DependencyObjectHelper.createFromValue(visible);
     }
 
     @Override
     public boolean isEnabled()
     {
-        return enabled;
+        return enabled.get(getDataContext());
     }
 
     @Override
     public void setEnabled(final boolean enabled)
     {
-        this.enabled = enabled;
+        this.enabled = DependencyObjectHelper.createFromValue(enabled);
     }
 
     @Nullable
     @Override
     public Object getDataContext()
     {
-        return dataContext;
+        return dataContext.get(parent.getDataContext());
     }
 
     @Override
     public void setDataContext(@Nullable final Object dataContext)
     {
-        this.dataContext = dataContext;
+        this.dataContext = DependencyObjectHelper.createFromValue(dataContext);
+    }
+
+    @Override
+    public void update()
+    {
+        updateBoundingBoxes();
     }
 }

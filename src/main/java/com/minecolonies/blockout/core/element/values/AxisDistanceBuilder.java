@@ -76,12 +76,12 @@ public class AxisDistanceBuilder
 
                     if (components.length > 2)
                     {
-                        setWithParse(this::setTop, parentSize.getX(), components[2]);
+                        setWithParse(this::setRight, parentSize.getX(), components[2]);
                     }
 
                     if (components.length > 3)
                     {
-                        setWithParse(this::setTop, parentSize.getY(), components[3]);
+                        setWithParse(this::setBottom, parentSize.getY(), components[3]);
                     }
                 }
             }

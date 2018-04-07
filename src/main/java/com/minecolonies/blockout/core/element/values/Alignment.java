@@ -5,6 +5,7 @@ import com.minecolonies.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 public enum Alignment
 {
@@ -90,7 +91,7 @@ public enum Alignment
         return isActive(element.getAlignment());
     }
 
-    public boolean isActive(@NotNull final EnumSet<Alignment> alignments)
+    public boolean isActive(@NotNull final Set<Alignment> alignments)
     {
         return alignments.contains(this);
     }

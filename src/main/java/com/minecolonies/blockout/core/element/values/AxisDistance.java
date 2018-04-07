@@ -8,13 +8,13 @@ import java.util.Optional;
 public final class AxisDistance
 {
     @NotNull
-    private final Optional<Double> left;
+    private Optional<Double> left;
     @NotNull
-    private final Optional<Double> top;
+    private Optional<Double> top;
     @NotNull
-    private final Optional<Double> right;
+    private Optional<Double> right;
     @NotNull
-    private final Optional<Double> bottom;
+    private Optional<Double> bottom;
 
     public AxisDistance()
     {
@@ -61,5 +61,15 @@ public final class AxisDistance
         final Optional<Double> bottom = this.bottom.map(aDouble -> aDouble - delta.getY());
 
         return new AxisDistanceBuilder().setLeft(left).setTop(top).setRight(right).setBottom(bottom).create();
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("%s,%s,%s,%s",
+          getLeft().map(Object::toString).orElse(""),
+          getTop().map(Object::toString).orElse(""),
+          getRight().map(Object::toString).orElse(""),
+          getBottom().map(Object::toString).orElse(""));
     }
 }

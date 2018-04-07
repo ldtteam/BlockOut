@@ -21,6 +21,12 @@ public interface IUIElement
     String getId();
 
     /**
+     * Called before the drawing of the UI.
+     * Can be used to update bounding boxes from bound values, and animation etc.
+     */
+    void update();
+
+    /**
      * Method to get the data context of this {@link IUIElement}.
      * This object is used during data binding.
      *
