@@ -6,6 +6,5 @@ import org.jetbrains.annotations.Nullable;
 @FunctionalInterface
 public interface IEventHandler<S, A>
 {
-    @Nullable
     void handle(@NotNull final S source, @Nullable final A args);
 }
