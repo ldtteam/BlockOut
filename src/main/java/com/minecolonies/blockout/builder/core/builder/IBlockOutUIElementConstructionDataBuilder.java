@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.builder.core;
+package com.minecolonies.blockout.builder.core.builder;
 
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElement;

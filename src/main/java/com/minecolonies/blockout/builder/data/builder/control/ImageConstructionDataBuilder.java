@@ -1,7 +1,7 @@
-package com.minecolonies.blockout.builder.data.control;
+package com.minecolonies.blockout.builder.data.builder.control;
 
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
-import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.element.simple.Image;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;

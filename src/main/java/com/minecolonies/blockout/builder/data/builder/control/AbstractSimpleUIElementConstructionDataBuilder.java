@@ -1,8 +1,8 @@
-package com.minecolonies.blockout.builder.data.control;
+package com.minecolonies.blockout.builder.data.builder.control;
 
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
-import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionDataBuilder;
-import com.minecolonies.blockout.builder.core.IBlockOutUIElementConstructionDataBuilder;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutUIElementConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
