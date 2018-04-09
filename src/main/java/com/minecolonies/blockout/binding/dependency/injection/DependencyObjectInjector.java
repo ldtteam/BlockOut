@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.binding.dependency.injection;
 
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.reflection.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
@@ -12,13 +13,12 @@ import java.lang.reflect.Type;
 public final class DependencyObjectInjector
 {
 
-
     private DependencyObjectInjector()
     {
         throw new IllegalArgumentException("Utility Class");
     }
 
-    public static void inject(@NotNull final Object target, @NotNull final IDependencyDataProvider provider)
+    public static void inject(@NotNull final IUIElement target, @NotNull final IDependencyDataProvider provider)
     {
         ReflectionUtil.getFields(target.getClass())
           .stream()
@@ -42,12 +42,13 @@ public final class DependencyObjectInjector
               {
                   final ParameterizedType parameterizedType = (ParameterizedType) fieldType;
                   final Type containedType = parameterizedType.getActualTypeArguments()[0];
+                  final String dependencyDataName = String.format("%s#%s", target.getId(), field.getName());
 
-                  if (provider.hasDependencyData(field.getName()))
+                  if (provider.hasDependencyData(dependencyDataName, current.getClass()))
                   {
                       try
                       {
-                          field.set(target, provider.get(field.getName(), current, containedType));
+                          field.set(target, provider.get(dependencyDataName, current, containedType));
                       }
                       catch (Exception e)
                       {
