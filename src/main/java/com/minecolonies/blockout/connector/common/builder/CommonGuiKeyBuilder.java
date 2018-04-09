@@ -56,6 +56,13 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
         return this;
     }
 
+    @Override
+    public IGuiKeyBuilder ofDefinition(@NotNull final IGuiDefinitionLoader definitionLoader)
+    {
+        this.guiDefinitionLoader = definitionLoader;
+        return this;
+    }
+
     @NotNull
     @Override
     public IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder> builderConsumer)
@@ -65,6 +72,14 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
         this.constructionData = builder.build();
 
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public IGuiKeyBuilder usingData(@NotNull final IBlockOutGuiConstructionData data)
+    {
+        this.constructionData = data;
         return this;
     }
 
@@ -97,6 +112,14 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     public IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos)
     {
         this.context = new PositionContext(world, blockPos);
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public IGuiKeyBuilder forContext(@NotNull final IContext context)
+    {
+        this.context = context;
         return this;
     }
 

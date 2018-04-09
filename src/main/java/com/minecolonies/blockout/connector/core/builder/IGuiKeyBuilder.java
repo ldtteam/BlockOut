@@ -1,7 +1,10 @@
 package com.minecolonies.blockout.connector.core.builder;
 
+import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.core.IGuiKey;
+import com.minecolonies.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +27,8 @@ public interface IGuiKeyBuilder
     @NotNull
     IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz);
 
+    IGuiKeyBuilder ofDefinition(@NotNull final IGuiDefinitionLoader definitionLoader);
+
     @NotNull
     default IGuiKeyBuilder usingDefaultData()
     {
@@ -36,6 +41,9 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder> builderConsumer);
 
     @NotNull
+    IGuiKeyBuilder usingData(@NotNull final IBlockOutGuiConstructionData data);
+
+    @NotNull
     IGuiKeyBuilder forEntity(@NotNull final UUID entityId);
 
     @NotNull
@@ -46,6 +54,9 @@ public interface IGuiKeyBuilder
 
     @NotNull
     IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos);
+
+    @NotNull
+    IGuiKeyBuilder forContext(@NotNull final IContext context);
 
     @NotNull
     IGuiKey build();
