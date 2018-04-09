@@ -56,12 +56,6 @@ public class PositionContext implements IContext
     }
 
     @Override
-    public int compareTo(@NotNull final IContext o)
-    {
-        return equals(o) ? 0 : -1;
-    }
-
-    @Override
     public boolean equals(final Object o)
     {
         if (this == o)

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
@@ -66,5 +67,28 @@ public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
         }
 
         return (IDependencyObject<T>) dependencyData.get(name);
+    }
+
+    @Override
+    public int hashCode()
+    {
+
+        return Objects.hash(dependencyData, eventHandlerData);
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        final BlockOutGuiConstructionData that = (BlockOutGuiConstructionData) o;
+        return Objects.equals(dependencyData, that.dependencyData) &&
+                 Objects.equals(eventHandlerData, that.eventHandlerData);
     }
 }

@@ -12,7 +12,6 @@ import com.minecolonies.blockout.network.message.CloseGuiCommandMessage;
 import com.minecolonies.blockout.network.message.OpenGuiCommandMessage;
 import com.minecolonies.blockout.util.Log;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -46,8 +45,7 @@ public class ServerGuiController implements IGuiController
             return;
         }
 
-        final ResourceLocation definitionLocation = key.getGuiDefinition();
-        final IUIElementData elementData = BlockOut.getBlockOut().getProxy().getLoaderManager().loadData(definitionLocation);
+        final IUIElementData elementData = BlockOut.getBlockOut().getProxy().getLoaderManager().loadData(key.getGuiDefinitionLoader());
 
         if (elementData == null)
         {

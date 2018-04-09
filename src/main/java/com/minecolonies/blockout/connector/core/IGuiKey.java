@@ -6,11 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-public interface IGuiKey extends Serializable, Comparable<IGuiKey>
+public interface IGuiKey extends Serializable
 {
 
     @NotNull
-    String getGuiDefinition();
+    IGuiDefinitionLoader getGuiDefinitionLoader();
 
     @NotNull
     IBlockOutGuiConstructionData getConstructionData();

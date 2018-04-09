@@ -1,55 +1,35 @@
 package com.minecolonies.blockout.connector.common;
 
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
+import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.context.core.IContext;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class CommonGuiKey implements IGuiKey
 {
+    @NotNull
+    private final IGuiDefinitionLoader loader;
 
     @NotNull
-    private final String definition;
+    private final IBlockOutGuiConstructionData constructionData;
 
     @NotNull
     private final IContext context;
 
-    public CommonGuiKey(@NotNull final ResourceLocation guiDefinition, @NotNull final IContext context)
+    public CommonGuiKey(@NotNull final IGuiDefinitionLoader loader, @NotNull final IBlockOutGuiConstructionData constructionData, @NotNull final IContext context)
     {
-        this.domain = guiDefinition.getResourceDomain();
-        this.path = guiDefinition.getResourcePath();
+        this.loader = loader;
+        this.constructionData = constructionData;
         this.context = context;
-    }
-
-    @NotNull
-    @Override
-    public ResourceLocation getGuiDefinition()
-    {
-        return new ResourceLocation(domain, path);
-    }
-
-    @NotNull
-    @Override
-    public IBlockOutGuiConstructionData getConstructionData()
-    {
-        return null;
-    }
-
-    @NotNull
-    @Override
-    public IContext getGuiContext()
-    {
-        return context;
     }
 
     @Override
     public int hashCode()
     {
-        int result = domain.hashCode();
-        result = 31 * result + path.hashCode();
-        result = 31 * result + context.hashCode();
-        return result;
+        return Objects.hash(getGuiDefinitionLoader(), getConstructionData(), getGuiContext());
     }
 
     @Override
@@ -59,27 +39,34 @@ public class CommonGuiKey implements IGuiKey
         {
             return true;
         }
-        if (!(o instanceof CommonGuiKey))
+        if (o == null || getClass() != o.getClass())
         {
             return false;
         }
-
         final CommonGuiKey that = (CommonGuiKey) o;
-
-        if (!domain.equals(that.domain))
-        {
-            return false;
-        }
-        if (!path.equals(that.path))
-        {
-            return false;
-        }
-        return context.equals(that.context);
+        return Objects.equals(getGuiDefinitionLoader(), that.getGuiDefinitionLoader()) &&
+                 Objects.equals(getConstructionData(), that.getConstructionData()) &&
+                 Objects.equals(getGuiContext(), that.getGuiContext());
     }
 
+    @NotNull
     @Override
-    public int compareTo(@NotNull final IGuiKey o)
+    public IGuiDefinitionLoader getGuiDefinitionLoader()
     {
-        return this.equals(o) ? 0 : -1;
+        return loader;
+    }
+
+    @NotNull
+    @Override
+    public IBlockOutGuiConstructionData getConstructionData()
+    {
+        return constructionData;
+    }
+
+    @NotNull
+    @Override
+    public IContext getGuiContext()
+    {
+        return context;
     }
 }
