@@ -27,6 +27,7 @@ public class Constants
             public static final String CONST_DOCK         = "dock";
             public static final String CONST_MARGIN       = "margin";
             public static final String CONST_ELEMENT_SIZE = "elementSize";
+            public static final String CONST_DATA_CONTEXT = "dataContext";
             public static final String CONST_VISIBLE      = "visible";
             public static final String CONST_ENABLED      = "enabled";
         }

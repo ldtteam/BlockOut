@@ -16,7 +16,6 @@ import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 public class AbstractSimpleUIElementConstructionDataBuilder<C extends AbstractSimpleUIElementConstructionDataBuilder<C, T>, T extends AbstractSimpleUIElement>
   implements IBlockOutUIElementConstructionDataBuilder<C, T>
 {
-    private static final String CONST_DATACONTEXT = "dataContext";
 
     private final String                              controlId;
     private final IBlockOutGuiConstructionDataBuilder builder;
@@ -80,7 +79,7 @@ public class AbstractSimpleUIElementConstructionDataBuilder<C extends AbstractSi
     @NotNull
     public final C withBoundDataContext(@NotNull final IDependencyObject<Object> dependencyObject)
     {
-        return withDependency(CONST_DATACONTEXT, dependencyObject);
+        return withDependency(CONST_DATA_CONTEXT, dependencyObject);
     }
 
     @NotNull
