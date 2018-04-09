@@ -3,6 +3,7 @@ package com.minecolonies.blockout.connector.common.builder;
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.connector.common.CommonClassBasedDefinitionLoader;
 import com.minecolonies.blockout.connector.common.CommonGuiKey;
 import com.minecolonies.blockout.connector.common.CommonResourceLocationBasedGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.common.CommonWebFileBasedGuiDefinitionLoader;
@@ -27,7 +28,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     @NotNull
     private IGuiDefinitionLoader         guiDefinitionLoader;
     @NotNull
-    private IBlockOutGuiConstructionData contructionData;
+    private IBlockOutGuiConstructionData constructionData;
     @NotNull
     private IContext                     context;
 
@@ -49,12 +50,20 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
+    public IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz)
+    {
+        this.guiDefinitionLoader = new CommonClassBasedDefinitionLoader(clazz);
+        return this;
+    }
+
+    @NotNull
+    @Override
     public IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder> builderConsumer)
     {
         final BlockOutGuiConstructionDataBuilder builder = new BlockOutGuiConstructionDataBuilder();
         builderConsumer.accept(builder);
 
-        this.contructionData = builder.build();
+        this.constructionData = builder.build();
 
         return this;
     }
@@ -95,6 +104,6 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     @Override
     public IGuiKey build()
     {
-        return new CommonGuiKey(guiDefinitionLoader, contructionData, context);
+        return new CommonGuiKey(guiDefinitionLoader, constructionData, context);
     }
 }

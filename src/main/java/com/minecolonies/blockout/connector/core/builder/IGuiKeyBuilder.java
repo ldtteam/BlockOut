@@ -22,6 +22,17 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location);
 
     @NotNull
+    IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz);
+
+    @NotNull
+    default IGuiKeyBuilder usingDefaultData()
+    {
+        return usingData((builder) -> {
+            //NOOP. Produces default builder.
+        });
+    }
+
+    @NotNull
     IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder> builderConsumer);
 
     @NotNull

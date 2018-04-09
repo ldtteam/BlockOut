@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ObjectUIElementLoader implements ILoader
 {
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public IUIElementData createFromFile(@NotNull final String data)
@@ -18,7 +19,8 @@ public class ObjectUIElementLoader implements ILoader
 
         try
         {
-            final Class<?> potentialFileLoader = Class.forName(data);
+            final String className = data.replace(".class", "");
+            final Class<?> potentialFileLoader = Class.forName(className);
             final Class<? extends IClassBasedUICreator> fileLoader = (Class<? extends IClassBasedUICreator>) potentialFileLoader;
             final IClassBasedUICreator instance = fileLoader.newInstance();
 
