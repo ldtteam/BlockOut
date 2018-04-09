@@ -132,7 +132,6 @@ public class RenderingController implements IRenderingController
 
     /**
      * Draws a cut IIcon on the Screen
-     * <p/>
      * This function comes with regards to the BuildCraft Team
      *
      * @param x              The x offset

@@ -28,8 +28,7 @@ public final class Vector2d
      * Creation constructor. Creates a new {@link Vector2d} from the given x, y, z.
      *
      * @param x The X-Coordinate.
-     * @param y The Y-Coordinate
-     * @param z The Z-Coordinate.
+     * @param y The Y-Coordinate.
      */
     public Vector2d(final double x, final double y)
     {
@@ -68,7 +67,7 @@ public final class Vector2d
     }
 
     /**
-     * Creates a new moved vector where all coordinate elements are moved with the given {@param delta}
+     * Creates a new moved vector where all coordinate elements are moved with the given delta
      *
      * @param delta The distance to move all coordinate elements.
      * @return A new {@link Vector2d} moved with the given delta.

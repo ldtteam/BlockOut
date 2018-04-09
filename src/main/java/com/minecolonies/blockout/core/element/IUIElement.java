@@ -50,7 +50,7 @@ public interface IUIElement
     void setEnabled(final boolean enabled);
 
     /**
-     * Method to get the current {@link Alignment) of the {@link IUIElement}
+     * Method to get the current {@link Alignment} of the {@link IUIElement}
      *
      * @return The current {@link Alignment}
      */
@@ -64,7 +64,7 @@ public interface IUIElement
     void setAlignment(@NotNull final EnumSet<Alignment> alignment);
 
     /**
-     * Method to get the current {@link Dock ) of the {@link IUIElement}
+     * Method to get the current {@link Dock} of the {@link IUIElement}
      *
      * @return The current {@link Dock}
      */
