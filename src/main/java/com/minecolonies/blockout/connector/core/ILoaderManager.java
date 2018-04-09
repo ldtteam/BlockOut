@@ -10,4 +10,6 @@ public interface ILoaderManager
     void registerLoader(@NotNull ILoader loader);
 
     IUIElementData loadData(@NotNull ResourceLocation location);
+
+    IUIElementData loadData(@NotNull final String data);
 }

@@ -22,6 +22,11 @@ public interface IUIElementDataBuilder
      */
     IUIElementDataBuilder setType(ResourceLocation type);
 
+    default IUIElementDataBuilder addChild(@NotNull final IUIElementDataBuilder builder)
+    {
+        return addChild(builder.build());
+    }
+
     /**
      * Method to add a child {@link IUIElementData} to the constructed {@link IUIElementData}.
      *
