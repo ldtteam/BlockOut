@@ -143,13 +143,13 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         public void writeToElementData(@NotNull final Image element, @NotNull final IUIElementDataBuilder builder)
         {
             builder
-              .addAlignment(CONST_ALIGNMENT, getAlignment())
-              .addEnum(CONST_DOCK, getDock())
-              .addAxisDistance(CONST_MARGIN, getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, getElementSize())
-              .addBoolean(CONST_VISIBLE, isVisible())
-              .addBoolean(CONST_ENABLED, isEnabled())
-              .addResourceLocation(CONST_ICON, getIcon());
+              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
+              .addEnum(CONST_DOCK, element.getDock())
+              .addAxisDistance(CONST_MARGIN, element.getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addBoolean(CONST_VISIBLE, element.isVisible())
+              .addBoolean(CONST_ENABLED, element.isEnabled())
+              .addResourceLocation(CONST_ICON, element.getIcon());
         }
     }
 }
