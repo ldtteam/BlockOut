@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.connector.common;
 
+import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.context.core.IContext;
 import net.minecraft.util.ResourceLocation;
@@ -9,9 +10,8 @@ public class CommonGuiKey implements IGuiKey
 {
 
     @NotNull
-    private final String   domain;
-    @NotNull
-    private final String   path;
+    private final String definition;
+
     @NotNull
     private final IContext context;
 
@@ -27,6 +27,13 @@ public class CommonGuiKey implements IGuiKey
     public ResourceLocation getGuiDefinition()
     {
         return new ResourceLocation(domain, path);
+    }
+
+    @NotNull
+    @Override
+    public IBlockOutGuiConstructionData getConstructionData()
+    {
+        return null;
     }
 
     @NotNull
