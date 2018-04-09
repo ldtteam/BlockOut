@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.element.core;
 
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -22,16 +24,17 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     private final IUIManager     uiManager;
     @NotNull
     private       IUIElementHost parent;
+
     @NotNull
-    private EnumSet<Alignment> alignments  = EnumSet.of(Alignment.NONE);
+    private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private Dock               dock        = Dock.NONE;
+    private IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
-    private AxisDistance       margin      = new AxisDistance();
+    private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
-    private Vector2d           elementSize = new Vector2d();
+    private IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
     @NotNull
-    private AxisDistance       padding     = new AxisDistance();
+    private IDependencyObject<AxisDistance>       padding     = DependencyObjectHelper.createFromValue(new AxisDistance());
 
     @NotNull
     private BoundingBox localBoundingBox;
@@ -42,23 +45,26 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     @NotNull
     private BoundingBox absoluteInternalBoundingBox;
 
-    @Nullable
-    private Object dataContext;
+    @NotNull
+    private IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
 
-    private boolean visible = true;
-    private boolean enabled = true;
+    @NotNull
+    private IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    @NotNull
+    private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractChildrenContainingUIElement(
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IUIManager uiManager,
-      @NotNull final EnumSet<Alignment> alignments,
-      @NotNull final Dock dock,
-      @NotNull final AxisDistance margin,
-      @NotNull final Vector2d elementSize,
-      @NotNull final AxisDistance padding,
-      final boolean visible,
-      final boolean enabled
+      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+      @NotNull final IDependencyObject<Dock> dock,
+      @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
+      @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Object> dataContext,
+      @NotNull final IDependencyObject<Boolean> visible,
+      @NotNull final IDependencyObject<Boolean> enabled
     )
     {
         this.id = id;
@@ -69,13 +75,18 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         this.margin = margin;
         this.elementSize = elementSize;
         this.padding = padding;
+        this.dataContext = dataContext;
         this.visible = visible;
         this.enabled = enabled;
     }
 
-    public AbstractChildrenContainingUIElement(@NotNull final String id, @NotNull final IUIManager uiManager)
+    public AbstractChildrenContainingUIElement(
+      @NotNull final String id,
+      @NotNull final IUIElementHost parent,
+      @NotNull final IUIManager uiManager)
     {
         this.id = id;
+        this.parent = parent;
         this.uiManager = uiManager;
     }
 
@@ -86,55 +97,117 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         return id;
     }
 
+    private void updateLocalBoundingBox()
+    {
+        //If we have no parent we see our default size as parent.
+        //Else grab the size from the parent.
+        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : getElementSize();
+
+        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
+        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
+        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
+        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
+
+        final Vector2d origin = new Vector2d(marginLeft, marginTop);
+
+        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
+
+        this.localBoundingBox = new BoundingBox(origin, size);
+        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+    }
+
     @Override
     public EnumSet<Alignment> getAlignment()
     {
-        return EnumSet.copyOf(alignments);
+        return alignments.get(getDataContext());
+    }
+
+    private void updateAbsoluteBoundingBox()
+    {
+        if (getParent() == this)
+        {
+            this.absoluteBoundingBox = getLocalBoundingBox();
+        }
+
+        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
+        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
     }
 
     @Override
     public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
     {
-        this.alignments = alignment;
-        updateBoundingBoxes();
+        this.alignments = DependencyObjectHelper.createFromValue(alignment);
+    }
+
+    @Override
+    public AxisDistance getPadding()
+    {
+        return padding.get(getDataContext());
     }
 
     @Override
     public Dock getDock()
     {
-        return dock;
+        return dock.get(getDataContext());
+    }
+
+    @Override
+    public void setPadding(@NotNull final AxisDistance padding)
+    {
+        this.padding = DependencyObjectHelper.createFromValue(padding);
     }
 
     @Override
     public void setDock(@NotNull final Dock dock)
     {
-        this.dock = dock;
+        this.dock = DependencyObjectHelper.createFromValue(dock);
+    }
+
+    @Override
+    public void update()
+    {
+        //Update our own boxes first.
         updateBoundingBoxes();
+
+        //Update the boxes for our children.
+        values().forEach(IUIElement::update);
     }
 
     @Override
     public AxisDistance getMargin()
     {
-        return margin;
+        return margin.get(getDataContext());
+    }
+
+    @Nullable
+    @Override
+    public Object getDataContext()
+    {
+        return dataContext.get(parent.getDataContext());
     }
 
     @Override
     public void setMargin(@NotNull final AxisDistance margin)
     {
-        this.margin = margin;
-        updateBoundingBoxes();
+        this.margin = DependencyObjectHelper.createFromValue(margin);
+    }
+
+    @Override
+    public void setDataContext(@Nullable final Object dataContext)
+    {
+        this.dataContext = DependencyObjectHelper.createFromValue(dataContext);
     }
 
     @Override
     public Vector2d getElementSize()
     {
-        return elementSize;
+        return elementSize.get(getDataContext());
     }
 
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize = elementSize;
+        this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
     }
 
     @Override
@@ -160,37 +233,11 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     public void setParent(@NotNull final IUIElementHost parent)
     {
         this.parent = parent;
-        updateBoundingBoxes();
     }
 
-    private void updateLocalBoundingBox()
-    {
-        //If we have no parent we see our default size as parent.
-        //Else grab the size from the parent.
-        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : getElementSize();
 
-        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
-        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
-        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
-        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
 
-        final Vector2d origin = new Vector2d(marginLeft, marginTop);
 
-        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
-
-        this.localBoundingBox = new BoundingBox(origin, size);
-    }
-
-    private void updateAbsoluteBoundingBox()
-    {
-        if (getParent() == this)
-        {
-            this.absoluteBoundingBox = getLocalBoundingBox();
-        }
-
-        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteBoundingBox();
-        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
-    }
 
     private void updateLocalInternalBoundingBox()
     {
@@ -234,19 +281,6 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         return uiManager;
     }
 
-    @Override
-    public AxisDistance getPadding()
-    {
-        return padding;
-    }
-
-    @Override
-    public void setPadding(@NotNull final AxisDistance padding)
-    {
-        this.padding = padding;
-        updateBoundingBoxes();
-    }
-
     @NotNull
     @Override
     public IUIElementHost getParent()
@@ -269,37 +303,24 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     @Override
     public boolean isVisible()
     {
-        return visible;
+        return visible.get(getDataContext());
     }
 
     @Override
     public void setVisible(final boolean visible)
     {
-        this.visible = visible;
+        this.visible = DependencyObjectHelper.createFromValue(visible);
     }
 
     @Override
     public boolean isEnabled()
     {
-        return enabled;
+        return enabled.get(getDataContext());
     }
 
     @Override
     public void setEnabled(final boolean enabled)
     {
-        this.enabled = enabled;
-    }
-
-    @Nullable
-    @Override
-    public Object getDataContext()
-    {
-        return dataContext;
-    }
-
-    @Override
-    public void setDataContext(@Nullable final Object dataContext)
-    {
-        this.dataContext = dataContext;
+        this.enabled = DependencyObjectHelper.createFromValue(enabled);
     }
 }
