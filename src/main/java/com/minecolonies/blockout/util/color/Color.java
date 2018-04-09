@@ -1,6 +1,9 @@
 package com.minecolonies.blockout.util.color;
 
+import com.minecolonies.blockout.util.Constants;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.vecmath.Vector2d;
@@ -20,6 +23,8 @@ import java.awt.image.ColorModel;
  */
 public class Color extends java.awt.Color
 {
+
+    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
 
     /**
      * Creates an opaque sRGB color with the specified red, green,
@@ -198,6 +203,7 @@ public class Color extends java.awt.Color
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
+    @SideOnly(Side.CLIENT)
     public String encodeColor()
     {
         return String.format("%c%c%c",

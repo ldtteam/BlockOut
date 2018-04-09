@@ -1,12 +1,14 @@
 package com.minecolonies.blockout.context;
 
 import com.minecolonies.blockout.context.core.IContext;
+import com.minecolonies.blockout.util.Constants;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 public class PositionContext implements IContext
 {
+    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
 
     private int dimensionId;
 

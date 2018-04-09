@@ -24,6 +24,7 @@ public final class Event<S, A>
         handlers.forEach(handler -> handler.handle(source, args));
     }
 
+    @SuppressWarnings("unchecked")
     public void registerHandler(final IEventHandler<?, ?> iEventHandler)
     {
         final IEventHandler<S, A> typedEventHandler;

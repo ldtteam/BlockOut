@@ -18,6 +18,7 @@ public class ReflectiveSupplier<S, T> implements Function<S, Optional<T>>
         this.getter.ifPresent(method -> method.setAccessible(true));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Optional<T> apply(final S s)
     {

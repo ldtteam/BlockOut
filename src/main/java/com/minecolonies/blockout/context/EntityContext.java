@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.context;
 
 import com.minecolonies.blockout.context.core.IContext;
+import com.minecolonies.blockout.util.Constants;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,8 @@ import java.util.UUID;
 
 public class EntityContext implements IContext
 {
+    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
+
     @NotNull
     private UUID entityId = new UUID(0,0);
 

@@ -15,6 +15,8 @@ public class Constants
     public static final String PROXY_CLIENT = "com.minecolonies.blockout.proxy.ClientProxy";
     public static final String PROXY_COMMON = "com.minecolonies.blockout.proxy.CommonProxy";
 
+    public static final Long SERIAL_VAR_ID = Long.valueOf(MC_VERSION.hashCode());
+
     public static class Controls
     {
 

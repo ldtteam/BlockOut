@@ -6,5 +6,5 @@ import org.jetbrains.annotations.NotNull;
 public interface IInjectionController
 {
 
-    <C, T> IDependencyObject<C, T> get(@NotNull final IDependencyObject<C, T> current, @NotNull final IDependencyDataProvider provider);
+    <C, T> IDependencyObject<T> get(@NotNull final IDependencyObject<T> current, @NotNull final IDependencyDataProvider provider);
 }

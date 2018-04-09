@@ -59,6 +59,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
      * @param cls The class of the type that is looked for.
      * @return An {@link Optional} containing the searched element or nothing.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     default <T extends IUIElement> Optional<T> searchExactElementById(@NotNull final String id, @NotNull final Class<T> cls)
     {
