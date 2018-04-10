@@ -2,7 +2,9 @@ package com.minecolonies.blockout.connector.core;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface IGuiDefinitionLoader
+import java.io.Serializable;
+
+public interface IGuiDefinitionLoader extends Serializable
 {
 
     @NotNull

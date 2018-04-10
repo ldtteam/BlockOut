@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.connector.common;
 
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
+import com.minecolonies.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.context.core.IContext;
@@ -14,10 +15,17 @@ public class CommonGuiKey implements IGuiKey
     private final IGuiDefinitionLoader loader;
 
     @NotNull
-    private final IBlockOutGuiConstructionData constructionData;
+    private final transient IBlockOutGuiConstructionData constructionData;
 
     @NotNull
     private final IContext context;
+
+    private CommonGuiKey()
+    {
+        this.loader = null;
+        this.constructionData = new BlockOutGuiConstructionDataBuilder().build();
+        this.context = null;
+    }
 
     public CommonGuiKey(@NotNull final IGuiDefinitionLoader loader, @NotNull final IBlockOutGuiConstructionData constructionData, @NotNull final IContext context)
     {

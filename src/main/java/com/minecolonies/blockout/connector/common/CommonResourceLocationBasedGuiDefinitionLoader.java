@@ -15,9 +15,22 @@ import java.util.Objects;
 public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefinitionLoader
 {
 
-    private final ResourceLocation location;
+    @NotNull
+    private final String domain;
+    @NotNull
+    private final String path;
 
-    public CommonResourceLocationBasedGuiDefinitionLoader(final ResourceLocation location) {this.location = location;}
+    private CommonResourceLocationBasedGuiDefinitionLoader()
+    {
+        this.domain = "";
+        this.path = "";
+    }
+
+    public CommonResourceLocationBasedGuiDefinitionLoader(final ResourceLocation location)
+    {
+        this.domain = location.getResourceDomain();
+        this.path = location.getResourcePath();
+    }
 
     @NotNull
     @Override
@@ -25,7 +38,7 @@ public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefin
     {
         try
         {
-            final InputStream stream = BlockOut.getBlockOut().getProxy().getResourceStream(location);
+            final InputStream stream = BlockOut.getBlockOut().getProxy().getResourceStream(getLocation());
             String data;
             try (final Reader reader = new InputStreamReader(stream))
             {
@@ -36,15 +49,21 @@ public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefin
         }
         catch (Exception e)
         {
-            Log.getLogger().warn("Failed to read data from location: " + location, e);
+            Log.getLogger().warn("Failed to read data from location: " + getLocation(), e);
             return "";
         }
+    }
+
+    @NotNull
+    public ResourceLocation getLocation()
+    {
+        return new ResourceLocation(domain, path);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(location);
+        return Objects.hash(getLocation());
     }
 
     @Override
@@ -59,6 +78,6 @@ public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefin
             return false;
         }
         final CommonResourceLocationBasedGuiDefinitionLoader that = (CommonResourceLocationBasedGuiDefinitionLoader) o;
-        return Objects.equals(location, that.location);
+        return Objects.equals(getLocation(), that.getLocation());
     }
 }

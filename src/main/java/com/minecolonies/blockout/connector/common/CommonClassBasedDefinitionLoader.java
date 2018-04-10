@@ -5,15 +5,20 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommonClassBasedDefinitionLoader implements IGuiDefinitionLoader
 {
+    @NotNull
+    private final String clazzName;
 
-    private final Class<?> clazz;
+    private CommonClassBasedDefinitionLoader()
+    {
+        this.clazzName = "";
+    }
 
-    public CommonClassBasedDefinitionLoader(final Class<?> clazz) {this.clazz = clazz;}
+    public CommonClassBasedDefinitionLoader(final Class<?> clazz) {this.clazzName = clazz.getName();}
 
     @NotNull
     @Override
     public String getGuiDefinition()
     {
-        return clazz.getName() + ".class";
+        return String.format("%s.class", clazzName);
     }
 }

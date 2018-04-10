@@ -4,7 +4,6 @@ import com.google.common.io.CharStreams;
 import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.util.Log;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -23,6 +22,11 @@ public class CommonWebFileBasedGuiDefinitionLoader implements IGuiDefinitionLoad
 {
     @NotNull
     private final URL url;
+
+    private CommonWebFileBasedGuiDefinitionLoader()
+    {
+        this.url = null;
+    }
 
     public CommonWebFileBasedGuiDefinitionLoader(@NotNull final URL url) {this.url = url;}
 
@@ -51,7 +55,7 @@ public class CommonWebFileBasedGuiDefinitionLoader implements IGuiDefinitionLoad
     {
 
         @Override
-        public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException
+        public String handleResponse(final HttpResponse response) throws IOException
         {
             final InputStream stream = response.getEntity().getContent();
             String data;

@@ -3,7 +3,6 @@ package com.minecolonies.blockout.network.message;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.network.message.core.IBlockOutClientToServerMessage;
-import com.minecolonies.blockout.util.Constants;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
 {
-    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
-
     @NotNull
     private IGuiKey key;
 
@@ -30,7 +27,7 @@ public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
     public void onMessageArrivalAtServer(@NotNull final MessageContext ctx)
     {
         final EntityPlayerMP playerMP = ctx.getServerHandler().player;
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(getKey(), playerMP.getUniqueID());
+        BlockOut.getBlockOut().getProxy().getGuiController().openUI(playerMP.getUniqueID(), getKey());
     }
 
     @NotNull
