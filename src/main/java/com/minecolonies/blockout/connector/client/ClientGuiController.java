@@ -10,11 +10,14 @@ import com.minecolonies.blockout.network.message.OpenGuiRequestMessage;
 import com.minecolonies.blockout.util.Log;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@SideOnly(Side.CLIENT)
 public class ClientGuiController implements IGuiController
 {
     @Override
@@ -51,7 +54,7 @@ public class ClientGuiController implements IGuiController
             return;
         }
 
-        NetworkManager.sendToServer(new OpenGuiRequestMessage());
+        NetworkManager.sendToServer(new OpenGuiRequestMessage(key));
     }
 
     @Override

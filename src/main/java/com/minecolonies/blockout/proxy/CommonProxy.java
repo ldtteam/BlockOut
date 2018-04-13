@@ -1,10 +1,12 @@
 package com.minecolonies.blockout.proxy;
 
+import com.minecolonies.blockout.connector.common.CommonFactoryController;
 import com.minecolonies.blockout.connector.common.CommonLoaderManager;
 import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.ILoaderManager;
 import com.minecolonies.blockout.connector.core.IUIElementFactoryController;
 import com.minecolonies.blockout.connector.server.ServerGuiController;
+import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
@@ -14,13 +16,15 @@ import java.io.InputStream;
 
 public class CommonProxy implements IProxy
 {
-    private final ServerGuiController controller;
-    private final CommonLoaderManager commonLoaderManager;
+    private final ServerGuiController     controller;
+    private final CommonLoaderManager     commonLoaderManager;
+    private final CommonFactoryController commonFactoryController;
 
     public CommonProxy()
     {
         controller = new ServerGuiController();
         commonLoaderManager = new CommonLoaderManager();
+        commonFactoryController = new CommonFactoryController();
     }
 
     @NotNull
@@ -41,7 +45,7 @@ public class CommonProxy implements IProxy
     @Override
     public IUIElementFactoryController getFactoryController()
     {
-        return null;
+        return commonFactoryController;
     }
 
     @Override
@@ -59,6 +63,6 @@ public class CommonProxy implements IProxy
     @Override
     public Vector2d getImageSize(@NotNull final ResourceLocation location)
     {
-        return new Vector2d();
+        return ImageUtil.getImageDimensions(location);
     }
 }

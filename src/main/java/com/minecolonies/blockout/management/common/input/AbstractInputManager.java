@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.management.input;
+package com.minecolonies.blockout.management.common.input;
 
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.input.IInputManager;
@@ -23,7 +23,7 @@ public abstract class AbstractInputManager implements IInputManager
         this.shouldRemoveFocusOnAcceptanceFailure = shouldRemoveFocusOnAcceptanceFailure;
     }
 
-    public IUIManager getManager()
+    protected IUIManager getManager()
     {
         return manager;
     }

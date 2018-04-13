@@ -46,6 +46,6 @@ public class ObjectUIElementDataBuilder implements IUIElementDataBuilder
     @Override
     public IUIElementData build()
     {
-        return new ObjectUIElementData(type, children, attributes, null);
+        return new ObjectUIElementData(type.toString(), children, attributes, null);
     }
 }

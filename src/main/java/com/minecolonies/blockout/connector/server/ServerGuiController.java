@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.connector.server;
 
+import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.minecolonies.blockout.connector.core.IGuiController;
@@ -148,5 +149,16 @@ public class ServerGuiController implements IGuiController
         NetworkManager.sendTo(new OpenGuiCommandMessage(key, data), playerMP);
 
         MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(playerMP, playerMP.openContainer));
+    }
+
+    /**
+     * Returns a list of all UUIDs that are watching this UI.
+     *
+     * @param key The key for the gui.
+     * @return The watching players.
+     */
+    public ImmutableList<UUID> getUUIDsOfPlayersWatching(@NotNull final IGuiKey key)
+    {
+        return ImmutableList.copyOf(watchers.get(key));
     }
 }

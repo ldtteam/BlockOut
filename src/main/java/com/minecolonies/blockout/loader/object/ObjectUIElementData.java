@@ -17,16 +17,24 @@ import java.util.stream.Collectors;
 public class ObjectUIElementData implements IUIElementData, Serializable
 {
     @NotNull
-    private final ResourceLocation                    type;
+    private final           String                    type;
     @NotNull
-    private final List<ObjectUIElementData> children;
+    private final           List<ObjectUIElementData> children;
     @NotNull
-    private final Map<String, Serializable> attributes;
+    private final           Map<String, Serializable> attributes;
     @Nullable
-    private final transient IUIElementHost parent;
+    private final transient IUIElementHost            parent;
 
     public ObjectUIElementData(
-      @NotNull final ResourceLocation type,
+      @NotNull final ObjectUIElementData copyFrom,
+      @Nullable final IUIElementHost parent
+    )
+    {
+        this(copyFrom.getType().toString(), Lists.newArrayList(copyFrom.children), Maps.newHashMap(copyFrom.attributes), parent);
+    }
+
+    public ObjectUIElementData(
+      @NotNull final String type,
       @NotNull final List<ObjectUIElementData> children,
       @NotNull final Map<String, Serializable> attributes,
       @Nullable final IUIElementHost parent)
@@ -37,18 +45,10 @@ public class ObjectUIElementData implements IUIElementData, Serializable
         this.parent = parent;
     }
 
-    public ObjectUIElementData(
-      @NotNull final ObjectUIElementData copyFrom,
-      @NotNull final IUIElementHost parent
-    )
-    {
-        this(copyFrom.getType(), Lists.newArrayList(copyFrom.children), Maps.newHashMap(copyFrom.attributes), parent);
-    }
-
     @Override
     public ResourceLocation getType()
     {
-        return type;
+        return new ResourceLocation(type);
     }
 
     @Nullable

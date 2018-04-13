@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
 {
+
     /**
      * Returns the {@link IUIManager} for this host.
      * Redirects to the parent by default.

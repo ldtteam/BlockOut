@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.management.input;
+package com.minecolonies.blockout.management.common.input;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.input.IKeyAcceptingUIElement;

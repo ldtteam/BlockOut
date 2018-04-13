@@ -34,7 +34,7 @@ public class Constants
 
         public static class Image
         {
-            public static final ResourceLocation KEY_ICON = new ResourceLocation(MOD_ID, "image");
+            public static final ResourceLocation KEY_IMAGE = new ResourceLocation(MOD_ID, "image");
 
             public static final String CONST_ICON = "icon";
         }

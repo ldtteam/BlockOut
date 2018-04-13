@@ -1,32 +1,54 @@
-package com.minecolonies.blockout.management.input;
+package com.minecolonies.blockout.management.common.input;
 
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.input.IScrollAcceptingUIElement;
+import com.minecolonies.blockout.core.element.input.IClickAcceptingUIElement;
 import com.minecolonies.blockout.core.management.IUIManager;
-import com.minecolonies.blockout.core.management.input.IScrollManager;
+import com.minecolonies.blockout.core.management.input.IClickManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import com.minecolonies.blockout.util.mouse.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class ScrollManager extends AbstractInputManager implements IScrollManager
+public class ClickManager extends AbstractInputManager implements IClickManager
 {
-
-    protected ScrollManager(final IUIManager manager)
+    protected ClickManager(final IUIManager manager)
     {
         super(manager);
     }
 
     @Override
-    public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
+    public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
     {
         attemptInputInteraction(
           localX,
           localY,
-          (u,x,y) -> u.canAcceptMouseInput(x,y,deltaWheel),
-          (u,x,y) -> u.onMouseScroll(x,y,deltaWheel)
+          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.onMouseClickBegin(x, y, button)
+        );
+    }
+
+    @Override
+    public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
+    {
+        attemptInputInteraction(
+          localX,
+          localY,
+          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.onMouseClickEnd(x, y, button)
+        );
+    }
+
+    @Override
+    public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
+    {
+        attemptInputInteraction(
+          localX,
+          localY,
+          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.onMouseClickMove(x, y, button, timeElapsed)
         );
     }
 
@@ -38,7 +60,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
     {
         @Nullable final IUIElement currentFocus = getManager().getFocusManager().getFocusedElement();
 
-        if (currentFocus instanceof IScrollAcceptingUIElement)
+        if (currentFocus instanceof IClickAcceptingUIElement)
         {
             if (attemptMouseInteractionWith(currentFocus, localX, localY, acceptanceCallback, executionCallback))
             {
@@ -49,7 +71,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         onAcceptanceFailure();
 
         final Optional<IUIElement> target = getManager().getHost().searchDeepestElementByCoord(new Vector2d(localX, localY));
-        if (target.isPresent() && target.get() instanceof IScrollAcceptingUIElement)
+        if (target.isPresent() && target.get() instanceof IClickAcceptingUIElement)
         {
             if (attemptMouseInteractionWith(target.get(), localX, localY, acceptanceCallback, executionCallback))
             {
@@ -65,7 +87,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
       final IInteractionAcceptanceCallback acceptanceCallback,
       final IInteractionExecutionCallback executionCallback)
     {
-        @NotNull final IScrollAcceptingUIElement t = (IScrollAcceptingUIElement) target;
+        @NotNull final IClickAcceptingUIElement t = (IClickAcceptingUIElement) target;
         @NotNull final BoundingBox absoluteTarget = convertToBoundingBox(localX, localY);
 
         if (t.getAbsoluteBoundingBox().includes(absoluteTarget))
@@ -86,16 +108,15 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         return new BoundingBox(new Vector2d(localX, localY), new Vector2d());
     }
 
-
     @FunctionalInterface
     protected interface IInteractionAcceptanceCallback
     {
-        boolean apply(@NotNull final IScrollAcceptingUIElement target, final int localX, final int localY);
+        boolean apply(@NotNull final IClickAcceptingUIElement target, final int localX, final int localY);
     }
 
     @FunctionalInterface
     protected interface IInteractionExecutionCallback
     {
-        void apply(@NotNull final IScrollAcceptingUIElement target, final int localX, final int localY);
+        void apply(@NotNull final IClickAcceptingUIElement target, final int localX, final int localY);
     }
 }

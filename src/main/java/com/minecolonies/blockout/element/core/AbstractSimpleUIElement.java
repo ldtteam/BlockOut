@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +18,11 @@ import java.util.EnumSet;
 public abstract class AbstractSimpleUIElement implements IUIElement
 {
     @NotNull
-    private final String         id;
+    private final ResourceLocation type;
     @NotNull
-    private IUIElementHost parent;
+    private final String           id;
+    @NotNull
+    private       IUIElementHost   parent;
 
     @NotNull
     private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
@@ -43,13 +46,15 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
-    public AbstractSimpleUIElement(@NotNull final String id, @NotNull final IUIElementHost parent)
+    public AbstractSimpleUIElement(@NotNull final ResourceLocation type, @NotNull final String id, @NotNull final IUIElementHost parent)
     {
+        this.type = type;
         this.id = id;
         this.parent = parent;
     }
 
     public AbstractSimpleUIElement(
+      @NotNull final ResourceLocation type,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -60,6 +65,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
+        this.type = type;
         this.id = id;
         this.parent = parent;
         this.alignments = alignments;
@@ -100,6 +106,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
         final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
         this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
+    }
+
+    @NotNull
+    @Override
+    public ResourceLocation getType()
+    {
+        return type;
     }
 
     @NotNull

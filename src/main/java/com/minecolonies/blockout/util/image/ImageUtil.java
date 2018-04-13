@@ -4,15 +4,12 @@ import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import java.util.Iterator;
 
-@SideOnly(Side.CLIENT)
 public final class ImageUtil
 {
 

@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.connector.common;
+package com.minecolonies.blockout.connector.common.definition.loader;
 
 import com.google.common.io.CharStreams;
 import com.minecolonies.blockout.BlockOut;

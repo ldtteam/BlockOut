@@ -10,6 +10,7 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,11 +20,11 @@ import java.util.HashMap;
 public abstract class AbstractChildrenContainingUIElement extends HashMap<String, IUIElement> implements IUIElementHost
 {
     @NotNull
-    private final String         id;
+    private final ResourceLocation type;
     @NotNull
-    private final IUIManager     uiManager;
+    private final String           id;
     @NotNull
-    private       IUIElementHost parent;
+    private       IUIElementHost   parent;
 
     @NotNull
     private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
@@ -54,9 +55,9 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractChildrenContainingUIElement(
+      @NotNull final ResourceLocation type,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
-      @NotNull final IUIManager uiManager,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -67,9 +68,9 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
       @NotNull final IDependencyObject<Boolean> enabled
     )
     {
+        this.type = type;
         this.id = id;
         this.parent = parent;
-        this.uiManager = uiManager;
         this.alignments = alignments;
         this.dock = dock;
         this.margin = margin;
@@ -81,13 +82,21 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     }
 
     public AbstractChildrenContainingUIElement(
+      @NotNull final ResourceLocation type,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IUIManager uiManager)
     {
+        this.type = type;
         this.id = id;
         this.parent = parent;
-        this.uiManager = uiManager;
+    }
+
+    @NotNull
+    @Override
+    public ResourceLocation getType()
+    {
+        return type;
     }
 
     @NotNull
@@ -272,13 +281,6 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     public BoundingBox getLocalBoundingBox()
     {
         return localBoundingBox;
-    }
-
-    @NotNull
-    @Override
-    public IUIManager getUiManager()
-    {
-        return uiManager;
     }
 
     @NotNull

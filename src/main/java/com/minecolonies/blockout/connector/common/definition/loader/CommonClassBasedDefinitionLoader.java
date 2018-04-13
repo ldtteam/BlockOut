@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.connector.common;
+package com.minecolonies.blockout.connector.common.definition.loader;
 
 import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import org.jetbrains.annotations.NotNull;

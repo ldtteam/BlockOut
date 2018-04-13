@@ -3,9 +3,12 @@ package com.minecolonies.blockout.network;
 import com.minecolonies.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.UUID;
 
 public class NetworkManager
 {
@@ -48,6 +51,17 @@ public class NetworkManager
         }
 
         network.sendTo(new BlockOutNetworkMessageWrapper(message), player);
+    }
+
+    /**
+     * Send this message to the specified player.
+     *
+     * @param message The message to send
+     * @param uuid    The player to send it to
+     */
+    public static void sendTo(IBlockOutNetworkMessage message, UUID uuid)
+    {
+        sendTo(message, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid));
     }
 
     /**

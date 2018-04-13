@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.management.network.messages;
+package com.minecolonies.blockout.management.server.network.messages;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.gui.BlockOutGui;
@@ -23,7 +23,7 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
 
         if (focusedElement != null)
         {
-            focusedElementId = focusedElement.getId();
+            focusedElementId = focusedElement.getId().toString();
         }
     }
 
@@ -34,7 +34,7 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
 
         if (openGuiScreen instanceof BlockOutGui)
         {
-            BlockOutGui blockOutGui = (BlockOutGui) openGuiScreen;
+            final BlockOutGui blockOutGui = (BlockOutGui) openGuiScreen;
 
             if (focusedElementId != null)
             {

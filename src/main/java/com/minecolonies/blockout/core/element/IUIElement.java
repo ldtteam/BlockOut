@@ -5,6 +5,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,6 +13,14 @@ import java.util.EnumSet;
 
 public interface IUIElement
 {
+
+    /**
+     * Returns the type of this IUIElement.
+     *
+     * @return The type of the element.
+     */
+    @NotNull
+    ResourceLocation getType();
 
     /**
      * The unique identifier of the element in the UI.

@@ -24,7 +24,7 @@ import java.util.EnumSet;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 import static com.minecolonies.blockout.util.Constants.Controls.Image.CONST_ICON;
-import static com.minecolonies.blockout.util.Constants.Controls.Image.KEY_ICON;
+import static com.minecolonies.blockout.util.Constants.Controls.Image.KEY_IMAGE;
 
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -36,7 +36,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<ResourceLocation> icon)
     {
-        super(id, parent);
+        super(KEY_IMAGE, id, parent);
         this.icon = icon;
     }
 
@@ -52,7 +52,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<ResourceLocation> icon)
     {
-        super(id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_IMAGE, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.icon = icon;
     }
 
@@ -110,7 +110,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         @Override
         public ResourceLocation getType()
         {
-            return KEY_ICON;
+            return KEY_IMAGE;
         }
 
         @NotNull

@@ -1,11 +1,20 @@
 package com.minecolonies.blockout.connector.core;
 
 import com.minecolonies.blockout.core.element.IUIElement;
+import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.loader.IUIElementData;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIElementFactoryController
 {
+
+    /**
+     * Registers a factory for a {@link IUIElement} to this controller.
+     *
+     * @param factory The factory.
+     * @return The controller.
+     */
+    IUIElementFactoryController registerFactory(@NotNull final IUIElementFactory<?> factory);
 
     /**
      * Creates a {@link IUIElement} from the given {@link IUIElementData}.
@@ -21,5 +30,5 @@ public interface IUIElementFactoryController
      * @return A {@link java.io.Serializable} {@link IUIElementData} created from the {@link IUIElement}.
      */
     @NotNull
-    IUIElementData getDataFromElement(@NotNull final IUIElement element);
+    <T extends IUIElement> IUIElementData getDataFromElement(@NotNull final T element);
 }
