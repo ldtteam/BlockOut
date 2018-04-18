@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.network;
 
-import com.minecolonies.blockout.network.message.core.IBlockOutNetworkMessage;
+import com.minecolonies.blockout.network.message.core.IBlockOutClientToServerMessage;
+import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -27,7 +28,7 @@ public class NetworkManager
      *
      * @param message The message to send
      */
-    public static void sendToAll(IBlockOutNetworkMessage message)
+    public static void sendToAll(IBlockOutServerToClientMessage message)
     {
         if (network == null)
         {
@@ -41,9 +42,20 @@ public class NetworkManager
      * Send this message to the specified player.
      *
      * @param message The message to send
+     * @param uuid    The player to send it to
+     */
+    public static void sendTo(IBlockOutServerToClientMessage message, UUID uuid)
+    {
+        sendTo(message, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid));
+    }
+
+    /**
+     * Send this message to the specified player.
+     *
+     * @param message The message to send
      * @param player  The player to send it to
      */
-    public static void sendTo(IBlockOutNetworkMessage message, EntityPlayerMP player)
+    public static void sendTo(IBlockOutServerToClientMessage message, EntityPlayerMP player)
     {
         if (network == null)
         {
@@ -54,24 +66,13 @@ public class NetworkManager
     }
 
     /**
-     * Send this message to the specified player.
-     *
-     * @param message The message to send
-     * @param uuid    The player to send it to
-     */
-    public static void sendTo(IBlockOutNetworkMessage message, UUID uuid)
-    {
-        sendTo(message, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid));
-    }
-
-    /**
      * Send this message to everyone within a certain range of a point.
      *
      * @param message The message to send
      * @param point   The {
      *                if (network == null) return;@link NetworkRegistry.TargetPoint} around which to send
      */
-    public static void sendToAllAround(IBlockOutNetworkMessage message, NetworkRegistry.TargetPoint point)
+    public static void sendToAllAround(IBlockOutServerToClientMessage message, NetworkRegistry.TargetPoint point)
     {
         if (network == null)
         {
@@ -87,7 +88,7 @@ public class NetworkManager
      * @param message     The message to send
      * @param dimensionId The dimension id to target
      */
-    public static void sendToDimension(IBlockOutNetworkMessage message, int dimensionId)
+    public static void sendToDimension(IBlockOutServerToClientMessage message, int dimensionId)
     {
         if (network == null)
         {
@@ -102,7 +103,7 @@ public class NetworkManager
      *
      * @param message The message to send
      */
-    public static void sendToServer(IBlockOutNetworkMessage message)
+    public static void sendToServer(IBlockOutClientToServerMessage message)
     {
         if (network == null)
         {

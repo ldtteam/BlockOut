@@ -7,7 +7,7 @@ import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.network.NetworkManager;
@@ -21,6 +21,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 public class ServerGuiController implements IGuiController
 {
 
-    private final Map<IGuiKey, IUIElementHost> openUis        = new HashMap<>();
+    private final Map<IGuiKey, RootGuiElement> openUis        = new HashMap<>();
     private final Map<IGuiKey, List<UUID>>     watchers       = new HashMap<>();
     private final Map<UUID, IGuiKey>           playerWatching = new HashMap<>();
 
@@ -86,13 +87,13 @@ public class ServerGuiController implements IGuiController
         if (!openUis.containsKey(key))
         {
             final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
-            if (!(element instanceof IUIElementHost))
+            if (!(element instanceof RootGuiElement))
             {
                 Log.getLogger().error("Failed to open UI for: " + playerId.toString() + " from: " + key.toString() + ". Component is not a Host.");
                 return;
             }
 
-            final IUIElementHost host = (IUIElementHost) element;
+            final RootGuiElement host = (RootGuiElement) element;
             openUis.put(key, host);
         }
 
@@ -136,6 +137,27 @@ public class ServerGuiController implements IGuiController
         }
 
         NetworkManager.sendTo(new CloseGuiCommandMessage(), player);
+    }
+
+    @Nullable
+    @Override
+    public IGuiKey getOpenUI(@NotNull final EntityPlayer player)
+    {
+        return getOpenUI(player.getUniqueID());
+    }
+
+    @Nullable
+    @Override
+    public IGuiKey getOpenUI(@NotNull final UUID player)
+    {
+        return playerWatching.get(player);
+    }
+
+    @Nullable
+    @Override
+    public RootGuiElement getRoot(@NotNull final IGuiKey guiKey)
+    {
+        return openUis.get(guiKey);
     }
 
     private void openGui(@NotNull final IGuiKey key, @NotNull final IUIElementData data, @NotNull final EntityPlayerMP playerMP)

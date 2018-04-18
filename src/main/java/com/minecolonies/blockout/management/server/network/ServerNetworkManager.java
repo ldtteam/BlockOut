@@ -7,7 +7,8 @@ import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.object.ObjectUIElementData;
-import com.minecolonies.blockout.management.server.network.messages.*;
+import com.minecolonies.blockout.management.server.network.messages.OnElementUpdatedMessage;
+import com.minecolonies.blockout.management.server.network.messages.OnFocusedElementChangedMessage;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
@@ -36,31 +37,31 @@ public class ServerNetworkManager implements INetworkManager
     @Override
     public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
     {
-        guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnMouseClickBeginMessage(localX, localY, button), uuid));
+        //NOOP
     }
 
     @Override
     public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
     {
-        guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnMouseClickEndMessage(localX, localY, button), uuid));
+        //NOOP
     }
 
     @Override
     public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
-        guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnMouseClickMoveMessage(localX, localY, button, timeElapsed), uuid));
+        //NOOP
     }
 
     @Override
     public void onKeyPressed(final int character, final KeyboardKey key)
     {
-        guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnKeyPressedMessage(character, key), uuid));
+        //NOOP
     }
 
     @Override
     public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
     {
-        guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnMouseScrollMessage(localX, localY, deltaWheel), uuid));
+        //NOOP
     }
 
     @Override
