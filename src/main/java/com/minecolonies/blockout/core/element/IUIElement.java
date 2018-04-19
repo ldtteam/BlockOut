@@ -3,6 +3,7 @@ package com.minecolonies.blockout.core.element;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -32,8 +33,9 @@ public interface IUIElement
     /**
      * Called before the drawing of the UI.
      * Can be used to update bounding boxes from bound values, and animation etc.
+     * @param manager The update manager that is updating this Element. Usefull to mark the UI as changed and sync data between client and server.
      */
-    void update();
+    void update(@NotNull final IUpdateManager manager);
 
     /**
      * Method to get the data context of this {@link IUIElement}.
@@ -113,11 +115,6 @@ public interface IUIElement
      * @param elementSize The new size.
      */
     void setElementSize(@NotNull final Vector2d elementSize);
-
-    /**
-     * Call this method to update the bounding boxes.
-     */
-    void updateBoundingBoxes();
 
     /**
      * Method to get the local {@link BoundingBox} of this {@link IUIElement}

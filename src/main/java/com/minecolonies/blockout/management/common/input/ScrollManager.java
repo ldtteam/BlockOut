@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ScrollManager extends AbstractInputManager implements IScrollManager
 {
 
-    protected ScrollManager(final IUIManager manager)
+    public ScrollManager(final IUIManager manager)
     {
         super(manager);
     }

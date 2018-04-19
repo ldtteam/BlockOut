@@ -7,6 +7,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -78,23 +79,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         
     }
 
-    private void updateLocalBoundingBox()
+    @Override
+    public void update(@NotNull final IUpdateManager manager)
     {
-        //If we have no parent we see our default elementSize as parent.
-        //Else grab the elementSize from the parent.
-        final Vector2d parentSize = getParent() != this ? getParent().getLocalInternalBoundingBox().getSize() : getElementSize();
-
-        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
-        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
-        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
-        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
-
-        final Vector2d origin = new Vector2d(marginLeft, marginTop);
-
-        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom));
-
-        this.localBoundingBox = new BoundingBox(origin, size);
-        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+        if (updateBoundingBoxes())
+        {
+            manager.markDirty();
+        }
     }
 
     private void updateAbsoluteBoundingBox()
@@ -170,11 +161,17 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
     }
 
-    @Override
-    public void updateBoundingBoxes()
+    private boolean updateBoundingBoxes()
     {
-        updateLocalBoundingBox();
+        boolean updated = false;
+
+        if (updateLocalBoundingBox())
+        {
+            updated = true;
+        }
         updateAbsoluteBoundingBox();
+
+        return updated;
     }
 
     @NotNull
@@ -241,9 +238,26 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         this.dataContext = DependencyObjectHelper.createFromValue(dataContext);
     }
 
-    @Override
-    public void update()
+    private boolean updateLocalBoundingBox()
     {
-        updateBoundingBoxes();
+        final BoundingBox currentLocalBoundingBox = localBoundingBox;
+
+        //If we have no parent we see our default elementSize as parent.
+        //Else grab the elementSize from the parent.
+        final Vector2d parentSize = getParent() != this ? getParent().getLocalInternalBoundingBox().getSize() : getElementSize();
+
+        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
+        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
+        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
+        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
+
+        final Vector2d origin = new Vector2d(marginLeft, marginTop);
+
+        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom));
+
+        this.localBoundingBox = new BoundingBox(origin, size);
+        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+
+        return !currentLocalBoundingBox.equals(this.localBoundingBox);
     }
 }

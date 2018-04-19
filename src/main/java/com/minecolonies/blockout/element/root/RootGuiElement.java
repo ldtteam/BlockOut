@@ -5,8 +5,11 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
+import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -38,5 +41,29 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IUIManager uiManager)
     {
         super(type, id, parent, uiManager);
+    }
+
+    public class Factory implements IUIElementFactory<RootGuiElement>
+    {
+
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return null;
+        }
+
+        @NotNull
+        @Override
+        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
+        {
+            return null;
+        }
+
+        @Override
+        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
+        {
+
+        }
     }
 }

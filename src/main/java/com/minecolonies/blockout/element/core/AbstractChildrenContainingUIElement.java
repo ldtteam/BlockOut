@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.IUIManager;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -106,23 +107,13 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         return id;
     }
 
-    private void updateLocalBoundingBox()
+    @Override
+    public void update(@NotNull final IUpdateManager updateManager)
     {
-        //If we have no parent we see our default size as parent.
-        //Else grab the size from the parent.
-        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : getElementSize();
-
-        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
-        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
-        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
-        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
-
-        final Vector2d origin = new Vector2d(marginLeft, marginTop);
-
-        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
-
-        this.localBoundingBox = new BoundingBox(origin, size);
-        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+        if (updateBoundingBoxes())
+        {
+            updateManager.markDirty();
+        }
     }
 
     @Override
@@ -172,14 +163,19 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         this.dock = DependencyObjectHelper.createFromValue(dock);
     }
 
-    @Override
-    public void update()
+    private boolean updateBoundingBoxes()
     {
-        //Update our own boxes first.
-        updateBoundingBoxes();
+        boolean updated = false;
 
-        //Update the boxes for our children.
-        values().forEach(IUIElement::update);
+        if (updateLocalBoundingBox())
+        {
+            updated = true;
+        }
+        updateAbsoluteBoundingBox();
+        updateLocalInternalBoundingBox();
+        updateAbsoluteInternalBoundingBox();
+
+        return updated;
     }
 
     @Override
@@ -219,18 +215,6 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
     }
 
-    @Override
-    public void updateBoundingBoxes()
-    {
-        updateLocalBoundingBox();
-        updateAbsoluteBoundingBox();
-        updateLocalInternalBoundingBox();
-        updateAbsoluteInternalBoundingBox();
-
-        //Since our bounding mox might have moved / changed. We trigger a recalc for our children.
-        values().forEach(IUIElement::updateBoundingBoxes);
-    }
-
     @NotNull
     @Override
     public BoundingBox getAbsoluteBoundingBox()
@@ -244,9 +228,28 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         this.parent = parent;
     }
 
+    private boolean updateLocalBoundingBox()
+    {
+        final BoundingBox currentBoundingBoc = this.localBoundingBox;
 
+        //If we have no parent we see our default size as parent.
+        //Else grab the size from the parent.
+        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : getElementSize();
 
+        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
+        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
+        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
+        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
 
+        final Vector2d origin = new Vector2d(marginLeft, marginTop);
+
+        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
+
+        this.localBoundingBox = new BoundingBox(origin, size);
+        this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+
+        return !currentBoundingBoc.equals(this.localBoundingBox);
+    }
 
     private void updateLocalInternalBoundingBox()
     {

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class KeyManager extends AbstractInputManager implements IKeyManager
 {
-    protected KeyManager(final IUIManager manager)
+    public KeyManager(final IUIManager manager)
     {
         super(manager);
     }

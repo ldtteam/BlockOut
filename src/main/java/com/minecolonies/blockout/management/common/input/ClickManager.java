@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class ClickManager extends AbstractInputManager implements IClickManager
 {
-    protected ClickManager(final IUIManager manager)
+    public ClickManager(final IUIManager manager)
     {
         super(manager);
     }
