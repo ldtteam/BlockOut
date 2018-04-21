@@ -3,13 +3,12 @@ package com.minecolonies.blockout.network.message;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,15 +49,14 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     @Override
     public void onMessageArrivalAtClient(@NotNull final MessageContext ctx)
     {
-        final EntityPlayerSP player = Minecraft.getMinecraft().player;
         final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(data);
 
-        if (!(element instanceof IUIElementHost))
+        if (!(element instanceof RootGuiElement))
         {
-            throw new IllegalStateException("Root element is not a IUIElementHost");
+            throw new IllegalStateException("Root element is not a RootGuiElement");
         }
 
-        final IUIElementHost root = (IUIElementHost) element;
+        final RootGuiElement root = (RootGuiElement) element;
         final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(key, root));
 
         Minecraft.getMinecraft().displayGuiScreen(gui);

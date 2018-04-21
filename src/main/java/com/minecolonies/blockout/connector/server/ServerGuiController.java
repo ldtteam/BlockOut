@@ -136,7 +136,14 @@ public class ServerGuiController implements IGuiController
             }
         }
 
-        NetworkManager.sendTo(new CloseGuiCommandMessage(), player);
+        try
+        {
+            NetworkManager.sendTo(new CloseGuiCommandMessage(), player);
+        }
+        catch (Exception ex)
+        {
+            Log.getLogger().info("Could not send close message. Player might have logged out when UI was open.");
+        }
     }
 
     @Nullable

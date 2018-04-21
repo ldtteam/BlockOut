@@ -7,9 +7,12 @@ import com.minecolonies.blockout.connector.common.CommonGuiKey;
 import com.minecolonies.blockout.connector.common.definition.loader.CommonClassBasedDefinitionLoader;
 import com.minecolonies.blockout.connector.common.definition.loader.CommonResourceLocationBasedGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.common.definition.loader.CommonWebFileBasedGuiDefinitionLoader;
+import com.minecolonies.blockout.connector.common.inventory.builder.CommonItemHandlerManagerBuilder;
 import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
+import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
+import com.minecolonies.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.minecolonies.blockout.context.EntityContext;
 import com.minecolonies.blockout.context.PositionContext;
 import com.minecolonies.blockout.context.core.IContext;
@@ -31,6 +34,8 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     private IBlockOutGuiConstructionData constructionData;
     @NotNull
     private IContext                     context;
+    @NotNull
+    private IItemHandlerManager          itemHandlerManager;
 
     @NotNull
     @Override
@@ -85,6 +90,24 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
+    public IGuiKeyBuilder withItemHandlerManager(@NotNull final IItemHandlerManager manager)
+    {
+        this.itemHandlerManager = manager;
+        return this;
+    }
+
+    @NotNull
+    @Override
+    public IGuiKeyBuilder withItemHandlerManager(@NotNull final Consumer<IItemHandlerManagerBuilder> configurer)
+    {
+        final CommonItemHandlerManagerBuilder builder = new CommonItemHandlerManagerBuilder();
+        configurer.accept(builder);
+
+        return withItemHandlerManager(builder.build());
+    }
+
+    @NotNull
+    @Override
     public IGuiKeyBuilder forEntity(@NotNull final UUID entityId)
     {
         this.context = new EntityContext(entityId);
@@ -127,6 +150,6 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     @Override
     public IGuiKey build()
     {
-        return new CommonGuiKey(guiDefinitionLoader, constructionData, context);
+        return new CommonGuiKey(guiDefinitionLoader, constructionData, context, itemHandlerManager);
     }
 }

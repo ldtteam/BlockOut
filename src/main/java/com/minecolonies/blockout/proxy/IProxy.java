@@ -10,6 +10,7 @@ import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,9 @@ public interface IProxy
 
     @NotNull
     IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager);
+
+    @NotNull
+    IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId);
 
     @SideOnly(Side.CLIENT)
     @NotNull

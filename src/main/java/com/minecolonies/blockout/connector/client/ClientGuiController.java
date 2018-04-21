@@ -4,6 +4,7 @@ import com.minecolonies.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
+import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.network.message.CloseGuiRequestMessage;
 import com.minecolonies.blockout.network.message.OpenGuiRequestMessage;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -73,5 +75,26 @@ public class ClientGuiController implements IGuiController
         }
 
         NetworkManager.sendToServer(new CloseGuiRequestMessage());
+    }
+
+    @Nullable
+    @Override
+    public IGuiKey getOpenUI(@NotNull final EntityPlayer player)
+    {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public IGuiKey getOpenUI(@NotNull final UUID player)
+    {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public RootGuiElement getRoot(@NotNull final IGuiKey guiKey)
+    {
+        return null;
     }
 }

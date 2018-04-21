@@ -38,6 +38,20 @@ public class Constants
 
             public static final String CONST_ICON = "icon";
         }
+
+        public static class Root
+        {
+            public static final ResourceLocation KEY_ROOT = new ResourceLocation(MOD_ID, "root");
+        }
+
+        public static class Slot
+        {
+            public static final ResourceLocation KEY_SLOT = new ResourceLocation(MOD_ID, "slot");
+
+            public static final String CONST_BACKGROUND_IMAGE = "background";
+            public static final String CONST_INVENTORY_ID     = "inventory";
+            public static final String CONST_INVENTORY_INDEX  = "index";
+        }
     }
 
 }

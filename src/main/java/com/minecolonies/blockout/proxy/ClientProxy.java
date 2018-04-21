@@ -15,6 +15,7 @@ import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
 import com.minecolonies.blockout.util.SideHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -49,14 +50,30 @@ public class ClientProxy extends CommonProxy
     @Override
     public INetworkManager generateNewNetworkManagerForGui(@NotNull final IGuiKey key)
     {
-        return SideHelper.on(ClientNetworkManager::new, () -> new ServerNetworkManager(key));
+        return SideHelper.on(
+          ClientNetworkManager::new,
+          () -> new ServerNetworkManager(key)
+        );
     }
 
     @NotNull
     @Override
     public IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager)
     {
-        return SideHelper.on(NoOpUpdateManager::new, () -> new ServerUpdateManager(manager));
+        return SideHelper.on(
+          NoOpUpdateManager::new,
+          () -> new ServerUpdateManager(manager)
+        );
+    }
+
+    @NotNull
+    @Override
+    public IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId)
+    {
+        return SideHelper.on(
+          () -> Minecraft.getMinecraft().world,
+          () -> super.getBlockAccessFromDimensionId(dimId)
+        );
     }
 
     @SideOnly(Side.CLIENT)

@@ -16,6 +16,8 @@ import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,6 +90,13 @@ public class CommonProxy implements IProxy
     public IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager)
     {
         return new ServerUpdateManager(manager);
+    }
+
+    @NotNull
+    @Override
+    public IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId)
+    {
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimId);
     }
 
     @SuppressWarnings({"ConstantConditions", "NullableProblems"})

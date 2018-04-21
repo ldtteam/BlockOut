@@ -6,6 +6,7 @@ import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -161,5 +162,20 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
         }
     }
 
+    /**
+     * Combines all the child elements of this element and its childs into one map.
+     *
+     * @return A map containing all child elements
+     */
+    @NotNull
+    default Map<String, IUIElement> getAllCombinedChildElements()
+    {
+        final Map<String, IUIElement> combinedChildren = new HashMap<>(this);
+        values().stream().filter(element -> element instanceof IUIElementHost)
+          .map(element -> (IUIElementHost) element)
+          .flatMap(iuiElementHost -> iuiElementHost.getAllCombinedChildElements().values().stream())
+          .forEach(element -> combinedChildren.put(element.getId(), element));
 
+        return combinedChildren;
+    }
 }

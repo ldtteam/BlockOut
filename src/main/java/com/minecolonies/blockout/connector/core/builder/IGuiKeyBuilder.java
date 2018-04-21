@@ -4,6 +4,8 @@ import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.connector.core.IGuiDefinitionLoader;
 import com.minecolonies.blockout.connector.core.IGuiKey;
+import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
+import com.minecolonies.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.minecolonies.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -42,6 +44,12 @@ public interface IGuiKeyBuilder
 
     @NotNull
     IGuiKeyBuilder usingData(@NotNull final IBlockOutGuiConstructionData data);
+
+    @NotNull
+    IGuiKeyBuilder withItemHandlerManager(@NotNull final IItemHandlerManager manager);
+
+    @NotNull
+    IGuiKeyBuilder withItemHandlerManager(@NotNull final Consumer<IItemHandlerManagerBuilder> configurer);
 
     @NotNull
     IGuiKeyBuilder forEntity(@NotNull final UUID entityId);

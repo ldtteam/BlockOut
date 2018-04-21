@@ -14,7 +14,7 @@ public interface IUpdateManager
     void updateElement(@NotNull final IUIElement element);
 
     /**
-     * Mark this update manager dirty.
+     * Mark this update inventory dirty.
      */
     void markDirty();
 }

@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.connector.core;
 
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
+import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.context.core.IContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,6 +15,9 @@ public interface IGuiKey extends Serializable
 
     @NotNull
     IBlockOutGuiConstructionData getConstructionData();
+
+    @NotNull
+    IItemHandlerManager getItemHandlerManager();
 
     @NotNull
     IContext getGuiContext();

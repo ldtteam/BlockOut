@@ -33,7 +33,7 @@ public interface IUIElement
     /**
      * Called before the drawing of the UI.
      * Can be used to update bounding boxes from bound values, and animation etc.
-     * @param manager The update manager that is updating this Element. Usefull to mark the UI as changed and sync data between client and server.
+     * @param manager The update inventory that is updating this Element. Usefull to mark the UI as changed and sync data between client and server.
      */
     void update(@NotNull final IUpdateManager manager);
 
