@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.minecolonies.blockout.binding.property.reflective.ReflectiveConsumer;
 import com.minecolonies.blockout.binding.property.reflective.ReflectiveSupplier;
+import com.minecolonies.blockout.util.Log;
 import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,8 +52,42 @@ public final class PropertyCreationHelper
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)
     {
-        return createFromMethod(getMethodName.map(name -> getGetter(targetClass, name).orElse(null))
-          , setMethodName.map(name -> getSetter(targetClass, name).orElse(null)));
+        final Optional<Function<Object, Optional<T>>> getter = getMethodName.map((name) -> (Function<Object, Optional<T>>) o -> {
+            final Class<?> clazz = o.getClass();
+            final Optional<Method> getterMethod = getGetter(clazz, name);
+            return getterMethod.map(method -> {
+                method.setAccessible(true);
+
+                try
+                {
+                    return (T) method.invoke(o);
+                }
+                catch (Exception e)
+                {
+                    Log.getLogger().error("Failed to reflectively access property getter.", e);
+                    return null;
+                }
+            });
+        });
+
+        final Optional<BiConsumer<Object, Optional<T>>> setter = setMethodName.map((name) -> (BiConsumer<Object, Optional<T>>) (o, t) -> {
+            final Class<?> clazz = o.getClass();
+            final Optional<Method> settterMethod = getSetter(clazz, name);
+            settterMethod.ifPresent(method -> {
+                method.setAccessible(true);
+
+                try
+                {
+                    method.invoke(o, t);
+                }
+                catch (Exception e)
+                {
+                    Log.getLogger().error("Failed to reflectively access property setter.", e);
+                }
+            });
+        });
+
+        return create(getter, setter);
     }
 
     public static <T> Property<T> createFromMethod(@NotNull final Optional<Method> getter, @NotNull final Optional<Method> setter)
