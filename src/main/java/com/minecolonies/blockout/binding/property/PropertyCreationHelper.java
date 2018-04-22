@@ -42,13 +42,12 @@ public final class PropertyCreationHelper
         return new Property<>(getter, setter);
     }
 
-    public static <T> Property<T> createFromName(@NotNull final Class<T> targetClass, @NotNull final Optional<String> getSetMethodName)
+    public static <T> Property<T> createFromName(@NotNull final Optional<String> getSetMethodName)
     {
-        return createFromName(targetClass, getSetMethodName.map(name -> "get" + name), getSetMethodName.map(name -> "set" + name));
+        return createFromName(getSetMethodName.map(name -> "get" + name), getSetMethodName.map(name -> "set" + name));
     }
 
     public static <T> Property<T> createFromName(
-      @NotNull final Class<T> targetClass,
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)
     {
