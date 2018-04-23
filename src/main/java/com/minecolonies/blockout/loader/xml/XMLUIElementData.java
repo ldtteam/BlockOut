@@ -1,15 +1,28 @@
 package com.minecolonies.blockout.loader.xml;
 
+import com.google.common.base.Functions;
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.binding.property.Property;
+import com.minecolonies.blockout.binding.property.PropertyCreationHelper;
 import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.core.element.values.Alignment;
+import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.regex.Matcher;
 
 /**
  * Special parameters for the panes.
@@ -83,6 +96,36 @@ public class XMLUIElementData implements IUIElementData
         return (attr != null) ? attr.getNodeValue() : def;
     }
 
+    @Override
+    public IDependencyObject<Integer> getBoundIntegerAttribute(@NotNull final String name, final int def)
+    {
+        return bindOrReturnStatic(name, Integer::new, def);
+    }
+
+    @Override
+    public IDependencyObject<Float> getBoundFloatAttribute(@NotNull final String name, final float def)
+    {
+        return bindOrReturnStatic(name, Float::new, def);
+    }
+
+    @Override
+    public IDependencyObject<Double> getBoundDoubleAttribute(@NotNull final String name, final double def)
+    {
+        return bindOrReturnStatic(name, Double::new, def);
+    }
+
+    @Override
+    public IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull final String name, final boolean def)
+    {
+        return bindOrReturnStatic(name, Boolean::new, def);
+    }
+
+    @Override
+    public <T extends Enum<T>> IDependencyObject<T> getBoundEnumAttribute(@NotNull final String name, final Class<T> clazz, final T def)
+    {
+        return bindOrReturnStatic(name, s -> Enum.valueOf(clazz, s), def);
+    }
+
     private Node getAttribute(final String name)
     {
         return node.getAttributes().getNamedItem(name);
@@ -106,6 +149,22 @@ public class XMLUIElementData implements IUIElementData
         return def;
     }
 
+    @Override
+    public <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz)
+    {
+        return bindOrReturnStatic(name, s -> {
+            final String[] splitted = s.split(",");
+
+            final EnumSet<T> result = EnumSet.noneOf(clazz);
+            for (String e : splitted)
+            {
+                result.add(Enum.valueOf(clazz, e.trim()));
+            }
+
+            return result;
+        }, EnumSet.noneOf(clazz));
+    }
+
     /**
      * Get the float attribute from name and definition.
      *
@@ -122,6 +181,12 @@ public class XMLUIElementData implements IUIElementData
             return Float.parseFloat(attr);
         }
         return def;
+    }
+
+    @Override
+    public IDependencyObject<String> getBoundStringAttribute(@NotNull final String name, final String def)
+    {
+        return bindOrReturnStatic(name, Functions.identity(), def);
     }
 
     /**
@@ -143,6 +208,18 @@ public class XMLUIElementData implements IUIElementData
         return def;
     }
 
+    @Override
+    public IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(
+      @NotNull final String name, final AxisDistance def)
+    {
+        return bindOrReturnStatic(name, s -> {
+            final AxisDistanceBuilder builder = new AxisDistanceBuilder();
+            builder.readFromString(getParentView().getElementSize(), s);
+
+            return builder.create();
+        }, def);
+    }
+
     /**
      * Get the boolean attribute from name and definition.
      *
@@ -159,5 +236,70 @@ public class XMLUIElementData implements IUIElementData
             return Boolean.parseBoolean(attr);
         }
         return def;
+    }
+
+    @Override
+    public IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(
+      @NotNull final String name, final EnumSet<Alignment> def)
+    {
+        return bindOrReturnStatic(name, Alignment::fromString, def);
+    }
+
+    @Override
+    public IDependencyObject<Vector2d> getBoundVector2dAttribute(@NotNull final String name, final Vector2d def)
+    {
+        return bindOrReturnStatic(name, s -> {
+            final String[] components = s.split(",");
+            if (components.length == 1)
+            {
+                return new Vector2d(Double.parseDouble(components[0]));
+            }
+            else if (components.length == 2)
+            {
+                return new Vector2d(Double.parseDouble(components[0]), Double.parseDouble(components[1]));
+            }
+            else
+            {
+                return def;
+            }
+        }, def);
+    }
+
+    @Override
+    public IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name, final ResourceLocation def)
+    {
+        return bindOrReturnStatic(name, ResourceLocation::new, def);
+    }
+
+    private <T> IDependencyObject<T> bindOrReturnStatic(
+      @NotNull final String name, @NotNull final
+    Function<String, T> extract, T defaultValue)
+    {
+        @Nullable final String attribute = getStringAttribute(name, null);
+        if (attribute == null)
+        {
+            return DependencyObjectHelper.createFromValue(defaultValue);
+        }
+
+        final String elementContents = attribute;
+
+        final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(elementContents);
+        if (singleNameMatcher.matches())
+        {
+            final String fieldName = singleNameMatcher.group("singleName");
+            final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+            return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
+        }
+
+        final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(elementContents);
+        if (multiNameMatcher.matches())
+        {
+            final String getterName = multiNameMatcher.group("getterName");
+            final String setterName = multiNameMatcher.group("setterName");
+            final Property<T> getterSetterProperty = PropertyCreationHelper.createFromName(Optional.of(getterName), Optional.of(setterName));
+            return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
+        }
+
+        return DependencyObjectHelper.createFromValue(extract.apply(attribute));
     }
 }

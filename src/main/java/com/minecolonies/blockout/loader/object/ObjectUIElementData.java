@@ -2,13 +2,19 @@ package com.minecolonies.blockout.loader.object;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.core.element.values.Alignment;
+import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -74,9 +80,21 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     }
 
     @Override
+    public IDependencyObject<Integer> getBoundIntegerAttribute(@NotNull final String name, final int def)
+    {
+        return DependencyObjectHelper.createFromValue(getIntegerAttribute(name, def));
+    }
+
+    @Override
     public float getFloatAttribute(@NotNull final String name, final float def)
     {
         return getAttribute(name, Float.class).orElse(def);
+    }
+
+    @Override
+    public IDependencyObject<Float> getBoundFloatAttribute(@NotNull final String name, final float def)
+    {
+        return DependencyObjectHelper.createFromValue(getFloatAttribute(name, def));
     }
 
     @Override
@@ -86,9 +104,33 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     }
 
     @Override
+    public IDependencyObject<Double> getBoundDoubleAttribute(@NotNull final String name, final double def)
+    {
+        return DependencyObjectHelper.createFromValue(getDoubleAttribute(name, def));
+    }
+
+    @Override
     public boolean getBooleanAttribute(@NotNull final String name, final boolean def)
     {
         return getAttribute(name, Boolean.class).orElse(def);
+    }
+
+    @Override
+    public IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull final String name, final boolean def)
+    {
+        return DependencyObjectHelper.createFromValue(getBooleanAttribute(name, def));
+    }
+
+    @Override
+    public <T extends Enum<T>> IDependencyObject<T> getBoundEnumAttribute(@NotNull final String name, final Class<T> clazz, final T def)
+    {
+        return DependencyObjectHelper.createFromValue(getEnumAttribute(name, clazz, def));
+    }
+
+    @Override
+    public <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz)
+    {
+        return DependencyObjectHelper.createFromValue(getEnumSetAttributes(name, clazz));
     }
 
     @Nullable
@@ -96,6 +138,38 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     public String getStringAttribute(@NotNull final String name, @Nullable final String def)
     {
         return getAttribute(name, String.class).orElse(def);
+    }
+
+    @Override
+    public IDependencyObject<String> getBoundStringAttribute(@NotNull final String name, final String def)
+    {
+        return DependencyObjectHelper.createFromValue(getStringAttribute(name, def));
+    }
+
+    @Override
+    public IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(
+      @NotNull final String name, final AxisDistance def)
+    {
+        return DependencyObjectHelper.createFromValue(getAxisDistanceAttribute(name, def));
+    }
+
+    @Override
+    public IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(
+      @NotNull final String name, final EnumSet<Alignment> def)
+    {
+        return DependencyObjectHelper.createFromValue(getAlignmentAttribute(name, def));
+    }
+
+    @Override
+    public IDependencyObject<Vector2d> getBoundVector2dAttribute(@NotNull final String name, final Vector2d def)
+    {
+        return DependencyObjectHelper.createFromValue(getVector2dAttribute(name, def));
+    }
+
+    @Override
+    public IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name, final ResourceLocation def)
+    {
+        return DependencyObjectHelper.createFromValue(getResourceLocationAttribute(name, def));
     }
 
     private <T extends Serializable> Optional<T> getAttribute(@NotNull final String name, @NotNull final Class<T> cls)

@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.loader;
 
+import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
@@ -12,9 +13,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public interface IUIElementData
 {
+    @NotNull
+    Pattern SINGLE_NAME_BINDING_REGEX = Pattern.compile("\\{([Bb])inding:(?<singleName>[a-zA-Z_]+)}");
+    //((?<getterName>[a-zA-Z_]+)#(?<setterName>[a-zA-Z_]+))
+    @NotNull
+    Pattern SPLIT_NAME_BINDING_REGEX  = Pattern.compile("\\{([Bb])inding:((?<getterName>[a-zA-Z_]+)#(?<setterName>[a-zA-Z_]+))}");
+
     /**
      * Method to get the type name of the Pane that is to be constructed from these {@link IUIElementData}
      *
@@ -56,6 +64,27 @@ public interface IUIElementData
     int getIntegerAttribute(@NotNull final String name, final int def);
 
     /**
+     * Returns a bound integer attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<Integer> getBoundIntegerAttribute(@NotNull final String name)
+    {
+        return getBoundIntegerAttribute(name, 0);
+    }
+
+    /**
+     * Returns a bound integer attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<Integer> getBoundIntegerAttribute(@NotNull String name, final int def);
+
+    /**
      * Get the float attribute from name.
      *
      * @param name the name.
@@ -75,6 +104,27 @@ public interface IUIElementData
      */
     float getFloatAttribute(@NotNull final String name, final float def);
 
+    /**
+     * Returns a bound float attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<Float> getBoundFloatAttribute(@NotNull final String name)
+    {
+        return getBoundFloatAttribute(name, 0f);
+    }
+
+    /**
+     * Returns a bound float attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<Float> getBoundFloatAttribute(@NotNull String name, final float def);
+    
     /**
      * Get the double attribute from name.
      *
@@ -96,6 +146,27 @@ public interface IUIElementData
     double getDoubleAttribute(@NotNull final String name, final double def);
 
     /**
+     * Returns a bound double attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<Double> getBoundDoubleAttribute(@NotNull final String name)
+    {
+        return getBoundDoubleAttribute(name, 0d);
+    }
+
+    /**
+     * Returns a bound double attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<Double> getBoundDoubleAttribute(@NotNull String name, final double def);
+    
+    /**
      * Get the boolean attribute from name.
      *
      * @param name the name.
@@ -114,7 +185,28 @@ public interface IUIElementData
      * @return the boolean.
      */
     boolean getBooleanAttribute(@NotNull final String name, final boolean def);
-    
+
+    /**
+     * Returns a bound boolean attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull final String name)
+    {
+        return getBoundBooleanAttribute(name, false);
+    }
+
+    /**
+     * Returns a bound boolean attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull String name, final boolean def);
+
     default <T extends Enum<T>> T getEnumAttribute(String name, Class<T> clazz, T def)
     {
         final String attr = getStringAttribute(name, null);
@@ -124,6 +216,17 @@ public interface IUIElementData
         }
         return def;
     }
+
+    /**
+     * Returns a bound enum attribute. If not found nor bound a static bound to the given default is returned.
+     *
+     * @param name  The name.
+     * @param clazz The class of the enum
+     * @param def   The default value if not defined.
+     * @param <T>   The enum type.
+     * @return The bound enum attribute.
+     */
+    <T extends Enum<T>> IDependencyObject<T> getBoundEnumAttribute(@NotNull final String name, Class<T> clazz, T def);
 
     default <T extends Enum<T>> EnumSet<T> getEnumSetAttributes(String name, Class<T> clazz)
     {
@@ -138,6 +241,16 @@ public interface IUIElementData
 
         return result;
     }
+
+    /**
+     * Returns a bound enum set attribute. If not found nor bound a static bound to an empty enumset is returned.
+     *
+     * @param name  The name.
+     * @param clazz The class of the enum
+     * @param <T>   The enum type.
+     * @return The bound enum attribute.
+     */
+    <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz);
 
     @NotNull
     default String getStringAttribute(@NotNull final String name)
@@ -154,6 +267,27 @@ public interface IUIElementData
      */
     @NotNull
     String getStringAttribute(@NotNull final String name, @NotNull final String def);
+
+    /**
+     * Returns a bound string attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<String> getBoundStringAttribute(@NotNull final String name)
+    {
+        return getBoundStringAttribute(name, "");
+    }
+
+    /**
+     * Returns a bound string attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<String> getBoundStringAttribute(@NotNull String name, final String def);
 
     @NotNull
     default AxisDistance getAxisDistanceAttribute(@NotNull final String name)
@@ -172,9 +306,30 @@ public interface IUIElementData
 
         final AxisDistanceBuilder builder = new AxisDistanceBuilder();
         builder.readFromString(getParentView().getElementSize(), attribute);
-        
+
         return builder.create();
     }
+
+    /**
+     * Returns a bound axisDistance attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(@NotNull final String name)
+    {
+        return getBoundAxisDistanceAttribute(name, new AxisDistance());
+    }
+
+    /**
+     * Returns a bound axisDistance attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(@NotNull String name, final AxisDistance def);
 
     @NotNull
     default EnumSet<Alignment> getAlignmentAttribute(@NotNull final String name)
@@ -193,6 +348,27 @@ public interface IUIElementData
 
         return Alignment.fromString(attribute);
     }
+
+    /**
+     * Returns a bound alignment attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(@NotNull final String name)
+    {
+        return getBoundAlignmentAttribute(name, EnumSet.of(Alignment.NONE));
+    }
+
+    /**
+     * Returns a bound alignment attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(@NotNull String name, final EnumSet<Alignment> def);
 
     @NotNull
     default Vector2d getVector2dAttribute(@NotNull final String name)
@@ -224,6 +400,27 @@ public interface IUIElementData
         }
     }
 
+    /**
+     * Returns a bound vector2d attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<Vector2d> getBoundVector2dAttribute(@NotNull final String name)
+    {
+        return getBoundVector2dAttribute(name, new Vector2d());
+    }
+
+    /**
+     * Returns a bound vector2d attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<Vector2d> getBoundVector2dAttribute(@NotNull String name, final Vector2d def);
+
     @NotNull
     default ResourceLocation getResourceLocationAttribute(@NotNull final String name)
     {
@@ -241,6 +438,25 @@ public interface IUIElementData
 
         return new ResourceLocation(attribute);
     }
-    
-    
+
+    /**
+     * Returns a bound resourceLocation attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name)
+    {
+        return getBoundResourceLocationAttribute(name, new ResourceLocation("minecraft:missingno"));
+    }
+
+    /**
+     * Returns a bound resourceLocation attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull String name, final ResourceLocation def);
 }
