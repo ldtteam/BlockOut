@@ -297,6 +297,17 @@ public class JsonUIElementData implements IUIElementData
         }, def);
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundDatacontext()
+    {
+        if (!object.has("datacontext"))
+        {
+            return DependencyObjectHelper.createFromValue(new Object());
+        }
+
+        return bindOrReturnStatic(object.get("datacontext"), e -> false, e -> new Object(), new Object());
+    }
+
     private <T> IDependencyObject<T> bindOrReturnStatic(
       @NotNull final JsonElement element, @NotNull final Predicate<JsonElement> elementMatchesTypePredicate, @NotNull final
     Function<JsonElement, T> jsonExtractor, T defaultValue)

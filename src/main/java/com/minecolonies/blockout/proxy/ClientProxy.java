@@ -36,7 +36,10 @@ public class ClientProxy extends CommonProxy
     @Override
     public IGuiController getGuiController()
     {
-        return guiController;
+        return SideHelper.on(
+          () -> guiController,
+          super::getGuiController
+        );
     }
 
     @NotNull

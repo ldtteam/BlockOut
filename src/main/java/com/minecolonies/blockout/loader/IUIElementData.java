@@ -459,4 +459,6 @@ public interface IUIElementData
      * @return The bound object.
      */
     IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull String name, final ResourceLocation def);
+
+    IDependencyObject<Object> getBoundDatacontext();
 }

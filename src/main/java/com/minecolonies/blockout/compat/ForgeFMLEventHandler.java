@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class ForgeFMLEventHandler
 {
     @SubscribeEvent
-    public void onPlayerLoggedOut(final PlayerEvent.PlayerLoggedOutEvent event)
+    public static void onPlayerLoggedOut(final PlayerEvent.PlayerLoggedOutEvent event)
     {
         if (event.player instanceof EntityPlayerMP)
         {
@@ -24,7 +24,7 @@ public class ForgeFMLEventHandler
     }
 
     @SubscribeEvent
-    public void onTickPlayerTick(final TickEvent.PlayerTickEvent event)
+    public static void onTickPlayerTick(final TickEvent.PlayerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END)
         {

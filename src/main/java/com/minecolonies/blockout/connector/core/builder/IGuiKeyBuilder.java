@@ -52,6 +52,9 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder withItemHandlerManager(@NotNull final Consumer<IItemHandlerManagerBuilder> configurer);
 
     @NotNull
+    IGuiKeyBuilder withDefaultItemHandlerManager();
+
+    @NotNull
     IGuiKeyBuilder forEntity(@NotNull final UUID entityId);
 
     @NotNull

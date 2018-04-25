@@ -271,6 +271,12 @@ public class XMLUIElementData implements IUIElementData
         return bindOrReturnStatic(name, ResourceLocation::new, def);
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundDatacontext()
+    {
+        return bindOrReturnStatic("datacontext", e -> new Object(), new Object());
+    }
+
     private <T> IDependencyObject<T> bindOrReturnStatic(
       @NotNull final String name, @NotNull final
     Function<String, T> extract, T defaultValue)

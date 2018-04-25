@@ -108,6 +108,14 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
+    public IGuiKeyBuilder withDefaultItemHandlerManager()
+    {
+        this.itemHandlerManager = new CommonItemHandlerManagerBuilder().build();
+        return this;
+    }
+
+    @NotNull
+    @Override
     public IGuiKeyBuilder forEntity(@NotNull final UUID entityId)
     {
         this.context = new EntityContext(entityId);

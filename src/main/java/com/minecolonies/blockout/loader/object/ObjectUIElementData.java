@@ -172,6 +172,12 @@ public class ObjectUIElementData implements IUIElementData, Serializable
         return DependencyObjectHelper.createFromValue(getResourceLocationAttribute(name, def));
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundDatacontext()
+    {
+        return DependencyObjectHelper.createFromValue(new Object());
+    }
+
     private <T extends Serializable> Optional<T> getAttribute(@NotNull final String name, @NotNull final Class<T> cls)
     {
         if (attributes.get(name) != null)

@@ -13,15 +13,18 @@ import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+
+import static com.minecolonies.blockout.util.Constants.Controls.General.*;
+import static com.minecolonies.blockout.util.Constants.Controls.Root.KEY_ROOT;
 
 public class RootGuiElement extends AbstractChildrenContainingUIElement
 {
     public RootGuiElement(
-      @NotNull final ResourceLocation type,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -31,39 +34,64 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(type, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_ROOT, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
     }
 
     public RootGuiElement(
-      @NotNull final ResourceLocation type,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
       @NotNull final IUIManager uiManager)
     {
-        super(type, id, parent, uiManager);
+        super(KEY_ROOT, id, parent, uiManager);
     }
 
-    public class Factory implements IUIElementFactory<RootGuiElement>
+    public static class Factory implements IUIElementFactory<RootGuiElement>
     {
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
-            return null;
+            return KEY_ROOT;
         }
 
         @NotNull
         @Override
         public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
         {
-            return null;
+            final String id = elementData.getStringAttribute(CONST_ID);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
+            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
+            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
+            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
+            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
+            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+
+            return new RootGuiElement(id,
+              elementData.getParentView(),
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              padding,
+              dataContext,
+              visible,
+              enabled);
         }
 
         @Override
         public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
         {
-
+            builder
+              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
+              .addEnum(CONST_DOCK, element.getDock())
+              .addAxisDistance(CONST_MARGIN, element.getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addAxisDistance(CONST_PADDING, element.getPadding())
+              .addBoolean(CONST_VISIBLE, element.isVisible())
+              .addBoolean(CONST_ENABLED, element.isEnabled());
         }
     }
 }

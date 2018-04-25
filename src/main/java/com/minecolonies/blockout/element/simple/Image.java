@@ -104,7 +104,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
     }
 
-    public class Factory implements IUIElementFactory<Image>
+    public static class Factory implements IUIElementFactory<Image>
     {
         @NotNull
         @Override
@@ -118,25 +118,25 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         public Image readFromElementData(@NotNull final IUIElementData elementData)
         {
             final String id = elementData.getStringAttribute(CONST_ID);
-            final EnumSet<Alignment> alignments = elementData.getAlignmentAttribute(CONST_ALIGNMENT);
-            final Dock dock = elementData.getEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final AxisDistance margin = elementData.getAxisDistanceAttribute(CONST_MARGIN);
-            final Vector2d elementSize = elementData.getVector2dAttribute(CONST_ELEMENT_SIZE);
-            final Object dataContext = new Object();
-            final Boolean visible = elementData.getBooleanAttribute(CONST_VISIBLE);
-            final Boolean enabled = elementData.getBooleanAttribute(CONST_ENABLED);
-            final ResourceLocation icon = elementData.getResourceLocationAttribute(CONST_ICON);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
+            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
+            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
+            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
+            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+            final IDependencyObject<ResourceLocation> icon = elementData.getBoundResourceLocationAttribute(CONST_ICON);
 
             return new Image(id,
               elementData.getParentView(),
-              DependencyObjectHelper.createFromValue(alignments),
-              DependencyObjectHelper.createFromValue(dock),
-              DependencyObjectHelper.createFromValue(margin),
-              DependencyObjectHelper.createFromValue(elementSize),
-              DependencyObjectHelper.createFromValue(dataContext),
-              DependencyObjectHelper.createFromValue(visible),
-              DependencyObjectHelper.createFromValue(enabled),
-              DependencyObjectHelper.createFromValue(icon));
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              dataContext,
+              visible,
+              enabled,
+              icon);
         }
 
         @Override
