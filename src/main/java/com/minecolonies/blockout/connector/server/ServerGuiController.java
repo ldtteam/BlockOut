@@ -142,6 +142,8 @@ public class ServerGuiController implements IGuiController
         {
             final IGuiKey currentlyWatching = playerWatching.get(playerId);
             watchers.get(currentlyWatching).remove(playerId);
+            playerWatching.remove(playerId);
+
             if (watchers.get(currentlyWatching).isEmpty())
             {
                 watchers.remove(currentlyWatching);

@@ -258,6 +258,6 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         this.localBoundingBox = new BoundingBox(origin, size);
         this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
 
-        return !currentLocalBoundingBox.equals(this.localBoundingBox);
+        return currentLocalBoundingBox == null || !currentLocalBoundingBox.equals(this.localBoundingBox);
     }
 }

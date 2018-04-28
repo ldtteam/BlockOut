@@ -59,6 +59,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
 
         final RootGuiElement root = (RootGuiElement) element;
         root.setUiManager(new UIManager(root, key));
+        root.getUiManager().getUpdateManager().updateElement(root);
         final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(key, root));
 
         Minecraft.getMinecraft().displayGuiScreen(gui);

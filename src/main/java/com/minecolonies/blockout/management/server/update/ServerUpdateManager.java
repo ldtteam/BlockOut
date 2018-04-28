@@ -1,10 +1,10 @@
 package com.minecolonies.blockout.management.server.update;
 
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.root.RootGuiElement;
+import com.minecolonies.blockout.management.common.update.ChildUpdateManager;
 import com.minecolonies.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,8 @@ public class ServerUpdateManager implements IUpdateManager
         if (element instanceof RootGuiElement)
         {
             RootGuiElement rootGuiElement = (RootGuiElement) element;
-            rootGuiElement.update(new ChildUpdateManager(this));
+            ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);
+            childUpdateManager.updateElement(rootGuiElement);
 
             if (dirty)
             {
@@ -34,33 +35,6 @@ public class ServerUpdateManager implements IUpdateManager
         else
         {
             Log.getLogger().warn("Somebody tried to update a none root element.");
-        }
-    }
-
-    private final class ChildUpdateManager implements IUpdateManager
-    {
-
-        @NotNull
-        private final IUpdateManager updateManager;
-
-        private ChildUpdateManager(@NotNull final IUpdateManager updateManager) {this.updateManager = updateManager;}
-
-        @Override
-        public void updateElement(@NotNull final IUIElement element)
-        {
-            element.update(this);
-
-            if (element instanceof IUIElementHost)
-            {
-                IUIElementHost iuiElementHost = (IUIElementHost) element;
-                iuiElementHost.values().forEach(this::updateElement);
-            }
-        }
-
-        @Override
-        public void markDirty()
-        {
-            updateManager.markDirty();
         }
     }
 

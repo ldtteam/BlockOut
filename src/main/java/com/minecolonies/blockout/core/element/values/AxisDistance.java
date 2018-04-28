@@ -29,6 +29,11 @@ public final class AxisDistance
         this.bottom = bottom;
     }
 
+    public AxisDistance(@NotNull final Number left, @NotNull final Number top, @NotNull final Number right, @NotNull final Number bottom)
+    {
+        this(Optional.of(left.doubleValue()), Optional.of(top.doubleValue()), Optional.of(right.doubleValue()), Optional.of(bottom.doubleValue()));
+    }
+
     @NotNull
     public Optional<Double> getLeft()
     {

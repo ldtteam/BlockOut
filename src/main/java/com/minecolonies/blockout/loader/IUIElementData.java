@@ -357,7 +357,7 @@ public interface IUIElementData
      */
     default IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(@NotNull final String name)
     {
-        return getBoundAlignmentAttribute(name, EnumSet.of(Alignment.NONE));
+        return getBoundAlignmentAttribute(name, EnumSet.of(Alignment.LEFT, Alignment.TOP));
     }
 
     /**

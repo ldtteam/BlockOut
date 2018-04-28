@@ -125,6 +125,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         if (getParent() == this)
         {
             this.absoluteBoundingBox = getLocalBoundingBox();
+            return;
         }
 
         final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
@@ -228,25 +229,38 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
 
     private boolean updateLocalBoundingBox()
     {
-        final BoundingBox currentBoundingBoc = this.localBoundingBox;
+        final BoundingBox currentBoundingBox = this.localBoundingBox;
 
         //If we have no parent we see our default size as parent.
         //Else grab the size from the parent.
-        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : getElementSize();
+        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : new Vector2d(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        final double marginLeft = Alignment.LEFT.isActive(this) ? getMargin().getLeft().orElse(0d) : 0d;
-        final double marginTop = Alignment.TOP.isActive(this) ? getMargin().getTop().orElse(0d) : 0d;
-        final double marginRight = Alignment.RIGHT.isActive(this) ? getMargin().getRight().orElse(0d) : 0d;
-        final double marginBottom = Alignment.BOTTOM.isActive(this) ? getMargin().getBottom().orElse(0d) : 0d;
+        double marginLeft = getMargin().getLeft().orElse(0d);
+        double marginTop = getMargin().getTop().orElse(0d);
+        double marginRight = getMargin().getRight().orElse(0d);
+        double marginBottom = getMargin().getBottom().orElse(0d);
+
+        double width = getElementSize().getX();
+        double height = getElementSize().getY();
+
+        if (Alignment.LEFT.isActive(this) && Alignment.RIGHT.isActive(this))
+        {
+            width = parentSize.getX() - marginLeft - marginRight;
+        }
+        else if (Alignment.LEFT.isActive(this))
+        {
+            margin
+        }
 
         final Vector2d origin = new Vector2d(marginLeft, marginTop);
 
-        final Vector2d size = new Vector2d(parentSize.getX() - (marginLeft + marginRight), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
+        final Vector2d size =
+          new Vector2d(parentSize.getX() - (marginLeft + marginRight + getElementSize().getX()) < 0 ? (), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
 
         this.localBoundingBox = new BoundingBox(origin, size);
         this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
 
-        return !currentBoundingBoc.equals(this.localBoundingBox);
+        return currentBoundingBox == null || !currentBoundingBox.equals(this.localBoundingBox);
     }
 
     private void updateLocalInternalBoundingBox()

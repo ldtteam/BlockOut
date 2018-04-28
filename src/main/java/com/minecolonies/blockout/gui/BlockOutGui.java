@@ -2,6 +2,7 @@ package com.minecolonies.blockout.gui;
 
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
@@ -22,6 +23,17 @@ public class BlockOutGui extends GuiContainer
         super(inventorySlotsIn);
         this.key = inventorySlotsIn.getKey();
         this.root = inventorySlotsIn.getRoot();
+    }
+
+    @Override
+    public void initGui()
+    {
+        this.xSize = (int) root.getLocalBoundingBox().getSize().getX();
+        this.ySize = (int) root.getLocalInternalBoundingBox().getSize().getY();
+        super.initGui();
+
+        root.setMargin(new AxisDistance(guiLeft, guiTop, guiLeft, guiTop));
+        root.getUiManager().getUpdateManager().updateElement(root);
     }
 
     @Override
