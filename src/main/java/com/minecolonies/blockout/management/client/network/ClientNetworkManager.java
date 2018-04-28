@@ -2,7 +2,10 @@ package com.minecolonies.blockout.management.client.network;
 
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
-import com.minecolonies.blockout.management.client.network.messages.*;
+import com.minecolonies.blockout.management.client.network.messages.OnKeyPressedMessage;
+import com.minecolonies.blockout.management.client.network.messages.OnMouseClickBeginMessage;
+import com.minecolonies.blockout.management.client.network.messages.OnMouseClickEndMessage;
+import com.minecolonies.blockout.management.client.network.messages.OnMouseClickMoveMessage;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
@@ -40,12 +43,6 @@ public class ClientNetworkManager implements INetworkManager
     public void onKeyPressed(final int character, final KeyboardKey key)
     {
         NetworkManager.sendToServer(new OnKeyPressedMessage(character, key));
-    }
-
-    @Override
-    public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
-    {
-        NetworkManager.sendToServer(new OnMouseScrollMessage(localX, localY, deltaWheel));
     }
 
     @Override

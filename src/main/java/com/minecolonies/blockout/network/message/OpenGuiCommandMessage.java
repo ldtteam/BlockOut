@@ -7,6 +7,7 @@ import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.management.UIManager;
 import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -57,6 +58,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         }
 
         final RootGuiElement root = (RootGuiElement) element;
+        root.setUiManager(new UIManager(root, key));
         final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(key, root));
 
         Minecraft.getMinecraft().displayGuiScreen(gui);

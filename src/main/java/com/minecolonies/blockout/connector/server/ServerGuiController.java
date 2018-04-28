@@ -2,6 +2,7 @@ package com.minecolonies.blockout.connector.server;
 
 import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
 import com.minecolonies.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.IGuiKey;
@@ -10,6 +11,7 @@ import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.management.UIManager;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.network.message.CloseGuiCommandMessage;
 import com.minecolonies.blockout.network.message.OpenGuiCommandMessage;
@@ -84,6 +86,8 @@ public class ServerGuiController implements IGuiController
             return;
         }
 
+        RootGuiElement host;
+
         if (!openUis.containsKey(key))
         {
             final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
@@ -93,14 +97,23 @@ public class ServerGuiController implements IGuiController
                 return;
             }
 
-            final RootGuiElement host = (RootGuiElement) element;
+            host = (RootGuiElement) element;
+            DependencyObjectInjector.inject(host, key.getConstructionData());
+            host.getAllCombinedChildElements().values().forEach(c -> DependencyObjectInjector.inject(c, key.getConstructionData()));
+            host.setUiManager(new UIManager(host, key));
+
             openUis.put(key, host);
         }
+        else
+        {
+            host = openUis.get(key);
+        }
 
-        watchers.putIfAbsent(key, new ArrayList<>()).add(playerId);
+        watchers.putIfAbsent(key, new ArrayList<>());
+        watchers.get(key).add(playerId);
         playerWatching.put(playerId, key);
 
-        openGui(key, elementData, player);
+        openGui(key, host, player);
     }
 
     @Override
@@ -167,7 +180,7 @@ public class ServerGuiController implements IGuiController
         return openUis.get(guiKey);
     }
 
-    private void openGui(@NotNull final IGuiKey key, @NotNull final IUIElementData data, @NotNull final EntityPlayerMP playerMP)
+    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final EntityPlayerMP playerMP)
     {
         playerMP.getNextWindowId();
         playerMP.closeContainer();
@@ -175,7 +188,7 @@ public class ServerGuiController implements IGuiController
         playerMP.openContainer.windowId = playerMP.currentWindowId;
         playerMP.openContainer.addListener(playerMP);
 
-        NetworkManager.sendTo(new OpenGuiCommandMessage(key, data), playerMP);
+        NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement)), playerMP);
 
         MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(playerMP, playerMP.openContainer));
     }

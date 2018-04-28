@@ -2,9 +2,11 @@ package com.minecolonies.blockout.management.server.network.messages;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.core.management.IUIManager;
+import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.loader.object.ObjectUIElementData;
+import com.minecolonies.blockout.management.UIManager;
 import com.minecolonies.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,27 +32,24 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
         {
             final BlockOutGui blockOutGui = (BlockOutGui) openGuiScreen;
             final IUIElement containedElement = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
-            final String id = containedElement.getId();
+            if (!(containedElement instanceof RootGuiElement))
+            {
+                throw new IllegalStateException("The synced element is not a root.");
+            }
 
-            blockOutGui.getRoot().searchExactElementById(id).ifPresent(target -> {
-                if (blockOutGui.getRoot().equals(target))
-                {
-                    if (target instanceof IUIElementHost)
-                    {
-                        blockOutGui.setRoot((IUIElementHost) target);
-                    }
-                    else
-                    {
-                        throw new IllegalStateException("Given target is not a content root. Update not possible");
-                    }
-                }
-                else
-                {
-                    final IUIElementHost targetParent = target.getParent();
-                    targetParent.remove(target.getId());
-                    targetParent.put(target.getId(), target);
-                }
-            });
+            final IUIManager iuiManager = blockOutGui.getRoot().getUiManager();
+            if (!(iuiManager instanceof RootGuiElement))
+            {
+                throw new IllegalStateException("The client side ui manager is not a UIManager instance");
+            }
+
+            final RootGuiElement rootGuiElement = (RootGuiElement) containedElement;
+            final UIManager uiManager = (UIManager) blockOutGui.getRoot().getUiManager();
+
+            uiManager.setRootGuiElement(rootGuiElement);
+            rootGuiElement.setUiManager(uiManager);
+
+            blockOutGui.setRoot(rootGuiElement);
         }
         else
         {

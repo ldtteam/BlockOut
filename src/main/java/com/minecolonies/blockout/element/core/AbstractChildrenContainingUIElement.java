@@ -7,7 +7,6 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
-import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -21,44 +20,44 @@ import java.util.HashMap;
 public abstract class AbstractChildrenContainingUIElement extends HashMap<String, IUIElement> implements IUIElementHost
 {
     @NotNull
-    private final ResourceLocation type;
+    protected final ResourceLocation type;
     @NotNull
-    private final String           id;
+    protected final String           id;
     @NotNull
-    private       IUIElementHost   parent;
+    protected       IUIElementHost   parent;
 
     @NotNull
-    private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
+    protected IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    protected IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
-    private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
+    protected IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
-    private IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
+    protected IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
     @NotNull
-    private IDependencyObject<AxisDistance>       padding     = DependencyObjectHelper.createFromValue(new AxisDistance());
+    protected IDependencyObject<AxisDistance>       padding     = DependencyObjectHelper.createFromValue(new AxisDistance());
 
     @NotNull
-    private BoundingBox localBoundingBox;
+    protected BoundingBox localBoundingBox;
     @NotNull
-    private BoundingBox absoluteBoundingBox;
+    protected BoundingBox absoluteBoundingBox;
     @NotNull
-    private BoundingBox localInternalBoundingBox;
+    protected BoundingBox localInternalBoundingBox;
     @NotNull
-    private BoundingBox absoluteInternalBoundingBox;
+    protected BoundingBox absoluteInternalBoundingBox;
 
     @NotNull
-    private IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
+    protected IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
 
     @NotNull
-    private IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    protected IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
     @NotNull
-    private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
+    protected IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractChildrenContainingUIElement(
       @NotNull final ResourceLocation type,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -85,8 +84,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     public AbstractChildrenContainingUIElement(
       @NotNull final ResourceLocation type,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
-      @NotNull final IUIManager uiManager)
+      @Nullable final IUIElementHost parent)
     {
         this.type = type;
         this.id = id;
@@ -188,7 +186,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     @Override
     public Object getDataContext()
     {
-        return dataContext.get(parent.getDataContext());
+        return dataContext.get(getParent().getDataContext());
     }
 
     @Override

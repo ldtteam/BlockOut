@@ -59,12 +59,6 @@ public class ServerNetworkManager implements INetworkManager
     }
 
     @Override
-    public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
-    {
-        //NOOP
-    }
-
-    @Override
     public void onElementChanged(@NotNull final IUIElement changedElement)
     {
         final IUIElementData dataCandidate = BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(changedElement);

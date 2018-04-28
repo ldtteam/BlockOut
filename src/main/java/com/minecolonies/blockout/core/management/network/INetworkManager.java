@@ -18,7 +18,5 @@ public interface INetworkManager
 
     void onKeyPressed(final int character, final KeyboardKey key);
 
-    void onMouseScroll(final int localX, final int localY, final int deltaWheel);
-
     void onElementChanged(@NotNull final IUIElement changedElement);
 }

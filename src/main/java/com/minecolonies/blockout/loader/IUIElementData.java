@@ -305,7 +305,7 @@ public interface IUIElementData
         }
 
         final AxisDistanceBuilder builder = new AxisDistanceBuilder();
-        builder.readFromString(getParentView().getElementSize(), attribute);
+        builder.readFromString(getParentView() != null ? getParentView().getElementSize() : new Vector2d(), attribute);
 
         return builder.create();
     }
