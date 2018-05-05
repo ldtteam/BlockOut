@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -170,6 +171,13 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     public IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name, final ResourceLocation def)
     {
         return DependencyObjectHelper.createFromValue(getResourceLocationAttribute(name, def));
+    }
+
+    @Override
+    public IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(
+      @NotNull final String name, final BoundingBox def)
+    {
+        return DependencyObjectHelper.createFromValue(getBoundingBoxAttribute(name, def));
     }
 
     @Override

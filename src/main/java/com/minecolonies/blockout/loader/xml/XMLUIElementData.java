@@ -11,6 +11,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -269,6 +270,13 @@ public class XMLUIElementData implements IUIElementData
     public IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name, final ResourceLocation def)
     {
         return bindOrReturnStatic(name, ResourceLocation::new, def);
+    }
+
+    @Override
+    public IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(
+      @NotNull final String name, final BoundingBox def)
+    {
+        return bindOrReturnStatic(name, BoundingBox::fromString, def);
     }
 
     @Override

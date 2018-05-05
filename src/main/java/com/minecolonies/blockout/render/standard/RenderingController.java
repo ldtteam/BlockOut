@@ -57,32 +57,40 @@ public class RenderingController implements IRenderingController
     }
 
     @Override
-    public void drawTexturedModalRect(@NotNull final BoundingBox box, @NotNull final Vector2d textureSize)
+    public void drawTexturedModalRect(
+      @NotNull final Vector2d origin,
+      @NotNull final Vector2d size,
+      @NotNull final Vector2d inTexturePosition,
+      @NotNull final Vector2d inTextureSize,
+      @NotNull final Vector2d textureSize)
     {
-        final double x = box.getLocalOrigin().getX();
-        final double y = box.getLocalOrigin().getY();
-        final double z = 1d;
-        final double w = box.getSize().getX();
-        final double h = box.getSize().getY();
-        final double u = textureSize.getX();
-        final double v = textureSize.getY();
+        double x = origin.getX();
+        double y = origin.getY();
+        double width = size.getX();
+        double height = size.getY();
+        double textureX = inTexturePosition.getX();
+        double textureY = inTexturePosition.getY();
+        double textureWidth = inTextureSize.getX() / textureSize.getX();
+        double textureHeight = inTextureSize.getY() / textureSize.getY();
 
-        double f = 0.00390625;
-        double f1 = 0.00390625;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder worldrenderer = tessellator.getBuffer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos(x, y + h, z)
-          .tex(u * f, (v + h) * f1)
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder
+          .pos(x + 0, y + height, 0)
+          .tex(textureX, textureY + textureHeight)
           .endVertex();
-        worldrenderer.pos(x + w, y + h, z)
-          .tex((u + w) * f, (v + h) * f1)
+        bufferbuilder
+          .pos(x + width, y + height, 0)
+          .tex(textureX + textureWidth, textureY + textureHeight)
           .endVertex();
-        worldrenderer.pos(x + w, y, z)
-          .tex((u + w) * f, v * f1)
+        bufferbuilder
+          .pos(x + width, y + 0, 0)
+          .tex(textureX + textureWidth, textureY)
           .endVertex();
-        worldrenderer.pos(x, y, z)
-          .tex(u * f, v * f1)
+        bufferbuilder
+          .pos(x + 0, y + 0, 0)
+          .tex(textureX, textureY)
           .endVertex();
         tessellator.draw();
     }

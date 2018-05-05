@@ -9,6 +9,7 @@ import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.element.root.RootGuiElement;
+import com.minecolonies.blockout.event.injector.EventHandlerInjector;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.management.UIManager;
@@ -98,8 +99,13 @@ public class ServerGuiController implements IGuiController
             }
 
             host = (RootGuiElement) element;
+
             DependencyObjectInjector.inject(host, key.getConstructionData());
             host.getAllCombinedChildElements().values().forEach(c -> DependencyObjectInjector.inject(c, key.getConstructionData()));
+
+            EventHandlerInjector.inject(host, key.getConstructionData());
+            host.getAllCombinedChildElements().values().forEach(c -> EventHandlerInjector.inject(c, key.getConstructionData()));
+
             host.setUiManager(new UIManager(host, key));
 
             openUis.put(key, host);

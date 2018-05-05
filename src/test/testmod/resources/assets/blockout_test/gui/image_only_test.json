@@ -5,6 +5,7 @@
     {
       "type": "blockout:image",
       "size": "150,150",
+      "imageData": "0,0,150,150",
       "icon": "blockout_test:images/chatchain_150.png"
     }
   ]

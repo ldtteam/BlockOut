@@ -21,7 +21,12 @@ public interface IRenderingController
 
     void bindTexture(@NotNull ResourceLocation textureLocation);
 
-    void drawTexturedModalRect(@NotNull final BoundingBox box, @NotNull final Vector2d textureSize);
+    void drawTexturedModalRect(
+      @NotNull final Vector2d origin,
+      @NotNull final Vector2d size,
+      @NotNull final Vector2d inTexturePosition,
+      @NotNull final Vector2d inTextureSize,
+      @NotNull final Vector2d textureSize);
 
     void drawFluid(@Nullable FluidStack fluid, int x, int y, int z, int w, int h);
 

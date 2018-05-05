@@ -12,6 +12,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -294,6 +295,21 @@ public class JsonUIElementData implements IUIElementData
         return bindOrReturnStatic(object.get(name), (JsonElement::isJsonPrimitive), (JsonElement element) -> {
             final String attribute = element.getAsString();
             return new ResourceLocation(attribute);
+        }, def);
+    }
+
+    @Override
+    public IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(
+      @NotNull final String name, final BoundingBox def)
+    {
+        if (!object.has(name))
+        {
+            return DependencyObjectHelper.createFromValue(def);
+        }
+
+        return bindOrReturnStatic(object.get(name), (JsonElement::isJsonPrimitive), (JsonElement element) -> {
+            final String attribute = element.getAsString();
+            return BoundingBox.fromString(attribute);
         }, def);
     }
 

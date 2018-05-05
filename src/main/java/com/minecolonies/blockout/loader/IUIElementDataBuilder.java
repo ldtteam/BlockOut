@@ -2,6 +2,7 @@ package com.minecolonies.blockout.loader;
 
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -98,6 +99,8 @@ public interface IUIElementDataBuilder
     {
         return addString(key, value.toString());
     }
+
+    default IUIElementDataBuilder addBoundingBox(@NotNull final String key, @NotNull final BoundingBox value) { return addString(key, value.toString()); }
 
     /**
      * Constructs the {@link IUIElementData} from the data contained in this builder.

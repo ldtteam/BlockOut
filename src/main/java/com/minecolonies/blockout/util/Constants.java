@@ -39,7 +39,8 @@ public class Constants
         {
             public static final ResourceLocation KEY_IMAGE = new ResourceLocation(MOD_ID, "image");
 
-            public static final String CONST_ICON = "icon";
+            public static final String CONST_ICON       = "icon";
+            public static final String CONST_IMAGE_DATA = "imageData";
         }
 
         public static class Root

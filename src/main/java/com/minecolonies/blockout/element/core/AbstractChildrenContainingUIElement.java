@@ -247,15 +247,32 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
         {
             width = parentSize.getX() - marginLeft - marginRight;
         }
-        else if (Alignment.LEFT.isActive(this))
+        else if (Alignment.RIGHT.isActive(this))
         {
-            margin
+            marginLeft = parentSize.getX() - width - marginRight;
+        }
+        else
+        {
+            marginRight = parentSize.getX() - width - marginLeft;
         }
 
-        final Vector2d origin = new Vector2d(marginLeft, marginTop);
+        if (Alignment.TOP.isActive(this) && Alignment.BOTTOM.isActive(this))
+        {
+            height = parentSize.getY() - marginTop - marginBottom;
+        }
+        else if (Alignment.BOTTOM.isActive(this))
+        {
+            marginTop = parentSize.getY() - height - marginBottom;
+        }
+        else
+        {
+            marginBottom = parentSize.getY() - height - marginTop;
+        }
+
+        final Vector2d origin = new Vector2d(marginLeft, marginTop).nullifyNegatives();
 
         final Vector2d size =
-          new Vector2d(parentSize.getX() - (marginLeft + marginRight + getElementSize().getX()) < 0 ? (), parentSize.getY() - (marginTop + marginBottom)).nullifyNegatives();
+          new Vector2d(width, height).nullifyNegatives();
 
         this.localBoundingBox = new BoundingBox(origin, size);
         this.localBoundingBox = getDock().apply(this, this.localBoundingBox);

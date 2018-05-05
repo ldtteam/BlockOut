@@ -5,6 +5,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
@@ -460,5 +461,44 @@ public interface IUIElementData
      */
     IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull String name, final ResourceLocation def);
 
+    @NotNull
+    default BoundingBox getBoundingBoxAttribute(@NotNull final String name)
+    {
+        return getBoundingBoxAttribute(name, new BoundingBox());
+    }
+
+    @NotNull
+    default BoundingBox getBoundingBoxAttribute(@NotNull final String name, @NotNull final BoundingBox def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        return BoundingBox.fromString(attribute);
+    }
+
+    /**
+     * Returns a bound boundingBox attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(@NotNull final String name)
+    {
+        return getBoundBoundingBoxAttribute(name, new BoundingBox());
+    }
+
+    /**
+     * Returns a bound boundingBox attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(@NotNull String name, final BoundingBox def);
+    
     IDependencyObject<Object> getBoundDatacontext();
 }

@@ -2,6 +2,9 @@ package com.minecolonies.blockout.util.math;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public final class BoundingBox
 {
 
@@ -144,6 +147,25 @@ public final class BoundingBox
             return false;
         }
         return getSize().equals(that.getSize());
+    }
+
+    public static BoundingBox fromString(@NotNull final String string)
+    {
+        final String[] parts = string.split(",");
+        final Double[] components = Arrays.stream(parts).map(s -> Double.parseDouble(s.trim())).collect(Collectors.toList()).toArray(new Double[4]);
+
+        if (components.length != 4)
+        {
+            throw new IllegalArgumentException("String does not contain 4 parts");
+        }
+
+        return new BoundingBox(new Vector2d(components[0], components[1]), new Vector2d(components[2], components[3]));
+    }
+
+    @Override
+    public String toString()
+    {
+        return getLocalOrigin().getX() + "," + getLocalOrigin().getY() + "," + getSize().getX() + "," + getSize().getY() + ",";
     }
 }
 

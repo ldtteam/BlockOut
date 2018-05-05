@@ -13,6 +13,7 @@ import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,21 +24,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
-import static com.minecolonies.blockout.util.Constants.Controls.Image.CONST_ICON;
-import static com.minecolonies.blockout.util.Constants.Controls.Image.KEY_IMAGE;
+import static com.minecolonies.blockout.util.Constants.Controls.Image.*;
 
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
     private IDependencyObject<ResourceLocation> icon;
+    @NotNull
+    private IDependencyObject<BoundingBox>      imageData;
 
     public Image(
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> icon)
+      @NotNull final IDependencyObject<ResourceLocation> icon,
+      @NotNull final IDependencyObject<BoundingBox> imageData)
     {
         super(KEY_IMAGE, id, parent);
         this.icon = icon;
+        this.imageData = imageData;
     }
 
     public Image(
@@ -50,10 +54,12 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> icon)
+      @NotNull final IDependencyObject<ResourceLocation> icon,
+      @NotNull final IDependencyObject<BoundingBox> imageData)
     {
         super(KEY_IMAGE, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.icon = icon;
+        this.imageData = imageData;
     }
 
     @SideOnly(Side.CLIENT)
@@ -66,7 +72,11 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
         controller.bindTexture(getIcon());
-        controller.drawTexturedModalRect(getLocalBoundingBox(), getImageSize());
+        controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
+          getLocalBoundingBox().getSize(),
+          getImageData().getLocalOrigin(),
+          getImageData().getSize(),
+          getImageSize());
 
         GlStateManager.popMatrix();
     }
@@ -98,10 +108,21 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     @NotNull
     public Vector2d getScalingFactor()
     {
-        final Vector2d imageSize = getImageSize();
+        final Vector2d imageSize = getImageData().getSize();
         final Vector2d elementSize = getElementSize();
 
         return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
+    }
+
+    @NotNull
+    public BoundingBox getImageData()
+    {
+        return imageData.get(getDataContext());
+    }
+
+    public void setImageData(@NotNull final BoundingBox box)
+    {
+        this.imageData = DependencyObjectHelper.createFromValue(box);
     }
 
     public static class Factory implements IUIElementFactory<Image>
@@ -126,6 +147,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<ResourceLocation> icon = elementData.getBoundResourceLocationAttribute(CONST_ICON);
+            final IDependencyObject<BoundingBox> imageData = elementData.getBoundBoundingBoxAttribute(CONST_IMAGE_DATA);
 
             return new Image(id,
               elementData.getParentView(),
@@ -136,7 +158,8 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
               dataContext,
               visible,
               enabled,
-              icon);
+              icon,
+              imageData);
         }
 
         @Override
@@ -149,7 +172,8 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
               .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
               .addBoolean(CONST_VISIBLE, element.isVisible())
               .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_ICON, element.getIcon());
+              .addResourceLocation(CONST_ICON, element.getIcon())
+              .addBoundingBox(CONST_IMAGE_DATA, element.getImageData());
         }
     }
 }
