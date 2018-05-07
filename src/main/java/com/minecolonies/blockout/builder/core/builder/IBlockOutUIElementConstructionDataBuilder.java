@@ -12,9 +12,9 @@ public interface IBlockOutUIElementConstructionDataBuilder<C extends IBlockOutUI
     C withDependency(@NotNull final String fieldName, @NotNull final IDependencyObject<?> dependency);
 
     @NotNull
-    <S, A> C withEventHandler(
-      @NotNull final String eventName, @NotNull final Class<S> controlTypeClass, @NotNull final Class<A> argumentTypeClass, @NotNull final
-    IEventHandler<S, A> eventHandler);
+    <A> C withEventHandler(
+      @NotNull final String eventName, @NotNull final Class<A> argumentTypeClass, @NotNull final
+    IEventHandler<T, A> eventHandler);
 
     @NotNull
     IBlockOutGuiConstructionDataBuilder done();
