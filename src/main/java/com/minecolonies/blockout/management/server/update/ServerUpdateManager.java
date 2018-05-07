@@ -25,12 +25,6 @@ public class ServerUpdateManager implements IUpdateManager
             RootGuiElement rootGuiElement = (RootGuiElement) element;
             ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);
             childUpdateManager.updateElement(rootGuiElement);
-
-            if (dirty)
-            {
-                manager.getNetworkManager().onElementChanged(element);
-                dirty = false;
-            }
         }
         else
         {
@@ -42,5 +36,14 @@ public class ServerUpdateManager implements IUpdateManager
     public void markDirty()
     {
         this.dirty = true;
+    }
+
+    public void onNetworkTick()
+    {
+        if (dirty)
+        {
+            manager.getNetworkManager().onElementChanged(manager.getHost());
+            dirty = false;
+        }
     }
 }

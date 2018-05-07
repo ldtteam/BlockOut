@@ -211,4 +211,9 @@ public class ServerGuiController implements IGuiController
     {
         return ImmutableList.copyOf(watchers.get(key));
     }
+
+    public ImmutableList<RootGuiElement> getOpenRoots()
+    {
+        return ImmutableList.copyOf(openUis.values());
+    }
 }
