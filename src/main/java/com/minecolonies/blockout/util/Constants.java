@@ -56,6 +56,19 @@ public class Constants
             public static final String CONST_INVENTORY_ID     = "inventory";
             public static final String CONST_INVENTORY_INDEX  = "index";
         }
+
+        public static class Button
+        {
+            public static final ResourceLocation KEY_BUTTON = new ResourceLocation(MOD_ID, "button");
+
+            public static final String CONST_DEFAULT_BACKGROUND_IMAGE       = "defaultBackgroundImage";
+            public static final String CONST_DEFAULT_BACKGROUND_IMAGE_DATA  = "defaultBackgroundImageData";
+            public static final String CONST_DISABLED_BACKGROUND_IMAGE      = "disabledBackgroundImage";
+            public static final String CONST_DISABLED_BACKGROUND_IMAGE_DATA = "disabledBackgroundImageData";
+            public static final String CONST_CLICKED_BACKGROUND_IMAGE       = "clickedBackgroundImage";
+            public static final String CONST_CLICKED_BACKGROUND_IMAGE_DATA  = "clickedBackgroundImageData";
+            public static final String CONST_INITIALLY_CLICKED              = "clicked";
+        }
     }
 
 }

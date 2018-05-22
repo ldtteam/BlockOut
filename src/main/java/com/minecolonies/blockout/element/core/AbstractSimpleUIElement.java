@@ -332,5 +332,89 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         {
             return data;
         }
+
+        @NotNull
+        public B withDependentAllignments(@NotNull final IDependencyObject<EnumSet<Alignment>> alignments)
+        {
+            return withDependency("alignments", alignments);
+        }
+
+        @NotNull
+        public B withDependentDock(@NotNull final IDependencyObject<Dock> dock)
+        {
+            return withDependency("dock", dock);
+        }
+
+        @NotNull
+        public B withDependentMargin(@NotNull final IDependencyObject<AxisDistance> margin)
+        {
+            return withDependency("margin", margin);
+        }
+
+        @NotNull
+        public B withDependentSize(@NotNull final IDependencyObject<Vector2d> elementSize)
+        {
+            return withDependency("elementSize", elementSize);
+        }
+
+        @NotNull
+        public B withDependentDataContext(@NotNull final IDependencyObject<Object> dataContext)
+        {
+            return withDependency("dataContext", dataContext);
+        }
+
+        @NotNull
+        public B withDependentVisibility(@NotNull final IDependencyObject<Boolean> visible)
+        {
+            return withDependency("visible", visible);
+        }
+
+        @NotNull
+        public B withDependentEnablement(@NotNull final IDependencyObject<Boolean> enabled)
+        {
+            return withDependency("enabled", enabled);
+        }
+
+        @NotNull
+        public B withAllignments(@NotNull final EnumSet<Alignment> alignments)
+        {
+            return withDependency("alignments", DependencyObjectHelper.createFromValue(alignments));
+        }
+
+        @NotNull
+        public B withDock(@NotNull final Dock dock)
+        {
+            return withDependency("dock", DependencyObjectHelper.createFromValue(dock));
+        }
+
+        @NotNull
+        public B withMargin(@NotNull final AxisDistance margin)
+        {
+            return withDependency("margin", DependencyObjectHelper.createFromValue(margin));
+        }
+
+        @NotNull
+        public B withSize(@NotNull final Vector2d elementSize)
+        {
+            return withDependency("elementSize", DependencyObjectHelper.createFromValue(elementSize));
+        }
+
+        @NotNull
+        public B withDataContext(@NotNull final Object dataContext)
+        {
+            return withDependency("dataContext", DependencyObjectHelper.createFromValue(dataContext));
+        }
+
+        @NotNull
+        public B withVisibility(@NotNull final Boolean visible)
+        {
+            return withDependency("visible", DependencyObjectHelper.createFromValue(visible));
+        }
+
+        @NotNull
+        public B withEnablement(@NotNull final Boolean enabled)
+        {
+            return withDependency("enabled", DependencyObjectHelper.createFromValue(enabled));
+        }
     }
 }

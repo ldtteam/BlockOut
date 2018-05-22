@@ -2,12 +2,15 @@ package com.minecolonies.blockout.element.core;
 
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutUIElementConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
+import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -356,5 +359,129 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     public void setEnabled(final boolean enabled)
     {
         this.enabled = DependencyObjectHelper.createFromValue(enabled);
+    }
+
+    public static abstract class SimpleControlConstructionDataBuilder<B extends SimpleControlConstructionDataBuilder<B, S>, S extends AbstractChildrenContainingUIElement>
+      implements IBlockOutUIElementConstructionDataBuilder<B, S>
+    {
+
+        private final String                              controlId;
+        private final IBlockOutGuiConstructionDataBuilder data;
+        private final Class<S>                            controlClass;
+
+        protected SimpleControlConstructionDataBuilder(final String controlId, final IBlockOutGuiConstructionDataBuilder data, final Class<S> controlClass)
+        {
+            this.controlId = controlId;
+            this.data = data;
+            this.controlClass = controlClass;
+        }
+
+        @NotNull
+        public B withDependentAllignments(@NotNull final IDependencyObject<EnumSet<Alignment>> alignments)
+        {
+            return withDependency("alignments", alignments);
+        }
+
+        @NotNull
+        @Override
+        public B withDependency(@NotNull final String fieldName, @NotNull final IDependencyObject<?> dependency)
+        {
+            data.withDependency(controlId, fieldName, dependency);
+            return (B) this;
+        }
+
+        @NotNull
+        @Override
+        public <A> B withEventHandler(
+          @NotNull final String eventName, @NotNull final Class<A> argumentTypeClass, @NotNull final IEventHandler<S, A> eventHandler)
+        {
+            data.withEventHandler(controlId, eventName, controlClass, argumentTypeClass, eventHandler);
+            return (B) this;
+        }
+
+        @NotNull
+        @Override
+        public IBlockOutGuiConstructionDataBuilder done()
+        {
+            return data;
+        }
+
+        @NotNull
+        public B withDependentDock(@NotNull final IDependencyObject<Dock> dock)
+        {
+            return withDependency("dock", dock);
+        }
+
+        @NotNull
+        public B withDependentMargin(@NotNull final IDependencyObject<AxisDistance> margin)
+        {
+            return withDependency("margin", margin);
+        }
+
+        @NotNull
+        public B withDependentSize(@NotNull final IDependencyObject<Vector2d> elementSize)
+        {
+            return withDependency("elementSize", elementSize);
+        }
+
+        @NotNull
+        public B withDependentDataContext(@NotNull final IDependencyObject<Object> dataContext)
+        {
+            return withDependency("dataContext", dataContext);
+        }
+
+        @NotNull
+        public B withDependentVisibility(@NotNull final IDependencyObject<Boolean> visible)
+        {
+            return withDependency("visible", visible);
+        }
+
+        @NotNull
+        public B withDependentEnablement(@NotNull final IDependencyObject<Boolean> enabled)
+        {
+            return withDependency("enabled", enabled);
+        }
+
+        @NotNull
+        public B withAllignments(@NotNull final EnumSet<Alignment> alignments)
+        {
+            return withDependency("alignments", DependencyObjectHelper.createFromValue(alignments));
+        }
+
+        @NotNull
+        public B withDock(@NotNull final Dock dock)
+        {
+            return withDependency("dock", DependencyObjectHelper.createFromValue(dock));
+        }
+
+        @NotNull
+        public B withMargin(@NotNull final AxisDistance margin)
+        {
+            return withDependency("margin", DependencyObjectHelper.createFromValue(margin));
+        }
+
+        @NotNull
+        public B withSize(@NotNull final Vector2d elementSize)
+        {
+            return withDependency("elementSize", DependencyObjectHelper.createFromValue(elementSize));
+        }
+
+        @NotNull
+        public B withDataContext(@NotNull final Object dataContext)
+        {
+            return withDependency("dataContext", DependencyObjectHelper.createFromValue(dataContext));
+        }
+
+        @NotNull
+        public B withVisibility(@NotNull final Boolean visible)
+        {
+            return withDependency("visible", DependencyObjectHelper.createFromValue(visible));
+        }
+
+        @NotNull
+        public B withEnablement(@NotNull final Boolean enabled)
+        {
+            return withDependency("enabled", DependencyObjectHelper.createFromValue(enabled));
+        }
     }
 }
