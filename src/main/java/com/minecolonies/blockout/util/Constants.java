@@ -69,6 +69,13 @@ public class Constants
             public static final String CONST_CLICKED_BACKGROUND_IMAGE_DATA  = "clickedBackgroundImageData";
             public static final String CONST_INITIALLY_CLICKED              = "clicked";
         }
+
+        public static class Label
+        {
+            public static final ResourceLocation KEY_LABEL = new ResourceLocation(MOD_ID, "label");
+
+            public static final String CONST_CONTENT = "content";
+        }
     }
 
 }

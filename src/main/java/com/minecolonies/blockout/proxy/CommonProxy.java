@@ -13,6 +13,7 @@ import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.management.server.network.ServerNetworkManager;
 import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
+import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -104,6 +105,19 @@ public class CommonProxy implements IProxy
     @Nullable
     @Override
     public IRenderManager generateNewRenderManager()
+    {
+        return null;
+    }
+
+    @Override
+    public void initializeFontRenderer()
+    {
+        //NOOP
+    }
+
+    @NotNull
+    @Override
+    public MultiColoredFontRenderer getFontRenderer()
     {
         return null;
     }

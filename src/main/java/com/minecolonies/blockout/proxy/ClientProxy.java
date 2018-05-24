@@ -13,7 +13,9 @@ import com.minecolonies.blockout.management.client.update.NoOpUpdateManager;
 import com.minecolonies.blockout.management.server.network.ServerNetworkManager;
 import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
 import com.minecolonies.blockout.util.SideHelper;
+import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,7 +30,9 @@ public class ClientProxy extends CommonProxy
 {
 
     @NotNull
-    private final ClientGuiController guiController;
+    private       MultiColoredFontRenderer multiColoredFontRenderer;
+    @NotNull
+    private final ClientGuiController      guiController;
 
     public ClientProxy() {guiController = new ClientGuiController();}
 
@@ -85,5 +89,26 @@ public class ClientProxy extends CommonProxy
     public IRenderManager generateNewRenderManager()
     {
         return new RenderManager();
+    }
+
+    @Override
+    public void initializeFontRenderer()
+    {
+        multiColoredFontRenderer =
+          new MultiColoredFontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine);
+        if (Minecraft.getMinecraft().gameSettings.language != null)
+        {
+            multiColoredFontRenderer.setUnicodeFlag(
+              Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode() || Minecraft.getMinecraft().gameSettings.forceUnicodeFont);
+            multiColoredFontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+        }
+        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(multiColoredFontRenderer);
+    }
+
+    @NotNull
+    @Override
+    public MultiColoredFontRenderer getFontRenderer()
+    {
+        return multiColoredFontRenderer;
     }
 }

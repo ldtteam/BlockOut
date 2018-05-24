@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.render.core;
 
+import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,6 +15,16 @@ public interface IScissoringController
      * @param box The new box.
      */
     void push(@NotNull final BoundingBox box);
+
+    /**
+     * Performs a push with the {@link IUIElement#getAbsoluteBoundingBox()} of the given {@link IUIElement}.
+     *
+     * @param element The element to focus.
+     */
+    default void focus(@NotNull final IUIElement element)
+    {
+        push(element.getAbsoluteBoundingBox());
+    }
 
     /**
      * Ends the current scissoring session.

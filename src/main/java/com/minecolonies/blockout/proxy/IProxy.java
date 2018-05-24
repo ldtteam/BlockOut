@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
+import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
@@ -46,4 +47,9 @@ public interface IProxy
     @SideOnly(Side.CLIENT)
     @NotNull
     IRenderManager generateNewRenderManager();
+
+    void initializeFontRenderer();
+
+    @NotNull
+    MultiColoredFontRenderer getFontRenderer();
 }

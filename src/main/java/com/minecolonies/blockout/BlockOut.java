@@ -1,7 +1,9 @@
 package com.minecolonies.blockout;
 
 import com.minecolonies.blockout.element.root.RootGuiElement;
+import com.minecolonies.blockout.element.simple.Button;
 import com.minecolonies.blockout.element.simple.Image;
+import com.minecolonies.blockout.element.simple.Label;
 import com.minecolonies.blockout.element.simple.Slot;
 import com.minecolonies.blockout.loader.json.JsonLoader;
 import com.minecolonies.blockout.loader.object.loader.ObjectUIElementLoader;
@@ -45,6 +47,7 @@ public class BlockOut
     @Mod.EventHandler
     public void preInit(@NotNull final FMLPreInitializationEvent event)
     {
+        getProxy().initializeFontRenderer();
         NetworkManager.init();
 
         getProxy().getLoaderManager().registerLoader(new JsonLoader());
@@ -54,5 +57,7 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new RootGuiElement.Factory());
         getProxy().getFactoryController().registerFactory(new Image.Factory());
         getProxy().getFactoryController().registerFactory(new Slot.Factory());
+        getProxy().getFactoryController().registerFactory(new Button.Factory());
+        getProxy().getFactoryController().registerFactory(new Label.Factory());
     }
 }
