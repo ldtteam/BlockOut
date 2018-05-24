@@ -1,4 +1,4 @@
-package com.minecolonies.blockout.element.simple.button;
+package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
@@ -13,6 +13,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.minecolonies.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
 import com.minecolonies.blockout.event.Event;
 import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
@@ -28,16 +29,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.minecolonies.blockout.util.Constants.Controls.Button.*;
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 
-public class Button extends AbstractChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
+public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
     private IDependencyObject<ResourceLocation> normalBackgroundImage;
@@ -105,307 +103,6 @@ public class Button extends AbstractChildrenContainingUIElement implements IDraw
         this.disabledImageData = disabledImageData;
 
         this.clicked = clicked;
-    }
-
-    public static class ButtonConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, Button>
-    {
-
-        protected ButtonConstructionDataBuilder(
-          final String controlId,
-          final IBlockOutGuiConstructionDataBuilder data)
-        {
-            super(controlId, data, Button.class);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentNormalBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImage)
-        {
-            return withDependency("normalBackgroundImage", normalBackgroundImage);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentNormalBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> normalImageData)
-        {
-            return withDependency("normalImageData", normalImageData);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImage(@NotNull final ResourceLocation normalBackgroundImage)
-        {
-            return withDependency("normalBackgroundImage", DependencyObjectHelper.createFromValue(normalBackgroundImage));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImageData(@NotNull final BoundingBox normalImageData)
-        {
-            return withDependency("normalImageData", DependencyObjectHelper.createFromValue(normalImageData));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentClickedBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImage)
-        {
-            return withDependency("clickedBackgroundImage", clickedBackgroundImage);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentClickedBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> clickedImageData)
-        {
-            return withDependency("clickedImageData", clickedImageData);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImage(@NotNull final ResourceLocation clickedBackgroundImage)
-        {
-            return withDependency("clickedBackgroundImage", DependencyObjectHelper.createFromValue(clickedBackgroundImage));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImageData(@NotNull final BoundingBox clickedImageData)
-        {
-            return withDependency("clickedImageData", DependencyObjectHelper.createFromValue(clickedImageData));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImage)
-        {
-            return withDependency("disabledBackgroundImage", disabledBackgroundImage);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> disabledImageData)
-        {
-            return withDependency("disabledImageData", disabledImageData);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImage(@NotNull final ResourceLocation disabledBackgroundImage)
-        {
-            return withDependency("disabledBackgroundImage", DependencyObjectHelper.createFromValue(disabledBackgroundImage));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImageData(@NotNull final BoundingBox disabledImageData)
-        {
-            return withDependency("disabledImageData", DependencyObjectHelper.createFromValue(disabledImageData));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withClickedEventHandler(@NotNull final IEventHandler<Button, ButtonClickedEventArgs> eventHandler)
-        {
-            return withEventHandler("onClicked", ButtonClickedEventArgs.class, eventHandler);
-        }
-    }
-
-    public static class Factory implements IUIElementFactory<Button>
-    {
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_BUTTON;
-        }
-
-        @NotNull
-        @Override
-        public Button readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final String id = elementData.getStringAttribute(CONST_ID);
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> defaultBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DEFAULT_BACKGROUND_IMAGE_DATA);
-            final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> clickedBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_CLICKED_BACKGROUND_IMAGE_DATA);
-            final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> disabledBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DISABLED_BACKGROUND_IMAGE_DATA);
-            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED);
-
-
-            final Button button = new Button(
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              padding,
-              dataContext,
-              visible,
-              enabled,
-              defaultBackgroundImage,
-              defaultBackgroundImageData,
-              clickedBackgroundImage,
-              clickedBackgroundImageData,
-              disabledBackgroundImage,
-              disabledBackgroundImageData,
-              clicked);
-
-            elementData.getChildren(button).forEach(childData -> {
-                IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                button.put(child.getId(), child);
-            });
-
-            return button;
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Button element, @NotNull final IUIElementDataBuilder builder)
-        {
-
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImage())
-              .addBoundingBox(CONST_DEFAULT_BACKGROUND_IMAGE_DATA, element.getNormalBackgroundImageData())
-              .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImage())
-              .addBoundingBox(CONST_DISABLED_BACKGROUND_IMAGE_DATA, element.getDisabledBackgroundImageData())
-              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImage())
-              .addBoundingBox(CONST_CLICKED_BACKGROUND_IMAGE_DATA, element.getClickedBackgroundImageData())
-              .addBoolean(CONST_INITIALLY_CLICKED, element.isClicked());
-
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
-        }
-    }
-
-    @Override
-    public IUIElement put(final String key, final IUIElement value)
-    {
-        if (value instanceof IClickAcceptingUIElement)
-        {
-            throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-        }
-
-        return super.put(key, value);
-    }
-
-    @Override
-    public void putAll(final Map<? extends String, ? extends IUIElement> m)
-    {
-        if (m.values().stream().anyMatch(e -> e instanceof IClickAcceptingUIElement))
-        {
-            throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-        }
-
-        super.putAll(m);
-    }
-
-    @Override
-    public IUIElement putIfAbsent(final String key, final IUIElement value)
-    {
-        if (!containsKey(key) && value instanceof IClickAcceptingUIElement)
-        {
-            throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-        }
-
-        return super.putIfAbsent(key, value);
-    }
-
-    @Override
-    public boolean replace(final String key, final IUIElement oldValue, final IUIElement newValue)
-    {
-        if (containsKey(key) && Objects.equals(get(key), oldValue) && newValue instanceof IClickAcceptingUIElement)
-        {
-            throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-        }
-
-        return super.replace(key, oldValue, newValue);
-    }
-
-    @Override
-    public IUIElement replace(final String key, final IUIElement value)
-    {
-        if (containsKey(key) && value instanceof IClickAcceptingUIElement)
-        {
-            throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-        }
-
-        return super.replace(key, value);
-    }
-
-    @Override
-    public IUIElement computeIfAbsent(final String key, final Function<? super String, ? extends IUIElement> mappingFunction)
-    {
-        if (get(key) == null)
-        {
-            final IUIElement target = mappingFunction.apply(key);
-            put(key, target);
-        }
-
-        return get(key);
-    }
-
-    @Override
-    public IUIElement computeIfPresent(
-      final String key, final BiFunction<? super String, ? super IUIElement, ? extends IUIElement> remappingFunction)
-    {
-        if (get(key) != null)
-        {
-            final IUIElement current = get(key);
-            final IUIElement target = remappingFunction.apply(key, current);
-            put(key, target);
-        }
-
-        return get(key);
-    }
-
-    @Override
-    public IUIElement compute(
-      final String key, final BiFunction<? super String, ? super IUIElement, ? extends IUIElement> remappingFunction)
-    {
-        final IUIElement current = get(key);
-        final IUIElement target = remappingFunction.apply(key, current);
-
-        put(key, target);
-
-        return get(key);
-    }
-
-    @Override
-    public IUIElement merge(
-      final String key, final IUIElement value, final BiFunction<? super IUIElement, ? super IUIElement, ? extends IUIElement> remappingFunction)
-    {
-        final IUIElement oldValue = get(key);
-        final IUIElement newValue = (oldValue == null) ? value : remappingFunction.apply(oldValue, value);
-
-        put(key, newValue);
-
-        return get(key);
-    }
-
-    @Override
-    public void replaceAll(final BiFunction<? super String, ? super IUIElement, ? extends IUIElement> function)
-    {
-        try
-        {
-            for (Map.Entry<String, IUIElement> childEntry : entrySet())
-            {
-                final IUIElement newElement = function.apply(childEntry.getKey(), childEntry.getValue());
-                if (newElement instanceof IClickAcceptingUIElement)
-                {
-                    throw new IllegalArgumentException("Buttons cannot contain other clickable elements");
-                }
-
-                childEntry.setValue(newElement);
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new IllegalArgumentException("Failed to replace some elements.", ex);
-        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -620,6 +317,186 @@ public class Button extends AbstractChildrenContainingUIElement implements IDraw
     {
         setClicked(true);
         onClicked.raise(this, new ButtonClickedEventArgs(true, localX, localY, button, timeElapsed));
+    }
+
+    @Override
+    public Predicate<IUIElement> IsValidChildPredicate()
+    {
+        return iuiElement -> !(iuiElement instanceof IClickAcceptingUIElement);
+    }
+
+    public static class ButtonConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, Button>
+    {
+
+        protected ButtonConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data)
+        {
+            super(controlId, data, Button.class);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentNormalBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImage)
+        {
+            return withDependency("normalBackgroundImage", normalBackgroundImage);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentNormalBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> normalImageData)
+        {
+            return withDependency("normalImageData", normalImageData);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withNormalBackgroundImage(@NotNull final ResourceLocation normalBackgroundImage)
+        {
+            return withDependency("normalBackgroundImage", DependencyObjectHelper.createFromValue(normalBackgroundImage));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withNormalBackgroundImageData(@NotNull final BoundingBox normalImageData)
+        {
+            return withDependency("normalImageData", DependencyObjectHelper.createFromValue(normalImageData));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentClickedBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImage)
+        {
+            return withDependency("clickedBackgroundImage", clickedBackgroundImage);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentClickedBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> clickedImageData)
+        {
+            return withDependency("clickedImageData", clickedImageData);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withClickedBackgroundImage(@NotNull final ResourceLocation clickedBackgroundImage)
+        {
+            return withDependency("clickedBackgroundImage", DependencyObjectHelper.createFromValue(clickedBackgroundImage));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withClickedBackgroundImageData(@NotNull final BoundingBox clickedImageData)
+        {
+            return withDependency("clickedImageData", DependencyObjectHelper.createFromValue(clickedImageData));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImage)
+        {
+            return withDependency("disabledBackgroundImage", disabledBackgroundImage);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> disabledImageData)
+        {
+            return withDependency("disabledImageData", disabledImageData);
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDisabledBackgroundImage(@NotNull final ResourceLocation disabledBackgroundImage)
+        {
+            return withDependency("disabledBackgroundImage", DependencyObjectHelper.createFromValue(disabledBackgroundImage));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageData(@NotNull final BoundingBox disabledImageData)
+        {
+            return withDependency("disabledImageData", DependencyObjectHelper.createFromValue(disabledImageData));
+        }
+
+        @NotNull
+        public ButtonConstructionDataBuilder withClickedEventHandler(@NotNull final IEventHandler<Button, ButtonClickedEventArgs> eventHandler)
+        {
+            return withEventHandler("onClicked", ButtonClickedEventArgs.class, eventHandler);
+        }
+    }
+
+    public static class Factory implements IUIElementFactory<Button>
+    {
+
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return KEY_BUTTON;
+        }
+
+        @NotNull
+        @Override
+        public Button readFromElementData(@NotNull final IUIElementData elementData)
+        {
+            final String id = elementData.getStringAttribute(CONST_ID);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
+            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
+            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
+            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
+            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
+            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+            final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
+            final IDependencyObject<BoundingBox> defaultBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DEFAULT_BACKGROUND_IMAGE_DATA);
+            final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
+            final IDependencyObject<BoundingBox> clickedBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_CLICKED_BACKGROUND_IMAGE_DATA);
+            final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
+            final IDependencyObject<BoundingBox> disabledBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DISABLED_BACKGROUND_IMAGE_DATA);
+            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED);
+
+
+            final Button button = new Button(
+              id,
+              elementData.getParentView(),
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              padding,
+              dataContext,
+              visible,
+              enabled,
+              defaultBackgroundImage,
+              defaultBackgroundImageData,
+              clickedBackgroundImage,
+              clickedBackgroundImageData,
+              disabledBackgroundImage,
+              disabledBackgroundImageData,
+              clicked);
+
+            elementData.getChildren(button).forEach(childData -> {
+                IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                button.put(child.getId(), child);
+            });
+
+            return button;
+        }
+
+        @Override
+        public void writeToElementData(@NotNull final Button element, @NotNull final IUIElementDataBuilder builder)
+        {
+
+            builder
+              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
+              .addEnum(CONST_DOCK, element.getDock())
+              .addAxisDistance(CONST_MARGIN, element.getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addAxisDistance(CONST_PADDING, element.getPadding())
+              .addBoolean(CONST_VISIBLE, element.isVisible())
+              .addBoolean(CONST_ENABLED, element.isEnabled())
+              .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImage())
+              .addBoundingBox(CONST_DEFAULT_BACKGROUND_IMAGE_DATA, element.getNormalBackgroundImageData())
+              .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImage())
+              .addBoundingBox(CONST_DISABLED_BACKGROUND_IMAGE_DATA, element.getDisabledBackgroundImageData())
+              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImage())
+              .addBoundingBox(CONST_CLICKED_BACKGROUND_IMAGE_DATA, element.getClickedBackgroundImageData())
+              .addBoolean(CONST_INITIALLY_CLICKED, element.isClicked());
+
+            element.values().forEach(child -> {
+                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
+            });
+        }
     }
 
     public static class ButtonClickedEventArgs
