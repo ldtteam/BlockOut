@@ -3,6 +3,7 @@ package com.minecolonies.blockout.element.simple;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -123,6 +124,29 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     public void setImageData(@NotNull final BoundingBox box)
     {
         this.imageData = DependencyObjectHelper.createFromValue(box);
+    }
+
+    public static class ImageConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<ImageConstructionDataBuilder, Image>
+    {
+
+        protected ImageConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data)
+        {
+            super(controlId, data, Image.class);
+        }
+
+        @NotNull
+        public ImageConstructionDataBuilder withDependentIcon(@NotNull final IDependencyObject<ResourceLocation> icon)
+        {
+            return withDependency("icon", icon);
+        }
+
+        @NotNull
+        public ImageConstructionDataBuilder withDependentImageData(@NotNull final IDependencyObject<BoundingBox> imageData)
+        {
+            return withDependency("imageData", imageData);
+        }
     }
 
     public static class Factory implements IUIElementFactory<Image>

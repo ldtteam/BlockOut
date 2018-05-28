@@ -35,7 +35,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     private final Pattern TRANSLATION_RAW_PATTERN = Pattern.compile("(?<key>(\\$\\{(?<keydata>.*)\\}))|(?<value>(.*))");
 
     @NotNull
-    private final IDependencyObject<String> contents;
+    private IDependencyObject<String> contents;
 
     public Label(
       @NotNull final String id,
@@ -104,6 +104,11 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public String getContents()
     {
         return contents.get(getDataContext());
+    }
+
+    public void setContents(String contents)
+    {
+        this.contents = DependencyObjectHelper.createFromValue(contents);
     }
 
     public static class LabelConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<LabelConstructionDataBuilder, Label>

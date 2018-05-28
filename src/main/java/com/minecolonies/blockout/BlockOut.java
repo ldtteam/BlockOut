@@ -13,6 +13,7 @@ import com.minecolonies.blockout.proxy.IProxy;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +48,6 @@ public class BlockOut
     @Mod.EventHandler
     public void preInit(@NotNull final FMLPreInitializationEvent event)
     {
-        getProxy().initializeFontRenderer();
         NetworkManager.init();
 
         getProxy().getLoaderManager().registerLoader(new JsonLoader());
@@ -59,5 +59,11 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Slot.Factory());
         getProxy().getFactoryController().registerFactory(new Button.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
+    }
+
+    @Mod.EventHandler
+    public void onInit(final FMLInitializationEvent event)
+    {
+        getProxy().initializeFontRenderer();
     }
 }
