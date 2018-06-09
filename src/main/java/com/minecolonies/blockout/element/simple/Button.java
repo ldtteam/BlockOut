@@ -119,24 +119,21 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             drawBackground(controller,
               this::getDisabledBackgroundImageScalingFactor,
               this::getDisabledBackgroundImage,
-              this::getDisabledBackgroundImageData,
-              this::getDisabledBackgroundImageSize);
+              this::getDisabledBackgroundImageData);
         }
         else if (isClicked())
         {
             drawBackground(controller,
               this::getClickedBackgroundImageScalingFactor,
               this::getClickedBackgroundImage,
-              this::getClickedBackgroundImageData,
-              this::getClickedBackgroundImageScalingFactor);
+              this::getClickedBackgroundImageData);
         }
         else
         {
             drawBackground(controller,
               this::getNormalBackgroundImageScalingFactor,
               this::getNormalBackgroundImage,
-              this::getNormalBackgroundImageData,
-              this::getNormalBackgroundImageScalingFactor);
+              this::getNormalBackgroundImageData);
         }
     }
 
@@ -144,8 +141,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
       @NotNull final IRenderingController controller,
       Supplier<Vector2d> scalingFactorSupplier,
       Supplier<ResourceLocation> imageSupplier,
-      Supplier<BoundingBox> imageDataSupplier,
-      Supplier<Vector2d> imageSizeSupplier)
+      Supplier<BoundingBox> imageDataSupplier)
     {
         final Vector2d scalingFactor = scalingFactorSupplier.get();
 
@@ -159,7 +155,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
           getLocalBoundingBox().getSize(),
           imageData.getLocalOrigin(),
           imageData.getSize(),
-          imageSizeSupplier.get());
+          BlockOut.getBlockOut().getProxy().getImageSize(imageSupplier.get()));
 
         GlStateManager.popMatrix();
     }

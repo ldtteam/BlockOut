@@ -5,6 +5,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
+import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -370,6 +371,46 @@ public interface IUIElementData
      * @return The bound object.
      */
     IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(@NotNull String name, final EnumSet<Alignment> def);
+
+    @NotNull
+    default ControlDirection getControlDirectionAttribute(@NotNull final String name)
+    {
+        return getControlDirectionAttribute(name, ControlDirection.LEFT_RIGHT);
+    }
+
+    @NotNull
+    default ControlDirection getControlDirectionAttribute(@NotNull final String name, @NotNull final ControlDirection def)
+    {
+        @Nullable final String attribute = getStringAttribute(name);
+        if (attribute == null || attribute.trim().isEmpty())
+        {
+            return def;
+        }
+
+        return ControlDirection.fromString(attribute);
+    }
+
+    /**
+     * Returns a bound ControlDirection attibute from a name. If not found or bound 0 is returned as a static bound.
+     *
+     * @param name The name of the attribute.
+     * @return The bound attribute.
+     */
+    default IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(@NotNull final String name)
+    {
+        return getBoundControlDirectionAttribute(name, ControlDirection.LEFT_RIGHT);
+    }
+
+    /**
+     * Returns a bound ControlDirection attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(@NotNull String name, final ControlDirection def);
+
 
     @NotNull
     default Vector2d getVector2dAttribute(@NotNull final String name)

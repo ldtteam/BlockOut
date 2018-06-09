@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
+import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
@@ -244,6 +245,21 @@ public class XMLUIElementData implements IUIElementData
       @NotNull final String name, final EnumSet<Alignment> def)
     {
         return bindOrReturnStatic(name, Alignment::fromString, def);
+    }
+
+    /**
+     * Returns a bound ControlDirection attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    @Override
+    public IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(
+      @NotNull final String name, final ControlDirection def)
+    {
+        return bindOrReturnStatic(name, ControlDirection::fromString, def);
     }
 
     @Override

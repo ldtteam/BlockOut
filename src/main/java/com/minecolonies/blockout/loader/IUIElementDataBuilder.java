@@ -2,6 +2,7 @@ package com.minecolonies.blockout.loader;
 
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -88,6 +89,11 @@ public interface IUIElementDataBuilder
     default IUIElementDataBuilder addAlignment(@NotNull final String key, @NotNull final EnumSet<Alignment> value)
     {
         return addInteger(key, Alignment.toInt(value));
+    }
+
+    default IUIElementDataBuilder addControlDirection(@NotNull final String key, @NotNull final ControlDirection value)
+    {
+        return addString(key, value.toString());
     }
 
     default IUIElementDataBuilder addVector2d(@NotNull final String key, @NotNull final Vector2d value)

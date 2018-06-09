@@ -76,6 +76,20 @@ public class Constants
 
             public static final String CONST_CONTENT = "content";
         }
+
+        public static class ProgressBar
+        {
+            public static final ResourceLocation KEY_PROGRESS_BAR = new ResourceLocation(MOD_ID, "progressbar");
+
+            public static final String CONST_BACKGROUND_IMAGE      = "backgroundImage";
+            public static final String CONST_BACKGROUND_IMAGE_DATA = "backgroundImageData";
+            public static final String CONST_FOREGROUND_IMAGE      = "foregroundImage";
+            public static final String CONST_FOREGROUND_IMAGE_DATA = "foregroundImageData";
+            public static final String CONST_ORIENTATION           = "orientation";
+            public static final String CONST_MIN                   = "min";
+            public static final String CONST_MAX                   = "max";
+            public static final String CONST_VALUE                 = "value";
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -159,6 +160,21 @@ public class ObjectUIElementData implements IUIElementData, Serializable
       @NotNull final String name, final EnumSet<Alignment> def)
     {
         return DependencyObjectHelper.createFromValue(getAlignmentAttribute(name, def));
+    }
+
+    /**
+     * Returns a bound ControlDirection attribute from a name and a default value.
+     * If the value is not bound nor found, a static bound to the given default value is returned.
+     *
+     * @param name The name
+     * @param def  The default value.
+     * @return The bound object.
+     */
+    @Override
+    public IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(
+      @NotNull final String name, final ControlDirection def)
+    {
+        return DependencyObjectHelper.createFromValue(getControlDirectionAttribute(name, def));
     }
 
     @Override
