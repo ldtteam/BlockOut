@@ -14,17 +14,18 @@ import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import com.minecolonies.blockout.util.xml.XMLStreamSupport;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
 
 /**
  * Special parameters for the panes.
@@ -39,7 +40,6 @@ public class XMLUIElementData implements IUIElementData
      * Instantiates the pane parameters.
      *
      * @param n the node.
-     * @param parent
      */
     public XMLUIElementData(final Node n, final IUIElementHost parent)
     {
@@ -64,24 +64,24 @@ public class XMLUIElementData implements IUIElementData
     @Nullable
     public List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren)
     {
-        List<IUIElementData> list = null;
+        return XMLStreamSupport
+                 .streamChildren(node)
+                 .filter(n -> n.getNodeType() == Node.ELEMENT_NODE)
+                 .map(n -> new XMLUIElementData(n, parentOfChildren))
+                 .collect(Collectors.toList());
+    }
 
-        Node child = node.getFirstChild();
-        while (child != null)
-        {
-            if (child.getNodeType() == Node.ELEMENT_NODE)
-            {
-                if (list == null)
-                {
-                    list = new ArrayList<>();
-                }
-
-                list.add(new XMLUIElementData(child, parentOfChildren));
-            }
-            child = child.getNextSibling();
-        }
-
-        return list;
+    /**
+     * Checks if this control has possible children.
+     *
+     * @return True when this control has children, false when not.
+     */
+    @Override
+    public boolean hasChildren()
+    {
+        return node.hasChildNodes() && XMLStreamSupport
+                                         .streamChildren(node)
+                                         .anyMatch(n -> n.getNodeType() == Node.ELEMENT_NODE);
     }
 
     /**

@@ -75,6 +75,17 @@ public class ObjectUIElementData implements IUIElementData, Serializable
                  .collect(Collectors.toList());
     }
 
+    /**
+     * Checks if this control has possible children.
+     *
+     * @return True when this control has children, false when not.
+     */
+    @Override
+    public boolean hasChildren()
+    {
+        return !children.isEmpty();
+    }
+
     @Override
     public int getIntegerAttribute(@NotNull final String name, final int def)
     {

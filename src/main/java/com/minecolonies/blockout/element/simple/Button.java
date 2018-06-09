@@ -167,7 +167,13 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public void setClicked(@NotNull final boolean clicked)
     {
+        final boolean currentClickState = isClicked();
         this.clicked = DependencyObjectHelper.createFromValue(clicked);
+
+        if (currentClickState != clicked)
+        {
+            getUiManager().getUpdateManager().markDirty();
+        }
     }
 
     @SideOnly(Side.CLIENT)

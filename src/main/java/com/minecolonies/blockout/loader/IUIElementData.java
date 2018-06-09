@@ -46,6 +46,13 @@ public interface IUIElementData
     List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren);
 
     /**
+     * Checks if this control has possible children.
+     *
+     * @return True when this control has children, false when not.
+     */
+    boolean hasChildren();
+
+    /**
      * Get the integer attribute from the name.
      *
      * @param name the name.

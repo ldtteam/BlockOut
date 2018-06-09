@@ -54,7 +54,7 @@ public class JsonUIElementData implements IUIElementData
     @Override
     public List<IUIElementData> getChildren(@NotNull final IUIElementHost parentOfChildren)
     {
-        if (!object.has("children"))
+        if (!object.has("children") || !object.get("children").isJsonArray())
         {
             return ImmutableList.of();
         }
@@ -64,6 +64,17 @@ public class JsonUIElementData implements IUIElementData
                  .map(JsonElement::getAsJsonObject)
                  .map(childData -> new JsonUIElementData(childData, parentOfChildren))
                  .collect(Collectors.toList());
+    }
+
+    /**
+     * Checks if this control has possible children.
+     *
+     * @return True when this control has children, false when not.
+     */
+    @Override
+    public boolean hasChildren()
+    {
+        return object.has("children") && object.get("children").isJsonArray();
     }
 
     @Override
