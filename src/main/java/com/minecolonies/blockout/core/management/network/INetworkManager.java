@@ -16,6 +16,8 @@ public interface INetworkManager
 
     void onMouseClickMove(final int localX, final int localY, MouseButton button, final float timeElapsed);
 
+    void onMouseWheel(final int localX, final int localY, final int deltaWheel);
+
     void onKeyPressed(final int character, final KeyboardKey key);
 
     void onElementChanged(@NotNull final IUIElement changedElement);

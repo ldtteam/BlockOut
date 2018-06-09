@@ -7,6 +7,7 @@ import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.focus.IFocusManager;
 import com.minecolonies.blockout.core.management.input.IClickManager;
 import com.minecolonies.blockout.core.management.input.IKeyManager;
+import com.minecolonies.blockout.core.management.input.IScrollManager;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
@@ -14,6 +15,7 @@ import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.management.common.focus.FocusManager;
 import com.minecolonies.blockout.management.common.input.ClickManager;
 import com.minecolonies.blockout.management.common.input.KeyManager;
+import com.minecolonies.blockout.management.common.input.ScrollManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -31,6 +33,8 @@ public class UIManager implements IUIManager
     private final IClickManager  clickManager  = new ClickManager(this);
     @NotNull
     private final IKeyManager    keyManager    = new KeyManager(this);
+    @NotNull
+    private final IScrollManager scrollManager = new ScrollManager(this);
     @NotNull
     private final IUpdateManager updateManager;
     @NotNull
@@ -77,6 +81,13 @@ public class UIManager implements IUIManager
     public IKeyManager getKeyManager()
     {
         return keyManager;
+    }
+
+    @NotNull
+    @Override
+    public IScrollManager getScrollManager()
+    {
+        return scrollManager;
     }
 
     @NotNull

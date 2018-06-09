@@ -53,6 +53,12 @@ public class ServerNetworkManager implements INetworkManager
     }
 
     @Override
+    public void onMouseWheel(final int localX, final int localY, final int deltaWheel)
+    {
+        //NOOP
+    }
+
+    @Override
     public void onKeyPressed(final int character, final KeyboardKey key)
     {
         //NOOP

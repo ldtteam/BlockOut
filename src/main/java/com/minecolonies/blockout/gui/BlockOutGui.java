@@ -8,6 +8,7 @@ import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
@@ -75,6 +76,23 @@ public class BlockOutGui extends GuiContainer
     {
         super.keyTyped(typedChar, keyCode);
         getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, KeyboardKey.getForCode(keyCode));
+    }
+
+    /**
+     * Handles mouse input.
+     */
+    @Override
+    public void handleMouseInput() throws IOException
+    {
+        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+
+        int delta = Mouse.getEventDWheel();
+        if (delta != 0)
+        {
+            getRoot().getUiManager().getNetworkManager().onMouseWheel(x, y, delta);
+        }
+        super.handleMouseInput();
     }
 
     @NotNull
