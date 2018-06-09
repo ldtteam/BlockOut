@@ -47,11 +47,26 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         onAcceptanceFailure();
 
         final Optional<IUIElement> target = getManager().getHost().searchDeepestElementByCoord(new Vector2d(localX, localY));
-        if (target.isPresent() && target.get() instanceof IScrollAcceptingUIElement)
+        attemptFailedInputInteraction(localX, localY, acceptanceCallback, executionCallback, target);
+    }
+
+    private void attemptFailedInputInteraction(
+      final int localX,
+      final int localY,
+      final IInteractionAcceptanceCallback acceptanceCallback,
+      final IInteractionExecutionCallback executionCallback,
+      final Optional<IUIElement> target
+    )
+    {
+        if (target.isPresent())
         {
-            if (attemptMouseInteractionWith(target.get(), localX, localY, acceptanceCallback, executionCallback))
+            if (target.get() instanceof IScrollAcceptingUIElement && attemptMouseInteractionWith(target.get(), localX, localY, acceptanceCallback, executionCallback))
             {
                 getManager().getFocusManager().setFocusedElement(target.get());
+            }
+            else if (target.get().getParent() != null && target.get().getParent() != target.get())
+            {
+                attemptFailedInputInteraction(localX, localY, acceptanceCallback, executionCallback, target.map(IUIElement::getParent));
             }
         }
     }
