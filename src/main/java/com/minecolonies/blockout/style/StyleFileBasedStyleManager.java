@@ -46,6 +46,11 @@ public class StyleFileBasedStyleManager implements IStyleManager, IResourceManag
         initialize(resourceManager);
     }
 
+    private static final IStyle loadStyle(final String domain, final String styleId, final String styleLocationPath, final ProgressManager.ProgressBar domainLoadingBar)
+    {
+        final ResourceLocation styleLocation = new ResourceLocation(domain, styleLocationPath);
+    }
+
     public void initialize(final IResourceManager resourceManager)
     {
         final Set<String> resourceDomains = resourceManager.getResourceDomains();
@@ -68,7 +73,14 @@ public class StyleFileBasedStyleManager implements IStyleManager, IResourceManag
                 return;
             }
 
-            final ProgressManager.ProgressBar domainLoadingBar = ProgressManager.push("Loading styles from: " + domain);
+            if (stylesInDomainMap.isEmpty())
+            {
+                return;
+            }
+
+            final ProgressManager.ProgressBar domainLoadingBar = ProgressManager.push("Loading styles from: " + domain, stylesInDomainMap.size());
+
+
         });
 
         ProgressManager.pop(loadingBar);
