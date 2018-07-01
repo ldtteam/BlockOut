@@ -39,12 +39,7 @@ public interface IStyleManager
                  .entrySet()
                  .stream()
                  .filter(e -> !e.getKey().equals(styleId))
-                 .map(e -> {
-                     //Not redundant since else the compiler will assume Optional<IResource> instead of Optional<T> and the type information would be lost to the style
-                     //noinspection UnnecessaryLocalVariable
-                     final Optional<T> target = e.getValue().getResource(resourceId);
-                     return target;
-                 })
+                 .<Optional<T>>map(e -> e.getValue().getResource(resourceId))
                  .filter(Optional::isPresent)
                  .map(Optional::get)
                  .findFirst()

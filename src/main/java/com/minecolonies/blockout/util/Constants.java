@@ -19,18 +19,24 @@ public class Constants
 
     public static final Long SERIAL_VAR_ID = Long.valueOf(MC_VERSION.hashCode());
 
+    public static class Styles
+    {
+        public static final String CONST_MINECRAFT = "default";
+    }
+
     public static class Controls
     {
 
         public static class General
         {
             public static final String CONST_ID           = "id";
+            public static final String CONST_STYLE_ID     = "style";
             public static final String CONST_ALIGNMENT    = "alignment";
             public static final String CONST_DOCK         = "dock";
             public static final String CONST_MARGIN       = "margin";
             public static final String CONST_PADDING      = "padding";
             public static final String CONST_ELEMENT_SIZE = "size";
-            public static final String CONST_DATA_CONTEXT = "dataContext";
+            public static final String CONST_DATA_CONTEXT = "context";
             public static final String CONST_VISIBLE      = "visible";
             public static final String CONST_ENABLED      = "enabled";
         }

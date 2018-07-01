@@ -8,6 +8,8 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -18,19 +20,31 @@ import java.util.function.Predicate;
 
 public abstract class AbstractFilteringChildrenContainingUIElement extends AbstractChildrenContainingUIElement
 {
-    public AbstractFilteringChildrenContainingUIElement(final ResourceLocation type, final String id, final IUIElementHost parent) {super(type, id, parent);}
 
     public AbstractFilteringChildrenContainingUIElement(
-      final ResourceLocation type,
-      final String id,
-      final IUIElementHost parent,
-      final IDependencyObject<EnumSet<Alignment>> alignments,
-      final IDependencyObject<Dock> dock,
-      final IDependencyObject<AxisDistance> margin,
-      final IDependencyObject<Vector2d> elementSize,
-      final IDependencyObject<AxisDistance> padding,
-      final IDependencyObject<Object> dataContext, final IDependencyObject<Boolean> visible, final IDependencyObject<Boolean> enabled)
-    {super(type, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);}
+      @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+      @NotNull final IDependencyObject<Dock> dock,
+      @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
+      @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Object> dataContext,
+      @NotNull final IDependencyObject<Boolean> visible, @NotNull final IDependencyObject<Boolean> enabled)
+    {
+        super(type, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+    }
+
+    public AbstractFilteringChildrenContainingUIElement(
+      @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent)
+    {
+        super(type, style, id, parent);
+    }
 
     public abstract Predicate<IUIElement> IsValidChildPredicate();
 

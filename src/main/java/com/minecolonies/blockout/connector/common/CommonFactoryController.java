@@ -54,6 +54,7 @@ public class CommonFactoryController implements IUIElementFactoryController
         final IUIElementDataBuilder builder = new ObjectUIElementDataBuilder();
         builder.setType(type);
         builder.addString(Constants.Controls.General.CONST_ID, element.getId());
+        builder.addResourceLocation(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId());
 
         factory.writeToElementData(element, builder);
 

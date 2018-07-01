@@ -1,9 +1,11 @@
 package com.minecolonies.blockout.core.element;
 
+import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
+import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -25,10 +27,28 @@ public interface IUIElement
 
     /**
      * The unique identifier of the element in the UI.
+     *
      * @return The id of the element.
      */
     @NotNull
     String getId();
+
+    /**
+     * Gets a resource form the style manager.
+     * Handy method that accesses the current style id and grabs the resource from the style manager.
+     *
+     * @param resourceId The id of the resource to get.
+     * @param <T>        The type of the resource.
+     * @return The resource requested.
+     *
+     * @throws IllegalArgumentException when no resource can be found in ANY style that matches the given id.
+     * @see com.minecolonies.blockout.style.core.IStyleManager#getResource(ResourceLocation, ResourceLocation)
+     */
+    @NotNull
+    default <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
+    {
+        return BlockOut.getBlockOut().getProxy().getStyleManager().getResource(getStyleId(), resourceId);
+    }
 
     /**
      * Called before the drawing of the UI.
@@ -165,5 +185,13 @@ public interface IUIElement
      * @return {@code true} when this {@link IUIElement} is visible or not.
      */
     boolean isEnabled();
+
+    /**
+     * Returns the style of this IUIElement.
+     *
+     * @return The style of the element.
+     */
+    @NotNull
+    ResourceLocation getStyleId();
 
 }

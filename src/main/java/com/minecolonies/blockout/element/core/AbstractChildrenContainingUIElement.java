@@ -11,6 +11,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.event.IEventHandler;
+import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +25,10 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
 {
     @NotNull
     protected final ResourceLocation type;
+
+    @NotNull
+    protected IDependencyObject<ResourceLocation> style = DependencyObjectHelper.createFromValue(new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT));
+
     @NotNull
     protected final String           id;
     @NotNull
@@ -59,6 +64,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
 
     public AbstractChildrenContainingUIElement(
       @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -72,6 +78,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     )
     {
         this.type = type;
+        this.style = style;
         this.id = id;
         this.parent = parent;
         this.alignments = alignments;
@@ -86,10 +93,12 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
 
     public AbstractChildrenContainingUIElement(
       @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent)
     {
         this.type = type;
+        this.style = style;
         this.id = id;
         this.parent = parent;
     }
@@ -99,6 +108,18 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     public ResourceLocation getType()
     {
         return type;
+    }
+
+    /**
+     * Returns the style of this IUIElement.
+     *
+     * @return The style of the element.
+     */
+    @NotNull
+    @Override
+    public ResourceLocation getStyleId()
+    {
+        return style.get(getDataContext());
     }
 
     @NotNull

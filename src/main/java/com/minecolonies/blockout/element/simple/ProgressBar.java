@@ -1,6 +1,5 @@
 package com.minecolonies.blockout.element.simple;
 
-import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
@@ -15,6 +14,7 @@ import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
+import com.minecolonies.blockout.style.resources.ImageResource;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,13 +30,9 @@ import static com.minecolonies.blockout.util.Constants.Controls.ProgressBar.*;
 public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> backGround;
+    private IDependencyObject<ResourceLocation> backGroundResource;
     @NotNull
-    private IDependencyObject<BoundingBox>      backGroundImageData;
-    @NotNull
-    private IDependencyObject<ResourceLocation> foreGround;
-    @NotNull
-    private IDependencyObject<BoundingBox>      foreGroundImageData;
+    private IDependencyObject<ResourceLocation> foreGroundResource;
     @NotNull
     private IDependencyObject<Double>           value;
     @NotNull
@@ -46,12 +42,16 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     @Nonnull
     private IDependencyObject<ControlDirection> orientation;
 
-    public ProgressBar(@NotNull final String id, @NotNull final IUIElementHost parent)
+    public ProgressBar(
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @NotNull final IUIElementHost parent)
     {
-        super(KEY_PROGRESS_BAR, id, parent);
+        super(KEY_PROGRESS_BAR, style, id, parent);
     }
 
     public ProgressBar(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -61,21 +61,17 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> backGround,
-      @NotNull final IDependencyObject<BoundingBox> backGroundImageData,
-      @NotNull final IDependencyObject<ResourceLocation> foreGround,
-      @NotNull final IDependencyObject<BoundingBox> foreGroundImageData,
+      @NotNull final IDependencyObject<ResourceLocation> backGroundResource,
+      @NotNull final IDependencyObject<ResourceLocation> foreGroundResource,
       @NotNull final IDependencyObject<Double> value,
       @NotNull final IDependencyObject<Double> min,
       @NotNull final IDependencyObject<Double> max,
       @NotNull final IDependencyObject<ControlDirection> orientation)
     {
-        super(KEY_PROGRESS_BAR, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_PROGRESS_BAR, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
 
-        this.backGround = backGround;
-        this.backGroundImageData = backGroundImageData;
-        this.foreGround = foreGround;
-        this.foreGroundImageData = foreGroundImageData;
+        this.backGroundResource = backGroundResource;
+        this.foreGroundResource = foreGroundResource;
         this.value = value;
         this.min = min;
         this.max = max;
@@ -88,37 +84,40 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         controller.getScissoringController().focus(this);
         GlStateManager.pushMatrix();
 
-        final Vector2d backgroundScalingFactor = getBackgroundScalingFactor();
-        final BoundingBox backgroundImageData = getBackGroundImageData();
+        final ImageResource backGround = getBackGround();
+        final ImageResource foreGround = getForeGround();
+
         final BoundingBox localBox = getLocalBoundingBox();
+        final BoundingBox absoluteBox = getAbsoluteBoundingBox();
+        final BoundingBox scissoredForeground = getForegroundRenderingBox(absoluteBox);
+
+
+        final Vector2d backgroundScalingFactor = backGround.getScalingFactor(absoluteBox.getSize());
 
         GlStateManager.scale(backgroundScalingFactor.getX(), backgroundScalingFactor.getY(), 1f);
 
-        controller.bindTexture(getBackGround());
+        controller.bindTexture(backGround.getDiskLocation());
         controller.drawTexturedModalRect(localBox.getLocalOrigin(),
           localBox.getSize(),
-          backgroundImageData.getLocalOrigin(),
-          backgroundImageData.getSize(),
-          BlockOut.getBlockOut().getProxy().getImageSize(getBackGround()));
+          backGround.getOffset(),
+          backGround.getSize(),
+          backGround.getFileSize());
 
         GlStateManager.popMatrix();
         controller.getScissoringController().pop();
 
-        final BoundingBox scissoredForeground = getForegroundRenderingBox(getAbsoluteBoundingBox());
         controller.getScissoringController().push(scissoredForeground);
         GlStateManager.pushMatrix();
 
-        final Vector2d foregroundScalingFactor = getForegroundScalingFactor();
-        final BoundingBox foregroundImageData = getBackGroundImageData();
-
+        final Vector2d foregroundScalingFactor = foreGround.getScalingFactor(scissoredForeground.getSize());
         GlStateManager.scale(foregroundScalingFactor.getX(), foregroundScalingFactor.getY(), 1f);
 
-        controller.bindTexture(getForeGround());
+        controller.bindTexture(foreGround.getDiskLocation());
         controller.drawTexturedModalRect(localBox.getLocalOrigin(),
           localBox.getSize(),
-          foregroundImageData.getLocalOrigin(),
-          foregroundImageData.getSize(),
-          BlockOut.getBlockOut().getProxy().getImageSize(getForeGround()));
+          foreGround.getOffset(),
+          foreGround.getSize(),
+          foreGround.getFileSize());
 
         GlStateManager.popMatrix();
         controller.getScissoringController().pop();
@@ -131,34 +130,21 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     }
 
     @NotNull
-    final Vector2d getBackgroundScalingFactor()
+    public ImageResource getBackGround()
     {
-        final Vector2d imageSize = getBackGroundImageData().getSize();
-        final Vector2d elementSize = getElementSize();
-
-        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
+        return getResource(getBackGroundResource());
     }
 
     @NotNull
-    public ResourceLocation getBackGround()
+    public ImageResource getForeGround()
     {
-        return backGround.get(getDataContext());
-    }
-
-    public void setBackGround(@NotNull final ResourceLocation backGround)
-    {
-        this.backGround = DependencyObjectHelper.createFromValue(backGround);
+        return getResource(getForeGroundResource());
     }
 
     @NotNull
-    public BoundingBox getBackGroundImageData()
+    public ResourceLocation getBackGroundResource()
     {
-        return backGroundImageData.get(getDataContext());
-    }
-
-    public void setBackGroundImageData(@NotNull final BoundingBox backGroundImageData)
-    {
-        this.backGroundImageData = DependencyObjectHelper.createFromValue(backGroundImageData);
+        return backGroundResource.get(getDataContext());
     }
 
     public BoundingBox getForegroundRenderingBox(@NotNull final BoundingBox inputBox)
@@ -195,35 +181,20 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         throw new IllegalStateException(String.format("Unsupported orientation for ProgressBar: %s", getOrientation()));
     }
 
-    @NotNull
-    public ResourceLocation getForeGround()
+    public void setBackGroundResource(@NotNull final ResourceLocation backGroundResource)
     {
-        return foreGround.get(getDataContext());
-    }
-
-    public void setForeGround(@NotNull final ResourceLocation foreGround)
-    {
-        this.foreGround = DependencyObjectHelper.createFromValue(foreGround);
+        this.backGroundResource = DependencyObjectHelper.createFromValue(backGroundResource);
     }
 
     @NotNull
-    public BoundingBox getForeGroundImageData()
+    public ResourceLocation getForeGroundResource()
     {
-        return foreGroundImageData.get(getDataContext());
+        return foreGroundResource.get(getDataContext());
     }
 
-    public void setForeGroundImageData(@NotNull final BoundingBox foreGroundImageData)
+    public void setForeGroundResource(@NotNull final ResourceLocation foreGroundResource)
     {
-        this.foreGroundImageData = DependencyObjectHelper.createFromValue(foreGroundImageData);
-    }
-
-    @NotNull
-    final Vector2d getForegroundScalingFactor()
-    {
-        final Vector2d imageSize = getForeGroundImageData().getSize();
-        final Vector2d elementSize = getElementSize();
-
-        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
+        this.foreGroundResource = DependencyObjectHelper.createFromValue(foreGroundResource);
     }
 
     @NotNull
@@ -398,6 +369,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         @Override
         public ProgressBar readFromElementData(@NotNull final IUIElementData elementData)
         {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
             final String id = elementData.getStringAttribute(CONST_ID);
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
@@ -407,15 +379,15 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<ResourceLocation> background = elementData.getBoundResourceLocationAttribute(CONST_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> backgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_BACKGROUND_IMAGE_DATA);
             final IDependencyObject<ResourceLocation> foreground = elementData.getBoundResourceLocationAttribute(CONST_FOREGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> foregroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_FOREGROUND_IMAGE_DATA);
             final IDependencyObject<Double> min = elementData.getBoundDoubleAttribute(CONST_MIN);
             final IDependencyObject<Double> max = elementData.getBoundDoubleAttribute(CONST_MAX);
             final IDependencyObject<Double> value = elementData.getBoundDoubleAttribute(CONST_VALUE);
             final IDependencyObject<ControlDirection> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION);
 
-            return new ProgressBar(id,
+            return new ProgressBar(
+              style,
+              id,
               elementData.getParentView(),
               alignments,
               dock,
@@ -425,9 +397,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
               visible,
               enabled,
               background,
-              backgroundImageData,
               foreground,
-              foregroundImageData,
               min,
               max,
               value,
@@ -452,10 +422,8 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
               .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
               .addBoolean(CONST_VISIBLE, element.isVisible())
               .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_BACKGROUND_IMAGE, element.getBackGround())
-              .addBoundingBox(CONST_BACKGROUND_IMAGE_DATA, element.getBackGroundImageData())
-              .addResourceLocation(CONST_FOREGROUND_IMAGE, element.getForeGround())
-              .addBoundingBox(CONST_FOREGROUND_IMAGE_DATA, element.getForeGroundImageData())
+              .addResourceLocation(CONST_BACKGROUND_IMAGE, element.getBackGroundResource())
+              .addResourceLocation(CONST_FOREGROUND_IMAGE, element.getForeGroundResource())
               .addDouble(CONST_MIN, element.getMin())
               .addDouble(CONST_MAX, element.getMax())
               .addDouble(CONST_VALUE, element.getValue())

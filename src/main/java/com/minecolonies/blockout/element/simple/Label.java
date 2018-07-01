@@ -38,15 +38,17 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     private IDependencyObject<String> contents;
 
     public Label(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent)
     {
-        super(KEY_LABEL, id, parent);
+        super(KEY_LABEL, style, id, parent);
 
         this.contents = DependencyObjectHelper.createFromValue("");
     }
 
     public Label(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -57,7 +59,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled, final IDependencyObject<String> contents)
     {
-        super(KEY_LABEL, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_LABEL, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.contents = contents;
     }
 
@@ -142,6 +144,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         @Override
         public Label readFromElementData(@NotNull final IUIElementData elementData)
         {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
             final String id = elementData.getStringAttribute(CONST_ID);
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
@@ -153,6 +156,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
             final IDependencyObject<String> contents = elementData.getBoundStringAttribute(CONST_CONTENT);
 
             return new Label(
+              style,
               id,
               elementData.getParentView(),
               alignments,

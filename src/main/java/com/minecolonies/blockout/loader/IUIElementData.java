@@ -33,6 +33,14 @@ public interface IUIElementData
     ResourceLocation getType();
 
     /**
+     * Method to get the style id, bound, for this control.
+     *
+     * @return The bound style id.
+     */
+    @NotNull
+    IDependencyObject<ResourceLocation> getBoundStyleId();
+
+    /**
      * Method used to get the parent {@link IUIElementHost} if it exists.
      */
     @Nullable

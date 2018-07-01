@@ -10,6 +10,8 @@ import com.minecolonies.blockout.loader.object.loader.ObjectUIElementLoader;
 import com.minecolonies.blockout.loader.xml.XMLLoader;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.proxy.IProxy;
+import com.minecolonies.blockout.style.resources.ImageResource;
+import com.minecolonies.blockout.style.resources.ItemStackResource;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -59,6 +61,9 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Slot.Factory());
         getProxy().getFactoryController().registerFactory(new Button.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
+
+        getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
+        getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());
     }
 
     @Mod.EventHandler

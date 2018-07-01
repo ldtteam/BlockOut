@@ -23,6 +23,10 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 {
     @NotNull
     private final ResourceLocation type;
+
+    @NotNull
+    private IDependencyObject<ResourceLocation> style;
+
     @NotNull
     private final String           id;
     @NotNull
@@ -50,15 +54,21 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
-    public AbstractSimpleUIElement(@NotNull final ResourceLocation type, @NotNull final String id, @NotNull final IUIElementHost parent)
+    public AbstractSimpleUIElement(
+      @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent)
     {
         this.type = type;
+        this.style = style;
         this.id = id;
         this.parent = parent;
     }
 
     public AbstractSimpleUIElement(
       @NotNull final ResourceLocation type,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -70,6 +80,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
       @NotNull final IDependencyObject<Boolean> enabled)
     {
         this.type = type;
+        this.style = style;
         this.id = id;
         this.parent = parent;
         this.alignments = alignments;
@@ -107,6 +118,18 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     public ResourceLocation getType()
     {
         return type;
+    }
+
+    /**
+     * Returns the style of this IUIElement.
+     *
+     * @return The style of the element.
+     */
+    @NotNull
+    @Override
+    public ResourceLocation getStyleId()
+    {
+        return style.get(getDataContext());
     }
 
     @NotNull

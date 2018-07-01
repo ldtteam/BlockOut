@@ -13,6 +13,10 @@ import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.management.server.network.ServerNetworkManager;
 import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
+import com.minecolonies.blockout.style.core.IStyleManager;
+import com.minecolonies.blockout.style.core.resources.loader.IResourceLoaderManager;
+import com.minecolonies.blockout.style.simple.SimpleFileBasedStyleManager;
+import com.minecolonies.blockout.style.simple.SimpleResourceLoaderManager;
 import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -119,6 +123,21 @@ public class CommonProxy implements IProxy
     @Override
     public MultiColoredFontRenderer getFontRenderer()
     {
+        //noinspection ConstantConditions
         return null;
+    }
+
+    @NotNull
+    @Override
+    public IResourceLoaderManager getResourceLoaderManager()
+    {
+        return SimpleResourceLoaderManager.getInstance();
+    }
+
+    @NotNull
+    @Override
+    public IStyleManager getStyleManager()
+    {
+        return SimpleFileBasedStyleManager.getInstance();
     }
 }

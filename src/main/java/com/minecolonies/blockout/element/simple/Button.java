@@ -19,6 +19,7 @@ import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
+import com.minecolonies.blockout.style.resources.ImageResource;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import com.minecolonies.blockout.util.mouse.MouseButton;
@@ -38,17 +39,11 @@ import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> normalBackgroundImage;
+    private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> clickedBackgroundImage;
+    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> disabledBackgroundImage;
-    @NotNull
-    private IDependencyObject<BoundingBox>      normalImageData;
-    @NotNull
-    private IDependencyObject<BoundingBox>      clickedImageData;
-    @NotNull
-    private IDependencyObject<BoundingBox>      disabledImageData;
+    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
     private IDependencyObject<Boolean>          clicked;
 
@@ -56,23 +51,21 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     private Event<Button, ButtonClickedEventArgs> onClicked = new Event<>(Button.class, Button.ButtonClickedEventArgs.class);
 
     public Button(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent)
     {
-        super(KEY_BUTTON, id, parent);
-        this.normalBackgroundImage = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.normalImageData = DependencyObjectHelper.createFromValue(new BoundingBox(new Vector2d(0, 0), new Vector2d(16, 16)));
+        super(KEY_BUTTON, style, id, parent);
 
-        this.clickedBackgroundImage = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.clickedImageData = DependencyObjectHelper.createFromValue(new BoundingBox(new Vector2d(0, 0), new Vector2d(16, 16)));
-
-        this.disabledBackgroundImage = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.disabledImageData = DependencyObjectHelper.createFromValue(new BoundingBox(new Vector2d(0, 0), new Vector2d(16, 16)));
+        this.normalBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
+        this.clickedBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
+        this.disabledBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
 
         this.clicked = DependencyObjectHelper.createFromValue(false);
     }
 
     public Button(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -83,24 +76,16 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> normalBackgroundImage,
-      @NotNull final IDependencyObject<BoundingBox> normalImageData,
-      @NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImage,
-      @NotNull final IDependencyObject<BoundingBox> clickedImageData,
-      @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImage,
-      @NotNull final IDependencyObject<BoundingBox> disabledImageData,
+      @NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
       @NotNull final IDependencyObject<Boolean> clicked)
     {
-        super(KEY_BUTTON, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_BUTTON, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
-        this.normalBackgroundImage = normalBackgroundImage;
-        this.normalImageData = normalImageData;
-
-        this.clickedBackgroundImage = clickedBackgroundImage;
-        this.clickedImageData = clickedImageData;
-
-        this.disabledBackgroundImage = disabledBackgroundImage;
-        this.disabledImageData = disabledImageData;
+        this.normalBackgroundImageResource = normalBackgroundImageResource;
+        this.clickedBackgroundImageResource = clickedBackgroundImageResource;
+        this.disabledBackgroundImageResource = disabledBackgroundImageResource;
 
         this.clicked = clicked;
     }
@@ -117,45 +102,37 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         if (!isEnabled())
         {
             drawBackground(controller,
-              this::getDisabledBackgroundImageScalingFactor,
-              this::getDisabledBackgroundImage,
-              this::getDisabledBackgroundImageData);
+              this::getDisabledBackgroundImage);
         }
         else if (isClicked())
         {
             drawBackground(controller,
-              this::getClickedBackgroundImageScalingFactor,
-              this::getClickedBackgroundImage,
-              this::getClickedBackgroundImageData);
+              this::getClickedBackgroundImage);
         }
         else
         {
             drawBackground(controller,
-              this::getNormalBackgroundImageScalingFactor,
-              this::getNormalBackgroundImage,
-              this::getNormalBackgroundImageData);
+              this::getNormalBackgroundImage);
         }
     }
 
     private void drawBackground(
       @NotNull final IRenderingController controller,
-      Supplier<Vector2d> scalingFactorSupplier,
-      Supplier<ResourceLocation> imageSupplier,
-      Supplier<BoundingBox> imageDataSupplier)
+      Supplier<ImageResource> resourceSupplier)
     {
-        final Vector2d scalingFactor = scalingFactorSupplier.get();
+        final ImageResource resource = resourceSupplier.get();
+        final Vector2d size = getLocalBoundingBox().getSize();
+        final Vector2d scalingFactor = resource.getScalingFactor(size);
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
-        final BoundingBox imageData = imageDataSupplier.get();
-
-        controller.bindTexture(imageSupplier.get());
+        controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
-          getLocalBoundingBox().getSize(),
-          imageData.getLocalOrigin(),
-          imageData.getSize(),
-          BlockOut.getBlockOut().getProxy().getImageSize(imageSupplier.get()));
+          size,
+          resource.getOffset(),
+          resource.getSize(),
+          resource.getFileSize());
 
         GlStateManager.popMatrix();
     }
@@ -184,114 +161,54 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     }
 
     @NotNull
-    public Vector2d getNormalBackgroundImageSize()
+    public ImageResource getNormalBackgroundImage()
     {
-        return BlockOut.getBlockOut().getProxy().getImageSize(getNormalBackgroundImage());
+        return getResource(getNormalBackgroundImageResource());
     }
 
     @NotNull
-    public ResourceLocation getNormalBackgroundImage()
+    public ResourceLocation getNormalBackgroundImageResource()
     {
-        return normalBackgroundImage.get(getDataContext());
+        return normalBackgroundImageResource.get(getDataContext());
     }
 
-    public void setNormalBackgroundImage(@NotNull final ResourceLocation normalBackgroundImage)
+    public void setNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImage)
     {
-        this.normalBackgroundImage = DependencyObjectHelper.createFromValue(normalBackgroundImage);
-    }
-
-    @NotNull
-    public Vector2d getNormalBackgroundImageScalingFactor()
-    {
-        final Vector2d imageSize = getNormalBackgroundImageData().getSize();
-        final Vector2d elementSize = getElementSize();
-
-        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
+        this.normalBackgroundImageResource = DependencyObjectHelper.createFromValue(normalBackgroundImage);
     }
 
     @NotNull
-    public BoundingBox getNormalBackgroundImageData()
+    public ImageResource getClickedBackgroundImage()
     {
-        return normalImageData.get(getDataContext());
-    }
-
-    public void setNormalBackgroundImageData(@NotNull final BoundingBox box)
-    {
-        this.normalImageData = DependencyObjectHelper.createFromValue(box);
+        return getResource(getClickedBackgroundImageResource());
     }
 
     @NotNull
-    public Vector2d getClickedBackgroundImageSize()
+    public ResourceLocation getClickedBackgroundImageResource()
     {
-        return BlockOut.getBlockOut().getProxy().getImageSize(getClickedBackgroundImage());
+        return clickedBackgroundImageResource.get(getDataContext());
+    }
+
+    public void setClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImage)
+    {
+        this.clickedBackgroundImageResource = DependencyObjectHelper.createFromValue(clickedBackgroundImage);
     }
 
     @NotNull
-    public ResourceLocation getClickedBackgroundImage()
+    public ImageResource getDisabledBackgroundImage()
     {
-        return clickedBackgroundImage.get(getDataContext());
-    }
-
-    public void setClickedBackgroundImage(@NotNull final ResourceLocation clickedBackgroundImage)
-    {
-        this.clickedBackgroundImage = DependencyObjectHelper.createFromValue(clickedBackgroundImage);
+        return getResource(getDisabledBackgroundImageResource());
     }
 
     @NotNull
-    public Vector2d getClickedBackgroundImageScalingFactor()
+    public ResourceLocation getDisabledBackgroundImageResource()
     {
-        final Vector2d imageSize = getClickedBackgroundImageData().getSize();
-        final Vector2d elementSize = getElementSize();
-
-        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
+        return disabledBackgroundImageResource.get(getDataContext());
     }
 
-    @NotNull
-    public BoundingBox getClickedBackgroundImageData()
+    public void setDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImage)
     {
-        return clickedImageData.get(getDataContext());
-    }
-
-    public void setClickedBackgroundImageData(@NotNull final BoundingBox box)
-    {
-        this.clickedImageData = DependencyObjectHelper.createFromValue(box);
-    }
-
-    @NotNull
-    public Vector2d getDisabledBackgroundImageSize()
-    {
-        return BlockOut.getBlockOut().getProxy().getImageSize(getDisabledBackgroundImage());
-    }
-
-    @NotNull
-    public ResourceLocation getDisabledBackgroundImage()
-    {
-        return disabledBackgroundImage.get(getDataContext());
-    }
-
-    public void setDisabledBackgroundImage(@NotNull final ResourceLocation disabledBackgroundImage)
-    {
-        this.disabledBackgroundImage = DependencyObjectHelper.createFromValue(disabledBackgroundImage);
-    }
-
-    @NotNull
-    public Vector2d getDisabledBackgroundImageScalingFactor()
-    {
-        final Vector2d imageSize = getDisabledBackgroundImageData().getSize();
-        final Vector2d elementSize = getElementSize();
-
-        return new Vector2d(imageSize.getX() / elementSize.getX(), imageSize.getY() / elementSize.getY());
-    }
-
-    @NotNull
-    public BoundingBox getDisabledBackgroundImageData()
-    {
-        return disabledImageData.get(getDataContext());
-    }
-
-    public void setDisabledBackgroundImageData(@NotNull final BoundingBox box)
-    {
-        this.disabledImageData = DependencyObjectHelper.createFromValue(box);
+        this.disabledBackgroundImageResource = DependencyObjectHelper.createFromValue(disabledBackgroundImage);
     }
 
     @Override
@@ -430,6 +347,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         @Override
         public Button readFromElementData(@NotNull final IUIElementData elementData)
         {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
             final String id = elementData.getStringAttribute(CONST_ID);
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
@@ -440,15 +358,13 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> defaultBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DEFAULT_BACKGROUND_IMAGE_DATA);
             final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> clickedBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_CLICKED_BACKGROUND_IMAGE_DATA);
             final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
-            final IDependencyObject<BoundingBox> disabledBackgroundImageData = elementData.getBoundBoundingBoxAttribute(CONST_DISABLED_BACKGROUND_IMAGE_DATA);
             final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED);
 
 
             final Button button = new Button(
+              style,
               id,
               elementData.getParentView(),
               alignments,
@@ -460,11 +376,8 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
               visible,
               enabled,
               defaultBackgroundImage,
-              defaultBackgroundImageData,
               clickedBackgroundImage,
-              clickedBackgroundImageData,
               disabledBackgroundImage,
-              disabledBackgroundImageData,
               clicked);
 
             elementData.getChildren(button).forEach(childData -> {
@@ -487,12 +400,9 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
               .addAxisDistance(CONST_PADDING, element.getPadding())
               .addBoolean(CONST_VISIBLE, element.isVisible())
               .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImage())
-              .addBoundingBox(CONST_DEFAULT_BACKGROUND_IMAGE_DATA, element.getNormalBackgroundImageData())
-              .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImage())
-              .addBoundingBox(CONST_DISABLED_BACKGROUND_IMAGE_DATA, element.getDisabledBackgroundImageData())
-              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImage())
-              .addBoundingBox(CONST_CLICKED_BACKGROUND_IMAGE_DATA, element.getClickedBackgroundImageData())
+              .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
+              .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
+              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
               .addBoolean(CONST_INITIALLY_CLICKED, element.isClicked());
 
             element.values().forEach(child -> {
