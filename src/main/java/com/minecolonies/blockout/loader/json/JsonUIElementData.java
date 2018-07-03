@@ -13,6 +13,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -41,6 +42,29 @@ public class JsonUIElementData implements IUIElementData
     public ResourceLocation getType()
     {
         return new ResourceLocation(object.get("type").getAsString());
+    }
+
+    @NotNull
+    @Override
+    public IDependencyObject<ResourceLocation> getBoundStyleId()
+    {
+        return bindOrReturnBoundTo(object.get("style"), (JsonElement::isJsonPrimitive), (JsonElement element) -> {
+              final String attribute = element.getAsString();
+              return new ResourceLocation(attribute);
+          },
+          PropertyCreationHelper.createFromNonOptional(
+            Optional.of(c -> {
+                if (getParentView() != null)
+                {
+                    return getParentView().getStyleId();
+                }
+
+                return new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT);
+            }),
+            Optional.empty()
+          ),
+          new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT)
+        );
     }
 
     @Nullable
@@ -395,6 +419,47 @@ public class JsonUIElementData implements IUIElementData
             }
 
             return DependencyObjectHelper.createFromValue(defaultValue);
+        }
+
+        return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+    }
+
+    private <T> IDependencyObject<T> bindOrReturnBoundTo(
+      @NotNull final JsonElement element, @NotNull final Predicate<JsonElement> elementMatchesTypePredicate, @NotNull final
+    Function<JsonElement, T> jsonExtractor, Property<T> boundTo, T defaultValue)
+    {
+        if (!elementMatchesTypePredicate.test(element) || defaultValue.getClass() == String.class)
+        {
+            if (!element.isJsonPrimitive())
+            {
+                return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
+            }
+
+            final String elementContents = element.getAsString();
+
+            final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(elementContents);
+            if (singleNameMatcher.matches())
+            {
+                final String fieldName = singleNameMatcher.group("singleName");
+                final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+                return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
+            }
+
+            final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(elementContents);
+            if (multiNameMatcher.matches())
+            {
+                final String getterName = multiNameMatcher.group("getterName");
+                final String setterName = multiNameMatcher.group("setterName");
+                final Property<T> getterSetterProperty = PropertyCreationHelper.createFromName(Optional.of(getterName), Optional.of(setterName));
+                return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
+            }
+
+            if (defaultValue.getClass() == String.class && elementMatchesTypePredicate.test(element))
+            {
+                return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+            }
+
+            return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
         }
 
         return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));

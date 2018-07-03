@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -57,6 +58,15 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     public ResourceLocation getType()
     {
         return new ResourceLocation(type);
+    }
+
+    @NotNull
+    @Override
+    public IDependencyObject<ResourceLocation> getBoundStyleId()
+    {
+        return DependencyObjectHelper.createFromValue(new ResourceLocation(getAttribute("style", String.class).orElseGet(() -> String.format("%s:%s",
+          Constants.MOD_ID,
+          Constants.Styles.CONST_MINECRAFT))));
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.element.root;
 
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -11,6 +12,7 @@ import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
+import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +30,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
     private IUIManager manager;
 
     public RootGuiElement(
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -37,14 +40,14 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(KEY_ROOT, KEY_ROOT.getResourcePath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_ROOT, style, KEY_ROOT.getResourcePath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.setParent(this);
     }
 
     public RootGuiElement()
     {
-        super(KEY_ROOT, KEY_ROOT.getResourcePath(), null);
+        super(KEY_ROOT, DependencyObjectHelper.createFromValue(new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT)), KEY_ROOT.getResourcePath(), null);
 
         this.setParent(this);
     }
@@ -82,6 +85,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
         @Override
         public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
         {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
@@ -92,6 +96,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
 
             RootGuiElement element = new RootGuiElement(
+              style,
               alignments,
               dock,
               margin,

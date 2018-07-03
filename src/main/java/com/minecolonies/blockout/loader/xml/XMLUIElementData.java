@@ -53,6 +53,28 @@ public class XMLUIElementData implements IUIElementData
         return new ResourceLocation(Constants.MOD_ID, node.getNodeName());
     }
 
+    @NotNull
+    @Override
+    public IDependencyObject<ResourceLocation> getBoundStyleId()
+    {
+        return bindOrReturnBoundTo(
+          "style",
+          ResourceLocation::new,
+          PropertyCreationHelper.createFromNonOptional(
+            Optional.of(c -> {
+                if (getParentView() != null)
+                {
+                    return getParentView().getStyleId();
+                }
+
+                return new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT);
+            }),
+            Optional.empty()
+          ),
+          new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT)
+        );
+    }
+
     @Nullable
     @Override
     public IUIElementHost getParentView()
@@ -309,6 +331,38 @@ public class XMLUIElementData implements IUIElementData
         if (attribute == null)
         {
             return DependencyObjectHelper.createFromValue(defaultValue);
+        }
+
+        final String elementContents = attribute;
+
+        final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(elementContents);
+        if (singleNameMatcher.matches())
+        {
+            final String fieldName = singleNameMatcher.group("singleName");
+            final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+            return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
+        }
+
+        final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(elementContents);
+        if (multiNameMatcher.matches())
+        {
+            final String getterName = multiNameMatcher.group("getterName");
+            final String setterName = multiNameMatcher.group("setterName");
+            final Property<T> getterSetterProperty = PropertyCreationHelper.createFromName(Optional.of(getterName), Optional.of(setterName));
+            return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
+        }
+
+        return DependencyObjectHelper.createFromValue(extract.apply(attribute));
+    }
+
+    private <T> IDependencyObject<T> bindOrReturnBoundTo(
+      @NotNull final String name, @NotNull final
+    Function<String, T> extract, Property<T> boundTo, T defaultValue)
+    {
+        @Nullable final String attribute = getStringAttribute(name, null);
+        if (attribute == null)
+        {
+            return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
         }
 
         final String elementContents = attribute;
