@@ -1,0 +1,6 @@
+{
+  "id": "blockout:default",
+  "types": [
+    "blockout:styles/default/image/"
+  ]
+}

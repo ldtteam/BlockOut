@@ -44,7 +44,7 @@ public class ResourceTypeDefinitionDeserializer implements JsonDeserializer<Reso
 
         final String typeId = object.get("id").getAsString();
 
-        if (!object.has("resources") || !object.get("resource").isJsonArray())
+        if (!object.has("resources") || !object.get("resources").isJsonArray())
         {
             throw new JsonParseException("ResourceType Definition does not have a resource array.");
         }

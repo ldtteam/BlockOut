@@ -1,0 +1,17 @@
+{
+  "id": "image",
+  "resources": [
+    {
+      "id": "button:enabled",
+      "data": "blockout:styles/default/image/button_enabled.png"
+    },
+    {
+      "id": "button:normal",
+      "data": "blockout:styles/default/image/button_normal.png"
+    },
+    {
+      "id": "button:disabled",
+      "data": "blockout:styles/default/image/button_disabled.png"
+    }
+  ]
+}
