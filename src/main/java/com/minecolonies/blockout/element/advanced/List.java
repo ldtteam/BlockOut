@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
+import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.drawable.IChildDrawableUIElement;
@@ -16,7 +18,9 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.minecolonies.blockout.event.injector.EventHandlerInjector;
 import com.minecolonies.blockout.render.core.IRenderingController;
+import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Clamp;
 import com.minecolonies.blockout.util.math.Vector2d;
 import com.minecolonies.blockout.util.mouse.MouseButton;
@@ -26,19 +30,26 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class List extends AbstractChildrenContainingUIElement implements IScrollAcceptingUIElement, IClickAcceptingUIElement, IDrawableUIElement, IChildDrawableUIElement
 {
+    private static final int CONST_SCROLLBAR_WIDTH = 5;
 
     //Indicates weither or not we need to watch for changes in the data list.
     private final boolean dataBoundMode;
+
     //The current scroll state is not bindable. It is exclusively controlled by the control it self.
     private       double  scrollOffset;
-    //Used to cache the contents of the databound list.
-    private Collection<?>    resolvedDataContext      = Lists.newArrayList();
-    private ResourceLocation resolvedTemplateLocation = new ResourceLocation("");
 
-    private IDependencyObject<ResourceLocation> templateResource;
+    //Used to cache the contents of the databound list.
+    private Collection<?>                resolvedDataContext              = Lists.newArrayList();
+    private ResourceLocation             resolvedTemplateLocation         = new ResourceLocation("");
+    private IBlockOutGuiConstructionData resolvedTemplateConstructionData = null;
+
+    //Bindable resource binding.
+    private IDependencyObject<ResourceLocation>             templateResource;
+    private IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
     public List(
       @NotNull final ResourceLocation type,
@@ -88,19 +99,17 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         scrollTo(newScrollOffset);
     }
 
-    /**
-     * Updates the scroll position by scrolling to a given target.
-     * Given value is clamped to the minimal and maximal scroll value.
-     *
-     * @param target The target to scroll to.
-     */
-    public void scrollTo(double target)
+    @Override
+    public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
     {
-        final double totalContentHeight = getTotalContentHeight();
-        final double ownHeight = getLocalInternalBoundingBox().getSize().getY();
-        final double maximalScrollOffset = Math.max(totalContentHeight - ownHeight, 0d);
+        final BoundingBox localBox = getLocalBoundingBox();
+        if (!localBox.includes(new Vector2d(localX, localY)))
+        {
+            return false;
+        }
 
-        this.scrollOffset = Clamp.Clamp(0, target, maximalScrollOffset);
+        final double offset = localBox.getSize().getX() - localX;
+        return offset <= CONST_SCROLLBAR_WIDTH;
     }
 
     /**
@@ -114,9 +123,16 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     @Override
-    public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
+    public void update(@NotNull final IUpdateManager updateManager)
     {
-        return false;
+        super.update(updateManager);
+
+        if (!dataBoundMode)
+        {
+            return;
+        }
+
+        updateChildrenInDataBoundMode(updateManager);
     }
 
     @Override
@@ -137,15 +153,38 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     }
 
-    @Override
-    public void update(@NotNull final IUpdateManager updateManager)
+    /**
+     * Updates the scroll position by trying to move the given child to the top.
+     * Passing a control that is not a child of this list will result in undefined behaviour.
+     *
+     * @param child The child to scroll to.
+     */
+    public void scrollTo(@NotNull final IUIElement child)
     {
-        super.update(updateManager);
+        final double firstChild = values().stream().findFirst().map(u -> u.getLocalBoundingBox().getLocalOrigin().getY()).orElse(0d);
+        final double lastChild = values().stream().reduce((f, s) -> s).map(u -> getLocalBoundingBox().getLocalOrigin().getY()).orElse(0d);
 
-        if (!dataBoundMode)
+        if (lastChild < firstChild || lastChild == 0)
         {
+            throw new IllegalArgumentException("Cannot scroll to control when list does not contain values.");
+        }
+
+        final double childOffset = child.getLocalBoundingBox().getLocalOrigin().getY();
+
+        if (childOffset < firstChild || lastChild < childOffset)
+        {
+            throw new IllegalArgumentException("Cannot scroll to control when control does not appear to be part of list.");
+        }
+
+        if (lastChild == firstChild && lastChild == childOffset)
+        {
+            scrollTo(0d);
             return;
         }
+
+        final double scrollOffset = (childOffset / (lastChild - firstChild));
+
+        scrollTo(scrollOffset);
     }
 
     /**
@@ -221,16 +260,14 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     /**
-     * Updates the scroll position by trying to move the given child to the top.
-     * Passing a control that is not a child of this list will result in undefined behaviour.
+     * Updates the scroll position by scrolling to a given target.
+     * Given value is clamped to the minimal and maximal scroll value.
      *
-     * @param child The child to scroll to.
+     * @param target The target to scroll to.
      */
-    public void scrollTo(@NotNull final IUIElement child)
+    public void scrollTo(double target)
     {
-        final double childOffset = child.getLocalBoundingBox().getLocalOrigin().getY();
-
-        scrollTo(childOffset);
+        this.scrollOffset = Clamp.Clamp(0, target, 1);
     }
 
     /**
@@ -253,7 +290,8 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     private void updateChildrenInDataBoundMoTo(@NotNull final IUpdateManager updateManager, @NotNull final Collection<?> newData)
     {
-        if (newData.equals(resolvedDataContext) && getTemplateResource() == resolvedTemplateLocation)
+        if (newData.equals(resolvedDataContext) && getTemplateResource() == resolvedTemplateLocation && Objects.equals(resolvedTemplateConstructionData,
+          getTemplateConstructionData()))
         {
             //Noop needed the lists are equal so no modifications are needed.
             return;
@@ -269,6 +307,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         //Set the template location
         resolvedTemplateLocation = getTemplateResource();
         resolvedDataContext = newData;
+        resolvedTemplateConstructionData = getTemplateConstructionData();
 
         //Create control instances from the template.
         int index = 0;
@@ -278,8 +317,21 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(this, context, resolvedTemplateLocation,
               String.format("%s_%d", getId(), index++));
 
+            DependencyObjectInjector.inject(element, resolvedTemplateConstructionData);
+            EventHandlerInjector.inject(element, resolvedTemplateConstructionData);
+
             put(element.getId(), element);
         }
+    }
+
+    public IBlockOutGuiConstructionData getTemplateConstructionData()
+    {
+        return templateConstructionData.get(getDataContext());
+    }
+
+    public void setTemplateConstructionData(final @NotNull IBlockOutGuiConstructionData templateConstructionData)
+    {
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(templateConstructionData);
     }
 
     /**
@@ -300,5 +352,23 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
         this.templateResource = DependencyObjectHelper.createFromValue(templateResource);
+    }
+
+    private void onSrollBarClick(int localY)
+    {
+        final double localHeight = getLocalBoundingBox().getSize().getY();
+        final double barHeight = getScrollBarHeight();
+        if (localHeight - localY <= barHeight)
+        {
+            scrollTo(getTotalContentHeight());
+        }
+    }
+
+    private int getScrollBarHeight()
+    {
+        final BoundingBox localBox = getLocalBoundingBox();
+        final double contentHeight = getTotalContentHeight();
+
+        return (int) Math.min(localBox.getSize().getY(), localBox.getSize().getY() / (contentHeight / localBox.getSize().getY()));
     }
 }

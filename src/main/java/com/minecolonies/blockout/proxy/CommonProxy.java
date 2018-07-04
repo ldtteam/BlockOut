@@ -46,6 +46,12 @@ public class CommonProxy implements IProxy
         commonFactoryController = new CommonFactoryController();
     }
 
+    @Override
+    public void onPreInit()
+    {
+        //TODO: Create split style loader.
+    }
+
     @NotNull
     @Override
     public IGuiController getGuiController()

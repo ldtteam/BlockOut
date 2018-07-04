@@ -23,6 +23,8 @@ import java.io.InputStream;
 
 public interface IProxy
 {
+    void onPreInit();
+
     @NotNull
     IGuiController getGuiController();
 

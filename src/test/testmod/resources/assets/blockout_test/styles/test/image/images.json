@@ -1,0 +1,9 @@
+{
+  "id": "image",
+  "resources": [
+    {
+      "id": "image:chatchain_150",
+      "data": "blockout_test:styles/test/image/chatchain_150.png"
+    }
+  ]
+}

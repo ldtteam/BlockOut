@@ -2,12 +2,13 @@ package com.minecolonies.blockout.style.core;
 
 import com.google.common.collect.ImmutableMap;
 import com.minecolonies.blockout.style.core.resources.core.IResource;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public interface IStyleManager
+public interface IStyleManager extends IResourceManagerReloadListener
 {
 
     /**

@@ -1,12 +1,13 @@
 {
   "type": "blockout:root",
+  "style": "blockout:defaut",
   "size": "150,150",
   "children": [
     {
       "type": "blockout:image",
+      "style": "blockout_test:test",
       "size": "150,150",
-      "imageData": "0,0,150,150",
-      "icon": "blockout_test:images/chatchain_150.png"
+      "icon": "image:chatchain_150"
     }
   ]
 }

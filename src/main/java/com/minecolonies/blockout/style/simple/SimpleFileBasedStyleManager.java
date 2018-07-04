@@ -85,7 +85,7 @@ public class SimpleFileBasedStyleManager implements IResourceManagerReloadListen
             }
             catch (Exception e)
             {
-                Log.getLogger().error(String.format("Failed to find styles map: %s", stylesLocation.toString()), e);
+                //Mod does not support BlockOut or has no style. So no biggy.
                 return;
             }
 
@@ -112,7 +112,7 @@ public class SimpleFileBasedStyleManager implements IResourceManagerReloadListen
                   styleDefinition.getResourceTypeDefinitionLocations()
                     .stream()
                     .flatMap(resourceTypeLocation -> {
-
+                        styleLoadingBar.step("Loading resources from: " + resourceTypeLocation);
 
                         final ResourceTypeDefinition resourceTypeDefinition;
                         try
