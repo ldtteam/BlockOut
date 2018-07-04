@@ -10,6 +10,7 @@ import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.style.core.IStyleManager;
 import com.minecolonies.blockout.style.core.resources.loader.IResourceLoaderManager;
+import com.minecolonies.blockout.template.ITemplateEngine;
 import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -60,4 +61,7 @@ public interface IProxy
 
     @NotNull
     IStyleManager getStyleManager();
+
+    @NotNull
+    ITemplateEngine getTemplateEngine();
 }

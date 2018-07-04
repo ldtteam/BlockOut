@@ -21,7 +21,14 @@ public class Constants
 
     public static class Styles
     {
-        public static final String CONST_MINECRAFT = "default";
+        public static final ResourceLocation CONST_DEFAULT = new ResourceLocation(MOD_ID, "default");
+    }
+
+    public static class Resources
+    {
+        public static final String CONST_IMAGE_RESOURCE_TYPE     = "image";
+        public static final String CONST_ITEMSTACK_RESOURCE_TYPE = "itemstack";
+        public static final String CONST_TEMPLATE_RESOURCE_TYPE  = "template";
     }
 
     public static class Controls
@@ -36,7 +43,6 @@ public class Constants
             public static final String CONST_MARGIN       = "margin";
             public static final String CONST_PADDING      = "padding";
             public static final String CONST_ELEMENT_SIZE = "size";
-            public static final String CONST_DATA_CONTEXT = "context";
             public static final String CONST_VISIBLE      = "visible";
             public static final String CONST_ENABLED      = "enabled";
         }
@@ -46,7 +52,6 @@ public class Constants
             public static final ResourceLocation KEY_IMAGE = new ResourceLocation(MOD_ID, "image");
 
             public static final String CONST_ICON       = "icon";
-            public static final String CONST_IMAGE_DATA = "imageData";
         }
 
         public static class Root
@@ -68,12 +73,14 @@ public class Constants
             public static final ResourceLocation KEY_BUTTON = new ResourceLocation(MOD_ID, "button");
 
             public static final String CONST_DEFAULT_BACKGROUND_IMAGE       = "defaultBackgroundImage";
-            public static final String CONST_DEFAULT_BACKGROUND_IMAGE_DATA  = "defaultBackgroundImageData";
             public static final String CONST_DISABLED_BACKGROUND_IMAGE      = "disabledBackgroundImage";
-            public static final String CONST_DISABLED_BACKGROUND_IMAGE_DATA = "disabledBackgroundImageData";
             public static final String CONST_CLICKED_BACKGROUND_IMAGE       = "clickedBackgroundImage";
-            public static final String CONST_CLICKED_BACKGROUND_IMAGE_DATA  = "clickedBackgroundImageData";
             public static final String CONST_INITIALLY_CLICKED              = "clicked";
+        }
+
+        public static class Template
+        {
+            public static final ResourceLocation KEY_TEMPLATE = new ResourceLocation(MOD_ID, "template");
         }
 
         public static class Label
@@ -88,13 +95,16 @@ public class Constants
             public static final ResourceLocation KEY_PROGRESS_BAR = new ResourceLocation(MOD_ID, "progressbar");
 
             public static final String CONST_BACKGROUND_IMAGE      = "backgroundImage";
-            public static final String CONST_BACKGROUND_IMAGE_DATA = "backgroundImageData";
             public static final String CONST_FOREGROUND_IMAGE      = "foregroundImage";
-            public static final String CONST_FOREGROUND_IMAGE_DATA = "foregroundImageData";
             public static final String CONST_ORIENTATION           = "orientation";
             public static final String CONST_MIN                   = "min";
             public static final String CONST_MAX                   = "max";
             public static final String CONST_VALUE                 = "value";
+        }
+
+        public static class Region
+        {
+            public static final ResourceLocation KEY_REGION = new ResourceLocation(MOD_ID, "region");
         }
     }
 

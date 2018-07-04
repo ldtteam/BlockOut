@@ -114,9 +114,15 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         }
 
         @NotNull
-        public ImageConstructionDataBuilder withDependentIcon(@NotNull final IDependencyObject<ResourceLocation> icon)
+        public ImageConstructionDataBuilder withDependentIconResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
         {
-            return withDependency("icon", icon);
+            return withDependency("iconResource", iconResource);
+        }
+
+        @NotNull
+        public ImageConstructionDataBuilder withIconResource(@NotNull final ResourceLocation iconResource)
+        {
+            return withDependency("iconResource", DependencyObjectHelper.createFromValue(iconResource));
         }
 
     }

@@ -11,13 +11,13 @@ import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+import static com.minecolonies.blockout.util.Constants.Resources.CONST_IMAGE_RESOURCE_TYPE;
+
 public class ImageResource implements IDiskResource
 {
 
     public static final class Loader implements IResourceLoader<ImageResource>
     {
-
-        private static final String CONST_TYPE_ID = "image";
 
         /**
          * Returns the if of the type that this {@link IResourceLoader} can load.
@@ -28,7 +28,7 @@ public class ImageResource implements IDiskResource
         @Override
         public String getTypeId()
         {
-            return CONST_TYPE_ID;
+            return CONST_IMAGE_RESOURCE_TYPE;
         }
 
         /**
@@ -54,7 +54,7 @@ public class ImageResource implements IDiskResource
 
             final JsonObject object = data.getAsJsonObject();
 
-            if (!object.has("file") || !object.get("target").isJsonPrimitive())
+            if (!object.has("file") || !object.get("file").isJsonPrimitive())
             {
                 throw new IllegalArgumentException(String.format("File target for ImageResource: %s is not a String.", id));
             }

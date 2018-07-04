@@ -1,10 +1,8 @@
 package com.minecolonies.blockout;
 
 import com.minecolonies.blockout.element.root.RootGuiElement;
-import com.minecolonies.blockout.element.simple.Button;
-import com.minecolonies.blockout.element.simple.Image;
-import com.minecolonies.blockout.element.simple.Label;
-import com.minecolonies.blockout.element.simple.Slot;
+import com.minecolonies.blockout.element.simple.*;
+import com.minecolonies.blockout.element.template.Template;
 import com.minecolonies.blockout.loader.json.JsonLoader;
 import com.minecolonies.blockout.loader.object.loader.ObjectUIElementLoader;
 import com.minecolonies.blockout.loader.xml.XMLLoader;
@@ -12,6 +10,7 @@ import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.proxy.IProxy;
 import com.minecolonies.blockout.style.resources.ImageResource;
 import com.minecolonies.blockout.style.resources.ItemStackResource;
+import com.minecolonies.blockout.style.resources.TemplateResource;
 import com.minecolonies.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -61,9 +60,12 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Slot.Factory());
         getProxy().getFactoryController().registerFactory(new Button.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
+        getProxy().getFactoryController().registerFactory(new Region.Factory());
+        getProxy().getFactoryController().registerFactory(new Template.Factory());
 
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());
+        getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
     }
 
     @Mod.EventHandler

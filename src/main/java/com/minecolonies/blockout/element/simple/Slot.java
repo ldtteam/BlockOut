@@ -2,6 +2,7 @@ package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -146,6 +147,48 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         this.slotIndex = slotIndex;
     }
 
+    public static final class SlotConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<SlotConstructionDataBuilder, Slot>
+    {
+
+        public SlotConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data,
+          final Class<Slot> controlClass)
+        {
+            super(controlId, data, controlClass);
+        }
+
+        public SlotConstructionDataBuilder withDependentInventoryId(@NotNull final IDependencyObject<ResourceLocation> inventoryId)
+        {
+            return withDependency("inventoryId", inventoryId);
+        }
+
+        public SlotConstructionDataBuilder withInventoryId(@NotNull final ResourceLocation inventoryId)
+        {
+            return withDependency("inventoryId", DependencyObjectHelper.createFromValue(inventoryId));
+        }
+
+        public SlotConstructionDataBuilder withDependentInventoryIndex(@NotNull final IDependencyObject<Integer> inventoryIndex)
+        {
+            return withDependency("inventoryIndex", inventoryIndex);
+        }
+
+        public SlotConstructionDataBuilder withInventoryIndex(@NotNull final Integer inventoryIndex)
+        {
+            return withDependency("inventoryIndex", DependencyObjectHelper.createFromValue(inventoryIndex));
+        }
+
+        public SlotConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
+        {
+            return withDependency("backgroundImageResource", backgroundImageResource);
+        }
+
+        public SlotConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
+        {
+            return withDependency("backgroundImageResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
+        }
+    }
+    
     public static class Factory implements IUIElementFactory<Slot>
     {
 

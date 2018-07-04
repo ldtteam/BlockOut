@@ -1,18 +1,17 @@
-package com.minecolonies.blockout.element.root;
+package com.minecolonies.blockout.element.simple;
 
 import com.minecolonies.blockout.BlockOut;
-import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.IUIElement;
+import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
-import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
-import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -21,16 +20,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
-import static com.minecolonies.blockout.util.Constants.Controls.Root.KEY_ROOT;
+import static com.minecolonies.blockout.util.Constants.Controls.Region.KEY_REGION;
 
-public class RootGuiElement extends AbstractChildrenContainingUIElement
+public class Region extends AbstractChildrenContainingUIElement
 {
-
-    @NotNull
-    private IUIManager manager;
-
-    public RootGuiElement(
+    public Region(
       @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -40,63 +37,49 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(KEY_ROOT, style, KEY_ROOT.getResourcePath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
-
-        this.setParent(this);
+        super(KEY_REGION, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
     }
 
-    public RootGuiElement()
+    public static class RegionConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<RegionConstructionDataBuilder, Region>
     {
-        super(KEY_ROOT, DependencyObjectHelper.createFromValue(Constants.Styles.CONST_DEFAULT), KEY_ROOT.getResourcePath(), null);
 
-        this.setParent(this);
+        public RegionConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data)
+        {
+            super(controlId, data, Region.class);
+        }
     }
 
-    @Nullable
-    @Override
-    public Object getDataContext()
-    {
-        return dataContext.get(new Object());
-    }
-
-    @NotNull
-    @Override
-    public IUIManager getUiManager()
-    {
-        return manager;
-    }
-
-    public void setUiManager(@NotNull final IUIManager manager)
-    {
-        this.manager = manager;
-    }
-
-    public static class Factory implements IUIElementFactory<RootGuiElement>
+    public static class Factory implements IUIElementFactory<Region>
     {
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
-            return KEY_ROOT;
+            return KEY_REGION;
         }
 
         @NotNull
         @Override
-        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
+        public Region readFromElementData(@NotNull final IUIElementData elementData)
         {
             final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
+            final String id = elementData.getStringAttribute(CONST_ID);
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
             final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
             final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
 
-            RootGuiElement element = new RootGuiElement(
+            final Region region = new Region(
               style,
+              id,
+              elementData.getParentView(),
               alignments,
               dock,
               margin,
@@ -106,17 +89,18 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
               visible,
               enabled);
 
-            elementData.getChildren(element).forEach(childData -> {
+            elementData.getChildren(region).forEach(childData -> {
                 IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                element.put(child.getId(), child);
+                region.put(child.getId(), child);
             });
 
-            return element;
+            return region;
         }
 
         @Override
-        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
+        public void writeToElementData(@NotNull final Region element, @NotNull final IUIElementDataBuilder builder)
         {
+
             builder
               .addAlignment(CONST_ALIGNMENT, element.getAlignment())
               .addEnum(CONST_DOCK, element.getDock())

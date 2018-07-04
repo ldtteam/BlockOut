@@ -3,6 +3,7 @@ package com.minecolonies.blockout.style.resources;
 import com.google.gson.JsonElement;
 import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.style.core.resources.loader.IResourceLoader;
+import com.minecolonies.blockout.util.Constants;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -16,8 +17,6 @@ public class ItemStackResource implements IResource
     public static final class Loader implements IResourceLoader<ItemStackResource>
     {
 
-        private static final String CONST_TYPE_ID = "itemstack";
-
         /**
          * Returns the if of the type that this {@link IResourceLoader} can load.
          *
@@ -27,7 +26,7 @@ public class ItemStackResource implements IResource
         @Override
         public String getTypeId()
         {
-            return CONST_TYPE_ID;
+            return Constants.Resources.CONST_ITEMSTACK_RESOURCE_TYPE;
         }
 
         /**

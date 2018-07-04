@@ -252,51 +252,27 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withDependentBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> backgroundImage)
+        public ProgressBarConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
         {
-            return withDependency("backGround", backgroundImage);
+            return withDependency("backGroundResource", backgroundImageResource);
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withDependentBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> imageData)
+        public ProgressBarConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
         {
-            return withDependency("backGroundImageData", imageData);
+            return withDependency("backGroundResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withBackgroundImage(@NotNull final ResourceLocation backgroundImage)
+        public ProgressBarConstructionDataBuilder withDependentForegroundImageResource(@NotNull final IDependencyObject<ResourceLocation> foregroundImageResource)
         {
-            return withDependency("backGround", DependencyObjectHelper.createFromValue(backgroundImage));
+            return withDependency("foreGroundResource", foregroundImageResource);
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withBackgroundImageData(@NotNull final BoundingBox imageData)
+        public ProgressBarConstructionDataBuilder withForegroundImageResource(@NotNull final ResourceLocation foregroundImageResource)
         {
-            return withDependency("backGroundImageData", DependencyObjectHelper.createFromValue(imageData));
-        }
-
-        @NotNull
-        public ProgressBarConstructionDataBuilder withDependentForegroundImage(@NotNull final IDependencyObject<ResourceLocation> foregroundImage)
-        {
-            return withDependency("foreGround", foregroundImage);
-        }
-
-        @NotNull
-        public ProgressBarConstructionDataBuilder withDependentForegroundImageData(@NotNull final IDependencyObject<BoundingBox> imageData)
-        {
-            return withDependency("foreGroundImageData", imageData);
-        }
-
-        @NotNull
-        public ProgressBarConstructionDataBuilder withForegroundImage(@NotNull final ResourceLocation foregroundImage)
-        {
-            return withDependency("foreGround", DependencyObjectHelper.createFromValue(foregroundImage));
-        }
-
-        @NotNull
-        public ProgressBarConstructionDataBuilder withForegroundImageData(@NotNull final BoundingBox imageData)
-        {
-            return withDependency("foreGroundImageData", DependencyObjectHelper.createFromValue(imageData));
+            return withDependency("foreGroundResource", DependencyObjectHelper.createFromValue(foregroundImageResource));
         }
 
         @NotNull

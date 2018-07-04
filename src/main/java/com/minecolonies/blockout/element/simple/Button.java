@@ -20,7 +20,6 @@ import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.style.resources.ImageResource;
-import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import com.minecolonies.blockout.util.mouse.MouseButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -247,7 +246,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     public static class ButtonConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, Button>
     {
 
-        protected ButtonConstructionDataBuilder(
+        public ButtonConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {
@@ -255,76 +254,41 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDependentNormalBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImage)
+        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource)
         {
-            return withDependency("normalBackgroundImage", normalBackgroundImage);
+            return withDependency("normalBackgroundImageResource", normalBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDependentNormalBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> normalImageData)
+        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImageResource)
         {
-            return withDependency("normalImageData", normalImageData);
+            return withDependency("normalBackgroundImageResource", DependencyObjectHelper.createFromValue(normalBackgroundImageResource));
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImage(@NotNull final ResourceLocation normalBackgroundImage)
+        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource)
         {
-            return withDependency("normalBackgroundImage", DependencyObjectHelper.createFromValue(normalBackgroundImage));
+            return withDependency("clickedBackgroundImageResource", clickedBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImageData(@NotNull final BoundingBox normalImageData)
+        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImageResource)
         {
-            return withDependency("normalImageData", DependencyObjectHelper.createFromValue(normalImageData));
+            return withDependency("clickedBackgroundImageResource", DependencyObjectHelper.createFromValue(clickedBackgroundImageResource));
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDependentClickedBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImage)
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource)
         {
-            return withDependency("clickedBackgroundImage", clickedBackgroundImage);
+            return withDependency("disabledBackgroundImageResource", disabledBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDependentClickedBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> clickedImageData)
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImageResource)
         {
-            return withDependency("clickedImageData", clickedImageData);
+            return withDependency("disabledBackgroundImageResource", DependencyObjectHelper.createFromValue(disabledBackgroundImageResource));
         }
 
-        @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImage(@NotNull final ResourceLocation clickedBackgroundImage)
-        {
-            return withDependency("clickedBackgroundImage", DependencyObjectHelper.createFromValue(clickedBackgroundImage));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImageData(@NotNull final BoundingBox clickedImageData)
-        {
-            return withDependency("clickedImageData", DependencyObjectHelper.createFromValue(clickedImageData));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImage(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImage)
-        {
-            return withDependency("disabledBackgroundImage", disabledBackgroundImage);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDependentDisabledBackgroundImageData(@NotNull final IDependencyObject<BoundingBox> disabledImageData)
-        {
-            return withDependency("disabledImageData", disabledImageData);
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImage(@NotNull final ResourceLocation disabledBackgroundImage)
-        {
-            return withDependency("disabledBackgroundImage", DependencyObjectHelper.createFromValue(disabledBackgroundImage));
-        }
-
-        @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImageData(@NotNull final BoundingBox disabledImageData)
-        {
-            return withDependency("disabledImageData", DependencyObjectHelper.createFromValue(disabledImageData));
-        }
 
         @NotNull
         public ButtonConstructionDataBuilder withClickedEventHandler(@NotNull final IEventHandler<Button, ButtonClickedEventArgs> eventHandler)

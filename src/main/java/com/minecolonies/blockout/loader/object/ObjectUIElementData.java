@@ -64,9 +64,7 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     @Override
     public IDependencyObject<ResourceLocation> getBoundStyleId()
     {
-        return DependencyObjectHelper.createFromValue(new ResourceLocation(getAttribute("style", String.class).orElseGet(() -> String.format("%s:%s",
-          Constants.MOD_ID,
-          Constants.Styles.CONST_MINECRAFT))));
+        return DependencyObjectHelper.createFromValue(new ResourceLocation(getAttribute("style", String.class).orElseGet(Constants.Styles.CONST_DEFAULT::toString)));
     }
 
     @Nullable

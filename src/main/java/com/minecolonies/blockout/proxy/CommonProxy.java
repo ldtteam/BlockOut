@@ -17,6 +17,8 @@ import com.minecolonies.blockout.style.core.IStyleManager;
 import com.minecolonies.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.minecolonies.blockout.style.simple.SimpleFileBasedStyleManager;
 import com.minecolonies.blockout.style.simple.SimpleResourceLoaderManager;
+import com.minecolonies.blockout.template.ITemplateEngine;
+import com.minecolonies.blockout.template.SimpleTemplateEngine;
 import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -139,5 +141,12 @@ public class CommonProxy implements IProxy
     public IStyleManager getStyleManager()
     {
         return SimpleFileBasedStyleManager.getInstance();
+    }
+
+    @NotNull
+    @Override
+    public ITemplateEngine getTemplateEngine()
+    {
+        return SimpleTemplateEngine.getInstance();
     }
 }

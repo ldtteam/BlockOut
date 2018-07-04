@@ -11,7 +11,6 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.event.IEventHandler;
-import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +26,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
     protected final ResourceLocation type;
 
     @NotNull
-    protected IDependencyObject<ResourceLocation> style = DependencyObjectHelper.createFromValue(new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT));
+    protected IDependencyObject<ResourceLocation> style;
 
     @NotNull
     protected final String           id;

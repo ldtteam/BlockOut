@@ -67,11 +67,11 @@ public class XMLUIElementData implements IUIElementData
                     return getParentView().getStyleId();
                 }
 
-                return new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT);
+                return Constants.Styles.CONST_DEFAULT;
             }),
             Optional.empty()
           ),
-          new ResourceLocation(Constants.MOD_ID, Constants.Styles.CONST_MINECRAFT)
+          Constants.Styles.CONST_DEFAULT
         );
     }
 
