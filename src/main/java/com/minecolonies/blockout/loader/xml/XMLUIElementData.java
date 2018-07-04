@@ -318,7 +318,7 @@ public class XMLUIElementData implements IUIElementData
     }
 
     @Override
-    public IDependencyObject<Object> getBoundDatacontext()
+    public IDependencyObject<Object> getBoundDataContext()
     {
         return bindOrReturnStatic("datacontext", e -> new Object(), new Object());
     }

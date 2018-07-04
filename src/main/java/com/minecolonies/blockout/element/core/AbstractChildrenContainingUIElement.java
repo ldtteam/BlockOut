@@ -256,7 +256,7 @@ public abstract class AbstractChildrenContainingUIElement extends HashMap<String
 
         //If we have no parent we see our default size as parent.
         //Else grab the size from the parent.
-        final Vector2d parentSize = getParent() != this ? getParent().getLocalBoundingBox().getSize() : new Vector2d(Double.MAX_VALUE, Double.MAX_VALUE);
+        final Vector2d parentSize = getParent() != this ? getParent().getLocalInternalBoundingBox().getSize() : new Vector2d(Double.MAX_VALUE, Double.MAX_VALUE);
 
         double marginLeft = getMargin().getLeft().orElse(0d);
         double marginTop = getMargin().getTop().orElse(0d);

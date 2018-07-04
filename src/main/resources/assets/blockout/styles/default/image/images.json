@@ -2,16 +2,28 @@
   "id": "image",
   "resources": [
     {
-      "id": "button:enabled",
+      "id": "image:button_enabled",
       "data": "blockout:styles/default/image/button_enabled.png"
     },
     {
-      "id": "button:normal",
+      "id": "image:button_normal",
       "data": "blockout:styles/default/image/button_normal.png"
     },
     {
-      "id": "button:disabled",
+      "id": "image:button_disabled",
       "data": "blockout:styles/default/image/button_disabled.png"
+    },
+    {
+      "id": "image:slot_default_18x18",
+      "data": "blockout:styles/default/image/slot_default_18x18.png"
+    },
+    {
+      "id": "image:progressbar_background",
+      "data": "blockout:styles/default/images/progressbar_background.png"
+    },
+    {
+      "id": "image:progressbar_foreground",
+      "data": "blockout:styles/default/images/progressbar_foreground.png"
     }
   ]
 }

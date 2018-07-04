@@ -18,7 +18,11 @@ public interface ITemplateEngine
      * @param dataContextForTemplate The datacontext.
      * @return The template.
      */
-    IUIElement generateFromTemplate(@NotNull final IUIElementHost parent, @Nullable final Object dataContextForTemplate, @NotNull final ResourceLocation resourceId);
+    IUIElement generateFromTemplate(
+      @NotNull final IUIElementHost parent,
+      @Nullable final Object dataContextForTemplate,
+      @NotNull final ResourceLocation resourceId,
+      @NotNull final String controlId);
 
     /**
      * Generates a new unique {@link IUIElement} that represents the template with a datacontext.
@@ -26,5 +30,9 @@ public interface ITemplateEngine
      * @param dataContextForTemplate The datacontext.
      * @return The template.
      */
-    IUIElement generateFromTemplate(@NotNull final IUIElementHost parent, @Nullable final Object dataContextForTemplate, @NotNull final IUIElementData templateData);
+    IUIElement generateFromTemplate(
+      @NotNull final IUIElementHost parent,
+      @Nullable final Object dataContextForTemplate,
+      @NotNull final IUIElementData templateData,
+      @NotNull final String controlId);
 }

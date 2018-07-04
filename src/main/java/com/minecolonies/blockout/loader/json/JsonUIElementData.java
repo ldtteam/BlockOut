@@ -373,7 +373,7 @@ public class JsonUIElementData implements IUIElementData
     }
 
     @Override
-    public IDependencyObject<Object> getBoundDatacontext()
+    public IDependencyObject<Object> getBoundDataContext()
     {
         if (!object.has("datacontext"))
         {

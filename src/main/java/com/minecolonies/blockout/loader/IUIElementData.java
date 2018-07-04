@@ -555,6 +555,13 @@ public interface IUIElementData
      * @return The bound object.
      */
     IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(@NotNull String name, final BoundingBox def);
-    
-    IDependencyObject<Object> getBoundDatacontext();
+
+    /**
+     * Returns the bound datacontext for the ui element this data belongs to.
+     * Only returns a meaningfull value on the server side.
+     * On the client side this value will always be bound to a plain Object.
+     *
+     * @return The bound datacontext.
+     */
+    IDependencyObject<Object> getBoundDataContext();
 }

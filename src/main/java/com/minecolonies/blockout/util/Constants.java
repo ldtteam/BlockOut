@@ -106,6 +106,13 @@ public class Constants
         {
             public static final ResourceLocation KEY_REGION = new ResourceLocation(MOD_ID, "region");
         }
+
+        public static class List
+        {
+            public static final ResourceLocation KEY_LIST = new ResourceLocation(MOD_ID, "list");
+
+            public static final String CONST_TEMPLATE = "itemTemplate";
+        }
     }
 
 }

@@ -53,6 +53,18 @@ public final class BoundingBox
         return getLocalOrigin().move(0, getSize().getY());
     }
 
+    @NotNull
+    public Vector2d getLowerLeftCoordinate()
+    {
+        return getLocalOrigin();
+    }
+
+    @NotNull
+    public Vector2d getUpperRightCoordinate()
+    {
+        return getLocalOrigin().move(getSize().getX(), getSize().getY());
+    }
+
     public boolean includes(@NotNull final Vector2d point)
     {
         return (getLowerLeftCoordinate().getX() <= point.getX() &&
@@ -105,19 +117,6 @@ public final class BoundingBox
     public static BoundingBox fromExtremities(@NotNull final Vector2d lowerLeft, @NotNull final Vector2d upperRight)
     {
         return new BoundingBox(lowerLeft, upperRight.move(lowerLeft.invert()));
-    }
-
-    @NotNull
-    public Vector2d
-    getLowerLeftCoordinate()
-    {
-        return getLocalOrigin();
-    }
-
-    @NotNull
-    public Vector2d getUpperRightCoordinate()
-    {
-        return getLocalOrigin().move(getSize().getX(), getSize().getY());
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.minecolonies.blockout.element.simple;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
-import com.minecolonies.blockout.core.element.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
+import com.minecolonies.blockout.core.element.drawable.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
@@ -208,7 +208,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
+            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<ResourceLocation> inventoryId = elementData.getBoundResourceLocationAttribute(CONST_INVENTORY_ID);

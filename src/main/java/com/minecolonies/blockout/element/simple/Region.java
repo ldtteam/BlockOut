@@ -72,7 +72,7 @@ public class Region extends AbstractChildrenContainingUIElement
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
             final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
             final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDatacontext();
+            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
 

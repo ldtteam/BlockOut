@@ -216,7 +216,7 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     }
 
     @Override
-    public IDependencyObject<Object> getBoundDatacontext()
+    public IDependencyObject<Object> getBoundDataContext()
     {
         return DependencyObjectHelper.createFromValue(new Object());
     }
