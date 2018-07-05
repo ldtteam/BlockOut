@@ -190,7 +190,7 @@ public class Color extends java.awt.Color
      *
      * @param original The standard color.
      */
-    public Color(@Nonnull Color original)
+    public Color(@Nonnull java.awt.Color original)
     {
         super(original.getRed(), original.getGreen(), original.getBlue(), original.getAlpha());
     }

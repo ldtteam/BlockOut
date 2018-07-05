@@ -20,10 +20,12 @@ import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.event.injector.EventHandlerInjector;
 import com.minecolonies.blockout.render.core.IRenderingController;
+import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Clamp;
 import com.minecolonies.blockout.util.math.Vector2d;
 import com.minecolonies.blockout.util.mouse.MouseButton;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +65,9 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
       @NotNull final IDependencyObject<AxisDistance> padding,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
-      @NotNull final IDependencyObject<Boolean> enabled)
+      @NotNull final IDependencyObject<Boolean> enabled,
+      @NotNull final boolean dataBoundMode,
+      @NotNull final IDependencyObject<ResourceLocation> templateResource)
     {
         super(type, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
     }
@@ -138,19 +142,19 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     @Override
     public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
     {
-        onSrollBarClick(localY);
+        onScrollBarClick(localY);
     }
 
     @Override
     public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
     {
-        onSrollBarClick(localY);
+        onScrollBarClick(localY);
     }
 
     @Override
     public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
-        onSrollBarClick(localY);
+        onScrollBarClick(localY);
     }
 
     /**
@@ -197,10 +201,13 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         manager.getRenderingController().getScissoringController().pop();
     }
 
-    @Override
-    public void drawBackground(@NotNull final IRenderingController controller)
+    private void onScrollBarClick(int localY)
     {
+        final double localHeight = getLocalBoundingBox().getSize().getY();
+        final double barHeight = getScrollBarHeight();
+        final double maxOffset = localHeight - barHeight;
 
+        scrollTo(localY / maxOffset);
     }
 
     @Override
@@ -238,40 +245,29 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         }
     }
 
-    private void updateChildrenInDataBoundMoTo(@NotNull final IUpdateManager updateManager, @NotNull final Collection<?> newData)
+    @Override
+    public void drawBackground(@NotNull final IRenderingController controller)
     {
-        if (newData.equals(resolvedDataContext) && getTemplateResource() == resolvedTemplateLocation && Objects.equals(resolvedTemplateConstructionData,
-          getTemplateConstructionData()))
-        {
-            //Noop needed the lists are equal so no modifications are needed.
-            return;
-        }
+        GlStateManager.pushMatrix();
 
-        //Context has changed.
-        //Mark the ui as dirty.
-        updateManager.markDirty();
+        final double localHeight = getLocalBoundingBox().getSize().getY();
+        final double barHeight = getScrollBarHeight();
+        final double maxOffset = localHeight - barHeight;
 
-        //Clear all children.
-        clear();
+        final Vector2d scrollBoxOrigin = getLocalBoundingBox().getLowerRightCoordinate().move(-CONST_SCROLLBAR_WIDTH, 0).nullifyNegatives();
+        final Vector2d scrollBoxSize = new Vector2d(CONST_SCROLLBAR_WIDTH, getLocalBoundingBox().getSize().getY());
 
-        //Set the template location
-        resolvedTemplateLocation = getTemplateResource();
-        resolvedDataContext = newData;
-        resolvedTemplateConstructionData = getTemplateConstructionData();
+        final BoundingBox scrollBox = new BoundingBox(scrollBoxOrigin, scrollBoxSize);
 
-        //Create control instances from the template.
-        int index = 0;
-        for (final Object context :
-          newData)
-        {
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(this, context, resolvedTemplateLocation,
-              String.format("%s_%d", getId(), index++));
+        final Vector2d scrollBarOrigin = getLocalBoundingBox().getLowerRightCoordinate().move(-CONST_SCROLLBAR_WIDTH, scrollOffset * maxOffset).nullifyNegatives();
+        final Vector2d scrollBarSize = new Vector2d(CONST_SCROLLBAR_WIDTH, barHeight);
 
-            DependencyObjectInjector.inject(element, resolvedTemplateConstructionData);
-            EventHandlerInjector.inject(element, resolvedTemplateConstructionData);
+        final BoundingBox scrollBarBox = new BoundingBox(scrollBarOrigin, scrollBarSize);
 
-            put(element.getId(), element);
-        }
+        controller.drawColoredRect(scrollBox, 0, new Color(Color.DARK_GRAY));
+        controller.drawColoredRect(scrollBarBox, 0, new Color(Color.LIGHT_GRAY));
+
+        GlStateManager.popMatrix();
     }
 
     public IBlockOutGuiConstructionData getTemplateConstructionData()
@@ -304,18 +300,44 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         this.templateResource = DependencyObjectHelper.createFromValue(templateResource);
     }
 
-    private void onSrollBarClick(int localY)
+    private void updateChildrenInDataBoundMoTo(@NotNull final IUpdateManager updateManager, @NotNull final Collection<?> newData)
     {
-        final double localHeight = getLocalBoundingBox().getSize().getY();
-        final double barHeight = getScrollBarHeight();
-
-        if (localHeight - localY <= barHeight)
+        if (newData.equals(resolvedDataContext)
+              && Objects.equals(getTemplateResource(), resolvedTemplateLocation)
+              && Objects.equals(getTemplateConstructionData(), resolvedTemplateConstructionData))
         {
-            scrollTo(1d);
+            //Noop needed the lists are equal so no modifications are needed.
             return;
         }
 
-        scrollTo(localY / (localHeight - localY));
+        //Context has changed.
+        //Mark the ui as dirty.
+        updateManager.markDirty();
+
+        //Clear all children.
+        clear();
+
+        //Set the template location
+        resolvedTemplateLocation = getTemplateResource();
+        resolvedDataContext = newData;
+        resolvedTemplateConstructionData = getTemplateConstructionData();
+
+        //Create control instances from the template.
+        int index = 0;
+        for (final Object context :
+          newData)
+        {
+            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(this, context, resolvedTemplateLocation,
+              String.format("%s_%d", getId(), index++));
+
+            if (resolvedTemplateConstructionData != null)
+            {
+                DependencyObjectInjector.inject(element, resolvedTemplateConstructionData);
+                EventHandlerInjector.inject(element, resolvedTemplateConstructionData);
+            }
+
+            put(element.getId(), element);
+        }
     }
 
     private int getScrollBarHeight()
