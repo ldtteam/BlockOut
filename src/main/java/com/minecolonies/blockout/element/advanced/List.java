@@ -82,36 +82,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         return true;
     }
 
-    @Override
-    public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
-    {
-        scroll(deltaWheel);
-    }
-
-    /**
-     * Updates the scroll position with a given delta.
-     *
-     * @param delta The delta to scroll.
-     */
-    public void scroll(int delta)
-    {
-        final double newScrollOffset = scrollOffset + delta;
-        scrollTo(newScrollOffset);
-    }
-
-    @Override
-    public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
-    {
-        final BoundingBox localBox = getLocalBoundingBox();
-        if (!localBox.includes(new Vector2d(localX, localY)))
-        {
-            return false;
-        }
-
-        final double offset = localBox.getSize().getX() - localX;
-        return offset <= CONST_SCROLLBAR_WIDTH;
-    }
-
     /**
      * Returns the total content height based on all children contained in this list.
      *
@@ -136,55 +106,51 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     @Override
+    public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
+    {
+        scroll(deltaWheel / getTotalContentHeight());
+    }
+
+    /**
+     * Updates the scroll position with a given delta.
+     *
+     * @param delta The delta to scroll.
+     */
+    public void scroll(double delta)
+    {
+        final double newScrollOffset = scrollOffset + delta;
+        scrollTo(newScrollOffset);
+    }
+
+    @Override
+    public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
+    {
+        final BoundingBox localBox = getLocalBoundingBox();
+        if (!localBox.includes(new Vector2d(localX, localY)))
+        {
+            return false;
+        }
+
+        final double offset = localBox.getSize().getX() - localX;
+        return offset <= CONST_SCROLLBAR_WIDTH;
+    }
+
+    @Override
     public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
     {
-
+        onSrollBarClick(localY);
     }
 
     @Override
     public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
     {
-
+        onSrollBarClick(localY);
     }
 
     @Override
     public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
-
-    }
-
-    /**
-     * Updates the scroll position by trying to move the given child to the top.
-     * Passing a control that is not a child of this list will result in undefined behaviour.
-     *
-     * @param child The child to scroll to.
-     */
-    public void scrollTo(@NotNull final IUIElement child)
-    {
-        final double firstChild = values().stream().findFirst().map(u -> u.getLocalBoundingBox().getLocalOrigin().getY()).orElse(0d);
-        final double lastChild = values().stream().reduce((f, s) -> s).map(u -> getLocalBoundingBox().getLocalOrigin().getY()).orElse(0d);
-
-        if (lastChild < firstChild || lastChild == 0)
-        {
-            throw new IllegalArgumentException("Cannot scroll to control when list does not contain values.");
-        }
-
-        final double childOffset = child.getLocalBoundingBox().getLocalOrigin().getY();
-
-        if (childOffset < firstChild || lastChild < childOffset)
-        {
-            throw new IllegalArgumentException("Cannot scroll to control when control does not appear to be part of list.");
-        }
-
-        if (lastChild == firstChild && lastChild == childOffset)
-        {
-            scrollTo(0d);
-            return;
-        }
-
-        final double scrollOffset = (childOffset / (lastChild - firstChild));
-
-        scrollTo(scrollOffset);
+        onSrollBarClick(localY);
     }
 
     /**
@@ -241,22 +207,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public void drawForeground(@NotNull final IRenderingController controller)
     {
 
-    }
-
-    /**
-     * Updates the scroll position by trying to move the child with the given id to the top.
-     *
-     * @param childId The child to scroll to.
-     * @throws IllegalArgumentException thrown when no child with a given id is found.
-     */
-    public void scrollTo(@NotNull final ResourceLocation childId) throws IllegalArgumentException
-    {
-        if (!containsKey(childId))
-        {
-            throw new IllegalArgumentException(String.format("No child with Id: %s can be found to scroll to.", childId));
-        }
-
-        scrollTo(get(childId));
     }
 
     /**
@@ -358,10 +308,14 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     {
         final double localHeight = getLocalBoundingBox().getSize().getY();
         final double barHeight = getScrollBarHeight();
+
         if (localHeight - localY <= barHeight)
         {
-            scrollTo(getTotalContentHeight());
+            scrollTo(1d);
+            return;
         }
+
+        scrollTo(localY / (localHeight - localY));
     }
 
     private int getScrollBarHeight()
