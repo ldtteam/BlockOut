@@ -64,6 +64,7 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Label.Factory());
         getProxy().getFactoryController().registerFactory(new Region.Factory());
         getProxy().getFactoryController().registerFactory(new Template.Factory());
+        getProxy().getFactoryController().registerFactory(new ItemIcon.Factory());
 
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());

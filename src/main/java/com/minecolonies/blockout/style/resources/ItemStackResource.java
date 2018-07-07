@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.style.core.resources.loader.IResourceLoader;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -76,5 +77,15 @@ public class ItemStackResource implements IResource
     public ItemStack getStack()
     {
         return stack.copy();
+    }
+
+    public Vector2d getScalingFactor(@NotNull final Vector2d targetSize)
+    {
+        if (targetSize.getX() == 0d || targetSize.getY() == 0d)
+        {
+            return new Vector2d(1d);
+        }
+
+        return new Vector2d(16 / targetSize.getX(), 16 / targetSize.getY());
     }
 }

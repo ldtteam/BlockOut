@@ -54,6 +54,13 @@ public class Constants
             public static final String CONST_ICON       = "icon";
         }
 
+        public static class ItemIcon
+        {
+            public static final ResourceLocation KEY_ITEM = new ResourceLocation(MOD_ID, "itemIcon");
+
+            public static final String CONST_ICON       = "icon";
+        }
+
         public static class Root
         {
             public static final ResourceLocation KEY_ROOT = new ResourceLocation(MOD_ID, "root");
