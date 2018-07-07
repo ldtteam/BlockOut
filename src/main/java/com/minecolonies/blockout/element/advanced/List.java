@@ -39,7 +39,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     private static final int CONST_SCROLLBAR_WIDTH = 5;
 
     //Indicates weither or not we need to watch for changes in the data list.
-    private final boolean dataBoundMode;
+    private final boolean dataBoundMode = true;
 
     //The current scroll state is not bindable. It is exclusively controlled by the control it self.
     private       double  scrollOffset;

@@ -62,6 +62,16 @@ sourceSets {
             srcDir 'src/test/resources'
         }
     }
+    testmod {
+        compileClasspath += main.compileClasspath + main.output
+
+        java {
+            srcDir 'src/testmod/java'
+        }
+        resources {
+            srcDir 'src/testmod/resources'
+        }
+    }
 }
 
 
@@ -75,6 +85,8 @@ configFile.withReader {
 
 dependencies {
     compile 'de.ruedigermoeller:fst:2.+'
+
+    testmodCompile sourceSets.main.output
 
     testCompile 'junit:junit:4.11'
     testCompile "org.mockito:mockito-core:1.+"
