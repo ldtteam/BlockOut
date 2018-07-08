@@ -18,6 +18,7 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.minecolonies.blockout.element.simple.Region;
 import com.minecolonies.blockout.event.injector.EventHandlerInjector;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.util.color.Color;
@@ -338,6 +339,24 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
             put(element.getId(), element);
         }
+    }
+
+    private void wrapNewElementAndRegister(@NotNull final IUIElement element)
+    {
+        element.setDock(Dock.NONE);
+        element.setAlignment(EnumSet.of(Alignment.LEFT, Alignment.TOP));
+
+        element.update(getParent().getUiManager().getUpdateManager());
+
+        final BoundingBox box = element.getLocalBoundingBox();
+        final Vector2d size = box.getSize();
+
+
+        final Region wrappingRegion = new Region(
+          DependencyObjectHelper.createFromValue(getStyleId()),
+          String.format("%s_wrapper", element.getId()),
+          this
+        );
     }
 
     private int getScrollBarHeight()

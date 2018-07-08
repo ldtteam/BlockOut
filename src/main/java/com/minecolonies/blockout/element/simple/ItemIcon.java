@@ -15,11 +15,7 @@ import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.style.resources.ItemStackResource;
 import com.minecolonies.blockout.util.math.Vector2d;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,24 +66,14 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
     {
         final ItemStackResource resource = getIcon();
         final ItemStack stack = resource.getStack();
-        if (stack != null)
+        if (stack != null && !stack.isEmpty())
         {
             GlStateManager.pushMatrix();
             final Vector2d scalingFactor = resource.getScalingFactor(getLocalBoundingBox().getSize());
             GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
+            controller.drawItemStack(stack, 0, 0);
 
-            RenderHelper.enableGUIStandardItemLighting();
-            final Minecraft mc = Minecraft.getMinecraft();
-            final RenderItem itemRender = mc.getRenderItem();
-
-            FontRenderer font = stack.getItem().getFontRenderer(stack);
-            if (font == null)
-            {
-                font = mc.fontRenderer;
-            }
-            itemRender.renderItemAndEffectIntoGUI(stack, 0, 0);
-            itemRender.renderItemOverlayIntoGUI(font, stack, 0, 0, null);
             GlStateManager.popMatrix();
         }
     }

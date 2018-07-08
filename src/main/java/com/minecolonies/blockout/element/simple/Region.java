@@ -40,6 +40,14 @@ public class Region extends AbstractChildrenContainingUIElement
         super(KEY_REGION, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
     }
 
+    public Region(
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent)
+    {
+        super(KEY_REGION, style, id, parent);
+    }
+
     public static class RegionConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<RegionConstructionDataBuilder, Region>
     {
 
