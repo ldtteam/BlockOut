@@ -564,4 +564,11 @@ public interface IUIElementData
      * @return The bound datacontext.
      */
     IDependencyObject<Object> getBoundDataContext();
+
+    /**
+     * Returns the itemstack attribute
+     * @param name
+     * @return
+     */
+    //ItemStack getItemStackAttribute(@NotNull final String name);
 }

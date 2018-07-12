@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -145,6 +146,12 @@ public final class XMLStreamSupport
         public int characteristics()
         {
             return Spliterator.ORDERED | Spliterator.SORTED | Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT;
+        }
+
+        @Override
+        public Comparator<? super Node> getComparator()
+        {
+            return (Comparator<Node>) Node::compareDocumentPosition;
         }
     }
 }

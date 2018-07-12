@@ -2,7 +2,7 @@ package com.minecolonies.blockout.management.server.network.messages;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.core.element.IUIElement;
-import com.minecolonies.blockout.core.management.IUIManager;
+import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.loader.object.ObjectUIElementData;
@@ -37,7 +37,7 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
                 throw new IllegalStateException("The synced element is not a root.");
             }
 
-            final IUIManager iuiManager = blockOutGui.getRoot().getUiManager();
+            final IUIElementHost iuiManager = blockOutGui.getRoot();
             if (!(iuiManager instanceof RootGuiElement))
             {
                 throw new IllegalStateException("The client side ui manager is not a UIManager instance");
@@ -48,9 +48,8 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 
             uiManager.setRootGuiElement(rootGuiElement);
             rootGuiElement.setUiManager(uiManager);
-            uiManager.getUpdateManager().updateElement(rootGuiElement);
-
             blockOutGui.setRoot(rootGuiElement);
+            blockOutGui.initGui();
         }
         else
         {

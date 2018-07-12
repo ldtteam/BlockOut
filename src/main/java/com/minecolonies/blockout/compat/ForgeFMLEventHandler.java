@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class ForgeFMLEventHandler
@@ -27,8 +29,9 @@ public class ForgeFMLEventHandler
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onTickClientTick(final TickEvent.ClientTickEvent event)
+    public static void onTickClientTick(final TickEvent.ClientTickEvent event)
     {
         SideHelper.onClient(() -> {
             if (Minecraft.getMinecraft().currentScreen instanceof BlockOutGui)
@@ -40,7 +43,7 @@ public class ForgeFMLEventHandler
     }
 
     @SubscribeEvent
-    public void onTickServerTick(final TickEvent.ServerTickEvent event)
+    public static void onTickServerTick(final TickEvent.ServerTickEvent event)
     {
         SideHelper.onServer(() -> {
             if (BlockOut.getBlockOut().getProxy().getGuiController() instanceof ServerGuiController)

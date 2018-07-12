@@ -29,6 +29,7 @@ public class BlockOutGui extends GuiContainer
     @Override
     public void initGui()
     {
+        root.getUiManager().getUpdateManager().updateElement(root);
         this.xSize = (int) root.getLocalBoundingBox().getSize().getX();
         this.ySize = (int) root.getLocalInternalBoundingBox().getSize().getY();
         super.initGui();
