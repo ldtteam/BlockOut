@@ -69,12 +69,19 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         GlStateManager.pushMatrix();
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_DST_ALPHA);
+
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
           getLocalBoundingBox().getSize(),
           resource.getOffset(),
           resource.getSize(),
           resource.getFileSize());
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
 
         GlStateManager.popMatrix();
     }

@@ -48,6 +48,22 @@ public class JsonUIElementData implements IUIElementData
     @Override
     public IDependencyObject<ResourceLocation> getBoundStyleId()
     {
+        if (!object.has("style"))
+        {
+            return DependencyObjectHelper.createFromProperty(PropertyCreationHelper.createFromNonOptional(
+              Optional.of(c -> {
+                  if (getParentView() != null)
+                  {
+                      return getParentView().getStyleId();
+                  }
+
+                  return Constants.Styles.CONST_DEFAULT;
+              }),
+              Optional.empty()
+              ),
+              Constants.Styles.CONST_DEFAULT);
+        }
+
         return bindOrReturnBoundTo(object.get("style"), (JsonElement::isJsonPrimitive), (JsonElement element) -> {
               final String attribute = element.getAsString();
               return new ResourceLocation(attribute);

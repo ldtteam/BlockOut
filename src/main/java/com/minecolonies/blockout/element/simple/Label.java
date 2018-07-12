@@ -32,7 +32,7 @@ import static com.minecolonies.blockout.util.Constants.Controls.Label.KEY_LABEL;
 
 public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 {
-    private final Pattern TRANSLATION_RAW_PATTERN = Pattern.compile("(?<key>(\\$\\{(?<keydata>.*)\\}))|(?<value>(.*))");
+    private final Pattern TRANSLATION_RAW_PATTERN = Pattern.compile("(?<key>(\\$\\{(?<keydata>.*?)\\}))|(?<value>(.*?))");
 
     @NotNull
     private IDependencyObject<String> contents;
@@ -91,16 +91,22 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public String getTranslatedContents()
     {
-        final String rawContents = getContents();
-        final Matcher contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
+        String rawContents = getContents();
+        Matcher contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
 
-        final String keyDataGroup = contentMatcher.group("keydata");
-        if (!keyDataGroup.isEmpty())
+        while (contentMatcher.matches())
         {
-            return I18n.translateToLocal(keyDataGroup);
+            final String keyGroupMatching = contentMatcher.group("keydata");
+            if (keyGroupMatching == null)
+            {
+                break;
+            }
+
+            rawContents = rawContents.replace("${" + keyGroupMatching + "}", I18n.translateToLocal(keyGroupMatching));
+            contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 
-        return contentMatcher.group("value");
+        return rawContents;
     }
 
     public String getContents()

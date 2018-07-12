@@ -115,7 +115,11 @@ public class ScissoringController implements IScissoringController
         scissorDebugColor.removeFirst();
 
         disableScissor();
-        enableScissor(scissorsQueue.peekFirst());
+
+        if (!scissorsQueue.isEmpty())
+        {
+            enableScissor(scissorsQueue.peekFirst());
+        }
     }
 
     @Override

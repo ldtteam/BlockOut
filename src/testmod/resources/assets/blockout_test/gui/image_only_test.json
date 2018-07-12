@@ -1,13 +1,19 @@
 {
   "type": "blockout:root",
-  "style": "blockout:defaut",
-  "size": "150,150",
+  "style": "blockout:default",
+  "size": "150,250",
   "children": [
     {
+      "id": "background",
       "type": "blockout:image",
-      "style": "blockout_test:test",
-      "size": "150,150",
-      "icon": "image:chatchain_150"
+      "size": "150,250",
+      "icon": "image:background_default"
+    },
+    {
+      "label:": "label",
+      "type": "blockout:label",
+      "size": "100, 26",
+      "content": "Hello, I am text"
     }
   ]
 }
