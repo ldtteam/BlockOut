@@ -71,7 +71,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_DST_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         GlStateManager.color(1,1,1);
 

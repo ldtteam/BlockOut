@@ -8,6 +8,8 @@ import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +61,19 @@ public class ScissoringController implements IScissoringController
 
         if (_debugEnabled)
         {
-            renderingController.drawColoredRect(DEBUG_BOX, 100, new Color(Color.GREEN));
+            GlStateManager.pushMatrix();
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            renderingController.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            renderingController.drawTexturedModalRect(new Vector2d(-10, -10),
+              new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
+              new Vector2d(),
+              new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
+              new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlpha();
+            GlStateManager.popMatrix();
         }
     }
 
@@ -91,9 +105,10 @@ public class ScissoringController implements IScissoringController
         GL11.glPushAttrib(GL11.GL_SCISSOR_BIT);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GL11.glScissor((int) (box.getUpperLeftCoordinate().getX() * GUISCALE),
-          (int) ((DISPLAYHEIGHT - box.getLowerRightCoordinate().getY()) * GUISCALE),
+          (int) ((DISPLAYHEIGHT - box.getUpperRightCoordinate().getY()) * GUISCALE),
           (int) ((box.getSize().getX()) * GUISCALE),
           (int) ((box.getSize().getY()) * GUISCALE));
+        //GL11.glScissor(500,500,100,100);
     }
 
     private static void calcScaleFactor()
@@ -103,7 +118,7 @@ public class ScissoringController implements IScissoringController
         DISPLAYWIDTH = sc.getScaledWidth();
         DISPLAYHEIGHT = sc.getScaledHeight();
         GUISCALE = sc.getScaleFactor();
-        DEBUG_BOX = new BoundingBox(new Vector2d(), new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
+        DEBUG_BOX = new BoundingBox(new Vector2d(-10000, -10000), new Vector2d(20000, 20000));
     }
 
     @Override

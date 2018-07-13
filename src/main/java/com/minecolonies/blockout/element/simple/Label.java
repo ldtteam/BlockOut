@@ -70,13 +70,17 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         controller.getScissoringController().focus(this);
 
         GlStateManager.pushMatrix();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        Vector2d vector2d = getLocalBoundingBox().getLocalOrigin();
         BlockOut.getBlockOut()
           .getProxy()
           .getFontRenderer()
-          .drawSplitString(getTranslatedContents(), (int) vector2d.getX(), (int) vector2d.getY(), (int) getElementSize().getY(), 0);
+          .drawSplitString(getTranslatedContents(), 0, 0, (int) getElementSize().getX(), 0);
 
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
         GlStateManager.popMatrix();
 
         controller.getScissoringController().pop();
