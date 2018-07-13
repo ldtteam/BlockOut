@@ -5,7 +5,11 @@ import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
+import com.minecolonies.blockout.binding.dependency.injection.IDependencyDataProvider;
+import com.minecolonies.blockout.binding.property.PropertyCreationHelper;
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.builder.data.BlockOutGuiConstructionData;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.drawable.IChildDrawableUIElement;
@@ -14,12 +18,16 @@ import com.minecolonies.blockout.core.element.input.IClickAcceptingUIElement;
 import com.minecolonies.blockout.core.element.input.IScrollAcceptingUIElement;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
+import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.Dock;
+import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.element.simple.Region;
 import com.minecolonies.blockout.event.injector.EventHandlerInjector;
+import com.minecolonies.blockout.loader.IUIElementData;
+import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
@@ -31,16 +39,20 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
+
+import static com.minecolonies.blockout.util.Constants.Controls.General.*;
+import static com.minecolonies.blockout.util.Constants.Controls.List.CONST_TEMPLATE;
+import static com.minecolonies.blockout.util.Constants.Controls.List.KEY_LIST;
 
 public class List extends AbstractChildrenContainingUIElement implements IScrollAcceptingUIElement, IClickAcceptingUIElement, IDrawableUIElement, IChildDrawableUIElement
 {
     private static final int CONST_SCROLLBAR_WIDTH = 5;
 
-    //Indicates weither or not we need to watch for changes in the data list.
-    private final boolean dataBoundMode = true;
 
     //The current scroll state is not bindable. It is exclusively controlled by the control it self.
     private       double  scrollOffset;
@@ -54,30 +66,27 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     private IDependencyObject<ResourceLocation>             templateResource;
     private IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
-    public List(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
-      @NotNull final IDependencyObject<Dock> dock,
-      @NotNull final IDependencyObject<AxisDistance> margin,
-      @NotNull final IDependencyObject<Vector2d> elementSize,
-      @NotNull final IDependencyObject<AxisDistance> padding,
-      @NotNull final IDependencyObject<Object> dataContext,
-      @NotNull final IDependencyObject<Boolean> visible,
-      @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final boolean dataBoundMode,
-      @NotNull final IDependencyObject<ResourceLocation> templateResource)
+    public static final class ListConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ListConstructionDataBuilder, List>
     {
-        super(type, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
-    }
 
-    public List(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
-    {
-        super(type, style, id, parent);
+        protected ListConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data)
+        {
+            super(controlId, data, List.class);
+        }
+
+        @NotNull
+        public ListConstructionDataBuilder withDependentTemplateResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
+        {
+            return withDependency("templateResource", iconResource);
+        }
+
+        @NotNull
+        public ListConstructionDataBuilder withTemplateResource(@NotNull final ResourceLocation iconResource)
+        {
+            return withDependency("templateResource", DependencyObjectHelper.createFromValue(iconResource));
+        }
     }
 
     @Override
@@ -217,16 +226,115 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     }
 
-    /**
-     * Updates the scroll position by scrolling to a given target.
-     * Given value is clamped to the minimal and maximal scroll value.
-     *
-     * @param target The target to scroll to.
-     */
-    public void scrollTo(double target)
+    public static final class Factory implements IUIElementFactory<List>
     {
-        this.scrollOffset = Clamp.Clamp(0, target, 1);
+
+        /**
+         * Returns the type that this factory builds.
+         *
+         * @return The type.
+         */
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return KEY_LIST;
+        }
+
+        /**
+         * Creates a new {@link List} from the given {@link IUIElementData}.
+         *
+         * @param elementData The {@link IUIElementData} which contains the data that is to be constructed.
+         * @return The {@link List} that is stored in the {@link IUIElementData}.
+         */
+        @NotNull
+        @Override
+        public List readFromElementData(@NotNull final IUIElementData elementData)
+        {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
+            final String id = elementData.getElementId();
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
+            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
+            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
+            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
+            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
+            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+
+            if (elementData.hasChildren())
+            {
+                final List list = new List(
+                  style,
+                  id,
+                  elementData.getParentView(),
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  padding,
+                  dataContext,
+                  visible,
+                  enabled,
+                  false,
+                  DependencyObjectHelper.createFromValue(new ResourceLocation(""))
+                );
+
+                elementData.getChildren(list).forEach(childData -> {
+                    IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                    list.put(child.getId(), child);
+                });
+
+                return list;
+            }
+
+            final IDependencyObject<ResourceLocation> templateResource = elementData.getBoundResourceLocationAttribute(CONST_TEMPLATE);
+
+            return new List(
+              style,
+              id,
+              elementData.getParentView(),
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              padding,
+              dataContext,
+              visible,
+              enabled,
+              true,
+              templateResource
+            );
+        }
+
+        /**
+         * Populates the given {@link IUIElementDataBuilder} with the data from {@link List} so that
+         * the given {@link List} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
+         * the given {@link IUIElementDataBuilder}.
+         *
+         * @param element The {@link List} to write into the {@link IUIElementDataBuilder}
+         * @param builder The {@link IUIElementDataBuilder} to write the {@link List} into.
+         */
+        @Override
+        public void writeToElementData(@NotNull final List element, @NotNull final IUIElementDataBuilder builder)
+        {
+            builder
+              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
+              .addEnum(CONST_DOCK, element.getDock())
+              .addAxisDistance(CONST_MARGIN, element.getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addAxisDistance(CONST_PADDING, element.getPadding())
+              .addBoolean(CONST_VISIBLE, element.isVisible())
+              .addBoolean(CONST_ENABLED, element.isEnabled());
+
+            element.values().forEach(child -> {
+                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
+            });
+        }
     }
+
+    //Indicates weither or not we need to watch for changes in the data list.
+    private boolean dataBoundMode;
 
     /**
      * Updates the children when the control is in databound mode via its datacontext.
@@ -291,6 +399,60 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         return templateResource.get(getDataContext());
     }
 
+    public List(
+      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String id,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+      @NotNull final IDependencyObject<Dock> dock,
+      @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
+      @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Object> dataContext,
+      @NotNull final IDependencyObject<Boolean> visible,
+      @NotNull final IDependencyObject<Boolean> enabled,
+      @NotNull final boolean dataBoundMode,
+      @NotNull final IDependencyObject<ResourceLocation> templateResource)
+    {
+        super(KEY_LIST, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        this.dataBoundMode = dataBoundMode;
+        this.templateResource = templateResource;
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
+    }
+
+    public List(
+      @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
+    {
+        super(KEY_LIST, style, id, parent);
+        this.dataBoundMode = false;
+        this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
+    }
+
+    /**
+     * Updates the scroll position by scrolling to a given target.
+     * Given value is clamped to the minimal and maximal scroll value.
+     *
+     * @param target The target to scroll to.
+     */
+    public void scrollTo(double target)
+    {
+        this.scrollOffset = Clamp.Clamp(0, target, 1);
+        updateScrollOffset();
+        getParent().getUiManager().getUpdateManager().markDirty();
+    }
+
+    private void updateScrollOffset()
+    {
+        double maxOffset = (getTotalContentHeight() - getLocalInternalBoundingBox().getSize().getY()) * scrollOffset;
+        double currentUsedHeight = 0d;
+        for (IUIElement wrapper : values())
+        {
+            wrapper.setMargin(new AxisDistanceBuilder().setLeft(Optional.of(0d)).setRight(Optional.of(0d)).setTop(Optional.of(-maxOffset + currentUsedHeight)).create());
+            currentUsedHeight += wrapper.getElementSize().getY();
+        }
+    }
+
     /**
      * Sets the template resource.
      *
@@ -299,6 +461,18 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
         this.templateResource = DependencyObjectHelper.createFromValue(templateResource);
+        this.dataBoundMode = true;
+        updateChildrenInDataBoundMode(getUiManager().getUpdateManager());
+    }
+
+    public boolean isDataBoundMode()
+    {
+        return dataBoundMode;
+    }
+
+    public void setDataBoundMode(final boolean dataBoundMode)
+    {
+        this.dataBoundMode = dataBoundMode;
     }
 
     private void updateChildrenInDataBoundMoTo(@NotNull final IUpdateManager updateManager, @NotNull final Collection<?> newData)
@@ -337,8 +511,10 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
                 EventHandlerInjector.inject(element, resolvedTemplateConstructionData);
             }
 
-            put(element.getId(), element);
+            wrapNewElementAndRegister(element);
         }
+
+        updateScrollOffset();
     }
 
     private void wrapNewElementAndRegister(@NotNull final IUIElement element)
@@ -348,15 +524,36 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
         element.update(getParent().getUiManager().getUpdateManager());
 
-        final BoundingBox box = element.getLocalBoundingBox();
-        final Vector2d size = box.getSize();
-
-
         final Region wrappingRegion = new Region(
           DependencyObjectHelper.createFromValue(getStyleId()),
           String.format("%s_wrapper", element.getId()),
           this
         );
+
+        DependencyObjectInjector.inject(wrappingRegion, new IDependencyDataProvider()
+        {
+            @Override
+            public boolean hasDependencyData(@NotNull final String name, @NotNull final Class<? extends IDependencyObject> searchedType)
+            {
+                return name.contains("elementSize");
+            }
+
+            @NotNull
+            @Override
+            public <T> IDependencyObject<T> get(@NotNull final String name, @NotNull final IDependencyObject<T> current, @NotNull final Type requestedType)
+            {
+                return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
+                  PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
+                    getLocalInternalBoundingBox().getSize().getX(),
+                    element.getElementSize().getY()
+                  )), (context, value) -> {
+                      //Noop
+                  }), new Vector2d());
+            }
+        });
+
+        wrappingRegion.put(element.getId(), element);
+        put(wrappingRegion.getId(), wrappingRegion);
     }
 
     private int getScrollBarHeight()
@@ -364,6 +561,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         final BoundingBox localBox = getLocalBoundingBox();
         final double contentHeight = getTotalContentHeight();
 
-        return (int) Math.min(localBox.getSize().getY(), localBox.getSize().getY() / (contentHeight / localBox.getSize().getY()));
+        return (int) Math.min(localBox.getSize().getY(), localBox.getSize().getY() / contentHeight);
     }
 }

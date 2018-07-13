@@ -29,7 +29,6 @@ public class ScissoringController implements IScissoringController
     private static int DISPLAYWIDTH;
     private static int GUISCALE;
 
-
     @NotNull
     private final Deque<BoundingBox> scissorsQueue     = new ConcurrentLinkedDeque<>();
     @NotNull

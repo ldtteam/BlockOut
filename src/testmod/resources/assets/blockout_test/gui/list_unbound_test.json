@@ -1,0 +1,38 @@
+{
+  "type": "blockout:root",
+  "style": "blockout:default",
+  "size": "150,50",
+  "children": [
+    {
+      "id": "list",
+      "type": "blockout:list",
+      "size": "150,50",
+      "children": [
+        {
+          "label:": "label",
+          "type": "blockout:label",
+          "size": "100, 26",
+          "content": "Hello, I am text1"
+        },
+        {
+          "label:": "label",
+          "type": "blockout:label",
+          "size": "100, 26",
+          "content": "Hello, I am text2"
+        },
+        {
+          "label:": "label",
+          "type": "blockout:label",
+          "size": "100, 26",
+          "content": "Hello, I am text3"
+        },
+        {
+          "label:": "label",
+          "type": "blockout:label",
+          "size": "100, 26",
+          "content": "Hello, I am tex4"
+        }
+      ]
+    }
+  ]
+}

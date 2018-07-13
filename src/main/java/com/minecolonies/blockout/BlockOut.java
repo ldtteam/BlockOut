@@ -1,5 +1,6 @@
 package com.minecolonies.blockout;
 
+import com.minecolonies.blockout.element.advanced.List;
 import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.element.simple.*;
 import com.minecolonies.blockout.element.template.Template;
@@ -65,6 +66,8 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Region.Factory());
         getProxy().getFactoryController().registerFactory(new Template.Factory());
         getProxy().getFactoryController().registerFactory(new ItemIcon.Factory());
+
+        getProxy().getFactoryController().registerFactory(new List.Factory());
 
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());

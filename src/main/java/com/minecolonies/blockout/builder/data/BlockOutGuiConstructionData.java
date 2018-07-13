@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.builder.data;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.event.IEventHandler;
@@ -15,6 +16,11 @@ public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
 {
     private final Map<String, IDependencyObject<?>>                                    dependencyData;
     private final Map<String, Map<Class<?>, Map<Class<?>, List<IEventHandler<?, ?>>>>> eventHandlerData;
+
+    public BlockOutGuiConstructionData()
+    {
+        this(Maps.newHashMap(), Maps.newHashMap());
+    }
 
     public BlockOutGuiConstructionData(
       final Map<String, IDependencyObject<?>> dependencyData,
