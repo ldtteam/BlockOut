@@ -73,6 +73,8 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_DST_ALPHA);
 
+        GlStateManager.color(1,1,1);
+
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
           getLocalBoundingBox().getSize(),

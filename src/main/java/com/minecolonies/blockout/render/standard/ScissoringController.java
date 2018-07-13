@@ -5,6 +5,7 @@ import com.minecolonies.blockout.render.core.IScissoringController;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
+import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,11 +20,13 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 @SideOnly(Side.CLIENT)
 public class ScissoringController implements IScissoringController
 {
+    private static BoundingBox DEBUG_BOX = new BoundingBox();
 
     private static Random random = new Random(12345);
     private static int DISPLAYHEIGHT;
     private static int DISPLAYWIDTH;
     private static int GUISCALE;
+
 
     @NotNull
     private final Deque<BoundingBox> scissorsQueue     = new ConcurrentLinkedDeque<>();
@@ -56,7 +59,7 @@ public class ScissoringController implements IScissoringController
 
         if (_debugEnabled)
         {
-            renderingController.drawColoredRect(scissorBox, 100, scissorDebugColor.peekFirst());
+            renderingController.drawColoredRect(DEBUG_BOX, 100, new Color(Color.GREEN));
         }
     }
 
@@ -74,6 +77,7 @@ public class ScissoringController implements IScissoringController
         int attempts = 0;
         while (scissorDebugColor.contains(color) && attempts < 100)
         {
+            attempts++;
             color = new Color(random.nextInt());
         }
 
@@ -99,6 +103,7 @@ public class ScissoringController implements IScissoringController
         DISPLAYWIDTH = sc.getScaledWidth();
         DISPLAYHEIGHT = sc.getScaledHeight();
         GUISCALE = sc.getScaleFactor();
+        DEBUG_BOX = new BoundingBox(new Vector2d(), new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
     }
 
     @Override
