@@ -36,7 +36,7 @@ public class Template extends AbstractChildrenContainingUIElement
         public Template readFromElementData(@NotNull final IUIElementData elementData)
         {
             final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String templateId = elementData.getStringAttribute(CONST_ID);
+            final String templateId = elementData.getElementId();
 
             return new Template(style, templateId, elementData);
         }

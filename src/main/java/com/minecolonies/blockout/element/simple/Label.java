@@ -151,7 +151,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         public Label readFromElementData(@NotNull final IUIElementData elementData)
         {
             final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getStringAttribute(CONST_ID);
+            final String id = elementData.getElementId();
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);

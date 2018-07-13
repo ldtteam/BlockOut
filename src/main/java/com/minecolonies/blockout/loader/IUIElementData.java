@@ -6,6 +6,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
+import com.minecolonies.blockout.util.Constants;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public interface IUIElementData
@@ -268,6 +270,18 @@ public interface IUIElementData
      * @return The bound enum attribute.
      */
     <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz);
+
+    /**
+     * Returns the id of the control.
+     * If not specified a random UUID will be used.
+     *
+     * @return The id of the control.
+     */
+    @NotNull
+    default String getElementId()
+    {
+        return getStringAttribute(Constants.Controls.General.CONST_ID, UUID.randomUUID().toString());
+    }
 
     @NotNull
     default String getStringAttribute(@NotNull final String name)
