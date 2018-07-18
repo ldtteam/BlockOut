@@ -1,14 +1,14 @@
 {
   "id": "root",
   "type": "blockout:root",
-  "style": "blockout:default",
+  "style": "blockout_test:minecolonies",
   "size": "150,50",
   "children": [
     {
       "id": "background",
       "type": "blockout:image",
       "size": "150,50",
-      "icon": "image:background_default"
+      "icon": "image:dialog"
     },
     {
       "id": "list",
@@ -21,25 +21,25 @@
           "label:": "label",
           "type": "blockout:label",
           "size": "100, 26",
-          "content": "Hello, I am text1"
+          "content": "Hello, I am text 1"
         },
         {
           "label:": "label",
           "type": "blockout:label",
           "size": "100, 26",
-          "content": "Hello, I am text2"
+          "content": "Hello, I am text 2"
         },
         {
           "label:": "label",
           "type": "blockout:label",
           "size": "100, 26",
-          "content": "Hello, I am text3"
+          "content": "Hello, I am text 3"
         },
         {
           "label:": "label",
           "type": "blockout:label",
           "size": "100, 26",
-          "content": "Hello, I am tex4"
+          "content": "Hello, I am text 4"
         }
       ]
     }

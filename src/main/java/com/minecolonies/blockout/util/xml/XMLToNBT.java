@@ -37,13 +37,13 @@ public final class XMLToNBT
 
     static
     {
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> new NBTTagByte(Byte.parseByte(byteString))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> new NBTTagByte(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, XMLToNBT::convertToByteArray);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, XMLToNBT::converToNBTTagCompound);
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, XMLToNBT::convertToNBTTagCompound);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> new NBTTagDouble(Double.parseDouble(doubleString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> new NBTTagFloat(Float.parseFloat(floatString))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> new NBTTagShort(Short.parseShort(shortString))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> new NBTTagLong(Long.parseLong(longString))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> new NBTTagShort(Short.parseShort(shortString.replace("s", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> new NBTTagLong(Long.parseLong(longString.replace("l", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> new NBTTagInt(Integer.parseInt(intString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, XMLToNBT::convertToList);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (node) -> convertFromValue(node, NBTTagString::new));
@@ -66,6 +66,44 @@ public final class XMLToNBT
         return TYPE_CONVERSION_FUNCTIONS.get(getNBTType(node)).apply(node);
     }
 
+    private static NBTBase convertToByteArray(@NotNull final Node node)
+    {
+        return new NBTTagByteArray(
+          XMLStreamSupport.streamChildren(node)
+            .filter(child -> child.getNodeType() != 8)
+            .filter(child -> child.getNodeType() != 3)
+            .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
+            .map(nbtBase -> (NBTTagByte) nbtBase)
+            .map(NBTTagByte::getByte)
+            .collect(Collectors.toList())
+        );
+    }
+
+    private static <T extends NBTBase> NBTBase convertFromValue(@NotNull final Node node, @NotNull final Function<String, T> converter)
+    {
+        if (node.getAttributes().getLength() != 1)
+        {
+            throw new IllegalArgumentException(String.format("Too many or not enough attributes on Node: %s only value is valid.", node.toString()));
+        }
+
+        final Node valueNode = node.getAttributes().getNamedItem("value");
+
+        return converter.apply(valueNode.getNodeValue());
+    }
+
+    private static NBTBase convertToList(@NotNull final Node node)
+    {
+        final NBTTagList list = new NBTTagList();
+
+        XMLStreamSupport.streamChildren(node)
+          .filter(child -> child.getNodeType() != 8)
+          .filter(child -> child.getNodeType() != 3)
+          .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
+          .forEach(list::appendTag);
+
+        return list;
+    }
+
     private static final NBTType getNBTType(@NotNull final Node node) throws IllegalArgumentException
     {
         if (!node.hasAttributes())
@@ -75,18 +113,38 @@ public final class XMLToNBT
                 throw new IllegalArgumentException(String.format("Can not determine NBT Type from node: %s", node.toString()));
             }
 
-            if (XMLStreamSupport.streamChildren(node).map(XMLToNBT::getNBTType).distinct().count() > 1)
+            final long childrenTypeCount = XMLStreamSupport.streamChildren(node)
+                                             .filter(child -> child.getNodeType() != 3)
+                                             .filter(child -> child.getNodeType() != 8)
+                                             .map(XMLToNBT::getNBTType)
+                                             .distinct()
+                                             .count();
+
+            final long childrenNameCount = XMLStreamSupport.streamChildren(node)
+                                             .filter(child -> child.getNodeType() != 3)
+                                             .filter(child -> child.getNodeType() != 8)
+                                             .map(Node::getNodeName)
+                                             .distinct()
+                                             .count();
+
+            if (childrenNameCount == 1)
             {
-                return NBTType.TAG_COMPOUND;
+                if (childrenTypeCount == 1)
+                {
+                    final NBTType type = XMLStreamSupport.streamChildren(node)
+                                           .filter(child -> child.getNodeType() != 3)
+                                           .filter(child -> child.getNodeType() != 8)
+                                           .map(XMLToNBT::getNBTType).distinct().findFirst().get();
+                    if (type == NBTType.TAG_BYTE)
+                    {
+                        return NBTType.TAG_BYTE_ARRAY;
+                    }
+
+                    return NBTType.TAG_LIST;
+                }
             }
 
-            final NBTType type = XMLStreamSupport.streamChildren(node).map(XMLToNBT::getNBTType).distinct().findFirst().get();
-            if (type == NBTType.TAG_BYTE)
-            {
-                return NBTType.TAG_BYTE_ARRAY;
-            }
-
-            return NBTType.TAG_LIST;
+            return NBTType.TAG_COMPOUND;
         }
 
         if (node.hasChildNodes())
@@ -120,48 +178,21 @@ public final class XMLToNBT
                  .orElse(NBTType.TAG_STRING);
     }
 
-    private static <T extends NBTBase> NBTBase convertFromValue(@NotNull final Node node, @NotNull final Function<String, T> converter)
-    {
-        if (node.getAttributes().getLength() != 1)
-        {
-            throw new IllegalArgumentException(String.format("Too many or not enough attributes on Node: %s only value is valid.", node.toString()));
-        }
-
-        final Node valueNode = node.getAttributes().getNamedItem("value");
-
-        return converter.apply(valueNode.getNodeValue());
-    }
-
-    private static NBTBase convertToByteArray(@NotNull final Node node)
-    {
-        return new NBTTagByteArray(
-          XMLStreamSupport.streamChildren(node)
-            .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
-            .map(nbtBase -> (NBTTagByte) nbtBase)
-            .map(nbtTagByte -> nbtTagByte.getByte())
-            .collect(Collectors.toList())
-        );
-    }
-
-    private static NBTBase convertToList(@NotNull final Node node)
-    {
-        final NBTTagList list = new NBTTagList();
-
-        XMLStreamSupport.streamChildren(node)
-          .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
-          .forEach(list::appendTag);
-
-        return list;
-    }
-
-    private static final NBTBase converToNBTTagCompound(@NotNull final Node node)
+    private static final NBTBase convertToNBTTagCompound(@NotNull final Node node)
     {
         final NBTTagCompound compound = new NBTTagCompound();
 
         XMLStreamSupport.streamChildren(node)
+          .filter(child -> child.getNodeType() != 8)
+          .filter(child -> child.getNodeType() != 3)
           .forEach(child -> {
               final NBTBase nbtBase = TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child);
               final String name = child.getNodeName();
+
+              if (compound.hasKey(name))
+              {
+                  throw new IllegalArgumentException(String.format("Given node contains multiple entries with the same key: %s", name));
+              }
 
               compound.setTag(name, nbtBase);
           });

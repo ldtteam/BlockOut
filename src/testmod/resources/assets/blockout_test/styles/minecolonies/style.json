@@ -1,0 +1,6 @@
+{
+  "id": "blockout_test:minecolonies",
+  "types": [
+    "blockout_test:styles/minecolonies/image/images.json"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "image",
+  "resources": [
+    {
+      "id": "image:scrollbar_background",
+      "data": "blockout_test:styles/minecolonies/image/scrollbar_background.png"
+    },
+    {
+      "id": "image:scrollbar_foreground",
+      "data": "blockout_test:styles/minecolonies/image/scrollbar_foreground.png"
+    },
+    {
+      "id": "image:dialog",
+      "data": "blockout_test:styles/minecolonies/image/dialog.png"
+    }
+  ]
+}
