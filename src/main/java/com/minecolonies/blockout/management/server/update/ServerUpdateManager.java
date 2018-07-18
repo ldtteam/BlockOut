@@ -38,6 +38,9 @@ public class ServerUpdateManager implements IUpdateManager
         this.dirty = true;
     }
 
+    /**
+     * Called by the forge event handler to indicate that a tick has passed on this UI and that a update packet should be send.
+     */
     public void onNetworkTick()
     {
         if (dirty)

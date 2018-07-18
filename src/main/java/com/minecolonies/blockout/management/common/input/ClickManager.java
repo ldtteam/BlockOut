@@ -70,7 +70,8 @@ public class ClickManager extends AbstractInputManager implements IClickManager
 
         onAcceptanceFailure();
 
-        final Optional<IUIElement> target = getManager().getHost().searchDeepestElementByCoord(new Vector2d(localX, localY));
+        final Optional<IUIElement> target =
+          getManager().getHost().searchDeepestElementByCoordAndPredicate(new Vector2d(localX, localY), e -> e instanceof IClickAcceptingUIElement);
         attemptFailedInputInteraction(localX, localY, acceptanceCallback, executionCallback, target);
     }
 

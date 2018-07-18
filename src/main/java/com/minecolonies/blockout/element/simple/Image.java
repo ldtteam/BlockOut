@@ -64,10 +64,8 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final ImageResource resource = getIcon();
-        final Vector2d scalingFactor = resource.getScalingFactor(getLocalBoundingBox().getSize());
 
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();

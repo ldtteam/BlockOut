@@ -118,7 +118,10 @@ public class Constants
         {
             public static final ResourceLocation KEY_LIST = new ResourceLocation(MOD_ID, "list");
 
-            public static final String CONST_TEMPLATE = "template";
+            public static final String CONST_SCROLL_BACKGROUND = "scrollBackground";
+            public static final String CONST_SCROLL_FOREGROUND = "scrollForeground";
+            public static final String CONST_TEMPLATE          = "template";
+            public static final String CONST_SCROLLOFFSET      = "initialOffset";
         }
     }
 

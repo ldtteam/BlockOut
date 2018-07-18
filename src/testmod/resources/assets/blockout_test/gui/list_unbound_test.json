@@ -1,12 +1,21 @@
 {
+  "id": "root",
   "type": "blockout:root",
   "style": "blockout:default",
   "size": "150,50",
   "children": [
     {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,50",
+      "icon": "image:background_default"
+    },
+    {
       "id": "list",
       "type": "blockout:list",
       "size": "150,50",
+      "scrollBackground": "image:scrollbar_background",
+      "scrollForeground": "image:scrollbar_foreground",
       "children": [
         {
           "label:": "label",

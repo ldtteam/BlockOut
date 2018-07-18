@@ -6,6 +6,8 @@ import com.minecolonies.blockout.core.management.focus.IFocusManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class FocusManager implements IFocusManager
 {
 
@@ -27,7 +29,7 @@ public class FocusManager implements IFocusManager
     @Override
     public void setFocusedElement(@Nullable final IUIElement focusedElement)
     {
-        if (this.focusedElement.equals(focusedElement))
+        if (Objects.equals(this.focusedElement, focusedElement))
         {
             return;
         }

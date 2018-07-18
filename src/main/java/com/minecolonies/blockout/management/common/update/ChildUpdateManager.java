@@ -22,6 +22,7 @@ public final class ChildUpdateManager implements IUpdateManager
         {
             IUIElementHost iuiElementHost = (IUIElementHost) element;
             iuiElementHost.values().forEach(this::updateElement);
+            iuiElementHost.onPostChildUpdate(this);
         }
     }
 

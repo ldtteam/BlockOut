@@ -121,10 +121,8 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     {
         final ImageResource resource = resourceSupplier.get();
         final Vector2d size = getLocalBoundingBox().getSize();
-        final Vector2d scalingFactor = resource.getScalingFactor(size);
 
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),

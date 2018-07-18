@@ -126,7 +126,7 @@ public class ImageResource implements IDiskResource
             return new Vector2d(1d);
         }
 
-        return new Vector2d(getSize().getX() / targetSize.getX(), getSize().getY() / targetSize.getY());
+        return new Vector2d(targetSize.getX() / getSize().getX(), targetSize.getY() / getSize().getY());
     }
 
     public Vector2d getSize()

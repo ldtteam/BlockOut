@@ -1,11 +1,13 @@
 package com.minecolonies.blockout.gui;
 
+import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
@@ -24,6 +26,16 @@ public class BlockOutGui extends GuiContainer
         super(inventorySlotsIn);
         this.key = inventorySlotsIn.getKey();
         this.root = inventorySlotsIn.getRoot();
+    }
+
+    /**
+     * Draws a rectangle with a vertical gradient between the specified colors (ARGB format). Args : x1, y1, x2, y2,
+     * topColor, bottomColor
+     */
+    @Override
+    protected void drawGradientRect(final int left, final int top, final int right, final int bottom, final int startColor, final int endColor)
+    {
+        super.drawGradientRect(left, top, right, bottom, startColor, endColor);
     }
 
     @Override
@@ -55,28 +67,35 @@ public class BlockOutGui extends GuiContainer
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        getRoot().getUiManager().getNetworkManager().onMouseClickBegin(mouseX, mouseY, MouseButton.getForCode(mouseButton));
+        getRoot().getUiManager().getNetworkManager().onMouseClickBegin(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(mouseButton));
     }
 
     @Override
     protected void mouseClickMove(final int mouseX, final int mouseY, final int clickedMouseButton, final long timeSinceLastClick)
     {
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-        getRoot().getUiManager().getNetworkManager().onMouseClickMove(mouseX, mouseY, MouseButton.getForCode(clickedMouseButton), timeSinceLastClick);
+        getRoot().getUiManager().getNetworkManager().onMouseClickMove(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(clickedMouseButton), timeSinceLastClick);
     }
 
     @Override
     protected void mouseReleased(final int mouseX, final int mouseY, final int state)
     {
         super.mouseReleased(mouseX, mouseY, state);
-        getRoot().getUiManager().getNetworkManager().onMouseClickEnd(mouseX, mouseY, MouseButton.getForCode(state));
+        getRoot().getUiManager().getNetworkManager().onMouseClickEnd(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(state));
     }
 
     @Override
     protected void keyTyped(final char typedChar, final int keyCode) throws IOException
     {
+        final KeyboardKey key = KeyboardKey.getForCode(keyCode);
+        if (key == KeyboardKey.KEY_ESCAPE)
+        {
+            BlockOut.getBlockOut().getProxy().getGuiController().closeUI(Minecraft.getMinecraft().player);
+            return;
+        }
+
         super.keyTyped(typedChar, keyCode);
-        getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, KeyboardKey.getForCode(keyCode));
+        getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, key);
     }
 
     /**
@@ -91,7 +110,7 @@ public class BlockOutGui extends GuiContainer
         int delta = Mouse.getEventDWheel();
         if (delta != 0)
         {
-            getRoot().getUiManager().getNetworkManager().onMouseWheel(x, y, delta);
+            getRoot().getUiManager().getNetworkManager().onMouseWheel(x - guiLeft, y - guiTop, delta);
         }
         super.handleMouseInput();
     }

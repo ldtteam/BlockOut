@@ -28,6 +28,15 @@
     {
       "id": "image:progressbar_foreground",
       "data": "blockout:styles/default/image/progressbar_foreground.png"
+    },
+    {
+      "id": "image:scrollbar_foreground",
+      "data": "blockout:styles/default/image/scrollbar_foreground.png"
+    },
+    {
+      "id": "image:scrollbar_background",
+      "data": "blockout:styles/default/image/scrollbar_background.png"
     }
+
   ]
 }

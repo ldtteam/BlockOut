@@ -2,6 +2,7 @@ package com.minecolonies.blockout.core.element;
 
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.management.IUIManager;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
@@ -177,5 +178,15 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
           .forEach(element -> combinedChildren.put(element.getId(), element));
 
         return combinedChildren;
+    }
+
+    /**
+     * Called by the update manager once all children have been updated.
+     *
+     * @param updateManager The update manager.
+     */
+    default void onPostChildUpdate(@NotNull final IUpdateManager updateManager)
+    {
+        //Noop
     }
 }
