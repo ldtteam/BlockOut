@@ -306,7 +306,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
             marginBottom = parentSize.getY() - height - marginTop;
         }
 
-        final Vector2d origin = new Vector2d(marginLeft, marginTop).nullifyNegatives();
+        final Vector2d origin = new Vector2d(marginLeft, marginTop);
 
         final Vector2d size =
           new Vector2d(width, height).nullifyNegatives();

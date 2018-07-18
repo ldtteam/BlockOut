@@ -263,12 +263,13 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
         this.scrollBarBackgroundResource = scrollBarBackgroundResource;
         this.scrollBarForegroundResource = scrollBarForegroundResource;
+        this.scrollOffset = scrollOffset;
     }
 
     @Override
     public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
     {
-        scroll(deltaWheel / getTotalContentHeight());
+        scroll(deltaWheel / getTotalContentHeight() / -10);
     }
 
     /**
