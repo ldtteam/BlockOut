@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.loader;
 
+import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.Alignment;
@@ -7,15 +8,22 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -580,9 +588,118 @@ public interface IUIElementData
     IDependencyObject<Object> getBoundDataContext();
 
     /**
-     * Returns the itemstack attribute
-     * @param name
-     * @return
+     * Returns the itemstack stored in the attribute with the given name.
+     * Converts the NBT data stored in the attribute into a ItemStack.
+     *
+     * @param name The name to lookup the stack for.
+     * @return The stack
      */
-    //ItemStack getItemStackAttribute(@NotNull final String name);
+    default ItemStack getItemstackAttribute(@NotNull final String name)
+    {
+        final NBTTagCompound compound = getNBTAttribute(name);
+        if (compound == null)
+        {
+            return ItemStack.EMPTY;
+        }
+
+        try
+        {
+            return new ItemStack(compound);
+        }
+        catch (Exception ex)
+        {
+            Log.getLogger().warn(String.format("Failed to deserialize ItemStack from: %s", compound), ex);
+            return ItemStack.EMPTY;
+        }
+    }
+
+    /**
+     * Returns the nbt stored in the attribute with the given name.
+     * @param name The name to lookup the nbt for.
+     * @return The NBT contained in the attribute with the given name.
+     */
+    <T extends NBTBase> T getNBTAttribute(@NotNull final String name);
+
+    /**
+     * Returns the  bound itemstack stored in the attribute with the given name.
+     * Converts the NBT data stored in the attribute into a ItemStack.
+     *
+     * @param name The name to lookup the stack for.
+     * @return The stack
+     */
+    default IDependencyObject<ItemStack> getBoundItemStackAttribute(@NotNull final String name)
+    {
+        return DependencyObjectHelper.transform(getBoundNBTAttribute(name, ItemStack.EMPTY.serializeNBT()), ItemStack::new, ItemStack::serializeNBT);
+    }
+
+    /**
+     * Returns the bound nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the bound nbt for.
+     * @param def  The default used incase of binding failure.
+     * @param <T>  The type of NBT required.
+     * @return The bound nbt.
+     */
+    <T extends NBTBase> IDependencyObject<T> getBoundNBTAttribute(@NotNull final String name, @NotNull final T def);
+
+    /**
+     * Returns the entity stored in the attribute with the given name.
+     * Converts the NBT data stored in the attribute into a entity.
+     *
+     * @param name The name to lookup the stack for.
+     * @return The entity
+     */
+    default Entity getEntityAttribute(@NotNull final String name)
+    {
+        final NBTTagCompound compound = getNBTAttribute(name);
+        if (compound == null)
+        {
+            return null;
+        }
+
+        try
+        {
+            return EntityList.createEntityFromNBT(compound, null);
+        }
+        catch (Exception ex)
+        {
+            Log.getLogger().warn(String.format("Failed to deserialize Entity from: %s", compound), ex);
+            return null;
+        }
+    }
+
+    /**
+     * Returns the  bound entity stored in the attribute with the given name.
+     * Converts the NBT data stored in the attribute into a entity.
+     *
+     * @param name The name to lookup the entity for.
+     * @return The entity
+     */
+    default IDependencyObject<Entity> getBoundEntityAttribute(@NotNull final String name)
+    {
+        return DependencyObjectHelper.transform(getBoundNBTAttribute(name, new NBTTagCompound()), nbt -> {
+              if (nbt == null || Objects.equals(nbt, new NBTTagCompound()))
+              {
+                  return null;
+              }
+
+              try
+              {
+                  return EntityList.createEntityFromNBT(nbt, null);
+              }
+              catch (Exception ex)
+              {
+                  Log.getLogger().warn("Failed to tranform Entity dependency.", ex);
+                  return null;
+              }
+          },
+          entity -> {
+              if (entity == null)
+              {
+                  return null;
+              }
+
+              return entity.serializeNBT();
+          });
+    }
 }

@@ -14,8 +14,11 @@ import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.Log;
+import com.minecolonies.blockout.util.json.JSONToNBT;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -399,9 +402,56 @@ public class JsonUIElementData implements IUIElementData
         return bindOrReturnStatic(object.get("datacontext"), e -> false, e -> new Object(), new Object());
     }
 
+    /**
+     * Returns the nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the nbt for.
+     * @return The NBT contained in the attribute with the given name.
+     */
+    @Override
+    public <T extends NBTBase> T getNBTAttribute(@NotNull final String name)
+    {
+        final JsonElement element = object.get(name);
+        try
+        {
+            return (T) JSONToNBT.fromJSON(element);
+        }
+        catch (ClassCastException ex)
+        {
+            Log.getLogger().warn("Failed to convert given JSON NBT String into requested type.");
+            return null;
+        }
+    }
+
+    /**
+     * Returns the bound nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the bound nbt for.
+     * @param def  The default used incase of binding failure.
+     * @return The bound nbt.
+     */
+    @Override
+    public <T extends NBTBase> IDependencyObject<T> getBoundNBTAttribute(@NotNull final String name, @NotNull final T def)
+    {
+        return bindOrReturnStatic(object.get(name), (e) -> true, element -> {
+              try
+              {
+                  return (T) JSONToNBT.fromJSON(element);
+              }
+              catch (ClassCastException ex)
+              {
+                  Log.getLogger().warn("Failed to convert given JSON NBT String into requested type.");
+                  return null;
+              }
+          },
+          def);
+    }
+
     private <T> IDependencyObject<T> bindOrReturnStatic(
-      @NotNull final JsonElement element, @NotNull final Predicate<JsonElement> elementMatchesTypePredicate, @NotNull final
-    Function<JsonElement, T> jsonExtractor, T defaultValue)
+      @NotNull final JsonElement element,
+      @NotNull final Predicate<JsonElement> elementMatchesTypePredicate,
+      @NotNull final Function<JsonElement, T> jsonExtractor,
+      T defaultValue)
     {
         if (!elementMatchesTypePredicate.test(element) || defaultValue.getClass() == String.class)
         {

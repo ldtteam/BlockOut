@@ -40,8 +40,8 @@ public final class XMLToNBT
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> new NBTTagByte(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, XMLToNBT::convertToByteArray);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, XMLToNBT::convertToNBTTagCompound);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> new NBTTagDouble(Double.parseDouble(doubleString))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> new NBTTagFloat(Float.parseFloat(floatString))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> new NBTTagDouble(Double.parseDouble(doubleString.replace("d", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> new NBTTagFloat(Float.parseFloat(floatString.replace("f", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> new NBTTagShort(Short.parseShort(shortString.replace("s", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> new NBTTagLong(Long.parseLong(longString.replace("l", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> new NBTTagInt(Integer.parseInt(intString))));

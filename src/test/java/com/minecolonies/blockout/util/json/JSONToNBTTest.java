@@ -1,42 +1,27 @@
-package com.minecolonies.blockout.util.xml;
+package com.minecolonies.blockout.util.json;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.minecolonies.test.AbstractBlockOutTest;
 import net.minecraft.nbt.*;
 import org.hamcrest.core.IsEqual;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 import org.junit.Test;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class XMLToNBTTest extends AbstractBlockOutTest
+public class JSONToNBTTest extends AbstractBlockOutTest
 {
-
-    private Node getXMLNodeForTest(@NotNull final String path) throws ParserConfigurationException, IOException, SAXException
-    {
-        final InputStream stream = getClass().getResourceAsStream(path);
-
-        final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        final DocumentBuilder documentBuilder;
-        documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        return documentBuilder.parse(stream).getFirstChild();
-    }
-
     @Test
-    public void fromXMLDoubleNoSuffix() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONDoubleNoSuffix()
     {
-        final Node doubleNoSuffix = getXMLNodeForTest("/XMLtoNBT/double_no_suffix.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(doubleNoSuffix);
+        final JsonElement doubleNoSuffix = getJsonElementForTest("/JSONtoNBT/double_no_suffix.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(doubleNoSuffix);
 
         assertTrue("Parsed NBT is not a Double", parsedNBT instanceof NBTTagDouble);
 
@@ -44,11 +29,18 @@ public class XMLToNBTTest extends AbstractBlockOutTest
         assertEquals(0.0102503625d, parsedDouble.getDouble(), 0.00000001d);
     }
 
-    @Test
-    public void fromXMLDoubleWithSuffix() throws IOException, SAXException, ParserConfigurationException
+    private JsonElement getJsonElementForTest(@NotNull final String path)
     {
-        final Node doubleNoSuffix = getXMLNodeForTest("/XMLtoNBT/double_with_suffix.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(doubleNoSuffix);
+        final InputStream stream = getClass().getResourceAsStream(path);
+        final JsonParser parser = new JsonParser();
+        return parser.parse(new InputStreamReader(stream)).getAsJsonObject().get("test");
+    }
+
+    @Test
+    public void fromJSONDoubleWithSuffix()
+    {
+        final JsonElement doubleNoSuffix = getJsonElementForTest("/JSONtoNBT/double_with_suffix.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(doubleNoSuffix);
 
         assertTrue("Parsed NBT is not a Double", parsedNBT instanceof NBTTagDouble);
 
@@ -57,10 +49,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLFloatWithSuffix() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONFloatWithSuffix()
     {
-        final Node floatNoSuffix = getXMLNodeForTest("/XMLtoNBT/float_with_suffix.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(floatNoSuffix);
+        final JsonElement floatNoSuffix = getJsonElementForTest("/JSONtoNBT/float_with_suffix.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(floatNoSuffix);
 
         assertTrue("Parsed NBT is not a Float", parsedNBT instanceof NBTTagFloat);
 
@@ -69,10 +61,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLByte() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONByte()
     {
-        final Node byteXml = getXMLNodeForTest("/XMLtoNBT/byte.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(byteXml);
+        final JsonElement byteJson = getJsonElementForTest("/JSONtoNBT/byte.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(byteJson);
 
         assertTrue("Parsed NBT is not a Byte", parsedNBT instanceof NBTTagByte);
 
@@ -81,10 +73,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLLong() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONLong()
     {
-        final Node longXml = getXMLNodeForTest("/XMLtoNBT/long.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(longXml);
+        final JsonElement longJson = getJsonElementForTest("/JSONtoNBT/long.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(longJson);
 
         assertTrue("Parsed NBT is not a Long", parsedNBT instanceof NBTTagLong);
 
@@ -93,10 +85,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLShort() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONShort()
     {
-        final Node shortXml = getXMLNodeForTest("/XMLtoNBT/short.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(shortXml);
+        final JsonElement shortJson = getJsonElementForTest("/JSONtoNBT/short.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(shortJson);
 
         assertTrue("Parsed NBT is not a Short", parsedNBT instanceof NBTTagShort);
 
@@ -105,10 +97,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLInt() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONInt()
     {
-        final Node intXml = getXMLNodeForTest("/XMLtoNBT/int.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(intXml);
+        final JsonElement intJson = getJsonElementForTest("/JSONtoNBT/int.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(intJson);
 
         assertTrue("Parsed NBT is not a Int", parsedNBT instanceof NBTTagInt);
 
@@ -117,10 +109,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLByteArray() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONByteArray()
     {
-        final Node byteArrayXml = getXMLNodeForTest("/XMLtoNBT/byteArray.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(byteArrayXml);
+        final JsonElement byteArrayJson = getJsonElementForTest("/JSONtoNBT/byteArray.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(byteArrayJson);
 
         assertTrue("Parsed NBT is not a ByteArray", parsedNBT instanceof NBTTagByteArray);
 
@@ -129,10 +121,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLList() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONList()
     {
-        final Node listXml = getXMLNodeForTest("/XMLtoNBT/list.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(listXml);
+        final JsonElement listJson = getJsonElementForTest("/JSONtoNBT/list.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(listJson);
 
         assertTrue("Parsed NBT is not a List", parsedNBT instanceof NBTTagList);
 
@@ -153,10 +145,10 @@ public class XMLToNBTTest extends AbstractBlockOutTest
     }
 
     @Test
-    public void fromXMLCompound() throws IOException, SAXException, ParserConfigurationException
+    public void fromJSONCompound()
     {
-        final Node listXml = getXMLNodeForTest("/XMLtoNBT/compound_correct.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(listXml);
+        final JsonElement listJson = getJsonElementForTest("/JSONtoNBT/compound_correct.json");
+        final NBTBase parsedNBT = JSONToNBT.fromJSON(listJson);
 
         assertTrue("Parsed NBT is not a Compound", parsedNBT instanceof NBTTagCompound);
 
@@ -173,12 +165,5 @@ public class XMLToNBTTest extends AbstractBlockOutTest
         parsedCompound.getKeySet().forEach(key -> {
             Assert.assertThat(parsedCompound.getTag(key), IsEqual.equalTo(shouldBeCompound.getTag(key)));
         });
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void fromXMLCompoundWithDuplicateKey() throws IOException, SAXException, ParserConfigurationException
-    {
-        final Node listXml = getXMLNodeForTest("/XMLtoNBT/compound_duplicate_key.xml");
-        final NBTBase parsedNBT = XMLToNBT.fromXML(listXml);
     }
 }

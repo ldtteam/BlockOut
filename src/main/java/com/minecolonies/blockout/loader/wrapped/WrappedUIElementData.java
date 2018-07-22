@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -340,5 +341,30 @@ public class WrappedUIElementData implements IUIElementData
     public IDependencyObject<Object> getBoundDataContext()
     {
         return wrapped.getBoundDataContext();
+    }
+
+    /**
+     * Returns the nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the nbt for.
+     * @return The NBT contained in the attribute with the given name.
+     */
+    @Override
+    public <T extends NBTBase> T getNBTAttribute(@NotNull final String name)
+    {
+        return wrapped.getNBTAttribute(name);
+    }
+
+    /**
+     * Returns the bound nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the bound nbt for.
+     * @param def  The default used incase of binding failure.
+     * @return The bound nbt.
+     */
+    @Override
+    public <T extends NBTBase> IDependencyObject<T> getBoundNBTAttribute(@NotNull final String name, @NotNull final T def)
+    {
+        return wrapped.getBoundNBTAttribute(name, def);
     }
 }

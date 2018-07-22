@@ -12,9 +12,12 @@ import com.minecolonies.blockout.core.element.values.AxisDistanceBuilder;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import com.minecolonies.blockout.util.xml.XMLStreamSupport;
+import com.minecolonies.blockout.util.xml.XMLToNBT;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,6 +92,7 @@ public class XMLUIElementData implements IUIElementData
         return XMLStreamSupport
                  .streamChildren(node)
                  .filter(n -> n.getNodeType() == Node.ELEMENT_NODE)
+                 .filter(n -> !n.getNodeName().startsWith(String.format("%s.", node.getNodeName())))
                  .map(n -> new XMLUIElementData(n, parentOfChildren))
                  .collect(Collectors.toList());
     }
@@ -123,36 +127,47 @@ public class XMLUIElementData implements IUIElementData
     @Override
     public IDependencyObject<Integer> getBoundIntegerAttribute(@NotNull final String name, final int def)
     {
-        return bindOrReturnStatic(name, Integer::new, def);
+        return bindOrReturnStaticViaString(name, Integer::new, def);
     }
 
     @Override
     public IDependencyObject<Float> getBoundFloatAttribute(@NotNull final String name, final float def)
     {
-        return bindOrReturnStatic(name, Float::new, def);
+        return bindOrReturnStaticViaString(name, Float::new, def);
     }
 
     @Override
     public IDependencyObject<Double> getBoundDoubleAttribute(@NotNull final String name, final double def)
     {
-        return bindOrReturnStatic(name, Double::new, def);
+        return bindOrReturnStaticViaString(name, Double::new, def);
     }
 
     @Override
     public IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull final String name, final boolean def)
     {
-        return bindOrReturnStatic(name, Boolean::new, def);
+        return bindOrReturnStaticViaString(name, Boolean::new, def);
     }
 
     @Override
     public <T extends Enum<T>> IDependencyObject<T> getBoundEnumAttribute(@NotNull final String name, final Class<T> clazz, final T def)
     {
-        return bindOrReturnStatic(name, s -> Enum.valueOf(clazz, s), def);
+        return bindOrReturnStaticViaString(name, s -> Enum.valueOf(clazz, s), def);
     }
 
-    private Node getAttribute(final String name)
+    @Override
+    public <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz)
     {
-        return node.getAttributes().getNamedItem(name);
+        return bindOrReturnStaticViaString(name, s -> {
+            final String[] splitted = s.split(",");
+
+            final EnumSet<T> result = EnumSet.noneOf(clazz);
+            for (String e : splitted)
+            {
+                result.add(Enum.valueOf(clazz, e.trim()));
+            }
+
+            return result;
+        }, EnumSet.noneOf(clazz));
     }
 
     /**
@@ -174,19 +189,9 @@ public class XMLUIElementData implements IUIElementData
     }
 
     @Override
-    public <T extends Enum<T>> IDependencyObject<EnumSet<T>> getBoundEnumSetAttribute(@NotNull final String name, @NotNull final Class<T> clazz)
+    public IDependencyObject<String> getBoundStringAttribute(@NotNull final String name, final String def)
     {
-        return bindOrReturnStatic(name, s -> {
-            final String[] splitted = s.split(",");
-
-            final EnumSet<T> result = EnumSet.noneOf(clazz);
-            for (String e : splitted)
-            {
-                result.add(Enum.valueOf(clazz, e.trim()));
-            }
-
-            return result;
-        }, EnumSet.noneOf(clazz));
+        return bindOrReturnStaticViaString(name, Functions.identity(), def);
     }
 
     /**
@@ -208,9 +213,15 @@ public class XMLUIElementData implements IUIElementData
     }
 
     @Override
-    public IDependencyObject<String> getBoundStringAttribute(@NotNull final String name, final String def)
+    public IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(
+      @NotNull final String name, final AxisDistance def)
     {
-        return bindOrReturnStatic(name, Functions.identity(), def);
+        return bindOrReturnStaticViaString(name, s -> {
+            final AxisDistanceBuilder builder = new AxisDistanceBuilder();
+            builder.readFromString(getParentView().getElementSize(), s);
+
+            return builder.create();
+        }, def);
     }
 
     /**
@@ -233,15 +244,10 @@ public class XMLUIElementData implements IUIElementData
     }
 
     @Override
-    public IDependencyObject<AxisDistance> getBoundAxisDistanceAttribute(
-      @NotNull final String name, final AxisDistance def)
+    public IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(
+      @NotNull final String name, final EnumSet<Alignment> def)
     {
-        return bindOrReturnStatic(name, s -> {
-            final AxisDistanceBuilder builder = new AxisDistanceBuilder();
-            builder.readFromString(getParentView().getElementSize(), s);
-
-            return builder.create();
-        }, def);
+        return bindOrReturnStaticViaString(name, Alignment::fromString, def);
     }
 
     /**
@@ -262,13 +268,6 @@ public class XMLUIElementData implements IUIElementData
         return def;
     }
 
-    @Override
-    public IDependencyObject<EnumSet<Alignment>> getBoundAlignmentAttribute(
-      @NotNull final String name, final EnumSet<Alignment> def)
-    {
-        return bindOrReturnStatic(name, Alignment::fromString, def);
-    }
-
     /**
      * Returns a bound ControlDirection attribute from a name and a default value.
      * If the value is not bound nor found, a static bound to the given default value is returned.
@@ -281,13 +280,13 @@ public class XMLUIElementData implements IUIElementData
     public IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(
       @NotNull final String name, final ControlDirection def)
     {
-        return bindOrReturnStatic(name, ControlDirection::fromString, def);
+        return bindOrReturnStaticViaString(name, ControlDirection::fromString, def);
     }
 
     @Override
     public IDependencyObject<Vector2d> getBoundVector2dAttribute(@NotNull final String name, final Vector2d def)
     {
-        return bindOrReturnStatic(name, s -> {
+        return bindOrReturnStaticViaString(name, s -> {
             final String[] components = s.split(",");
             if (components.length == 1)
             {
@@ -307,27 +306,90 @@ public class XMLUIElementData implements IUIElementData
     @Override
     public IDependencyObject<ResourceLocation> getBoundResourceLocationAttribute(@NotNull final String name, final ResourceLocation def)
     {
-        return bindOrReturnStatic(name, ResourceLocation::new, def);
+        return bindOrReturnStaticViaString(name, ResourceLocation::new, def);
     }
 
     @Override
     public IDependencyObject<BoundingBox> getBoundBoundingBoxAttribute(
       @NotNull final String name, final BoundingBox def)
     {
-        return bindOrReturnStatic(name, BoundingBox::fromString, def);
+        return bindOrReturnStaticViaString(name, BoundingBox::fromString, def);
     }
 
     @Override
     public IDependencyObject<Object> getBoundDataContext()
     {
-        return bindOrReturnStatic("datacontext", e -> new Object(), new Object());
+        return bindOrReturnStaticViaString("datacontext", e -> new Object(), new Object());
+    }
+
+    /**
+     * Returns the nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the nbt for.
+     * @return The NBT contained in the attribute with the given name.
+     */
+    @Override
+    public <T extends NBTBase> T getNBTAttribute(@NotNull final String name)
+    {
+        final Node node = getAttribute(name);
+        final NBTBase nbt = XMLToNBT.fromXML(node);
+
+        try
+        {
+            return (T) nbt;
+        }
+        catch (ClassCastException ex)
+        {
+            Log.getLogger().warn("Failed to parse XML into NBT. Contained type is not correct.", ex);
+            return null;
+        }
+    }
+
+    /**
+     * Returns the bound nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the bound nbt for.
+     * @param def  The default used incase of binding failure.
+     * @return The bound nbt.
+     */
+    @Override
+    public <T extends NBTBase> IDependencyObject<T> getBoundNBTAttribute(@NotNull final String name, @NotNull final T def)
+    {
+        return bindOrReturnStatic(name, node -> {
+              final NBTBase base = XMLToNBT.fromXML(node);
+              try
+              {
+                  return (T) base;
+              }
+              catch (ClassCastException ex)
+              {
+                  Log.getLogger().warn("Failed to read XML into NBT.", ex);
+                  return null;
+              }
+          },
+          def);
+    }
+
+    private <T> IDependencyObject<T> bindOrReturnStaticViaString(
+      @NotNull final String name, @NotNull final
+    Function<String, T> extract, T defaultValue)
+    {
+        return bindOrReturnStatic(name,
+          node -> extract.apply(node.getNodeValue()),
+          defaultValue);
     }
 
     private <T> IDependencyObject<T> bindOrReturnStatic(
       @NotNull final String name, @NotNull final
-    Function<String, T> extract, T defaultValue)
+    Function<Node, T> extract, T defaultValue)
     {
-        @Nullable final String attribute = getStringAttribute(name, null);
+        @Nullable final Node node = getAttribute(name);
+        if (node == null)
+        {
+            return DependencyObjectHelper.createFromValue(defaultValue);
+        }
+
+        @Nullable final String attribute = node == null ? null : node.getNodeValue();
         if (attribute == null)
         {
             return DependencyObjectHelper.createFromValue(defaultValue);
@@ -352,7 +414,24 @@ public class XMLUIElementData implements IUIElementData
             return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
         }
 
-        return DependencyObjectHelper.createFromValue(extract.apply(attribute));
+        return DependencyObjectHelper.createFromValue(extract.apply(node));
+    }
+
+    private Node getAttribute(final String name)
+    {
+        final Node attributeNode = node.getAttributes().getNamedItem(name);
+        if (attributeNode == null)
+        {
+            return XMLStreamSupport
+                     .streamChildren(node)
+                     .filter(n -> n.getNodeType() == Node.ELEMENT_NODE)
+                     .filter(n -> n.getNodeName().startsWith(String.format("%s.", node.getNodeName())))
+                     .filter(n -> n.getNodeName().replace(String.format("%s.", node.getNodeName()), "").equals(name))
+                     .findFirst()
+                     .orElse(null);
+        }
+
+        return attributeNode;
     }
 
     private <T> IDependencyObject<T> bindOrReturnBoundTo(

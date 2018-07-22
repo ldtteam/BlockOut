@@ -2,6 +2,8 @@ package com.minecolonies.blockout.loader.object;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.core.element.IUIElementHost;
@@ -10,8 +12,11 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.util.Constants;
+import com.minecolonies.blockout.util.Log;
+import com.minecolonies.blockout.util.json.JSONToNBT;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -219,6 +224,43 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     public IDependencyObject<Object> getBoundDataContext()
     {
         return DependencyObjectHelper.createFromValue(new Object());
+    }
+
+    /**
+     * Returns the nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the nbt for.
+     * @return The NBT contained in the attribute with the given name.
+     */
+    @Override
+    public <T extends NBTBase> T getNBTAttribute(@NotNull final String name)
+    {
+        final String nbtString = getAttribute(name, String.class).orElseThrow(() -> new IllegalArgumentException("Given name is not an NBT string."));
+        final JsonParser jsonParser = new JsonParser();
+        final JsonElement element = jsonParser.parse(nbtString);
+
+        try
+        {
+            return (T) JSONToNBT.fromJSON(element);
+        }
+        catch (ClassCastException ex)
+        {
+            Log.getLogger().warn("Failed to convert given JSON NBT String into requested type.");
+            return null;
+        }
+    }
+
+    /**
+     * Returns the bound nbt stored in the attribute with the given name.
+     *
+     * @param name The name to lookup the bound nbt for.
+     * @param def  The default used incase of binding failure.
+     * @return The bound nbt.
+     */
+    @Override
+    public <T extends NBTBase> IDependencyObject<T> getBoundNBTAttribute(@NotNull final String name, @NotNull final T def)
+    {
+        return DependencyObjectHelper.createFromValue(getNBTAttribute(name));
     }
 
     private <T extends Serializable> Optional<T> getAttribute(@NotNull final String name, @NotNull final Class<T> cls)
