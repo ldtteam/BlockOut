@@ -11,6 +11,12 @@
       "icon": "image:dialog"
     },
     {
+      "id": "textfield",
+      "type": "blockout:textfield",
+      "size": "150,25",
+      "content": "Hello, I am text 1"
+    },
+    {
       "id": "list",
       "type": "blockout:list",
       "size": "150,50",

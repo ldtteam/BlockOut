@@ -97,6 +97,13 @@ public class Constants
             public static final String CONST_CONTENT = "content";
         }
 
+        public static class TextField
+        {
+            public static final ResourceLocation KEY_TEXT_FIELD = new ResourceLocation(MOD_ID, "textfield");
+
+            public static final String CONST_CONTENT = "content";
+        }
+
         public static class ProgressBar
         {
             public static final ResourceLocation KEY_PROGRESS_BAR = new ResourceLocation(MOD_ID, "progressbar");

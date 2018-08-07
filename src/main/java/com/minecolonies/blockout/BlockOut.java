@@ -63,6 +63,8 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Slot.Factory());
         getProxy().getFactoryController().registerFactory(new Button.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
+        getProxy().getFactoryController().registerFactory(new TextField.Factory());
+
         getProxy().getFactoryController().registerFactory(new Region.Factory());
         getProxy().getFactoryController().registerFactory(new Template.Factory());
         getProxy().getFactoryController().registerFactory(new ItemIcon.Factory());
