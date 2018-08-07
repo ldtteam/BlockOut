@@ -83,6 +83,10 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
+configurations {
+    testmodRuntime.extendsFrom(forgeGradleGradleStart)
+}
+
 dependencies {
     compile 'de.ruedigermoeller:fst:2.+'
 
@@ -142,15 +146,6 @@ compileJava {
     options.compilerArgs << "-Xlint"
 }
 
-task deobfJar(type: Jar) {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    extension = 'jar'
-    classifier "deobf"
-}
-
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from "build/docs/javadoc"
     classifier "javadoc"
@@ -159,7 +154,6 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
 jar {
     from sourceSets.main.output
 
-    dependsOn deobfJar
     dependsOn javadocJar
 }
 
@@ -167,6 +161,8 @@ idea {
     module {
         inheritOutputDirs = true
     }
+    module.downloadJavadoc = true
+    module.downloadSources = true
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
@@ -198,7 +194,7 @@ curseforge {
             changelogType = 'markdown'
             releaseType = System.getenv().CURSERELEASETYPE
 
-            addArtifact deobfJar
+            addArtifact javadocJar
         }
     }
     else
