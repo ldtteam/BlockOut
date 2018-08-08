@@ -14,7 +14,7 @@ import java.awt.image.ColorModel;
  * A standard Color class for smithsmodding.
  * <p>
  * Extends the Standard Java color class with some functions.
- * <p>
+ * <p>D
  * Created by Orion
  * Created on 27.10.2015
  * 17:19

@@ -5,6 +5,7 @@ import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
+import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
 import net.minecraft.client.Minecraft;
@@ -93,7 +94,6 @@ public class BlockOutGui extends GuiContainer
             BlockOut.getBlockOut().getProxy().getGuiController().closeUI(Minecraft.getMinecraft().player);
             return;
         }
-
         super.keyTyped(typedChar, keyCode);
         getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, key);
     }
