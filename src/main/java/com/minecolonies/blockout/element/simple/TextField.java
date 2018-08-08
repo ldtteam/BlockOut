@@ -43,17 +43,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Texture resource location.
      */
-    private static final ResourceLocation TEXTURE                 = new ResourceLocation("textures/gui/widgets.png");
-
-    /**
-     * The default max text length.
-     */
-    private static final int              DEFAULT_MAX_TEXT_LENGTH = 32;
-
-    /**
-     * The considered max text length.
-     */
-    private int maxTextLength = DEFAULT_MAX_TEXT_LENGTH;
+    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/widgets.png");
 
     /**
      * The current cursor position.
@@ -85,7 +75,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
       @NotNull final IUIElementHost parent)
     {
         super(KEY_TEXT_FIELD, style, id, parent);
-
         this.contents = DependencyObjectHelper.createFromValue("");
     }
 
@@ -134,6 +123,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
+        final int maxTextLength = (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
+
         controller.getScissoringController().focus(this);
 
         GlStateManager.pushMatrix();
@@ -162,7 +153,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final int relativeCursorPosition = cursorPosition - scrollOffset;
         int relativeSelectionEnd = selectionEnd - scrollOffset;
         final boolean cursorVisible = relativeCursorPosition >= 0 && relativeCursorPosition <= visibleString.length();
-        final boolean cursorBeforeEnd = cursorPosition < getContents().length() || getContents().length() >= maxTextLength;
+        final boolean cursorBeforeEnd = cursorPosition < getContents().length() || fontRenderer.getStringWidth(getContents()) >= maxTextLength;
 
         //  Enforce selection to the length limit of the visible string
         if (relativeSelectionEnd > visibleString.length())
@@ -330,9 +321,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private void writeText(final String str)
     {
+        final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
+        final int maxTextLength = (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
+
+
         final int insertAt = Math.min(cursorPosition, selectionEnd);
         final int insertEnd = Math.max(cursorPosition, selectionEnd);
-        final int availableChars = (maxTextLength - getContents().length()) + (insertEnd - insertAt);
+        final int availableChars = (maxTextLength - fontRenderer.getStringWidth(getContents())) + (insertEnd - insertAt);
 
         if (availableChars < 0)
         {
