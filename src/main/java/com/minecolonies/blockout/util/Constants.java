@@ -101,9 +101,10 @@ public class Constants
         {
             public static final ResourceLocation KEY_TEXT_FIELD = new ResourceLocation(MOD_ID, "textfield");
 
-            public static final String CONST_CONTENT = "content";
-            public static final String CONST_CURSER = "curser";
-            public static final String CONST_CURSER_COUNTER = "curserCounter";
+            public static final String CONST_CONTENT           = "content";
+            public static final String CONST_CURSOR_POS        = "cursorCounter";
+            public static final String CONST_CURSOR_SCROLL_OFF = "cursorScroll";
+            public static final String CONST_CURSOR_SEL_END    = "cursor_SEL";
         }
 
         public static class ProgressBar

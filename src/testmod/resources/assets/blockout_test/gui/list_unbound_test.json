@@ -11,17 +11,24 @@
       "icon": "image:dialog"
     },
     {
-      "id": "textfield",
+      "id": "textfield1",
       "type": "blockout:textfield",
       "size": "150,25",
       "margin": "50, 50",
-      "content": "Hello, I am a textfield"
+      "content": "Hello, I am a textfield1"
+    },
+    {
+      "id": "textfield2",
+      "type": "blockout:textfield",
+      "size": "150,25",
+      "margin": "50, 85",
+      "content": "Hello, I am a textfield2"
     },
     {
       "id": "list",
       "type": "blockout:list",
       "size": "150,50",
-      "margin": "100, 100",
+      "margin": "150, 150",
       "scrollBackground": "image:scrollbar_background",
       "scrollForeground": "image:scrollbar_foreground",
       "children": [

@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.core.management.focus;
 
 import com.minecolonies.blockout.core.element.IUIElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,7 +21,7 @@ public interface IFocusManager
      * @param element the element to compare.
      * @return true if so.
      */
-    boolean isFocusedElement(IUIElement element);
+    boolean isFocusedElement(@NotNull IUIElement element);
 
     /**
      * Set the focused element.

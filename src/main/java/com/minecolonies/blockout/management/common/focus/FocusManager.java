@@ -29,9 +29,13 @@ public class FocusManager implements IFocusManager
     }
 
     @Override
-    public boolean isFocusedElement(final IUIElement element)
+    public boolean isFocusedElement(@NotNull final IUIElement element)
     {
-        return element == focusedElement;
+        if (focusedElement == null)
+        {
+            return false;
+        }
+        return element.getId().equals(focusedElement.getId());
     }
 
     @Override
