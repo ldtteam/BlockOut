@@ -38,6 +38,8 @@ public class ForgeFMLEventHandler
             {
                 BlockOutGui currentScreen = (BlockOutGui) Minecraft.getMinecraft().currentScreen;
                 currentScreen.getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getRoot());
+
+                ClientTickManager.getInstance().onClientTick();
             }
         });
     }
