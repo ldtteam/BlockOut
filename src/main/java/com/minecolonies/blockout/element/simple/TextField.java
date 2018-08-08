@@ -4,6 +4,7 @@ import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.minecolonies.blockout.compat.ClientTickManager;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.drawable.IDrawableUIElement;
 import com.minecolonies.blockout.core.element.input.IClickAcceptingUIElement;
@@ -51,19 +52,18 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private static final ResourceLocation TEXTURE           = new ResourceLocation("textures/gui/widgets.png");
     private static final int RECT_COLOR = -3_092_272;
     private static final int DEFAULT_MAX_TEXT_LENGTH = 32;
+
     //  Attributes
     protected            int              maxTextLength     = DEFAULT_MAX_TEXT_LENGTH;
-    protected            int              textColor         = 0xE0E0E0;
-    protected            int              textColorDisabled = 0x707070;
-    protected            boolean          shadow            = true;
+
     @Nullable
     protected            String           tabNextPaneID     = null;
+
     //  Runtime
     protected            String           text              = "";
     protected int cursorPosition     = 0;
     protected int scrollOffset       = 0;
     protected int selectionEnd       = 0;
-    protected int cursorBlinkCounter = 0;
 
     @NotNull
     private IDependencyObject<String> contents;
@@ -155,9 +155,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
 
         //  Should we draw the cursor this frame?
-        if (cursorVisible && (cursorBlinkCounter / 6 % 2 == 0))
+        if (cursorVisible && (ClientTickManager.getInstance().getTickCount() / 20 % 2 == 0))
         {
-            int x = fontRenderer.getStringWidth(getContents().substring(0, cursorPosition));
+            int x = fontRenderer.getStringWidth(getContents().substring(0, Math.min(getContents().length(), cursorPosition)));
             if (cursorBeforeEnd)
             {
                 drawRect(x, drawY, x+1, fontRenderer.FONT_HEIGHT+1, RECT_COLOR);
@@ -211,7 +211,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.popMatrix();
-        cursorBlinkCounter++;
         controller.getScissoringController().pop();
     }
 
@@ -500,28 +499,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         return getNthWordFromPos(count, cursorPosition);
     }
-    
-    public String getText()
-    {
-        return text;
-    }
-
-    public void setText(@NotNull final String s)
-    {
-        text = s.length() <= maxTextLength ? s : s.substring(0, maxTextLength);
-        setCursorPosition(text.length());
-    }
-
-    public void setTextIgnoreLength(@NotNull final String s)
-    {
-        text = s;
-        setCursorPosition(text.length());
-    }
-    
-    private double getWidth()
-    {
-        return this.getLocalBoundingBox().getSize().getX();
-    }
 
     public void setCursorPosition(final int pos)
     {
@@ -594,8 +571,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private boolean handleKey(final char c, final KeyboardKey key)
     {
+        Log.getLogger().warn(key.name());
         switch (key)
         {
+            case KEY_LSHIFT:
+            case KEY_RSHIFT:
+                return true;
             case KEY_BACK:
             case KEY_DELETE:
                 return handleDelete(key);
@@ -710,7 +691,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     public void onFocus()
     {
         setCursorPosition(getContents().length());
-        cursorBlinkCounter = 0;
     }
 
     /**
