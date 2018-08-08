@@ -16,9 +16,11 @@ import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
+import com.minecolonies.blockout.management.common.focus.FocusManager;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.util.Log;
+import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -112,8 +114,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         final double width = box.getSize().getX();
         final double height = box.getSize().getY();
-        drawRect(0 - 1, 0 - 1, 0 + width + 1, 0 + height + 1, 0xFFA0A0A0);
-        drawRect(0, 0, 0 + width, 0 + height, 0xFF000000);
+        controller.drawRect(-1, -1, width + 1, height + 1, new Color(0xFFA0A0A0));
+        controller.drawRect(0, 0, width, height, new Color(Color.BLACK));
 
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
         fontRenderer.drawSplitString(getContents(), 0,2, (int) getElementSize().getX(), 0xffffff);
@@ -155,12 +157,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
 
         //  Should we draw the cursor this frame?
-        if (cursorVisible && (ClientTickManager.getInstance().getTickCount() / 20 % 2 == 0))
+        if (getParent().getUiManager().getFocusManager().isFocusedElement(this) && cursorVisible && (ClientTickManager.getInstance().getTickCount() / 20 % 2 == 0))
         {
             int x = fontRenderer.getStringWidth(getContents().substring(0, Math.min(getContents().length(), cursorPosition)));
             if (cursorBeforeEnd)
             {
-                drawRect(x, drawY, x+1, fontRenderer.FONT_HEIGHT+1, RECT_COLOR);
+                controller.drawRect(x, drawY, x+1, fontRenderer.FONT_HEIGHT+1, new Color(color));
             }
             else
             {
@@ -220,41 +222,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
     }
 
-    public static void drawRect(double left, double top, double right, double bottom, int color)
-    {
-        double j;
-        if (left < right) {
-            j = left;
-            left = right;
-            right = j;
-        }
-
-        if (top < bottom) {
-            j = top;
-            top = bottom;
-            bottom = j;
-        }
-
-        float f3 = (float)(color >> 24 & 255) / 255.0F;
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(f, f1, f2, f3);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-        bufferbuilder.pos((double)left, (double)bottom, 0.0D).endVertex();
-        bufferbuilder.pos((double)right, (double)bottom, 0.0D).endVertex();
-        bufferbuilder.pos((double)right, (double)top, 0.0D).endVertex();
-        bufferbuilder.pos((double)left, (double)top, 0.0D).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-    }
-
     public String getContents()
     {
         return text;
@@ -296,7 +263,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         // Cache and restore scrollOffset when we change focus via click,
         // because onFocus() sets the cursor (and thus scroll offset) to the end.
         final int oldScrollOffset = scrollOffset;
-        setFocus();
         scrollOffset = oldScrollOffset;
         setCursorPosition(trimmedString.length() + scrollOffset);
     }
@@ -668,49 +634,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
 
         return true;
-    }
-    
-    /**
-     * Set Focus to this Pane.
-     */
-    public final void setFocus()
-    {
-        setFocus(this);
-    }
-
-    /**
-     * Return <tt>true</tt> if this Pane is the current focus.
-     *
-     * @return <tt>true</tt> if this Pane is the current focus.
-     */
-    public final synchronized boolean isFocus()
-    {
-        return focus == this;
-    }
-
-    public void onFocus()
-    {
-        setCursorPosition(getContents().length());
-    }
-
-    /**
-     * Set the currently focused Pane.
-     *
-     * @param f Pane to focus, or nil.
-     */
-    public static synchronized void setFocus(final TextField f)
-    {
-        if (focus != null)
-        {
-            focus = null;
-        }
-
-        focus = f;
-
-        if (focus != null)
-        {
-            focus.onFocus();
-        }
     }
 
     @NotNull

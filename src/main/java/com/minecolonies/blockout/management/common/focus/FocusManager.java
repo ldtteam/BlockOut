@@ -8,9 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * Class implementing the focus manager interface.
+ */
 public class FocusManager implements IFocusManager
 {
-
     @NotNull
     private final IUIManager manager;
 
@@ -24,6 +26,12 @@ public class FocusManager implements IFocusManager
     public IUIElement getFocusedElement()
     {
         return focusedElement;
+    }
+
+    @Override
+    public boolean isFocusedElement(final IUIElement element)
+    {
+        return element == focusedElement;
     }
 
     @Override

@@ -244,6 +244,51 @@ public class RenderingController implements IRenderingController
         GlStateManager.enableTexture2D();
     }
 
+    @Override
+    public void drawRect(final double left, final double top, final double right, final double bottom, @NotNull final Color color)
+    {
+        double relativeLeft = left;
+        double relativeRight = right;
+        double relativeTop = top;
+        double relativeBottom = bottom;
+        double j;
+        if (left < right)
+        {
+            j = left;
+            relativeLeft = right;
+            relativeRight = j;
+        }
+
+        if (top < bottom)
+        {
+            j = top;
+            relativeTop = bottom;
+            relativeBottom = j;
+        }
+
+        float f = color.getRedFloat();
+        float f1 = color.getGreenFloat();
+        float f2 = color.getBlueFloat();
+        float f3 = color.getAlphaFloat();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+          GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+          GlStateManager.SourceFactor.ONE,
+          GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(f, f1, f2, f3);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(relativeLeft, relativeBottom, 0.0D).endVertex();
+        bufferbuilder.pos(relativeRight, relativeBottom, 0.0D).endVertex();
+        bufferbuilder.pos(relativeRight, relativeTop, 0.0D).endVertex();
+        bufferbuilder.pos(relativeLeft, relativeTop, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
     /**
      * Helper function to draw an ItemStack on the given location
      *
