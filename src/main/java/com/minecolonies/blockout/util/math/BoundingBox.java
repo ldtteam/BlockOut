@@ -81,7 +81,7 @@ public final class BoundingBox
     @NotNull
     public BoundingBox include(@NotNull final BoundingBox box)
     {
-        return this.include(getLowerLeftCoordinate())
+        return box.include(getLowerLeftCoordinate())
                  .include(getLowerRightCoordinate())
                  .include(getUpperRightCoordinate())
                  .include(getUpperLeftCoordinate());

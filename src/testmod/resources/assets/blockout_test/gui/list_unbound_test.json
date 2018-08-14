@@ -28,7 +28,7 @@
       "id": "list",
       "type": "blockout:list",
       "size": "150,50",
-      "margin": "150, 150",
+      "margin": "50, 120",
       "scrollBackground": "image:scrollbar_background",
       "scrollForeground": "image:scrollbar_foreground",
       "children": [
