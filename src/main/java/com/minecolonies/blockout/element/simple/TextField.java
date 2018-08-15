@@ -48,25 +48,26 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * The current cursor position.
      */
-    private int    cursorPosition = 0;
+    private int cursorPosition = 0;
 
     /**
      * The scroll offset.
      */
-    private int    scrollOffset   = 0;
+    private int scrollOffset = 0;
 
     /**
      * The selection end.
      */
-    private int    selectionEnd   = 0;
+    private int selectionEnd = 0;
 
     @NotNull
     private IDependencyObject<String> contents;
 
     /**
      * Public constructor to create textField.
-     * @param style the used style.
-     * @param id the unique id.
+     *
+     * @param style  the used style.
+     * @param id     the unique id.
      * @param parent the parent.
      */
     public TextField(
@@ -80,20 +81,21 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Private constructor for internal use.
-     * @param style the style.
-     * @param id the unique id.
-     * @param parent the parent.
-     * @param alignments the alginments.
-     * @param dock the dock.
-     * @param margin the margin.
-     * @param elementSize the size.
-     * @param dataContext the data context.
-     * @param visible if visible.
-     * @param enabled if enabled.
-     * @param contents the string content.
+     *
+     * @param style          the style.
+     * @param id             the unique id.
+     * @param parent         the parent.
+     * @param alignments     the alginments.
+     * @param dock           the dock.
+     * @param margin         the margin.
+     * @param elementSize    the size.
+     * @param dataContext    the data context.
+     * @param visible        if visible.
+     * @param enabled        if enabled.
+     * @param contents       the string content.
      * @param cursorPosition the cursor position.
-     * @param scrollOffset the scroll offset.
-     * @param selectionEnd the selection end.
+     * @param scrollOffset   the scroll offset.
+     * @param selectionEnd   the selection end.
      */
     private TextField(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -110,7 +112,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
       final int cursorPosition,
       final int scrollOffset,
       final int selectionEnd
-      )
+    )
     {
         super(KEY_TEXT_FIELD, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.contents = contents;
@@ -139,7 +141,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         controller.drawRect(0, 0, width, height, new Color(Color.BLACK));
 
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
-        fontRenderer.drawSplitString(getContents(), 0,2, (int) getElementSize().getX(), 0xffffff);
+        //fontRenderer.drawString(getContents(), 0,2, 0xffffff);
 
         final boolean shadow = false;
         final int color = isEnabled() ? 0xffffff : 0xffffff;
@@ -180,10 +182,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         //  Should we draw the cursor this frame?
         if (getParent().getUiManager().getFocusManager().isFocusedElement(this) && cursorVisible && (ClientTickManager.getInstance().getTickCount() / 20 % 2 == 0))
         {
-            int x = fontRenderer.getStringWidth(getContents().substring(0, Math.min(getContents().length(), cursorPosition)));
+            int x = fontRenderer.getStringWidth(visibleString.substring(0, Math.min(visibleString.length(), relativeCursorPosition)));
             if (cursorBeforeEnd)
             {
-                controller.drawRect(x, drawY, x+1, fontRenderer.FONT_HEIGHT+1, new Color(color));
+                controller.drawRect(x, drawY, x + 1, fontRenderer.FONT_HEIGHT + 1, new Color(color));
             }
             else
             {
@@ -199,7 +201,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             final int max = Math.max(relativeSelectionEnd, relativeCursorPosition);
             double selectionStartX = fontRenderer.getStringWidth(visibleString.substring(0, min));
             double selectionEndX = selectionStartX + fontRenderer.getStringWidth(visibleString.substring(min, max));
-            controller.drawRect(selectionStartX, drawY, selectionEndX, fontRenderer.FONT_HEIGHT+1, new Color(Color.white.getRed(), Color.WHITE.getGreen(), Color.white.getBlue(), 200));
+            controller.drawRect(selectionStartX,
+              drawY,
+              selectionEndX,
+              fontRenderer.FONT_HEIGHT + 1,
+              new Color(Color.white.getRed(), Color.WHITE.getGreen(), Color.white.getBlue(), 200));
         }
 
 
@@ -217,6 +223,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Get the text content.
+     *
      * @return the text.
      */
     public String getContents()
@@ -226,6 +233,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Set the text contents
+     *
      * @param contents the new string to set.
      */
     public void setContents(@NotNull final String contents)
@@ -259,6 +267,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Get the internal width of the textField.
+     *
      * @return the width.
      */
     private int getInternalWidth()
@@ -322,7 +331,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private void writeText(final String str)
     {
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
-        final int maxTextLength = (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
+        final int maxTextLength =
+          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
 
 
         final int insertAt = Math.min(cursorPosition, selectionEnd);
@@ -482,6 +492,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Setter for the cursor position.
+     *
      * @param pos the x pos.
      */
     private void setCursorPosition(final int pos)
@@ -502,6 +513,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Get the selection end.
+     *
      * @return the end pos.
      */
     private int getSelectionEnd()
@@ -511,6 +523,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Set the end of the selection.
+     *
      * @param pos the end pos.
      */
     private void setSelectionEnd(final int pos)
@@ -518,7 +531,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         selectionEnd = pos;
 
         final int internalWidth = getInternalWidth();
-        /*if (internalWidth > 0)
+        if (internalWidth > 0)
         {
             if (scrollOffset > getContents().length())
             {
@@ -543,11 +556,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             }
 
             scrollOffset = MathHelper.clamp(scrollOffset, 0, getContents().length());
-        }*/
+        }
     }
 
     /**
      * Get the selected text.
+     *
      * @return the selected text.
      */
     @NotNull
@@ -612,6 +626,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Handling arrow key for textfield navigation.
+     *
      * @param key the clicked key.
      */
     private void handleArrowKeys(final KeyboardKey key)
@@ -641,6 +656,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * On home end key clicked.
+     *
      * @param key the key specifics.
      */
     private void handleHomeEnd(final KeyboardKey key)
@@ -659,6 +675,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     /**
      * Handle delete action.
+     *
      * @param key the pressed key.
      */
     private void handleDelete(final KeyboardKey key)
@@ -681,7 +698,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         return null;
     }
-    
+
     public static class TextFieldConstructionDataBuilder extends SimpleControlConstructionDataBuilder<TextFieldConstructionDataBuilder, TextField>
     {
 
@@ -724,9 +741,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<String> contents = elementData.getBoundStringAttribute(CONST_CONTENT);
 
-            final int    cursorPosition = elementData.getIntegerAttribute(CONST_CURSOR_POS);
-            final int    scrollOffset   = elementData.getIntegerAttribute(CONST_CURSOR_SCROLL_OFF);
-            final int    selectionEnd   = elementData.getIntegerAttribute(CONST_CURSOR_SEL_END);
+            final int cursorPosition = elementData.getIntegerAttribute(CONST_CURSOR_POS);
+            final int scrollOffset = elementData.getIntegerAttribute(CONST_CURSOR_SCROLL_OFF);
+            final int selectionEnd = elementData.getIntegerAttribute(CONST_CURSOR_SEL_END);
 
             return new TextField(
               style,
@@ -760,7 +777,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
               .addInteger(CONST_CURSOR_POS, element.cursorPosition)
               .addInteger(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
               .addInteger(CONST_CURSOR_SEL_END, element.selectionEnd);
-
         }
     }
 }
