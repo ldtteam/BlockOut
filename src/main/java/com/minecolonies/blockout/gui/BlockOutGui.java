@@ -94,7 +94,8 @@ public class BlockOutGui extends GuiContainer
             BlockOut.getBlockOut().getProxy().getGuiController().closeUI(Minecraft.getMinecraft().player);
             return;
         }
-        super.keyTyped(typedChar, keyCode);
+        // Disabled to avoid any functionality like opening the player GUI on e. If we want this behavior we gotta write an if (shouldHandleKey()) which the fields should decide.
+        //super.keyTyped(typedChar, keyCode);
         getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, key);
     }
 
