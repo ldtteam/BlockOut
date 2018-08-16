@@ -14,6 +14,8 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
+import com.minecolonies.blockout.event.Event;
+import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
@@ -62,6 +64,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     @NotNull
     private IDependencyObject<String> contents;
+
+    @NotNull
+    private Event<TextField, TextFieldChangedEventArgs> onClicked = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
 
     /**
      * Public constructor to create textField.
@@ -369,6 +374,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         setContents(resultBuffer.toString());
         moveCursorBy((insertAt - selectionEnd) + insertedLength);
+
+        onClicked.raise(this, new TextFieldChangedEventArgs(getContents()));
     }
 
     /**
@@ -699,9 +706,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         return null;
     }
 
+    /**
+     * Data builder for the text field.
+     */
     public static class TextFieldConstructionDataBuilder extends SimpleControlConstructionDataBuilder<TextFieldConstructionDataBuilder, TextField>
     {
-
         protected TextFieldConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
@@ -714,11 +723,19 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             return withDependency("contents", contents);
         }
+
+        @NotNull
+        public TextFieldConstructionDataBuilder withChangedEventHandler(@NotNull final IEventHandler<TextField, TextField.TextFieldChangedEventArgs> eventHandler)
+        {
+            return withEventHandler("onChanged", TextField.TextFieldChangedEventArgs.class, eventHandler);
+        }
     }
 
+    /**
+     * Element factory to instantiate the text field.
+     */
     public static class Factory implements IUIElementFactory<TextField>
     {
-
         @NotNull
         @Override
         public ResourceLocation getType()
@@ -777,6 +794,45 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
               .addInteger(CONST_CURSOR_POS, element.cursorPosition)
               .addInteger(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
               .addInteger(CONST_CURSOR_SEL_END, element.selectionEnd);
+        }
+    }
+
+    /**
+     * Event arguments on change.
+     */
+    public static class TextFieldChangedEventArgs
+    {
+        /**
+         * The content of the event.
+         */
+        private final String newContent;
+
+        /**
+         * Creates the event argument on text field changed
+         * @param newContent the new content.
+         */
+        public TextFieldChangedEventArgs(final String newContent)
+        {
+            this.newContent = newContent;
+        }
+
+        /**
+         * Creates the event argument on text field changed with delta.
+         * @param newContent the new content.
+         * @param timeDelta the delta.
+         */
+        public TextFieldChangedEventArgs(final String newContent, final float timeDelta)
+        {
+            this.newContent = newContent;
+        }
+
+        /**
+         * Gets the new text field content after event.
+         * @return the content String.
+         */
+        public String getNewContent()
+        {
+            return newContent;
         }
     }
 }
