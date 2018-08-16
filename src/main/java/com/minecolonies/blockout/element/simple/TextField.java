@@ -19,7 +19,6 @@ import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
-import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
@@ -697,13 +696,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             deleteFromCursor(direction);
         }
-    }
-
-    @NotNull
-    @Override
-    public <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
-    {
-        return null;
     }
 
     /**
