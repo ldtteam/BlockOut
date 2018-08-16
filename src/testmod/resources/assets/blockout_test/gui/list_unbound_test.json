@@ -25,6 +25,20 @@
       "content": "Hello, I am a textfield2"
     },
     {
+      "id": "inv1",
+      "type": "blockout:slot",
+      "margin": "68, 85",
+      "index": "0",
+      "inventory":"blockout:test_inventory"
+    },
+    {
+      "id": "inv2",
+      "type": "blockout:slot",
+      "margin": "50, 85",
+      "index": "1",
+      "inventory":"blockout:test_inventory"
+    },
+    {
       "id": "list",
       "type": "blockout:list",
       "size": "150,50",

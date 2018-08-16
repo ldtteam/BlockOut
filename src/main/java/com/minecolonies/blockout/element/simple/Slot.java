@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumSet;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
-import static com.minecolonies.blockout.util.Constants.Controls.Image.CONST_ICON;
 import static com.minecolonies.blockout.util.Constants.Controls.Slot.*;
 
 public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
@@ -240,7 +239,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
               .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
               .addBoolean(CONST_VISIBLE, element.isVisible())
               .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_ICON, element.getBackgroundImageResource())
+              .addResourceLocation(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource())
               .addResourceLocation(CONST_INVENTORY_ID, element.getInventoryId())
               .addInteger(CONST_INVENTORY_INDEX, element.getInventoryIndex());
         }
