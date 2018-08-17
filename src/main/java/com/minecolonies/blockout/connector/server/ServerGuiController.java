@@ -109,6 +109,7 @@ public class ServerGuiController implements IGuiController
             host.setUiManager(new UIManager(host, key));
 
             openUis.put(key, host);
+            host.getUiManager().getUpdateManager().updateElement(host);
         }
         else
         {
@@ -192,11 +193,12 @@ public class ServerGuiController implements IGuiController
     {
         playerMP.getNextWindowId();
         playerMP.closeContainer();
-        playerMP.openContainer = new BlockOutContainer(key, openUis.get(key));
-        playerMP.openContainer.windowId = playerMP.currentWindowId;
-        playerMP.openContainer.addListener(playerMP);
 
-        NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement)), playerMP);
+        NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement), playerMP.currentWindowId),
+          playerMP);
+
+        playerMP.openContainer = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
+        playerMP.openContainer.addListener(playerMP);
 
         MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(playerMP, playerMP.openContainer));
     }

@@ -6,6 +6,10 @@
       "data": "blockout:styles/default/image/background_default.png"
     },
     {
+      "id": "image:background_ruler",
+      "data": "blockout:styles/default/image/background_ruler.png"
+    },
+    {
       "id": "image:button_clicked",
       "data": "blockout:styles/default/image/button_clicked.png"
     },

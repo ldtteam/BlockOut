@@ -20,10 +20,11 @@ public class BlockOutContainer extends Container
     @NotNull
     private final IUIElementHost root;
 
-    public BlockOutContainer(@NotNull final IGuiKey key, @NotNull final IUIElementHost root)
+    public BlockOutContainer(@NotNull final IGuiKey key, @NotNull final IUIElementHost root, @NotNull final int windowId)
     {
         this.key = key;
         this.root = root;
+        this.windowId = windowId;
 
         initializeSlots();
     }
@@ -67,8 +68,8 @@ public class BlockOutContainer extends Container
             final BoundingBox absoluteBoundingBox = slot.getAbsoluteBoundingBox();
             final SlotItemHandler slotItemHandler = new SlotItemHandler(itemHandler,
               slotIndex++,
-              (int) absoluteBoundingBox.getLocalOrigin().getX(),
-              (int) absoluteBoundingBox.getLocalOrigin().getY())
+              (int) absoluteBoundingBox.getLocalOrigin().getX() + 1,
+              (int) absoluteBoundingBox.getLocalOrigin().getY() + 1)
             {
                 @Override
                 public boolean canTakeStack(final EntityPlayer playerIn)

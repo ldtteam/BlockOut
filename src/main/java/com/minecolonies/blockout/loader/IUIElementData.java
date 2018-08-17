@@ -221,7 +221,7 @@ public interface IUIElementData
      */
     default IDependencyObject<Boolean> getBoundBooleanAttribute(@NotNull final String name)
     {
-        return getBoundBooleanAttribute(name, false);
+        return getBoundBooleanAttribute(name, true);
     }
 
     /**

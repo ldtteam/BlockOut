@@ -74,7 +74,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         GlStateManager.color(1,1,1);
 
         controller.bindTexture(resource.getDiskLocation());
-        controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
+        controller.drawTexturedModalRect(new Vector2d(),
           getLocalBoundingBox().getSize(),
           resource.getOffset(),
           resource.getSize(),

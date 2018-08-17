@@ -97,7 +97,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         GlStateManager.scale(backgroundScalingFactor.getX(), backgroundScalingFactor.getY(), 1f);
 
         controller.bindTexture(backGround.getDiskLocation());
-        controller.drawTexturedModalRect(localBox.getLocalOrigin(),
+        controller.drawTexturedModalRect(new Vector2d(),
           localBox.getSize(),
           backGround.getOffset(),
           backGround.getSize(),
@@ -113,7 +113,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         GlStateManager.scale(foregroundScalingFactor.getX(), foregroundScalingFactor.getY(), 1f);
 
         controller.bindTexture(foreGround.getDiskLocation());
-        controller.drawTexturedModalRect(localBox.getLocalOrigin(),
+        controller.drawTexturedModalRect(new Vector2d(),
           localBox.getSize(),
           foreGround.getOffset(),
           foreGround.getSize(),

@@ -47,7 +47,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         super(KEY_SLOT, style, id, parent);
         this.inventoryId = inventoryId;
         this.inventoryIndex = inventoryIndex;
-        this.backgroundImageResource = backgroundImageResource;
+        this.backgroundImageResource = backgroundImage;
     }
 
     public Slot(
@@ -81,7 +81,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
 
         controller.bindTexture(resource.getDiskLocation());
-        controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
+        controller.drawTexturedModalRect(new Vector2d(),
           size,
           resource.getOffset(),
           resource.getSize(),

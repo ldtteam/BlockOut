@@ -22,15 +22,18 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     private IGuiKey        key;
     @NotNull
     private IUIElementData data;
+    @NotNull
+    private int            windowId;
 
     public OpenGuiCommandMessage()
     {
     }
 
-    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final IUIElementData data)
+    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final IUIElementData data, @NotNull final int windowId)
     {
         this.key = key;
         this.data = data;
+        this.windowId = windowId;
     }
 
     @NotNull
@@ -50,7 +53,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     @Override
     public void onMessageArrivalAtClient(@NotNull final MessageContext ctx)
     {
-        final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(data);
+        final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(getData());
 
         if (!(element instanceof RootGuiElement))
         {
@@ -58,10 +61,16 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         }
 
         final RootGuiElement root = (RootGuiElement) element;
-        root.setUiManager(new UIManager(root, key));
+        root.setUiManager(new UIManager(root, getKey()));
         root.getUiManager().getUpdateManager().updateElement(root);
-        final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(key, root));
+        final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(getKey(), root, getWindowId()));
 
         Minecraft.getMinecraft().displayGuiScreen(gui);
+    }
+
+    @NotNull
+    public int getWindowId()
+    {
+        return windowId;
     }
 }

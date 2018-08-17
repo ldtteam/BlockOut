@@ -1,76 +1,29 @@
 {
   "id": "root",
   "type": "blockout:root",
-  "style": "blockout_test:minecolonies",
-  "size": "250,200",
+  "size": "150,150",
   "children": [
     {
       "id": "background",
       "type": "blockout:image",
-      "size": "250,200",
-      "icon": "image:dialog"
+      "size": "150,150",
+      "icon": "image:background_ruler"
     },
     {
-      "id": "textfield1",
-      "type": "blockout:textfield",
-      "size": "150,25",
-      "margin": "50, 50",
-      "content": "Hello, I am a textfield1"
-    },
-    {
-      "id": "textfield2",
-      "type": "blockout:textfield",
-      "size": "150,25",
-      "margin": "50, 85",
-      "content": "Hello, I am a textfield2"
-    },
-    {
-      "id": "inv1",
+      "id": "upper_left",
       "type": "blockout:slot",
-      "margin": "68, 85",
+      "margin": "10, 10",
+      "background": "image:slot_default_18x18",
       "index": "0",
       "inventory":"blockout:test_inventory"
     },
     {
-      "id": "inv2",
+      "id": "lower_right",
       "type": "blockout:slot",
-      "margin": "50, 85",
+      "margin": "40, 40",
+      "background": "image:slot_default_18x18",
       "index": "1",
       "inventory":"blockout:test_inventory"
-    },
-    {
-      "id": "list",
-      "type": "blockout:list",
-      "size": "150,50",
-      "margin": "50, 120",
-      "scrollBackground": "image:scrollbar_background",
-      "scrollForeground": "image:scrollbar_foreground",
-      "children": [
-        {
-          "label:": "label",
-          "type": "blockout:label",
-          "size": "100, 26",
-          "content": "Hello, I am text 1"
-        },
-        {
-          "label:": "label",
-          "type": "blockout:label",
-          "size": "100, 26",
-          "content": "Hello, I am text 2"
-        },
-        {
-          "label:": "label",
-          "type": "blockout:label",
-          "size": "100, 26",
-          "content": "Hello, I am text 3"
-        },
-        {
-          "label:": "label",
-          "type": "blockout:label",
-          "size": "100, 26",
-          "content": "Hello, I am text 4"
-        }
-      ]
     }
   ]
 }

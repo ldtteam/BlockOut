@@ -125,7 +125,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         GlStateManager.pushMatrix();
 
         controller.bindTexture(resource.getDiskLocation());
-        controller.drawTexturedModalRect(getLocalBoundingBox().getLocalOrigin(),
+        controller.drawTexturedModalRect(new Vector2d(),
           size,
           resource.getOffset(),
           resource.getSize(),
