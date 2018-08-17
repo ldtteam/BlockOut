@@ -19,7 +19,6 @@ import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
-import com.minecolonies.blockout.style.core.resources.core.IResource;
 import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
@@ -163,7 +162,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final boolean cursorBeforeEnd = cursorPosition < getContents().length() || fontRenderer.getStringWidth(getContents()) >= maxTextLength;
 
         //  Enforce selection to the length limit of the visible string
-        if (relativeSelectionEnd > visibleString.length())
+        if (relativeSelectionEnd != relativeCursorPosition && relativeSelectionEnd > visibleString.length())
         {
             relativeSelectionEnd = visibleString.length();
         }
@@ -202,10 +201,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         //  Draw selection
         if (relativeSelectionEnd != relativeCursorPosition)
         {
-            final int min = Math.min(relativeSelectionEnd, relativeCursorPosition);
+            final int min = Math.max(0, Math.min(relativeSelectionEnd, relativeCursorPosition));
             final int max = Math.max(relativeSelectionEnd, relativeCursorPosition);
             double selectionStartX = fontRenderer.getStringWidth(visibleString.substring(0, min));
-            double selectionEndX = selectionStartX + fontRenderer.getStringWidth(visibleString.substring(min, max));
+            double selectionEndX = selectionStartX + fontRenderer.getStringWidth(visibleString.substring(min, Math.min(visibleString.length(),max)));
             controller.drawRect(selectionStartX,
               drawY,
               selectionEndX,
@@ -289,7 +288,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     @Override
     public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
-        Log.getLogger().warn(cursorPosition + " " + localX);
         final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
         final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
         final int oldScrollOffset = scrollOffset;
@@ -587,7 +585,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private void handleKey(final char c, final KeyboardKey key)
     {
-        Log.getLogger().warn(key.name());
         switch (key)
         {
             case KEY_LSHIFT:
@@ -697,13 +694,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             deleteFromCursor(direction);
         }
-    }
-
-    @NotNull
-    @Override
-    public <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
-    {
-        return null;
     }
 
     /**
