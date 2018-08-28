@@ -157,6 +157,17 @@ jar {
     dependsOn javadocJar
 }
 
+task testModJar(type: Jar) {
+    from sourceSets.testmod.output
+
+    classifier 'testmod'
+}
+
+reob{
+    jar{}
+    testModJar{}
+}
+
 idea {
     module {
         inheritOutputDirs = true
@@ -195,6 +206,8 @@ curseforge {
             releaseType = System.getenv().CURSERELEASETYPE
 
             addArtifact javadocJar
+            addArtifact testModJar
+            addArtifact sourceJar
         }
     }
     else
