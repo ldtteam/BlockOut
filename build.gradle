@@ -91,14 +91,12 @@ dependencies {
     compile 'com.intellij:annotations:+@jar'
 }
 
-group = "com.minecolonies.blockout"
+group = "com.ldtteam"
+version = config.minecraft_version.toString() + "-" + System.getenv()["Version"]
 archivesBaseName = "blockout"
-
-version = config.minecraft_version.toString() + "-" + System.getenv()["version"]
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
-
 minecraft {
 
     version = config.minecraft_version + "-" + config.forge_version
