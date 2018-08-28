@@ -1,0 +1,19 @@
+{
+  "type": "blockout:root",
+  "style": "blockout:default",
+  "size": "150,250",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,250",
+      "icon": "image:background_default"
+    },
+    {
+      "label:": "label",
+      "type": "blockout:label",
+      "size": "100, 26",
+      "content": "Hello, I am text"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "blockout_test",
+    "name": "BlockOut_Test",
+    "description": "Test mod for blockout.",
+    "version": "@VERSION@",
+    "mcversion": "@MCVERSION@",
+    "url": "http://minecolonies.com",
+    "updateUrl": "",
+    "authorList": [
+      "MineColonies Mod Team"
+    ],
+    "credits": "OrionDevelopment",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

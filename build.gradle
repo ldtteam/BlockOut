@@ -62,6 +62,16 @@ sourceSets {
             srcDir 'src/test/resources'
         }
     }
+    testmod {
+        compileClasspath += main.compileClasspath + main.output
+
+        java {
+            srcDir 'src/testmod/java'
+        }
+        resources {
+            srcDir 'src/testmod/resources'
+        }
+    }
 }
 
 
@@ -73,7 +83,15 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
+configurations {
+    testmodRuntime.extendsFrom(forgeGradleGradleStart)
+}
+
 dependencies {
+    compile 'de.ruedigermoeller:fst:2.+'
+
+    testmodCompile sourceSets.main.output
+
     testCompile 'junit:junit:4.11'
     testCompile "org.mockito:mockito-core:1.+"
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.5'
@@ -128,15 +146,6 @@ compileJava {
     options.compilerArgs << "-Xlint"
 }
 
-task deobfJar(type: Jar) {
-    from(sourceSets.main.output) {
-        include '**'
-    }
-
-    extension = 'jar'
-    classifier "deobf"
-}
-
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from "build/docs/javadoc"
     classifier "javadoc"
@@ -145,14 +154,26 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
 jar {
     from sourceSets.main.output
 
-    dependsOn deobfJar
     dependsOn javadocJar
+}
+
+task testModJar(type: Jar) {
+    from sourceSets.testmod.output
+
+    classifier 'testmod'
+}
+
+reob{
+    jar{}
+    testModJar{}
 }
 
 idea {
     module {
         inheritOutputDirs = true
     }
+    module.downloadJavadoc = true
+    module.downloadSources = true
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
@@ -184,7 +205,9 @@ curseforge {
             changelogType = 'markdown'
             releaseType = System.getenv().CURSERELEASETYPE
 
-            addArtifact deobfJar
+            addArtifact javadocJar
+            addArtifact testModJar
+            addArtifact sourceJar
         }
     }
     else

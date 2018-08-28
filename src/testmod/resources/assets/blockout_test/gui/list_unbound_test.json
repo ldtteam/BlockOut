@@ -1,0 +1,29 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "size": "150,150",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,150",
+      "icon": "image:background_ruler"
+    },
+    {
+      "id": "upper_left",
+      "type": "blockout:slot",
+      "margin": "10, 10",
+      "background": "image:slot_default_18x18",
+      "index": "0",
+      "inventory":"blockout:test_inventory"
+    },
+    {
+      "id": "lower_right",
+      "type": "blockout:slot",
+      "margin": "40, 40",
+      "background": "image:slot_default_18x18",
+      "index": "1",
+      "inventory":"blockout:test_inventory"
+    }
+  ]
+}
