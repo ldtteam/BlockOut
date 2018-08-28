@@ -12,8 +12,7 @@ buildscript {
 }
 
 plugins {
-    id "org.sonarqube" version "2.3"
-    id "com.matthewprenger.cursegradle" version "1.0.9"
+    id "com.matthewprenger.cursegradle" version "1.1.0"
 }
 
 repositories {
@@ -23,15 +22,6 @@ repositories {
     }
     maven {
         url 'http://dogforce-games.com/maven'
-    }
-}
-
-sonarqube {
-    properties{
-        property "sonar.host.url", "http://home.kk-sc.de:9000"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.projectName", "BlockOut"
-        property "sonar.branch", System.getenv()['TEAMCITY_BRANCH']
     }
 }
 
