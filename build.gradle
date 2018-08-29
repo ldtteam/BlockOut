@@ -165,7 +165,6 @@ idea {
 artifacts {
     archives jar
     archives javadocJar
-    archives apiJar
     archives testModJar
     archives sourceJar
 }
