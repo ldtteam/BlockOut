@@ -25,6 +25,7 @@ repositories {
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
 
 jacocoTestReport {
     reports {
@@ -160,6 +161,16 @@ idea {
     module.downloadJavadoc = true
     module.downloadSources = true
 }
+
+artifacts {
+    archives jar
+    archives javadocJar
+    archives apiJar
+    archives testModJar
+    archives sourceJar
+}
+
+
 
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available
