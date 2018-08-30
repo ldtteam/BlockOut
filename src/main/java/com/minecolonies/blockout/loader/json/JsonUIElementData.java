@@ -3,6 +3,7 @@ package com.minecolonies.blockout.loader.json;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
 import com.minecolonies.blockout.binding.property.Property;
@@ -396,6 +397,20 @@ public class JsonUIElementData implements IUIElementData
     {
         if (!object.has("datacontext"))
         {
+            if (getParentView() != null)
+            {
+                //Bind the childs datacontext if not specified directly to the parent.
+                return bindOrReturnBoundTo(
+                  new JsonPrimitive("?!?!Dummy!?!?"),
+                  e -> false,
+                  e -> new Object(),
+                  PropertyCreationHelper.create(
+                    Optional::of,
+                    null
+                  ),
+                  new Object());
+            }
+
             return DependencyObjectHelper.createFromValue(new Object());
         }
 
@@ -491,8 +506,11 @@ public class JsonUIElementData implements IUIElementData
     }
 
     private <T> IDependencyObject<T> bindOrReturnBoundTo(
-      @NotNull final JsonElement element, @NotNull final Predicate<JsonElement> elementMatchesTypePredicate, @NotNull final
-    Function<JsonElement, T> jsonExtractor, Property<T> boundTo, T defaultValue)
+      @NotNull final JsonElement element,
+      @NotNull final Predicate<JsonElement> elementMatchesTypePredicate,
+      @NotNull final Function<JsonElement, T> jsonExtractor,
+      @NotNull final Property<T> boundTo,
+      @NotNull final T defaultValue)
     {
         if (!elementMatchesTypePredicate.test(element) || defaultValue.getClass() == String.class)
         {

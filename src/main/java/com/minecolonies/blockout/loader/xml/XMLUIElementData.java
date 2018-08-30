@@ -319,7 +319,11 @@ public class XMLUIElementData implements IUIElementData
     @Override
     public IDependencyObject<Object> getBoundDataContext()
     {
-        return bindOrReturnStaticViaString("datacontext", e -> new Object(), new Object());
+        return bindOrReturnBoundTo("dataContext", e -> new Object(), PropertyCreationHelper.create(
+          Optional::of,
+          null
+          ),
+          new Object());
     }
 
     /**
@@ -435,8 +439,10 @@ public class XMLUIElementData implements IUIElementData
     }
 
     private <T> IDependencyObject<T> bindOrReturnBoundTo(
-      @NotNull final String name, @NotNull final
-    Function<String, T> extract, Property<T> boundTo, T defaultValue)
+      @NotNull final String name,
+      @NotNull final Function<String, T> extract,
+      @NotNull final Property<T> boundTo,
+      @NotNull final T defaultValue)
     {
         @Nullable final String attribute = getStringAttribute(name, null);
         if (attribute == null)

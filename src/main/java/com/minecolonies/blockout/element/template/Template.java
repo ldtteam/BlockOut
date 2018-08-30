@@ -3,6 +3,7 @@ package com.minecolonies.blockout.element.template;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.binding.property.Property;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
@@ -61,7 +62,15 @@ public class Template extends AbstractChildrenContainingUIElement
         this.setParent(this);
     }
 
-    public IUIElement generateInstance(@NotNull final IUIElementHost instanceParent, @NotNull final Object context, @NotNull final String controlId)
+    /**
+     * Generates a new instance of the template.
+     *
+     * @param instanceParent  The instances parent.
+     * @param contextProperty The property for the context retrieval.
+     * @param controlId       The id of the new instance.
+     * @return The instance from the parent.
+     */
+    public IUIElement generateInstance(@NotNull final IUIElementHost instanceParent, @NotNull final Property<Object> contextProperty, @NotNull final String controlId)
     {
         final List<IUIElementData> childDatas = ownData.getChildren(instanceParent);
         if (childDatas.size() != 1)
@@ -103,12 +112,10 @@ public class Template extends AbstractChildrenContainingUIElement
             @Override
             public IDependencyObject<Object> getBoundDataContext()
             {
-                return DependencyObjectHelper.createFromValue(context);
+                return DependencyObjectHelper.createFromProperty(contextProperty, new Object());
             }
         };
 
-        final IUIElement instance = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(wrappedUIElementData);
-
-        return instance;
+        return BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(wrappedUIElementData);
     }
 }

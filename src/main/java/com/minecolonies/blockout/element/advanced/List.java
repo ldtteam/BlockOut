@@ -611,7 +611,13 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         for (final Object context :
           newData)
         {
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(this, context, resolvedTemplateLocation,
+            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
+              this,
+              PropertyCreationHelper.create(
+                parentContext -> Optional.of(context),
+                null
+              ),
+              resolvedTemplateLocation,
               String.format("%s_%d", getId(), index++));
 
             if (resolvedTemplateConstructionData != null)
@@ -661,6 +667,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             }
         });
 
+        element.setParent(wrappingRegion);
         wrappingRegion.put(element.getId(), element);
         put(wrappingRegion.getId(), wrappingRegion);
     }

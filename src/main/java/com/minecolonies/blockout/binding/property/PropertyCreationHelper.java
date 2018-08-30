@@ -94,9 +94,9 @@ public final class PropertyCreationHelper
         return create(new ReflectiveSupplier<>(getter), new ReflectiveConsumer<>(setter));
     }
 
-    public static <T> Property<T> create(@NotNull final Function<Object, Optional<T>> getter, @NotNull final BiConsumer<Object, Optional<T>> setter)
+    public static <T> Property<T> create(@Nullable final Function<Object, Optional<T>> getter, @Nullable final BiConsumer<Object, Optional<T>> setter)
     {
-        return create(Optional.of(getter), Optional.of(setter));
+        return create(Optional.ofNullable(getter), Optional.ofNullable(setter));
     }
 
     private static Optional<Method> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
