@@ -3,6 +3,7 @@ package com.minecolonies.blockout.element.root;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
@@ -129,6 +130,17 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
             element.values().forEach(child -> {
                 builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
             });
+        }
+    }
+
+    public static final class RootGuiConstructionDataBuilder extends SimpleControlConstructionDataBuilder<RootGuiConstructionDataBuilder, RootGuiElement>
+    {
+
+        public RootGuiConstructionDataBuilder(
+          final String controlId,
+          final IBlockOutGuiConstructionDataBuilder data)
+        {
+            super(controlId, data, RootGuiElement.class);
         }
     }
 }
