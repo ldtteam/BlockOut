@@ -23,7 +23,7 @@ import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -107,7 +107,7 @@ public class CommonProxy implements IProxy
 
     @NotNull
     @Override
-    public IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId)
+    public World getWorldFromDimensionId(@NotNull final int dimId)
     {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimId);
     }

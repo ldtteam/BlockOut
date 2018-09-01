@@ -2,47 +2,32 @@ package com.minecolonies.blockout.connector.common.inventory.provider;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerProvider;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CommonTileBasedProvider implements IItemHandlerProvider
+public class CommonEntityBasedProvider implements IItemHandlerProvider
 {
-
     @NotNull
     private final String id;
 
     @NotNull
-    private final int dimId;
+    private final int        dimId;
     @NotNull
-    private final int x;
-    @NotNull
-    private final int y;
-    @NotNull
-    private final int z;
-
+    private final int        entityId;
     @Nullable
     private final EnumFacing facing;
 
-    public CommonTileBasedProvider(
-      @NotNull final ResourceLocation id,
-      @NotNull final int dimId,
-      @NotNull final int x,
-      @NotNull final int y,
-      @NotNull final int z,
-      @Nullable final EnumFacing facing)
+    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityId, @Nullable final EnumFacing facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.entityId = entityId;
         this.facing = facing;
     }
 
@@ -51,9 +36,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     {
         int result = getId().hashCode();
         result = 31 * result + dimId;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
+        result = 31 * result + entityId;
         result = 31 * result + (facing != null ? facing.hashCode() : 0);
         return result;
     }
@@ -70,21 +53,13 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
             return false;
         }
 
-        final CommonTileBasedProvider that = (CommonTileBasedProvider) o;
+        final CommonEntityBasedProvider that = (CommonEntityBasedProvider) o;
 
         if (dimId != that.dimId)
         {
             return false;
         }
-        if (x != that.x)
-        {
-            return false;
-        }
-        if (y != that.y)
-        {
-            return false;
-        }
-        if (z != that.z)
+        if (entityId != that.entityId)
         {
             return false;
         }
@@ -95,6 +70,11 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
         return facing == that.facing;
     }
 
+    /**
+     * The id of the provider.
+     *
+     * @return The id.
+     */
     @NotNull
     @Override
     public ResourceLocation getId()
@@ -102,23 +82,17 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
         return new ResourceLocation(id);
     }
 
+    /**
+     *
+     * @return
+     */
     @Nullable
     @Override
     public IItemHandler get()
     {
         final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
-        final TileEntity tileEntity = blockAccess.getTileEntity(new BlockPos(x, y, z));
+        final Entity entity = blockAccess.getEntityByID(entityId);
 
-        if (tileEntity == null)
-        {
-            return null;
-        }
-
-        if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing))
-        {
-            return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
-        }
-
-        return null;
+        return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
     }
 }

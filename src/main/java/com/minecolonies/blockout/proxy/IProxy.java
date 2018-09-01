@@ -14,7 +14,7 @@ import com.minecolonies.blockout.template.ITemplateEngine;
 import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +47,7 @@ public interface IProxy
     IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager);
 
     @NotNull
-    IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId);
+    World getWorldFromDimensionId(@NotNull final int dimId);
 
     @SideOnly(Side.CLIENT)
     @NotNull

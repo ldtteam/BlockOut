@@ -17,7 +17,7 @@ import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -75,11 +75,11 @@ public class ClientProxy extends CommonProxy
 
     @NotNull
     @Override
-    public IBlockAccess getBlockAccessFromDimensionId(@NotNull final int dimId)
+    public World getWorldFromDimensionId(@NotNull final int dimId)
     {
         return SideHelper.on(
           () -> Minecraft.getMinecraft().world,
-          () -> super.getBlockAccessFromDimensionId(dimId)
+          () -> super.getWorldFromDimensionId(dimId)
         );
     }
 
