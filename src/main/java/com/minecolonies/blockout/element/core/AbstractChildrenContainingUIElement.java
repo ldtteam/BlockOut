@@ -296,25 +296,25 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             if (!marginTop.isPresent() && !marginBottom.isPresent())
             {
-                marginTop = Optional.of((parentSize.getX() - height) / 2);
+                marginTop = Optional.of((parentSize.getY() - height) / 2);
             }
             else if (!marginTop.isPresent())
             {
                 marginTop = Optional.of(0d);
-                height = parentSize.getX() - marginBottom.orElse(0d);
+                height = parentSize.getY() - marginBottom.orElse(0d);
             }
             else if (!marginBottom.isPresent())
             {
-                height = parentSize.getX() - marginTop.orElse(0d);
+                height = parentSize.getY() - marginTop.orElse(0d);
             }
             else
             {
-                height = parentSize.getX() - marginTop.get() - marginBottom.get();
+                height = parentSize.getY() - marginTop.get() - marginBottom.get();
             }
         }
         else if (Alignment.BOTTOM.isActive(this))
         {
-            marginTop = Optional.of(parentSize.getX() - height - marginBottom.orElse(0d));
+            marginTop = Optional.of(parentSize.getY() - height - marginBottom.orElse(0d));
         }
 
         final Vector2d origin = new Vector2d(marginLeft.orElse(0d), marginTop.orElse(0d));
