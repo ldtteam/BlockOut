@@ -382,7 +382,13 @@ public interface IUIElementData
         @Nullable final String attribute = getStringAttribute(name);
         if (attribute == null || attribute.trim().isEmpty())
         {
-            return def;
+            @Nullable final Integer intAtt = getIntegerAttribute(name);
+            if (intAtt == null)
+            {
+                return def;
+            }
+
+            return Alignment.fromInt(intAtt);
         }
 
         return Alignment.fromString(attribute);
