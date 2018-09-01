@@ -1,6 +1,7 @@
 package com.minecolonies.blockout;
 
 import com.minecolonies.blockout.element.advanced.List;
+import com.minecolonies.blockout.element.advanced.TemplateInstance;
 import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.element.simple.*;
 import com.minecolonies.blockout.element.template.Template;
@@ -64,6 +65,7 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new Button.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
         getProxy().getFactoryController().registerFactory(new TextField.Factory());
+        getProxy().getFactoryController().registerFactory(new TemplateInstance.Factory());
 
         getProxy().getFactoryController().registerFactory(new Region.Factory());
         getProxy().getFactoryController().registerFactory(new Template.Factory());
