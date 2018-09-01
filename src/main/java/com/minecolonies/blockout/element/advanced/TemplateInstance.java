@@ -178,6 +178,8 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
             updateManager.markDirty();
             this.clear();
 
+            resolvedTemplateResource = getTemplateResource();
+
             final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
               this,
               PropertyCreationHelper.create(
