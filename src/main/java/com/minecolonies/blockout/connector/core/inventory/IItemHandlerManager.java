@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface IItemHandlerManager extends Serializable
 {
@@ -18,4 +19,12 @@ public interface IItemHandlerManager extends Serializable
      */
     @Nullable
     IItemHandler getItemHandlerFromId(@NotNull final ResourceLocation id);
+
+    /**
+     * Method used to get a list of ids for {@link IItemHandler}.
+     *
+     * @return The ids of all registered {@link IItemHandler}.
+     */
+    @NotNull
+    List<ResourceLocation> getAllItemHandlerIds();
 }

@@ -3,6 +3,7 @@ package com.minecolonies.blockout.inventory;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.element.simple.Slot;
+import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -61,7 +62,23 @@ public class BlockOutContainer extends Container
             final IItemHandler itemHandler = getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId());
             if (itemHandler == null)
             {
-                throw new IllegalStateException("The slot does not have a known item handler");
+                final StringBuilder errorMessageBuilder = new StringBuilder();
+                errorMessageBuilder
+                  .append("Failed to find IItemHandler for Slot with index: ")
+                  .append(slot.getInventoryIndex())
+                  .append(" with Inventory Id: ")
+                  .append(slot.getInventoryId())
+                  .append(".\n")
+                  .append("Possible Inventory candidates are:")
+                  .append("\n");
+
+                getKey().getItemHandlerManager().getAllItemHandlerIds().forEach(loc -> errorMessageBuilder
+                                                                                         .append("  * ")
+                                                                                         .append(loc)
+                                                                                         .append("\n"));
+
+                Log.getLogger().error(errorMessageBuilder.toString());
+                throw new IllegalArgumentException("Failed to find IItemHandler for Slot.");
             }
 
             slot.setSlotIndex(slotIndex);

@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.connector.common.inventory;
 
+import com.google.common.collect.ImmutableList;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraft.util.ResourceLocation;
@@ -34,6 +35,18 @@ public class CommonItemHandlerManager implements IItemHandlerManager
         }
 
         return null;
+    }
+
+    /**
+     * Method used to get a list of ids for {@link IItemHandler}.
+     *
+     * @return The ids of all registered {@link IItemHandler}.
+     */
+    @NotNull
+    @Override
+    public List<ResourceLocation> getAllItemHandlerIds()
+    {
+        return ImmutableList.copyOf(providerMap.keySet().stream().map(ResourceLocation::new).collect(Collectors.toList()));
     }
 
     @Override
