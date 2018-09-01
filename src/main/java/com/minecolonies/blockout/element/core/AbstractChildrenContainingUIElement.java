@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<String, IUIElement> implements IUIElementHost
 {
@@ -258,41 +259,66 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         //Else grab the size from the parent.
         final Vector2d parentSize = getParent() != this ? getParent().getLocalInternalBoundingBox().getSize() : new Vector2d(Double.MAX_VALUE, Double.MAX_VALUE);
 
-        double marginLeft = getMargin().getLeft().orElse(0d);
-        double marginTop = getMargin().getTop().orElse(0d);
-        double marginRight = getMargin().getRight().orElse(0d);
-        double marginBottom = getMargin().getBottom().orElse(0d);
+        Optional<Double> marginLeft = getMargin().getLeft();
+        Optional<Double> marginTop = getMargin().getTop();
+        Optional<Double> marginRight = getMargin().getRight();
+        Optional<Double> marginBottom = getMargin().getBottom();
 
         double width = getElementSize().getX();
         double height = getElementSize().getY();
 
         if (Alignment.LEFT.isActive(this) && Alignment.RIGHT.isActive(this))
         {
-            width = parentSize.getX() - marginLeft - marginRight;
+            if (!marginLeft.isPresent() && !marginRight.isPresent())
+            {
+                marginLeft = Optional.of((parentSize.getX() - width) / 2);
+            }
+            else if (!marginLeft.isPresent())
+            {
+                marginLeft = Optional.of(0d);
+                width = parentSize.getX() - marginRight.orElse(0d);
+            }
+            else if (!marginRight.isPresent())
+            {
+                width = parentSize.getX() - marginLeft.orElse(0d);
+            }
+            else
+            {
+                width = parentSize.getX() - marginLeft.get() - marginRight.get();
+            }
         }
         else if (Alignment.RIGHT.isActive(this))
         {
-            marginLeft = parentSize.getX() - width - marginRight;
-        }
-        else
-        {
-            marginRight = parentSize.getX() - width - marginLeft;
+            marginLeft = Optional.of(parentSize.getX() - width - marginRight.orElse(0d));
         }
 
         if (Alignment.TOP.isActive(this) && Alignment.BOTTOM.isActive(this))
         {
-            height = parentSize.getY() - marginTop - marginBottom;
+            if (!marginTop.isPresent() && !marginBottom.isPresent())
+            {
+                marginTop = Optional.of((parentSize.getX() - height) / 2);
+            }
+            else if (!marginTop.isPresent())
+            {
+                marginTop = Optional.of(0d);
+                height = parentSize.getX() - marginBottom.orElse(0d);
+            }
+            else if (!marginBottom.isPresent())
+            {
+                height = parentSize.getX() - marginTop.orElse(0d);
+            }
+            else
+            {
+                height = parentSize.getX() - marginTop.get() - marginBottom.get();
+            }
         }
         else if (Alignment.BOTTOM.isActive(this))
         {
-            marginTop = parentSize.getY() - height - marginBottom;
-        }
-        else
-        {
-            marginBottom = parentSize.getY() - height - marginTop;
+            marginTop = Optional.of(parentSize.getX() - height - marginBottom.orElse(0d));
         }
 
-        final Vector2d origin = new Vector2d(marginLeft, marginTop);
+        final Vector2d origin = new Vector2d(marginLeft.orElse(0d), marginTop.orElse(0d));
+
 
         final Vector2d size =
           new Vector2d(width, height).nullifyNegatives();
