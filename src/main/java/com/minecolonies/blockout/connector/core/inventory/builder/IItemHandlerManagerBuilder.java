@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,17 +39,25 @@ public interface IItemHandlerManagerBuilder
     }
 
     @NotNull
-    default IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final EnumFacing facing
+    default IItemHandlerManagerBuilder withTileBasedProvider(
+      @NotNull final ResourceLocation id, @NotNull final World world, @NotNull final BlockPos blockPos, @Nullable EnumFacing facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.world.provider.getDimension(), entity.getEntityId(), facing);
+        return this.withTileBasedProvider(id, world.provider.getDimension(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
     }
 
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
       @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityId, @Nullable final EnumFacing facing
     );
+
+    @NotNull
+    default IItemHandlerManagerBuilder withEntityBasedProvider(
+      @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final EnumFacing facing
+    )
+    {
+        return this.withEntityBasedProvider(id, entity.world.provider.getDimension(), entity.getEntityId(), facing);
+    }
 
     @NotNull
     IItemHandlerManager build();
