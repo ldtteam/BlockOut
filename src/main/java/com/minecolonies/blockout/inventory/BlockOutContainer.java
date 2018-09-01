@@ -81,10 +81,11 @@ public class BlockOutContainer extends Container
                 throw new IllegalArgumentException("Failed to find IItemHandler for Slot.");
             }
 
-            slot.setSlotIndex(slotIndex);
+            slot.setSlotIndex(slotIndex++);
             final BoundingBox absoluteBoundingBox = slot.getAbsoluteBoundingBox();
-            final SlotItemHandler slotItemHandler = new SlotItemHandler(itemHandler,
-              slotIndex++,
+            final SlotItemHandler slotItemHandler = new SlotItemHandler(
+              itemHandler,
+              slot.getInventoryIndex(),
               (int) absoluteBoundingBox.getLocalOrigin().getX() + 1,
               (int) absoluteBoundingBox.getLocalOrigin().getY() + 1)
             {
