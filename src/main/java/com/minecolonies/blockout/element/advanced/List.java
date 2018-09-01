@@ -52,18 +52,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 {
     private static final int CONST_SCROLLBAR_WIDTH = 5;
 
-
-    //The current scroll state is not bindable. It is exclusively controlled by the control it self.
-    private       double  scrollOffset;
-
-    //Used to cache the contents of the databound list.
-    private Collection<?>                resolvedDataContext              = Lists.newArrayList();
-    private ResourceLocation             resolvedTemplateLocation         = new ResourceLocation("");
-    private IBlockOutGuiConstructionData resolvedTemplateConstructionData = null;
-
-    //Bindable resource binding.
-    private IDependencyObject<ResourceLocation>             templateResource;
-    private IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
     public static final class ListConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ListConstructionDataBuilder, List>
     {
 
@@ -87,124 +75,14 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         }
     }
 
-    public static final class Factory implements IUIElementFactory<List>
-    {
+    //Used to cache the contents of the databound list.
+    private Collection<?>                resolvedDataContext              = Lists.newArrayList();
+    private ResourceLocation             resolvedTemplateLocation         = new ResourceLocation("");
+    private IBlockOutGuiConstructionData resolvedTemplateConstructionData = null;
 
-        /**
-         * Returns the type that this factory builds.
-         *
-         * @return The type.
-         */
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_LIST;
-        }
-
-        /**
-         * Creates a new {@link List} from the given {@link IUIElementData}.
-         *
-         * @param elementData The {@link IUIElementData} which contains the data that is to be constructed.
-         * @return The {@link List} that is stored in the {@link IUIElementData}.
-         */
-        @NotNull
-        @Override
-        public List readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_BACKGROUND);
-            final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_FOREGROUND);
-            final double scrollOffset = elementData.getDoubleAttribute(CONST_SCROLLOFFSET);
-
-            if (elementData.hasChildren())
-            {
-                final List list = new List(
-                  style,
-                  id,
-                  elementData.getParentView(),
-                  alignments,
-                  dock,
-                  margin,
-                  elementSize,
-                  padding,
-                  dataContext,
-                  visible,
-                  enabled,
-                  false,
-                  DependencyObjectHelper.createFromValue(new ResourceLocation("")),
-                  scrollBarBackgroundResource,
-                  scrollBarForegroundResource,
-                  scrollOffset
-                );
-
-                elementData.getChildren(list).forEach(childData -> {
-                    IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                    list.put(child.getId(), child);
-                });
-
-                return list;
-            }
-
-            final IDependencyObject<ResourceLocation> templateResource = elementData.getBoundResourceLocationAttribute(CONST_TEMPLATE);
-
-            return new List(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              padding,
-              dataContext,
-              visible,
-              enabled,
-              true,
-              templateResource,
-              scrollBarBackgroundResource,
-              scrollBarForegroundResource,
-              scrollOffset
-            );
-        }
-
-        /**
-         * Populates the given {@link IUIElementDataBuilder} with the data from {@link List} so that
-         * the given {@link List} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
-         * the given {@link IUIElementDataBuilder}.
-         *
-         * @param element The {@link List} to write into the {@link IUIElementDataBuilder}
-         * @param builder The {@link IUIElementDataBuilder} to write the {@link List} into.
-         */
-        @Override
-        public void writeToElementData(@NotNull final List element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource())
-              .addResourceLocation(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource())
-              .addDouble(CONST_SCROLLOFFSET, element.scrollOffset);
-
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
-        }
-    }
+    //Bindable resource binding.
+    private IDependencyObject<ResourceLocation>             templateResource;
+    private IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
     private IDependencyObject<ResourceLocation> scrollBarBackgroundResource;
     private IDependencyObject<ResourceLocation> scrollBarForegroundResource;
@@ -441,7 +319,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     {
 
     }
-    
+
     public IBlockOutGuiConstructionData getTemplateConstructionData()
     {
         return templateConstructionData.get(getDataContext());
@@ -687,4 +565,126 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     {
         this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(scrollBarForeground);
     }
+
+    public static final class Factory implements IUIElementFactory<List>
+    {
+
+        /**
+         * Returns the type that this factory builds.
+         *
+         * @return The type.
+         */
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return KEY_LIST;
+        }
+
+        /**
+         * Creates a new {@link List} from the given {@link IUIElementData}.
+         *
+         * @param elementData The {@link IUIElementData} which contains the data that is to be constructed.
+         * @return The {@link List} that is stored in the {@link IUIElementData}.
+         */
+        @NotNull
+        @Override
+        public List readFromElementData(@NotNull final IUIElementData elementData)
+        {
+            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
+            final String id = elementData.getElementId();
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
+            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
+            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
+            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
+            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
+            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
+            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+            final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_BACKGROUND);
+            final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_FOREGROUND);
+            final double scrollOffset = elementData.getDoubleAttribute(CONST_SCROLLOFFSET);
+
+            if (elementData.hasChildren())
+            {
+                final List list = new List(
+                  style,
+                  id,
+                  elementData.getParentView(),
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  padding,
+                  dataContext,
+                  visible,
+                  enabled,
+                  false,
+                  DependencyObjectHelper.createFromValue(new ResourceLocation("")),
+                  scrollBarBackgroundResource,
+                  scrollBarForegroundResource,
+                  scrollOffset
+                );
+
+                elementData.getChildren(list).forEach(childData -> {
+                    IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                    list.put(child.getId(), child);
+                });
+
+                return list;
+            }
+
+            final IDependencyObject<ResourceLocation> templateResource = elementData.getBoundResourceLocationAttribute(CONST_TEMPLATE);
+
+            return new List(
+              style,
+              id,
+              elementData.getParentView(),
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              padding,
+              dataContext,
+              visible,
+              enabled,
+              true,
+              templateResource,
+              scrollBarBackgroundResource,
+              scrollBarForegroundResource,
+              scrollOffset
+            );
+        }
+
+        /**
+         * Populates the given {@link IUIElementDataBuilder} with the data from {@link List} so that
+         * the given {@link List} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
+         * the given {@link IUIElementDataBuilder}.
+         *
+         * @param element The {@link List} to write into the {@link IUIElementDataBuilder}
+         * @param builder The {@link IUIElementDataBuilder} to write the {@link List} into.
+         */
+        @Override
+        public void writeToElementData(@NotNull final List element, @NotNull final IUIElementDataBuilder builder)
+        {
+            builder
+              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
+              .addEnum(CONST_DOCK, element.getDock())
+              .addAxisDistance(CONST_MARGIN, element.getMargin())
+              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addAxisDistance(CONST_PADDING, element.getPadding())
+              .addBoolean(CONST_VISIBLE, element.isVisible())
+              .addBoolean(CONST_ENABLED, element.isEnabled())
+              .addResourceLocation(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource())
+              .addResourceLocation(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource())
+              .addDouble(CONST_SCROLLOFFSET, element.scrollOffset);
+
+            element.values().forEach(child -> {
+                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
+            });
+        }
+    }
+
+    //The current scroll state is not bindable. It is exclusively controlled by the control it self.
+    private double scrollOffset;
 }

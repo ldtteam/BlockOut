@@ -26,6 +26,11 @@ public final class PropertyCreationHelper
         throw new IllegalArgumentException("Utility Class");
     }
 
+    public static <T> Property<T> createNoneSettableFromStaticValue(@Nullable T value)
+    {
+        return create(c -> Optional.ofNullable(value), null);
+    }
+
     public static <T> Property<T> createFromNonOptional(@NotNull final Function<Object, T> getter, @NotNull final BiConsumer<Object, T> setter)
     {
         return createFromNonOptional(Optional.of(getter), Optional.of(setter));

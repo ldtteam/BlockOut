@@ -133,6 +133,13 @@ public class Constants
             public static final String CONST_TEMPLATE          = "template";
             public static final String CONST_SCROLLOFFSET      = "initialOffset";
         }
+
+        public static class TemplateInstance
+        {
+            public static final ResourceLocation KEY_TEMPLATE_INSTANCE = new ResourceLocation(MOD_ID, "instance");
+
+            public static final String CONST_TEMPLATE = "template";
+        }
     }
 
 }
