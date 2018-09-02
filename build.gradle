@@ -76,7 +76,7 @@ configurations {
 }
 
 dependencies {
-    compile 'de.ruedigermoeller:fst:2.+'
+    compile 'com.esotericsoftware:kryo:4.+'
 
     testmodCompile sourceSets.main.output
 
