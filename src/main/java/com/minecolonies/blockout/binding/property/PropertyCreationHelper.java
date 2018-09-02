@@ -106,20 +106,19 @@ public final class PropertyCreationHelper
 
     private static Optional<Method> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
     {
+        if (targetClass == null)
+        {
+            return Optional.empty();
+        }
+
         try
         {
-            return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> {
-                if (targetClass == null)
-                {
-                    return Optional.empty();
-                }
-
-                return Optional.ofNullable(Arrays.stream(targetClass.getClass().getDeclaredMethods())
-                                             .filter(method -> method.getName().equals(getMethodName))
-                                             .filter(method -> method.getParameterCount() == 0)
-                                             .findFirst()
-                                             .orElse(getGetter(targetClass.getSuperclass(), getMethodName).orElse(null)));
-            });
+            return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> Optional.ofNullable(Arrays.stream(targetClass.getDeclaredMethods())
+                                                                                                         .filter(method -> method.getName().equals(getMethodName))
+                                                                                                         .filter(method -> method.getParameterCount() == 0)
+                                                                                                         .findFirst()
+                                                                                                         .orElse(getGetter(targetClass.getSuperclass(),
+                                                                                                           getMethodName).orElse(null))));
         }
         catch (Exception e)
         {
@@ -129,21 +128,20 @@ public final class PropertyCreationHelper
 
     private static Optional<Method> getSetter(@Nullable final Class<?> targetClass, @NotNull final String setMethodName)
     {
+        if (targetClass == null)
+        {
+            return Optional.empty();
+        }
+
         try
         {
-            return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> {
-                if (targetClass == null)
-                {
-                    return Optional.empty();
-                }
-
-                return Optional.ofNullable(Arrays.stream(targetClass.getClass().getDeclaredMethods())
-                                             .filter(method -> method.getName().equals(setMethodName))
-                                             .filter(method -> method.getParameterCount() == 1)
-                                             .filter(method -> method.getReturnType() == Void.TYPE)
-                                             .findFirst()
-                                             .orElse(getGetter(targetClass.getSuperclass(), setMethodName).orElse(null)));
-            });
+            return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> Optional.ofNullable(Arrays.stream(targetClass.getDeclaredMethods())
+                                                                                                         .filter(method -> method.getName().equals(setMethodName))
+                                                                                                         .filter(method -> method.getParameterCount() == 1)
+                                                                                                         .filter(method -> method.getReturnType() == Void.TYPE)
+                                                                                                         .findFirst()
+                                                                                                         .orElse(getSetter(targetClass.getSuperclass(),
+                                                                                                           setMethodName).orElse(null))));
         }
         catch (Exception e)
         {

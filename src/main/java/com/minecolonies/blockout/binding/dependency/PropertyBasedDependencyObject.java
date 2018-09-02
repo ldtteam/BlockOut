@@ -2,6 +2,7 @@ package com.minecolonies.blockout.binding.dependency;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.minecolonies.blockout.binding.property.Property;
+import com.minecolonies.blockout.util.kryo.KryoUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public final class PropertyBasedDependencyObject<T> implements IDependencyObject<T>
 {
-    private final Kryo KRYO = new Kryo();
+    private final Kryo KRYO = KryoUtil.createNewKryo();
     @NotNull
     private final Property<T> property;
     @Nullable

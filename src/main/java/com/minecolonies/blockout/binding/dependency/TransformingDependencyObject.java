@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.binding.dependency;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.minecolonies.blockout.util.kryo.KryoUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -8,7 +9,7 @@ import java.util.function.Function;
 
 public class TransformingDependencyObject<T, I> implements IDependencyObject<T>
 {
-    private final Kryo KRYO = new Kryo();
+    private final Kryo KRYO = KryoUtil.createNewKryo();
     private final Function<I, T> getTransformer;
     private final Function<T, I> setTransformer;
 

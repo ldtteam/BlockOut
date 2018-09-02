@@ -76,7 +76,9 @@ configurations {
 }
 
 dependencies {
-    compile 'com.esotericsoftware:kryo:4.+'
+    compile ('com.esotericsoftware:kryo:4.+') {
+        exclude group: 'org.ow2.asm', module: 'asm'
+    }
 
     testmodCompile sourceSets.main.output
 
