@@ -1,6 +1,5 @@
 package com.minecolonies.blockout.binding.dependency;
 
-import com.minecolonies.blockout.binding.dependency.injection.TransformingDependencyObject;
 import com.minecolonies.blockout.binding.property.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

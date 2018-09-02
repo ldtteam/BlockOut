@@ -23,4 +23,12 @@ public interface IDependencyObject<T>
      * @param value The new for the dependency object.
      */
     void set(@Nullable final Object context, @Nullable final T value);
+
+    /**
+     * Indicates if this {@link IDependencyObject} has changed from the last time {@link #get(Object)} was called.
+     *
+     * @param context The context.
+     * @return True when this object has changed, false when not.
+     */
+    boolean hasChanged(@Nullable final Object context);
 }

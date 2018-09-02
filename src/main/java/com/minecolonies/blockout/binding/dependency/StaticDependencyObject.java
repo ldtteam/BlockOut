@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.binding.dependency;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -11,6 +12,8 @@ public final class StaticDependencyObject<T> implements IDependencyObject<T>
 {
     @Nullable
     private T value;
+    @NotNull
+    private boolean hasChanged = false;
 
     public StaticDependencyObject(@Nullable final T value) {this.value = value;}
 
@@ -18,6 +21,7 @@ public final class StaticDependencyObject<T> implements IDependencyObject<T>
     @Override
     public T get(@Nullable final Object context)
     {
+        this.hasChanged = false;
         return value;
     }
 
@@ -25,5 +29,12 @@ public final class StaticDependencyObject<T> implements IDependencyObject<T>
     public void set(@Nullable final Object context, @Nullable final T value)
     {
         this.value = value;
+        this.hasChanged = true;
+    }
+
+    @Override
+    public boolean hasChanged(@Nullable final Object context)
+    {
+        return hasChanged;
     }
 }
