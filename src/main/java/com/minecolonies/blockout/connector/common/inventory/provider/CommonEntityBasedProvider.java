@@ -94,7 +94,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     public IItemHandler get()
     {
         final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
-        final Entity entity = blockAccess.getLoadedEntityList().stream().filter(e -> e.getPersistentID().equals(entityId)).findFirst().orElse(null);
+        final Entity entity = blockAccess.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(entityId)).findFirst().orElse(null);
 
         if (entity == null)
         {
