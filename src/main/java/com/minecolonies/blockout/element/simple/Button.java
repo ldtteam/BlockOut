@@ -12,6 +12,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
 import com.minecolonies.blockout.event.Event;
@@ -87,6 +88,29 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         this.disabledBackgroundImageResource = disabledBackgroundImageResource;
 
         this.clicked = clicked;
+    }
+
+    @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (normalBackgroundImageResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (clickedBackgroundImageResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (disabledBackgroundImageResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (clicked.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
     }
 
     @SideOnly(Side.CLIENT)
