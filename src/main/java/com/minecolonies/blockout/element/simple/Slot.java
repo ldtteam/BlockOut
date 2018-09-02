@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
@@ -71,6 +72,25 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (inventoryId.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (inventoryIndex.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (backgroundImageResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+    }
+
+    @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final Vector2d size = getLocalBoundingBox().getSize();
@@ -79,6 +99,8 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
+        GlStateManager.disableAlpha();
+        GlStateManager.enableBlend();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -87,6 +109,8 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
         GlStateManager.popMatrix();
     }
 
