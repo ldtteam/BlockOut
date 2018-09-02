@@ -1,23 +1,19 @@
 package com.minecolonies.blockout.binding.dependency;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.minecolonies.blockout.binding.property.Property;
-import com.minecolonies.blockout.util.kryo.KryoUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public final class PropertyBasedDependencyObject<T> implements IDependencyObject<T>
 {
-    private final Kryo KRYO = KryoUtil.createNewKryo();
     @NotNull
     private final Property<T> property;
     @Nullable
     private final T           def;
     @Nullable
-    private       T           lastResolved;
+    private       int         lastResolvedHash;
 
     public PropertyBasedDependencyObject(@NotNull final Property<T> property)
     {
@@ -44,7 +40,7 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
             value = property.apply(context).orElse(def);
         }
 
-        lastResolved = KRYO.copyShallow(value);
+        lastResolvedHash = value.hashCode();
         return value;
     }
 
@@ -62,6 +58,9 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Override
     public boolean hasChanged(@Nullable final Object context)
     {
-        return Objects.equals(lastResolved, context == null ? def : property.apply(context).orElse(def));
+        final T resolved = context == null ? def : property.apply(context).orElse(def);
+        final int currentHash = resolved == null ? 0 : resolved.hashCode();
+
+        return lastResolvedHash == currentHash;
     }
 }
