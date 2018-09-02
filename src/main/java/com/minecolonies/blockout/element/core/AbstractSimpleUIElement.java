@@ -95,11 +95,44 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     }
 
     @Override
-    public void update(@NotNull final IUpdateManager manager)
+    public void update(@NotNull final IUpdateManager updateManager)
     {
         if (updateBoundingBoxes())
         {
-            manager.markDirty();
+            updateManager.markDirty();
+        }
+
+        if (dataContext.hasChanged(parent.getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (alignments.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (style.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (dock.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (margin.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (enabled.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (visible.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (elementSize.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
         }
     }
 

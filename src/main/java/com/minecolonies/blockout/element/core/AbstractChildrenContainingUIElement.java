@@ -136,6 +136,43 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             updateManager.markDirty();
         }
+
+        if (dataContext.hasChanged(parent.getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (alignments.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (style.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (dock.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (margin.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (enabled.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (visible.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (elementSize.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (padding.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
     }
 
     @Override

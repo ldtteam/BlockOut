@@ -154,7 +154,7 @@ public abstract class AbstractFilteringChildrenContainingUIElement extends Abstr
     {
         try
         {
-            for (Entry<String, IUIElement> childEntry : entrySet())
+            for (Map.Entry<String, IUIElement> childEntry : entrySet())
             {
                 final IUIElement newElement = function.apply(childEntry.getKey(), childEntry.getValue());
                 IsValidChild(newElement);
