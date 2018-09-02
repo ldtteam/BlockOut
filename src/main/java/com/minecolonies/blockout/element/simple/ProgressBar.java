@@ -10,6 +10,7 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.ControlDirection;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
@@ -76,6 +77,37 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         this.min = min;
         this.max = max;
         this.orientation = orientation;
+    }
+
+    @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (backGroundResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (foreGroundResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (value.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (min.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (max.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
+        if (orientation.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
     }
 
     @Override
