@@ -13,13 +13,13 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.event.Event;
 import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
 import com.minecolonies.blockout.render.core.IRenderingController;
-import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.math.BoundingBox;
@@ -123,6 +123,17 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         this.cursorPosition = cursorPosition;
         this.scrollOffset = scrollOffset;
         this.selectionEnd = selectionEnd;
+    }
+
+    @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (contents.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
     }
 
     @SideOnly(Side.CLIENT)
