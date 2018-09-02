@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public interface IItemHandlerManagerBuilder
 {
 
@@ -47,17 +49,17 @@ public interface IItemHandlerManagerBuilder
     }
 
     @NotNull
-    IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityId, @Nullable final EnumFacing facing
-    );
-
-    @NotNull
     default IItemHandlerManagerBuilder withEntityBasedProvider(
       @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final EnumFacing facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.world.provider.getDimension(), entity.getEntityId(), facing);
+        return this.withEntityBasedProvider(id, entity.world.provider.getDimension(), entity.getPersistentID(), facing);
     }
+
+    @NotNull
+    IItemHandlerManagerBuilder withEntityBasedProvider(
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing
+    );
 
     @NotNull
     IItemHandlerManager build();

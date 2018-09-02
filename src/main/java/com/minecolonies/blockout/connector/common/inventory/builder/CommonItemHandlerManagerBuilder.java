@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuilder
 {
@@ -39,7 +40,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityId, @Nullable final EnumFacing facing)
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing)
     {
         return withProvider(new CommonEntityBasedProvider(id, dimId, entityId, facing));
     }

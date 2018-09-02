@@ -8,8 +8,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.EmptyHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class CommonEntityBasedProvider implements IItemHandlerProvider
 {
@@ -19,11 +22,11 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @NotNull
     private final int        dimId;
     @NotNull
-    private final int        entityId;
+    private final UUID       entityId;
     @Nullable
     private final EnumFacing facing;
 
-    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityId, @Nullable final EnumFacing facing)
+    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -36,7 +39,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     {
         int result = getId().hashCode();
         result = 31 * result + dimId;
-        result = 31 * result + entityId;
+        result = 31 * result + entityId.hashCode();
         result = 31 * result + (facing != null ? facing.hashCode() : 0);
         return result;
     }
@@ -59,11 +62,11 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
         {
             return false;
         }
-        if (entityId != that.entityId)
+        if (!getId().equals(that.getId()))
         {
             return false;
         }
-        if (!getId().equals(that.getId()))
+        if (!entityId.equals(that.entityId))
         {
             return false;
         }
@@ -91,7 +94,12 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     public IItemHandler get()
     {
         final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
-        final Entity entity = blockAccess.getEntityByID(entityId);
+        final Entity entity = blockAccess.getLoadedEntityList().stream().filter(e -> e.getPersistentID().equals(entityId)).findFirst().orElse(null);
+
+        if (entity == null)
+        {
+            return new EmptyHandler();
+        }
 
         return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
     }
