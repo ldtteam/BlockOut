@@ -16,6 +16,7 @@ import com.minecolonies.blockout.management.common.focus.FocusManager;
 import com.minecolonies.blockout.management.common.input.ClickManager;
 import com.minecolonies.blockout.management.common.input.KeyManager;
 import com.minecolonies.blockout.management.common.input.ScrollManager;
+import com.minecolonies.blockout.util.SideHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,7 @@ public class UIManager implements IUIManager
         this.rootGuiElement = rootGuiElement;
         this.networkManager = BlockOut.getBlockOut().getProxy().generateNewNetworkManagerForGui(key);
         this.updateManager = BlockOut.getBlockOut().getProxy().generateNewUpdateManager(this);
-        this.renderManager = BlockOut.getBlockOut().getProxy().generateNewRenderManager();
+        this.renderManager = SideHelper.on(() -> BlockOut.getBlockOut().getProxy().generateNewRenderManager(), () -> null);
     }
 
     @NotNull

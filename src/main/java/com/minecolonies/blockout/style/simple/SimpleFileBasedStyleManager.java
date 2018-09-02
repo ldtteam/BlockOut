@@ -14,9 +14,8 @@ import com.minecolonies.blockout.style.definitions.deserializers.ResourceTypeDef
 import com.minecolonies.blockout.style.definitions.deserializers.StyleDefinitionDeserializer;
 import com.minecolonies.blockout.style.definitions.deserializers.StylesDefinitionDeserializer;
 import com.minecolonies.blockout.util.Log;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +27,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SimpleFileBasedStyleManager implements IResourceManagerReloadListener, IStyleManager
+public class SimpleFileBasedStyleManager implements IStyleManager
 {
     public static final String                        CONST_STYLE_FILE_PATH = "styles/styles.json";
     private static      SimpleFileBasedStyleManager   ourInstance           = new SimpleFileBasedStyleManager();
@@ -55,16 +54,21 @@ public class SimpleFileBasedStyleManager implements IResourceManagerReloadListen
         return ImmutableMap.copyOf(styles);
     }
 
+    /**
+     * Loads the styles during post init.
+     */
     @Override
-    public void onResourceManagerReload(final IResourceManager resourceManager)
+    public void loadStyles()
     {
         styles.clear();
-        initialize(resourceManager);
+        initialize();
     }
 
-    public void initialize(final IResourceManager resourceManager)
+    public void initialize()
     {
-        final Set<String> resourceDomains = resourceManager.getResourceDomains();
+        Loader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toList());
+
+        final Set<String> resourceDomains = Loader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toSet());
         final ProgressManager.ProgressBar loadingBar = ProgressManager.push("Loading BlockOut Styles", resourceDomains.size());
 
         final Gson gson = new GsonBuilder()

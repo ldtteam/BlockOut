@@ -19,9 +19,11 @@ import com.minecolonies.blockout.style.simple.SimpleFileBasedStyleManager;
 import com.minecolonies.blockout.style.simple.SimpleResourceLoaderManager;
 import com.minecolonies.blockout.template.ITemplateEngine;
 import com.minecolonies.blockout.template.SimpleTemplateEngine;
+import com.minecolonies.blockout.util.SideHelper;
 import com.minecolonies.blockout.util.color.MultiColoredFontRenderer;
 import com.minecolonies.blockout.util.image.ImageUtil;
 import com.minecolonies.blockout.util.math.Vector2d;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -78,9 +80,28 @@ public class CommonProxy implements IProxy
     public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
         final String modId = location.getResourceDomain().toLowerCase();
-        final String path = "assets/" + modId + "/" + location.getResourcePath();
+        String path = "assets/" + modId + "/" + location.getResourcePath();
 
-        final Object mod = Loader.instance().getIndexedModList().get(modId).getMod();
+        final Object mod;
+        if (modId.equalsIgnoreCase("minecraft"))
+        {
+            mod = SideHelper.on(() -> Minecraft.getMinecraft(), () -> FMLCommonHandler.instance().getMinecraftServerInstance());
+        }
+        else
+        {
+            mod = Loader.instance().getIndexedModList().get(modId).getMod();
+        }
+
+        final Package pack = mod.getClass().getPackage();
+        if (pack != null)
+        {
+            final int packageDepth = pack.getName().split("\\.").length;
+            for (int i = 0; i < packageDepth; i++)
+            {
+                path = "../" + path;
+            }
+        }
+
         return mod.getClass().getResourceAsStream(path);
     }
 

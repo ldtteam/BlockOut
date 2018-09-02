@@ -14,11 +14,10 @@ import com.minecolonies.blockout.style.resources.ImageResource;
 import com.minecolonies.blockout.style.resources.ItemStackResource;
 import com.minecolonies.blockout.style.resources.TemplateResource;
 import com.minecolonies.blockout.util.Constants;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,14 +75,17 @@ public class BlockOut
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
-
-        //This needs to be done last.
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(getProxy().getStyleManager());
     }
 
     @Mod.EventHandler
     public void onInit(final FMLInitializationEvent event)
     {
         getProxy().initializeFontRenderer();
+    }
+
+    @Mod.EventHandler
+    public void onFMLPostInitialization(final FMLPostInitializationEvent event)
+    {
+        getProxy().getStyleManager().loadStyles();
     }
 }
