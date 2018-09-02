@@ -9,6 +9,7 @@ import com.minecolonies.blockout.core.element.values.Alignment;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
+import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.loader.IUIElementData;
 import com.minecolonies.blockout.loader.IUIElementDataBuilder;
@@ -57,6 +58,17 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     {
         super(KEY_IMAGE, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
+    }
+
+    @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (iconResource.hasChanged(getDataContext()))
+        {
+            updateManager.markDirty();
+        }
     }
 
     @SideOnly(Side.CLIENT)
