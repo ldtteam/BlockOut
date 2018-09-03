@@ -1,0 +1,21 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "size": "150,150",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,150",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "list",
+      "type": "blockout:list",
+      "size": "150,150",
+      "scrollBackground": "image:scrollbar_background",
+      "scrollForeground": "image:scrollbar_foreground",
+      "template": "template:label_test"
+    }
+  ]
+}

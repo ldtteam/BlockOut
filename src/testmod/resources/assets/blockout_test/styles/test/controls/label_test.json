@@ -1,0 +1,13 @@
+{
+  "id": "template_player_inventory_root",
+  "type": "blockout:template",
+  "children": [
+    {
+      "label:": "label",
+      "type": "blockout:label",
+      "alignment": "LEFT,BOTTOM",
+      "size": "100,13",
+      "content": "{Binding:SlotIndexString}"
+    }
+  ]
+}

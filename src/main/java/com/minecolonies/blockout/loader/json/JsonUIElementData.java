@@ -19,6 +19,7 @@ import com.minecolonies.blockout.util.Log;
 import com.minecolonies.blockout.util.json.JSONToNBT;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
+import com.minecolonies.blockout.util.parsing.ParsingUtils;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -140,7 +141,7 @@ public class JsonUIElementData implements IUIElementData
             return DependencyObjectHelper.createFromValue(def);
         }
 
-        return bindOrReturnStatic(object.get(name), JsonElement::isJsonPrimitive, JsonElement::getAsInt, def);
+        return bindOrReturnStatic(object.get(name), (e -> e.isJsonPrimitive() && ParsingUtils.isParseable(e.getAsString(), Integer::parseInt)), JsonElement::getAsInt, def);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class JsonUIElementData implements IUIElementData
             return DependencyObjectHelper.createFromValue(def);
         }
 
-        return bindOrReturnStatic(object.get(name), JsonElement::isJsonPrimitive, JsonElement::getAsFloat, def);
+        return bindOrReturnStatic(object.get(name), (e -> e.isJsonPrimitive() && ParsingUtils.isParseable(e.getAsString(), Float::parseFloat)), JsonElement::getAsFloat, def);
     }
 
     @Override
@@ -184,7 +185,7 @@ public class JsonUIElementData implements IUIElementData
             return DependencyObjectHelper.createFromValue(def);
         }
 
-        return bindOrReturnStatic(object.get(name), JsonElement::isJsonPrimitive, JsonElement::getAsDouble, def);
+        return bindOrReturnStatic(object.get(name), (e -> e.isJsonPrimitive() && ParsingUtils.isParseable(e.getAsString(), Double::parseDouble)), JsonElement::getAsDouble, def);
     }
 
     @Override
@@ -206,7 +207,7 @@ public class JsonUIElementData implements IUIElementData
             return DependencyObjectHelper.createFromValue(def);
         }
 
-        return bindOrReturnStatic(object.get(name), JsonElement::isJsonPrimitive, JsonElement::getAsBoolean, def);
+        return bindOrReturnStatic(object.get(name), (e -> e.isJsonPrimitive() && ParsingUtils.isParseable(e.getAsString(), Boolean::parseBoolean)), JsonElement::getAsBoolean, def);
     }
 
     @Override

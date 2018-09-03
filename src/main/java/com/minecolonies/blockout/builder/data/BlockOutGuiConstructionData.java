@@ -67,7 +67,7 @@ public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
     public <T> IDependencyObject<T> get(
       @NotNull final String name, @NotNull final IDependencyObject<T> current, @NotNull final Type requestedType)
     {
-        if (!hasDependencyData(name, current.getClass()))
+        if (!hasDependencyData(name, (Class<? extends IDependencyObject>) requestedType))
         {
             throw new IllegalArgumentException("No known dependency data available for the requested name and type.");
         }

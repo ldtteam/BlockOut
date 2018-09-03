@@ -44,7 +44,7 @@ public final class DependencyObjectInjector
                   final Type containedType = parameterizedType.getActualTypeArguments()[0];
                   final String dependencyDataName = String.format("%s#%s", target.getId(), field.getName());
 
-                  if (provider.hasDependencyData(dependencyDataName, current.getClass()))
+                  if (containedType instanceof Class && provider.hasDependencyData(dependencyDataName, (Class<? extends IDependencyObject>) containedType))
                   {
                       try
                       {

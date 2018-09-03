@@ -55,7 +55,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public static final class ListConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ListConstructionDataBuilder, List>
     {
 
-        protected ListConstructionDataBuilder(
+        public ListConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {
@@ -546,7 +546,11 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         });
 
         element.setParent(wrappingRegion);
+
         wrappingRegion.put(element.getId(), element);
+        wrappingRegion.setParent(this);
+        wrappingRegion.update(getParent().getUiManager().getUpdateManager());
+
         put(wrappingRegion.getId(), wrappingRegion);
     }
 
