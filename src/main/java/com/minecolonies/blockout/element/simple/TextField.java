@@ -65,7 +65,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private IDependencyObject<String> contents;
 
     @NotNull
-    private Event<TextField, TextFieldChangedEventArgs> onClicked = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
+    private Event<TextField, TextFieldChangedEventArgs> onTyped = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
+
+    @NotNull
+    private Event<TextField, TextFieldEnterEventArgs> onEnter = new Event<>(TextField.class, TextFieldEnterEventArgs.class);
 
     /**
      * Public constructor to create textField.
@@ -153,7 +156,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final double width = box.getSize().getX();
         final double height = box.getSize().getY();
         controller.drawRect(-1, -1, width + 1, height + 1, new Color(0xFFA0A0A0));
-        controller.drawRect(0, 0, width, height, new Color(Color.BLACK));
+        controller.drawRect(1, 1, width-1, height-1, new Color(Color.BLACK));
 
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
         //fontRenderer.drawString(getContents(), 0,2, 0xffffff);
@@ -161,7 +164,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final boolean shadow = false;
         final int color = isEnabled() ? 0xffffff : 0xffffff;
         final double drawWidth = box.getSize().getX();
-        final int drawX = 0;
+        final int drawX = 2;
         final int drawY = 2;
 
         //  Determine the portion of the string that is visible on screen
@@ -384,7 +387,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         setContents(resultBuffer.toString());
         moveCursorBy((insertAt - selectionEnd) + insertedLength);
 
-        onClicked.raise(this, new TextFieldChangedEventArgs(getContents()));
+        onTyped.raise(this, new TextFieldChangedEventArgs(getContents()));
     }
 
     /**
@@ -618,6 +621,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             case KEY_TAB:
                 handleTab();
                 break;
+            case KEY_RETURN:
+                onEnter.raise(this, new TextFieldEnterEventArgs(getContents()));
+                break;
             default:
                 writeText(Character.toString(c));
         }
@@ -730,6 +736,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             return withEventHandler("onChanged", TextField.TextFieldChangedEventArgs.class, eventHandler);
         }
+
+        @NotNull
+        public TextFieldConstructionDataBuilder withEnterEventHandler(@NotNull final IEventHandler<TextField, TextField.TextFieldEnterEventArgs> eventHandler)
+        {
+            return withEventHandler("onEnter", TextField.TextFieldEnterEventArgs.class, eventHandler);
+        }
     }
 
     /**
@@ -818,11 +830,30 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
 
         /**
-         * Creates the event argument on text field changed with delta.
-         * @param newContent the new content.
-         * @param timeDelta the delta.
+         * Gets the new text field content after event.
+         * @return the content String.
          */
-        public TextFieldChangedEventArgs(final String newContent, final float timeDelta)
+        public String getNewContent()
+        {
+            return newContent;
+        }
+    }
+
+    /**
+     * Event arguments on change.
+     */
+    public static class TextFieldEnterEventArgs
+    {
+        /**
+         * The content of the event.
+         */
+        private final String newContent;
+
+        /**
+         * Creates the event argument on text field changed
+         * @param newContent the new content.
+         */
+        public TextFieldEnterEventArgs(final String newContent)
         {
             this.newContent = newContent;
         }

@@ -110,12 +110,12 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         String rawContents = getContents();
         Matcher contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
 
-        while (contentMatcher.matches())
+        while (contentMatcher.find())
         {
             final String keyGroupMatching = contentMatcher.group("keydata");
             if (keyGroupMatching == null)
             {
-                break;
+                continue;
             }
 
             rawContents = rawContents.replace("${" + keyGroupMatching + "}", I18n.translateToLocal(keyGroupMatching));
