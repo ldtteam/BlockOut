@@ -256,7 +256,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     public void setContents(@NotNull final String contents)
     {
-        this.contents = DependencyObjectHelper.createFromValue(contents);
+        this.contents.set(getDataContext(), contents);
     }
 
     @Override
