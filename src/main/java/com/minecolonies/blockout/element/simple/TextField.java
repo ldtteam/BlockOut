@@ -718,7 +718,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     public static class TextFieldConstructionDataBuilder extends SimpleControlConstructionDataBuilder<TextFieldConstructionDataBuilder, TextField>
     {
-        protected TextFieldConstructionDataBuilder(
+        public TextFieldConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {
