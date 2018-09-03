@@ -41,14 +41,14 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(KEY_ROOT, style, KEY_ROOT.getResourcePath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_ROOT, style, KEY_ROOT.getPath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.setParent(this);
     }
 
     public RootGuiElement()
     {
-        super(KEY_ROOT, DependencyObjectHelper.createFromValue(Constants.Styles.CONST_DEFAULT), KEY_ROOT.getResourcePath(), null);
+        super(KEY_ROOT, DependencyObjectHelper.createFromValue(Constants.Styles.CONST_DEFAULT), KEY_ROOT.getPath(), null);
 
         this.setParent(this);
     }

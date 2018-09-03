@@ -61,7 +61,7 @@ public final class ItemStackHelper
                     }
                     else
                     {
-                        return pItemStack1.getItem().getUnlocalizedName(pItemStack1).compareToIgnoreCase(pItemStack2.getItem().getUnlocalizedName(pItemStack2));
+                        return pItemStack1.getItem().getTranslationKey(pItemStack1).compareToIgnoreCase(pItemStack2.getItem().getTranslationKey(pItemStack2));
                     }
                 }
                 else
@@ -311,7 +311,7 @@ public final class ItemStackHelper
         {
             return String.format("%sxitemStack[%s@%s][%s]",
               pItemStack.getCount(),
-              pItemStack.getUnlocalizedName(),
+              pItemStack.getTranslationKey(),
               pItemStack.getItemDamage(),
               pItemStack.hasTagCompound() ? pItemStack.getTagCompound().toString() : "");
         }

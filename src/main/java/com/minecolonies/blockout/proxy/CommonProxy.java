@@ -79,8 +79,8 @@ public class CommonProxy implements IProxy
     @NotNull
     public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
-        final String modId = location.getResourceDomain().toLowerCase();
-        String path = "assets/" + modId + "/" + location.getResourcePath();
+        final String modId = location.getNamespace().toLowerCase();
+        String path = "assets/" + modId + "/" + location.getPath();
 
         final Object mod;
         if (modId.equalsIgnoreCase("minecraft"))

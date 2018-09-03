@@ -28,8 +28,8 @@ public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefin
 
     public CommonResourceLocationBasedGuiDefinitionLoader(final ResourceLocation location)
     {
-        this.domain = location.getResourceDomain();
-        this.path = location.getResourcePath();
+        this.domain = location.getNamespace();
+        this.path = location.getPath();
     }
 
     @NotNull
