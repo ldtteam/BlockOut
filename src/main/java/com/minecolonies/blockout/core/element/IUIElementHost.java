@@ -9,8 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
 {
@@ -89,6 +91,12 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
             return Optional.of(this);
         }
 
+        final List<IUIElement> childElements = values().stream().filter(element -> !(element instanceof IUIElementHost)).filter(predicate).collect(Collectors.toList());
+        if (!childElements.isEmpty())
+        {
+            return childElements.stream().findFirst();
+        }
+        
         return Optional.ofNullable(values()
                                      .stream()
                                      .filter(element -> !(element instanceof IUIElementHost))
@@ -98,6 +106,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
                                        values()
                                          .stream()
                                          .filter(element -> (element instanceof IUIElementHost))
+                                         .flatMap(iuiElement -> ((IUIElementHost) iuiElement).values().stream().filter(element -> !(element instanceof IUIElementHost) || ((IUIElementHost) element).searchFirstElementByPredicate(predicate).isPresent()))
                                          .filter(predicate)
                                          .findFirst()
                                          .orElse(null)
