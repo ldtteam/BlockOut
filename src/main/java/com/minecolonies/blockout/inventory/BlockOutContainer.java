@@ -3,14 +3,19 @@ package com.minecolonies.blockout.inventory;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.element.simple.Slot;
+import com.minecolonies.blockout.inventory.slot.SlotBlockOut;
 import com.minecolonies.blockout.util.Log;
-import com.minecolonies.blockout.util.math.BoundingBox;
+import com.minecolonies.blockout.util.itemstack.ItemStackHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,12 +45,6 @@ public class BlockOutContainer extends Container
     public IUIElementHost getRoot()
     {
         return root;
-    }
-
-    @Override
-    public boolean canInteractWith(final EntityPlayer playerIn)
-    {
-        return true;
     }
 
     private void initializeSlots()
@@ -82,19 +81,7 @@ public class BlockOutContainer extends Container
             }
 
             slot.setSlotIndex(slotIndex++);
-            final BoundingBox absoluteBoundingBox = slot.getAbsoluteBoundingBox();
-            final SlotItemHandler slotItemHandler = new SlotItemHandler(
-              itemHandler,
-              slot.getInventoryIndex(),
-              (int) absoluteBoundingBox.getLocalOrigin().getX() + 1,
-              (int) absoluteBoundingBox.getLocalOrigin().getY() + 1)
-            {
-                @Override
-                public boolean canTakeStack(final EntityPlayer playerIn)
-                {
-                    return slot.isEnabled() && super.canTakeStack(playerIn);
-                }
-            };
+            final SlotItemHandler slotItemHandler = new SlotBlockOut(itemHandler, slot);
 
             addSlotToContainer(slotItemHandler);
         }
@@ -106,5 +93,166 @@ public class BlockOutContainer extends Container
         initializeSlots();
 
         detectAndSendChanges();
+    }
+
+    @Override
+    public ItemStack transferStackInSlot(@NotNull EntityPlayer entityPlayer, int slotIndex)
+    {
+        ItemStack newItemStack = ItemStack.EMPTY;
+        net.minecraft.inventory.Slot slot = inventorySlots.get(slotIndex);
+        if (slot instanceof SlotBlockOut)
+        {
+            SlotBlockOut slotBlockOut = (SlotBlockOut) slot;
+            if (slotBlockOut.getHasStack())
+            {
+                ItemStack itemStack = slotBlockOut.getStack();
+                newItemStack = itemStack.copy();
+                final Tuple<Integer, Integer> containerRange = findNextInventoryIndices(slotBlockOut);
+
+                if (!this.mergeItemStack(itemStack, containerRange.getFirst(), containerRange.getSecond(), false))
+                {
+                    return ItemStack.EMPTY;
+                }
+                if (itemStack.getCount() == 0 || itemStack.isEmpty())
+                {
+                    slotBlockOut.putStack(ItemStack.EMPTY);
+                }
+                else
+                {
+                    slotBlockOut.onSlotChanged();
+                }
+            }
+        }
+
+        return newItemStack;
+    }
+
+    private final Tuple<Integer, Integer> findNextInventoryIndices(@NotNull final SlotBlockOut slotBlockOut)
+    {
+        final Integer startIndex = findStartIndexOfNextInventory(slotBlockOut);
+        final SlotBlockOut startSlot = (SlotBlockOut) this.inventorySlots.get(0);
+        final Integer endIndex = findStartIndexOfNextInventory(startSlot);
+
+        //Check if the entire container is populated with one inventory.
+        if (startIndex == 0 && startIndex == endIndex)
+        {
+            return new Tuple<>(0, this.inventorySlots.size());
+        }
+
+        return new Tuple<>(startIndex, endIndex);
+    }
+
+    private final Integer findStartIndexOfNextInventory(@NotNull final SlotBlockOut slotBlockOut)
+    {
+        final ResourceLocation currentInventory = slotBlockOut.getUiSlotInstance().getInventoryId();
+        ResourceLocation workingInventory = slotBlockOut.getUiSlotInstance().getInventoryId();
+        SlotBlockOut workingSlot = slotBlockOut;
+
+        while (currentInventory == workingInventory)
+        {
+            workingSlot =
+              (SlotBlockOut) ((workingSlot.slotNumber + 1) == this.inventorySlots.size() ? this.inventorySlots.get(0) : this.inventorySlots.get(workingSlot.slotNumber + 1));
+
+            if (workingSlot == slotBlockOut)
+            {
+                break;
+            }
+
+            workingInventory = workingSlot.getUiSlotInstance().getInventoryId();
+        }
+
+        if (workingSlot == slotBlockOut)
+        {
+            return 0;
+        }
+
+        return workingSlot.slotNumber;
+    }
+
+    @Override
+    public boolean canInteractWith(@Nonnull EntityPlayer playerIn)
+    {
+        return true;
+    }
+
+    @Override
+    protected boolean mergeItemStack(@Nonnull ItemStack itemStack, int slotMin, int slotMax, boolean ascending)
+    {
+        boolean slotFound = false;
+        int currentSlotIndex = ascending ? slotMax - 1 : slotMin;
+        net.minecraft.inventory.Slot slot;
+        ItemStack stackInSlot;
+        if (itemStack.isStackable())
+        {
+            while (itemStack.getCount() > 0 && (!ascending && currentSlotIndex < slotMax || ascending && currentSlotIndex >= slotMin))
+            {
+                slot = this.inventorySlots.get(currentSlotIndex);
+                stackInSlot = slot.getStack();
+                if (slot.isItemValid(itemStack) && ItemStackHelper.equalsIgnoreStackSize(itemStack, stackInSlot))
+                {
+                    int combinedStackSize = stackInSlot.getCount() + itemStack.getCount();
+                    int slotStackSizeLimit = Math.min(stackInSlot.getMaxStackSize(), slot.getSlotStackLimit());
+                    if (combinedStackSize <= slotStackSizeLimit)
+                    {
+                        itemStack.setCount(0);
+                        stackInSlot.setCount(combinedStackSize);
+                        slot.onSlotChanged();
+                        slotFound = true;
+                    }
+                    else if (stackInSlot.getCount() < slotStackSizeLimit)
+                    {
+                        itemStack.shrink(slotStackSizeLimit - stackInSlot.getCount());
+                        stackInSlot.setCount(slotStackSizeLimit);
+                        slot.onSlotChanged();
+                        slotFound = true;
+                    }
+                }
+                if (ascending && currentSlotIndex == this.inventorySlots.size() - 1)
+                {
+                    currentSlotIndex = 0;
+                }
+                else if (!ascending && currentSlotIndex == 0)
+                {
+                    currentSlotIndex = this.inventorySlots.size() - 1;
+                }
+                else
+                {
+                    currentSlotIndex += ascending ? -1 : 1;
+                }
+            }
+        }
+        if (itemStack.getCount() > 0)
+        {
+            currentSlotIndex = ascending ? slotMax - 1 : slotMin;
+            while (!ascending && currentSlotIndex < slotMax || ascending && currentSlotIndex >= slotMin)
+            {
+                slot = this.inventorySlots.get(currentSlotIndex);
+                stackInSlot = slot.getStack();
+                if (slot.isItemValid(itemStack) && stackInSlot.isEmpty())
+                {
+                    slot.putStack(ItemStackHelper.cloneItemStack(itemStack, Math.min(itemStack.getCount(), slot.getSlotStackLimit())));
+                    slot.onSlotChanged();
+                    if (!slot.getStack().isEmpty())
+                    {
+                        itemStack.shrink(slot.getStack().getCount());
+                        slotFound = true;
+                    }
+                    break;
+                }
+                if (ascending && currentSlotIndex == this.inventorySlots.size() - 1)
+                {
+                    currentSlotIndex = 0;
+                }
+                else if (!ascending && currentSlotIndex == 0)
+                {
+                    currentSlotIndex = this.inventorySlots.size() - 1;
+                }
+                else
+                {
+                    currentSlotIndex += ascending ? -1 : 1;
+                }
+            }
+        }
+        return slotFound;
     }
 }
