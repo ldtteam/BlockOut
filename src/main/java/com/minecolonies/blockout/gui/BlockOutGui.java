@@ -5,11 +5,12 @@ import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
-import com.minecolonies.blockout.util.Log;
+import com.minecolonies.blockout.inventory.slot.SlotBlockOut;
 import com.minecolonies.blockout.util.keyboard.KeyboardKey;
 import com.minecolonies.blockout.util.mouse.MouseButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
@@ -22,21 +23,18 @@ public class BlockOutGui extends GuiContainer
     @NotNull
     private       IUIElementHost root;
 
+    /**
+     * Used to track if the current slot interactions happen because of drawing or interactions.
+     */
+    @NotNull
+    private boolean isDrawing = false;
+
     public BlockOutGui(final BlockOutContainer inventorySlotsIn)
     {
         super(inventorySlotsIn);
         this.key = inventorySlotsIn.getKey();
         this.root = inventorySlotsIn.getRoot();
-    }
-
-    /**
-     * Draws a rectangle with a vertical gradient between the specified colors (ARGB format). Args : x1, y1, x2, y2,
-     * topColor, bottomColor
-     */
-    @Override
-    protected void drawGradientRect(final int left, final int top, final int right, final int bottom, final int startColor, final int endColor)
-    {
-        super.drawGradientRect(left, top, right, bottom, startColor, endColor);
+        this.root.getUiManager().getRenderManager().setGui(this);
     }
 
     @Override
@@ -55,13 +53,48 @@ public class BlockOutGui extends GuiContainer
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY)
     {
         getRoot().getUiManager().getRenderManager().drawForeground(getRoot());
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
     {
         getRoot().getUiManager().getRenderManager().drawBackground(getRoot());
+    }
+
+    @Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks)
+    {
+        this.isDrawing = true;
+
+        //Can be done here since both fore and background methods are called by the super
+        this.getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(mouseX, mouseY);
+
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        this.isDrawing = false;
+    }
+
+    /**
+     * Draws the given slot: any item in it, the slot's background, the hovered highlight, etc.
+     */
+    @Override
+    public void drawSlot(final Slot slotIn)
+    {
+        if (isDrawing && slotIn instanceof SlotBlockOut)
+        {
+            return;
+        }
+
+        super.drawSlot(slotIn);
+    }
+
+    /**
+     * Returns whether the mouse is over the given slot.
+     */
+    @Override
+    public boolean isMouseOverSlot(final Slot slotIn, final int mouseX, final int mouseY)
+    {
+        return (!isDrawing || !(slotIn instanceof SlotBlockOut)) && super.isMouseOverSlot(slotIn, mouseX, mouseY);
     }
 
     @Override
@@ -86,7 +119,7 @@ public class BlockOutGui extends GuiContainer
     }
 
     @Override
-    protected void keyTyped(final char typedChar, final int keyCode) throws IOException
+    protected void keyTyped(final char typedChar, final int keyCode)
     {
         final KeyboardKey key = KeyboardKey.getForCode(keyCode);
         if (key == KeyboardKey.KEY_ESCAPE)
@@ -125,6 +158,10 @@ public class BlockOutGui extends GuiContainer
     public void setRoot(@NotNull final IUIElementHost root)
     {
         this.root = root;
+        this.root.getUiManager().getRenderManager().setGui(this);
+        this.root.update(this.root.getUiManager().getUpdateManager());
+        this.initGui();
+        ((BlockOutContainer) this.inventorySlots).setRoot(root);
     }
 
     @NotNull

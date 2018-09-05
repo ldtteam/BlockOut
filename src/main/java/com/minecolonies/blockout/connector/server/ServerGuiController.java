@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.connector.server;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
 import com.minecolonies.blockout.connector.common.builder.CommonGuiKeyBuilder;
@@ -212,6 +213,11 @@ public class ServerGuiController implements IGuiController
     public ImmutableList<UUID> getUUIDsOfPlayersWatching(@NotNull final IGuiKey key)
     {
         return ImmutableList.copyOf(watchers.get(key));
+    }
+
+    public ImmutableMap<IGuiKey, RootGuiElement> getOpenUis()
+    {
+        return ImmutableMap.copyOf(openUis);
     }
 
     public ImmutableList<RootGuiElement> getOpenRoots()

@@ -36,7 +36,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private IDependencyObject<Dock>             dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    private IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
     private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull

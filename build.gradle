@@ -143,6 +143,10 @@ jar {
     from sourceSets.main.output
 
     dependsOn javadocJar
+
+    manifest {
+        attributes 'FMLAT': "blockout_at.cfg"
+    }
 }
 
 task testModJar(type: Jar) {

@@ -1,6 +1,5 @@
 package com.minecolonies.blockout.core.management;
 
-import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.management.focus.IFocusManager;
 import com.minecolonies.blockout.core.management.input.IClickManager;
 import com.minecolonies.blockout.core.management.input.IKeyManager;
@@ -8,6 +7,7 @@ import com.minecolonies.blockout.core.management.input.IScrollManager;
 import com.minecolonies.blockout.core.management.network.INetworkManager;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
+import com.minecolonies.blockout.element.root.RootGuiElement;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public interface IUIManager
 {
     @NotNull
-    IUIElementHost getHost();
+    RootGuiElement getHost();
 
     @NotNull
     INetworkManager getNetworkManager();

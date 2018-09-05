@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.core.management.render;
 
 import com.minecolonies.blockout.core.element.IUIElement;
+import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,4 +19,11 @@ public interface IRenderManager
     @NotNull
     @SideOnly(Side.CLIENT)
     IRenderingController getRenderingController();
+
+    @NotNull
+    @SideOnly(Side.CLIENT)
+    BlockOutGui getGui();
+
+    @SideOnly(Side.CLIENT)
+    void setGui(@NotNull final BlockOutGui gui);
 }

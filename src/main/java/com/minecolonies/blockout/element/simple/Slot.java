@@ -99,6 +99,8 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
 
@@ -111,7 +113,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
         GlStateManager.popMatrix();
+
+        controller.drawSlotContent(this);
+        controller.drawSlotMouseOverlay(this);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface IDependencyObject<T>
 {
+
     /**
      * Method used to get the value of the dependency object.
      *

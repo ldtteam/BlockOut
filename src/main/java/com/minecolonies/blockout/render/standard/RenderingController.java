@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.render.standard;
 
+import com.minecolonies.blockout.core.management.render.IRenderManager;
+import com.minecolonies.blockout.element.simple.Slot;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.render.core.IScissoringController;
 import com.minecolonies.blockout.util.color.Color;
@@ -11,8 +13,10 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -24,9 +28,17 @@ public class RenderingController implements IRenderingController
 {
 
     @NotNull
-    protected static RenderItem ITEMRENDERER = Minecraft.getMinecraft().getRenderItem();
+    private final static RenderItem ITEMRENDERER = Minecraft.getMinecraft().getRenderItem();
 
+    @NotNull
+    private final IRenderManager renderManager;
+    @NotNull
     private final IScissoringController scissoringController = new ScissoringController(this);
+
+    @NotNull
+    private Vector2d lastKnownMousePosition = new Vector2d();
+
+    public RenderingController(@NotNull final IRenderManager renderManager) {this.renderManager = renderManager;}
 
     @Override
     public IScissoringController getScissoringController()
@@ -349,10 +361,137 @@ public class RenderingController implements IRenderingController
         }
 
         ITEMRENDERER.renderItemAndEffectIntoGUI(stack, x, y);
-        ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y - 8, altText);
+        ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, altText);
 
         RenderHelper.disableStandardItemLighting();
         GlStateManager.enableDepth();
         GlStateManager.disableLighting();
+    }
+
+    @Override
+    public void drawSlotContent(@NotNull final Slot slot)
+    {
+        int x = 1;
+        int y = 1;
+        ItemStack itemstack = renderManager.getGui().getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId()).getStackInSlot(slot.getInventoryIndex());
+        net.minecraft.inventory.Slot slotIn = renderManager.getGui().inventorySlots.getSlot(slot.getSlotIndex());
+
+        boolean flag = false;
+        boolean isDraggingStartSlot = slotIn == renderManager.getGui().clickedSlot && !renderManager.getGui().draggedStack.isEmpty() && !renderManager.getGui().isRightMouseClick;
+        ItemStack itemstack1 = renderManager.getGui().mc.player.inventory.getItemStack();
+        String s = null;
+
+        if (slotIn == renderManager.getGui().clickedSlot && !renderManager.getGui().draggedStack.isEmpty() && renderManager.getGui().isRightMouseClick && !itemstack.isEmpty())
+        {
+            itemstack = itemstack.copy();
+            itemstack.setCount(itemstack.getCount() / 2);
+        }
+        else if (renderManager.getGui().dragSplitting && renderManager.getGui().dragSplittingSlots.contains(slotIn) && !itemstack1.isEmpty())
+        {
+            if (renderManager.getGui().dragSplittingSlots.size() == 1)
+            {
+                return;
+            }
+
+            if (Container.canAddItemToSlot(slotIn, itemstack1, true) && renderManager.getGui().inventorySlots.canDragIntoSlot(slotIn))
+            {
+                itemstack = itemstack1.copy();
+                flag = true;
+                Container.computeStackSize(renderManager.getGui().dragSplittingSlots,
+                  renderManager.getGui().dragSplittingLimit,
+                  itemstack,
+                  slotIn.getStack().isEmpty() ? 0 : slotIn.getStack().getCount());
+                int k = Math.min(itemstack.getMaxStackSize(), slotIn.getItemStackLimit(itemstack));
+
+                if (itemstack.getCount() > k)
+                {
+                    s = TextFormatting.YELLOW.toString() + k;
+                    itemstack.setCount(k);
+                }
+            }
+            else
+            {
+                renderManager.getGui().dragSplittingSlots.remove(slotIn);
+                renderManager.getGui().updateDragSplitting();
+            }
+        }
+
+        renderManager.getGui().itemRender.zLevel = 100.0F;
+
+        if (itemstack.isEmpty() && slotIn.isEnabled())
+        {
+            TextureAtlasSprite textureatlassprite = slotIn.getBackgroundSprite();
+
+            if (textureatlassprite != null)
+            {
+                GlStateManager.disableLighting();
+                renderManager.getGui().mc.getTextureManager().bindTexture(slotIn.getBackgroundLocation());
+                renderManager.getGui().drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
+                GlStateManager.enableLighting();
+                isDraggingStartSlot = true;
+            }
+        }
+
+        if (!isDraggingStartSlot)
+        {
+            if (flag)
+            {
+                drawRect(x, y, x + 16, y + 16, new Color(-2130706433));
+            }
+
+            GlStateManager.enableDepth();
+            drawItemStack(itemstack, x, y, s);
+        }
+
+        renderManager.getGui().itemRender.zLevel = 0.0F;
+    }
+
+    /**
+     * Draws the slot overlay.
+     *
+     * @param slot The slot
+     */
+    @Override
+    public void drawSlotMouseOverlay(@NotNull final Slot slot)
+    {
+        if (!slot.getAbsoluteBoundingBox().includes(getMousePosition()))
+        {
+            return;
+        }
+
+        net.minecraft.inventory.Slot slotIn = renderManager.getGui().inventorySlots.getSlot(slot.getSlotIndex());
+
+        renderManager.getGui().hoveredSlot = slotIn;
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        int x = 1;
+        int y = 1;
+        GlStateManager.colorMask(true, true, true, false);
+        renderManager.getGui().drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
+        GlStateManager.colorMask(true, true, true, true);
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+    }
+
+    /**
+     * Returns the mouse position for rendering.
+     *
+     * @return The mouse position.
+     */
+    @Override
+    public Vector2d getMousePosition()
+    {
+        return lastKnownMousePosition;
+    }
+
+    /**
+     * Sets the mouse position for rendering.
+     *
+     * @param mousePosition The mouse position.
+     */
+    @Override
+    public void setMousePosition(@NotNull final Vector2d mousePosition)
+    {
+        this.lastKnownMousePosition = mousePosition;
     }
 }

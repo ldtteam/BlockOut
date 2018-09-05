@@ -39,7 +39,6 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Objects;
@@ -285,8 +284,10 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     @Override
     public void onPostChildUpdate(@NotNull final IUpdateManager updateManager)
     {
-        updateScrollOffset();
-        updateManager.markDirty();
+        if (updateScrollOffset())
+        {
+            updateManager.markDirty();
+        }
     }
 
     @Override
@@ -429,15 +430,25 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         getParent().getUiManager().getUpdateManager().markDirty();
     }
 
-    private void updateScrollOffset()
+    private boolean updateScrollOffset()
     {
+        boolean requiresUpdate = false;
         double maxOffset = (getTotalContentHeight() - getLocalInternalBoundingBox().getSize().getY()) * scrollOffset;
         double currentUsedHeight = 0d;
         for (IUIElement wrapper : values())
         {
-            wrapper.setMargin(new AxisDistanceBuilder().setLeft(Optional.of(0d)).setRight(Optional.of(0d)).setTop(Optional.of(-maxOffset + currentUsedHeight)).create());
+            final AxisDistance newMargin =
+              new AxisDistanceBuilder().setLeft(Optional.of(0d)).setRight(Optional.of(0d)).setTop(Optional.of(-maxOffset + currentUsedHeight)).create();
+            if (!newMargin.equals(wrapper.getMargin()))
+            {
+                requiresUpdate = true;
+            }
+
+            wrapper.setMargin(newMargin);
             currentUsedHeight += wrapper.getElementSize().getY();
         }
+
+        return requiresUpdate;
     }
 
     /**
@@ -526,14 +537,14 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         DependencyObjectInjector.inject(wrappingRegion, new IDependencyDataProvider()
         {
             @Override
-            public boolean hasDependencyData(@NotNull final String name, @NotNull final Class<? extends IDependencyObject> searchedType)
+            public boolean hasDependencyData(@NotNull final String name)
             {
                 return name.contains("elementSize");
             }
 
             @NotNull
             @Override
-            public <T> IDependencyObject<T> get(@NotNull final String name, @NotNull final IDependencyObject<T> current, @NotNull final Type requestedType)
+            public <T> IDependencyObject<T> get(@NotNull final String name)
             {
                 return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
                   PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
