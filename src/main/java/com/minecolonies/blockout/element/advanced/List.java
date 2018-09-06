@@ -41,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
@@ -74,10 +73,9 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         }
     }
 
-    //Used to cache the contents of the databound list.
-    private Collection<?>                resolvedDataContext              = Lists.newArrayList();
-    private ResourceLocation             resolvedTemplateLocation         = new ResourceLocation("");
-    private IBlockOutGuiConstructionData resolvedTemplateConstructionData = null;
+    private final IDependencyObject<Object> dataBoundModeContents;
+    //The current scroll state is not bindable. It is exclusively controlled by the control it self.
+    private       double                    scrollOffset;
 
     //Bindable resource binding.
     private IDependencyObject<ResourceLocation>             templateResource;
@@ -85,35 +83,18 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     private IDependencyObject<ResourceLocation> scrollBarBackgroundResource;
     private IDependencyObject<ResourceLocation> scrollBarForegroundResource;
+    private boolean                             dataBoundMode;
 
-    @Override
-    public boolean canAcceptMouseInput(final int localX, final int localY, final int deltaWheel)
+    public List(
+      @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
     {
-        //We accept all mouse input that is in our box.
-        return true;
-    }
-
-    /**
-     * Returns the total content height based on all children contained in this list.
-     *
-     * @return The total content height.
-     */
-    private double getTotalContentHeight()
-    {
-        return this.values().stream().mapToDouble(u -> u.getLocalBoundingBox().getSize().getY()).sum();
-    }
-
-    @Override
-    public void update(@NotNull final IUpdateManager updateManager)
-    {
-        super.update(updateManager);
-
-        if (!dataBoundMode)
-        {
-            return;
-        }
-
-        updateChildrenInDataBoundMode(updateManager);
+        super(KEY_LIST, style, id, parent);
+        this.dataBoundMode = false;
+        this.dataBoundModeContents = DependencyObjectHelper.createFromValue(new Object());
+        this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
+        this.scrollBarBackgroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
+        this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
     }
 
     public List(
@@ -136,6 +117,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     {
         super(KEY_LIST, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
         this.dataBoundMode = dataBoundMode;
+        this.dataBoundModeContents = DependencyObjectHelper.wrapForChangeTracking(() -> this.dataContext);
         this.templateResource = templateResource;
         this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
         this.scrollBarBackgroundResource = scrollBarBackgroundResource;
@@ -144,20 +126,22 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     @Override
+    public void update(@NotNull final IUpdateManager updateManager)
+    {
+        super.update(updateManager);
+
+        if (!dataBoundMode)
+        {
+            return;
+        }
+
+        updateChildrenInDataBoundMode(updateManager);
+    }
+
+    @Override
     public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
     {
         scroll(deltaWheel / getTotalContentHeight() / -10);
-    }
-
-    /**
-     * Updates the scroll position with a given delta.
-     *
-     * @param delta The delta to scroll.
-     */
-    public void scroll(double delta)
-    {
-        final double newScrollOffset = scrollOffset + delta;
-        scrollTo(newScrollOffset);
     }
 
     @Override
@@ -190,6 +174,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     {
         onScrollBarClick(localY);
     }
+
 
     /**
      * Called by the rendering manager before the drawing of the background of our children starts.
@@ -233,47 +218,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public void postForegroundDrawOfChildren(@NotNull final IRenderManager manager)
     {
         manager.getRenderingController().getScissoringController().pop();
-    }
-
-    private void onScrollBarClick(int localY)
-    {
-        final double localHeight = getLocalBoundingBox().getSize().getY();
-        final double barHeight = getScrollBarHeight();
-        final double maxOffset = localHeight - barHeight;
-
-        scrollTo(localY / maxOffset);
-    }
-
-    //Indicates weither or not we need to watch for changes in the data list.
-    private boolean dataBoundMode;
-
-    /**
-     * Updates the children when the control is in databound mode via its datacontext.
-     *
-     * @param updateManager The update manager to mark the ui dirty when the control changed.
-     */
-    private void updateChildrenInDataBoundMode(@NotNull final IUpdateManager updateManager)
-    {
-        final Object context = getDataContext();
-        if (!(context instanceof Collection))
-        {
-            updateChildrenInDataBoundMoTo(updateManager, Lists.newArrayList());
-        }
-        else
-        {
-            updateChildrenInDataBoundMoTo(updateManager, (Collection<?>) context);
-        }
-    }
-
-    public List(
-      @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
-    {
-        super(KEY_LIST, style, id, parent);
-        this.dataBoundMode = false;
-        this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.scrollBarBackgroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
     }
 
     /**
@@ -326,9 +270,63 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         return templateConstructionData.get(getDataContext());
     }
 
-    public void setTemplateConstructionData(final @NotNull IBlockOutGuiConstructionData templateConstructionData)
+    /**
+     * Updates the children when the control is in databound mode via its datacontext.
+     *
+     * @param updateManager The update manager to mark the ui dirty when the control changed.
+     */
+    private void updateChildrenInDataBoundMode(@NotNull final IUpdateManager updateManager)
     {
-        this.templateConstructionData = DependencyObjectHelper.createFromValue(templateConstructionData);
+        if (!dataBoundModeContents.hasChanged(parent.getDataContext())
+              && !templateResource.hasChanged(getDataContext())
+              && !templateConstructionData.hasChanged(getDataContext()))
+        {
+            //Noop needed the lists are equal so no modifications are needed.
+            return;
+        }
+
+        final Object newDataContext = dataBoundModeContents.get(parent.getDataContext());
+        final Collection<?> newData;
+        if (newDataContext instanceof Collection)
+        {
+            newData = (Collection<?>) newDataContext;
+        }
+        else
+        {
+            newData = Lists.newArrayList();
+        }
+
+        //Context has changed.
+        //Mark the ui as dirty.
+        updateManager.markDirty();
+
+        //Clear all children.
+        clear();
+
+        //Create control instances from the template.
+        int index = 0;
+        for (final Object context :
+          newData)
+        {
+            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
+              this,
+              PropertyCreationHelper.create(
+                parentContext -> Optional.of(context),
+                null
+              ),
+              getTemplateResource(),
+              String.format("%s_%d", getId(), index++));
+
+            if (getTemplateConstructionData() != null)
+            {
+                DependencyObjectInjector.inject(element, getTemplateConstructionData());
+                EventHandlerInjector.inject(element, getTemplateConstructionData());
+            }
+
+            wrapNewElementAndRegister(element);
+        }
+
+        updateScrollOffset();
     }
 
     /**
@@ -339,14 +337,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public ResourceLocation getTemplateResource()
     {
         return templateResource.get(getDataContext());
-    }
-
-    private int getScrollBarHeight()
-    {
-        final BoundingBox localBox = getLocalBoundingBox();
-        final double contentHeight = getTotalContentHeight();
-
-        return (int) Math.min(localBox.getSize().getY(), (localBox.getSize().getY() / contentHeight) * localBox.getSize().getY());
     }
 
     private void drawSrollbarBackground(@NotNull final IRenderingController controller, @NotNull final BoundingBox scrollBox)
@@ -417,19 +407,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         return scrollBarBackgroundResource.get(getDataContext());
     }
 
-    /**
-     * Updates the scroll position by scrolling to a given target.
-     * Given value is clamped to the minimal and maximal scroll value.
-     *
-     * @param target The target to scroll to.
-     */
-    public void scrollTo(double target)
-    {
-        this.scrollOffset = Clamp.Clamp(0, target, 1);
-        updateScrollOffset();
-        getParent().getUiManager().getUpdateManager().markDirty();
-    }
-
     private boolean updateScrollOffset()
     {
         boolean requiresUpdate = false;
@@ -452,74 +429,27 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     /**
-     * Sets the template resource.
+     * Returns the total content height based on all children contained in this list.
      *
-     * @param templateResource The new template resource.
+     * @return The total content height.
      */
-    public void setTemplateResource(@NotNull final ResourceLocation templateResource)
+    private double getTotalContentHeight()
     {
-        this.templateResource = DependencyObjectHelper.createFromValue(templateResource);
-        this.dataBoundMode = true;
-        updateChildrenInDataBoundMode(getUiManager().getUpdateManager());
+        return this.values().stream().mapToDouble(u -> u.getLocalBoundingBox().getSize().getY()).sum();
     }
 
-    public boolean isDataBoundMode()
+    @Override
+    public boolean canAcceptMouseInput(final int localX, final int localY, final int deltaWheel)
     {
-        return dataBoundMode;
+        //We accept all mouse input that is in our box.
+        return true;
     }
 
-    public void setDataBoundMode(final boolean dataBoundMode)
+    public void setTemplateConstructionData(final @NotNull IBlockOutGuiConstructionData templateConstructionData)
     {
-        this.dataBoundMode = dataBoundMode;
+        this.templateConstructionData.set(getDataContext(), templateConstructionData);
     }
 
-    private void updateChildrenInDataBoundMoTo(@NotNull final IUpdateManager updateManager, @NotNull final Collection<?> newData)
-    {
-        if (newData.equals(resolvedDataContext)
-              && Objects.equals(getTemplateResource(), resolvedTemplateLocation)
-              && Objects.equals(getTemplateConstructionData(), resolvedTemplateConstructionData))
-        {
-            //Noop needed the lists are equal so no modifications are needed.
-            return;
-        }
-
-        //Context has changed.
-        //Mark the ui as dirty.
-        updateManager.markDirty();
-
-        //Clear all children.
-        clear();
-
-        //Set the template location
-        resolvedTemplateLocation = getTemplateResource();
-        resolvedDataContext = newData;
-        resolvedTemplateConstructionData = getTemplateConstructionData();
-
-        //Create control instances from the template.
-        int index = 0;
-        for (final Object context :
-          newData)
-        {
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
-              this,
-              PropertyCreationHelper.create(
-                parentContext -> Optional.of(context),
-                null
-              ),
-              resolvedTemplateLocation,
-              String.format("%s_%d", getId(), index++));
-
-            if (resolvedTemplateConstructionData != null)
-            {
-                DependencyObjectInjector.inject(element, resolvedTemplateConstructionData);
-                EventHandlerInjector.inject(element, resolvedTemplateConstructionData);
-            }
-
-            wrapNewElementAndRegister(element);
-        }
-
-        updateScrollOffset();
-    }
 
     private void wrapNewElementAndRegister(@NotNull final IUIElement element)
     {
@@ -567,7 +497,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     public void setScrollBarBackgroundResource(@NotNull final ResourceLocation scrollBarBackground)
     {
-        this.scrollBarBackgroundResource = DependencyObjectHelper.createFromValue(scrollBarBackground);
+        this.scrollBarBackgroundResource.set(getDataContext(), scrollBarBackground);
     }
 
     @NotNull
@@ -578,7 +508,80 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
     public void setScrollBarForegroundResource(@NotNull final ResourceLocation scrollBarForeground)
     {
-        this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(scrollBarForeground);
+        this.scrollBarForegroundResource.set(getDataContext(), scrollBarForeground);
+    }
+
+    /**
+     * Sets the template resource.
+     *
+     * @param templateResource The new template resource.
+     */
+    public void setTemplateResource(@NotNull final ResourceLocation templateResource)
+    {
+        this.templateResource.set(getDataContext(), templateResource);
+        this.dataBoundMode = true;
+        updateChildrenInDataBoundMode(getUiManager().getUpdateManager());
+    }
+
+    public boolean isDataBoundMode()
+    {
+        return dataBoundMode;
+    }
+
+    public void setDataBoundMode(final boolean dataBoundMode)
+    {
+        this.dataBoundMode = dataBoundMode;
+    }
+
+    /**
+     * Updates the scroll position with a given delta.
+     *
+     * @param delta The delta to scroll.
+     */
+    public void scroll(double delta)
+    {
+        final double newScrollOffset = scrollOffset + delta;
+        scrollTo(newScrollOffset);
+    }
+
+    /**
+     * Updates the scroll position by scrolling to a given target.
+     * Given value is clamped to the minimal and maximal scroll value.
+     *
+     * @param target The target to scroll to.
+     */
+    public void scrollTo(double target)
+    {
+        this.scrollOffset = Clamp.Clamp(0, target, 1);
+        updateScrollOffset();
+        getParent().getUiManager().getUpdateManager().markDirty();
+    }
+
+    /**
+     * Called when a click is made on the scrollbar.
+     *
+     * @param localY The localY of set of the click.
+     */
+    private void onScrollBarClick(int localY)
+    {
+        final double localHeight = getLocalBoundingBox().getSize().getY();
+        final double barHeight = getScrollBarHeight();
+        final double maxOffset = localHeight - barHeight;
+
+        scrollTo(localY / maxOffset);
+    }
+
+    /**
+     * Returns the height of the scrolling element of the scrollbar.
+     *
+     * @return The height.
+     */
+    private int getScrollBarHeight()
+    {
+        final BoundingBox localBox = getLocalBoundingBox();
+        final double contentHeight = getTotalContentHeight();
+
+        return (int) Math.min(localBox.getSize().getY(), (localBox.getSize().getY() / contentHeight) * localBox.getSize().getY());
     }
 
     public static final class Factory implements IUIElementFactory<List>
@@ -699,7 +702,4 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             });
         }
     }
-
-    //The current scroll state is not bindable. It is exclusively controlled by the control it self.
-    private double scrollOffset;
 }
