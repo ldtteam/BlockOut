@@ -85,6 +85,16 @@ public class Constants
             public static final String CONST_INITIALLY_CLICKED              = "clicked";
         }
 
+        public static class CheckBox
+        {
+            public static final ResourceLocation KEY_CHECKBOX = new ResourceLocation(MOD_ID, "checkbox");
+
+            public static final String CONST_DEFAULT_BACKGROUND_IMAGE  = "defaultBackgroundImage";
+            public static final String CONST_DISABLED_BACKGROUND_IMAGE = "disabledBackgroundImage";
+            public static final String CONST_CHECKED_BACKGROUND_IMAGE  = "checkedBackgroundImage";
+            public static final String CONST_INITIALLY_CHECKED         = "checked";
+        }
+
         public static class Template
         {
             public static final ResourceLocation KEY_TEMPLATE = new ResourceLocation(MOD_ID, "template");
