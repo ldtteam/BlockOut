@@ -19,7 +19,7 @@ public class KeyManager extends AbstractInputManager implements IKeyManager
     public void onKeyPressed(final int character, final KeyboardKey key)
     {
         attemptInputInteraction(
-          t -> t.canAcceptKeyInput(character, key),
+          t -> t.isEnabled() && t.canAcceptKeyInput(character, key),
           t -> t.onKeyPressed(character, key)
         );
     }

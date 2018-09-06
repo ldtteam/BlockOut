@@ -200,6 +200,6 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
 
     public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
-        this.templateResource = DependencyObjectHelper.createFromValue(templateResource);
+        this.templateResource.set(getDataContext(), templateResource);
     }
 }

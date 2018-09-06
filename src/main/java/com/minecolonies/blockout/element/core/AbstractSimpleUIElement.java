@@ -248,7 +248,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public boolean isVisible()
     {
-        return visible.get(getDataContext());
+        return visible.get(getDataContext()) && (this == getParent() || getParent().isVisible());
     }
 
     @Override
@@ -260,7 +260,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public boolean isEnabled()
     {
-        return enabled.get(getDataContext());
+        return isVisible() && enabled.get(getDataContext()) && (this == getParent() || getParent().isEnabled());
     }
 
     /**

@@ -141,7 +141,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setBackgroundImageResource(@NotNull final ResourceLocation location)
     {
-        backgroundImageResource = DependencyObjectHelper.createFromValue(location);
+        backgroundImageResource.set(getDataContext(), location);
     }
 
     @NotNull
@@ -152,7 +152,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setInventoryId(@NotNull final ResourceLocation inventoryId)
     {
-        this.inventoryId = DependencyObjectHelper.createFromValue(inventoryId);
+        this.inventoryId.set(getDataContext(), inventoryId);
     }
 
     @NotNull
@@ -163,7 +163,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setInventoryIndex(@NotNull final Integer index)
     {
-        inventoryIndex = DependencyObjectHelper.createFromValue(index);
+        inventoryIndex.set(getDataContext(), index);
     }
 
     @NotNull

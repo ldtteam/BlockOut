@@ -166,7 +166,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     public void setClicked(@NotNull final boolean clicked)
     {
         final boolean currentClickState = isClicked();
-        this.clicked = DependencyObjectHelper.createFromValue(clicked);
+        this.clicked.set(getDataContext(), clicked);
 
         if (currentClickState != clicked)
         {
@@ -195,7 +195,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public void setNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImage)
     {
-        this.normalBackgroundImageResource = DependencyObjectHelper.createFromValue(normalBackgroundImage);
+        this.normalBackgroundImageResource.set(getDataContext(), normalBackgroundImage);
     }
 
     @NotNull
@@ -212,7 +212,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public void setClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImage)
     {
-        this.clickedBackgroundImageResource = DependencyObjectHelper.createFromValue(clickedBackgroundImage);
+        this.clickedBackgroundImageResource.set(getDataContext(), clickedBackgroundImage);
     }
 
     @NotNull
@@ -229,7 +229,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public void setDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImage)
     {
-        this.disabledBackgroundImageResource = DependencyObjectHelper.createFromValue(disabledBackgroundImage);
+        this.disabledBackgroundImageResource.set(getDataContext(), disabledBackgroundImage);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ClickManager extends AbstractInputManager implements IClickManager
         attemptInputInteraction(
           localX,
           localY,
-          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.isEnabled() && u.canAcceptMouseInput(x, y, button),
           (u, x, y) -> u.onMouseClickBegin(x, y, button)
         );
     }
@@ -36,7 +36,7 @@ public class ClickManager extends AbstractInputManager implements IClickManager
         attemptInputInteraction(
           localX,
           localY,
-          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.isEnabled() && u.canAcceptMouseInput(x, y, button),
           (u, x, y) -> u.onMouseClickEnd(x, y, button)
         );
     }
@@ -47,7 +47,7 @@ public class ClickManager extends AbstractInputManager implements IClickManager
         attemptInputInteraction(
           localX,
           localY,
-          (u, x, y) -> u.canAcceptMouseInput(x, y, button),
+          (u, x, y) -> u.isEnabled() && u.canAcceptMouseInput(x, y, button),
           (u, x, y) -> u.onMouseClickMove(x, y, button, timeElapsed)
         );
     }
@@ -104,11 +104,11 @@ public class ClickManager extends AbstractInputManager implements IClickManager
       final IInteractionExecutionCallback executionCallback)
     {
         @NotNull final IClickAcceptingUIElement t = (IClickAcceptingUIElement) target;
-        @NotNull final BoundingBox absoluteTarget = convertToBoundingBox(localX, localY);
+        @NotNull final Vector2d absoluteClickPos = new Vector2d(localX, localY);
 
-        if (t.getAbsoluteBoundingBox().includes(absoluteTarget))
+        if (t.getAbsoluteBoundingBox().includes(absoluteClickPos))
         {
-            @NotNull final BoundingBox localTarget = new BoundingBox(absoluteTarget.getLocalOrigin().move(t.getAbsoluteBoundingBox().getLocalOrigin().invert()), new Vector2d());
+            @NotNull final BoundingBox localTarget = new BoundingBox(absoluteClickPos.move(t.getAbsoluteBoundingBox().getLocalOrigin().invert()), new Vector2d());
             if (acceptanceCallback.apply(t, (int) localTarget.getLocalOrigin().getX(), (int) localTarget.getLocalOrigin().getY()))
             {
                 executionCallback.apply(t, (int) localTarget.getLocalOrigin().getX(), (int) localTarget.getLocalOrigin().getY());
@@ -117,11 +117,6 @@ public class ClickManager extends AbstractInputManager implements IClickManager
         }
 
         return false;
-    }
-
-    private BoundingBox convertToBoundingBox(final int localX, final int localY)
-    {
-        return new BoundingBox(new Vector2d(localX, localY), new Vector2d());
     }
 
     @FunctionalInterface

@@ -104,7 +104,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
 
     public void setIconResource(@NotNull final ResourceLocation icon)
     {
-        this.iconResource = DependencyObjectHelper.createFromValue(icon);
+        this.iconResource.set(getDataContext(), icon);
     }
 
     @SideOnly(Side.CLIENT)

@@ -317,7 +317,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public boolean isVisible()
     {
-        return visible.get(getDataContext());
+        return visible.get(getDataContext()) && (getParent() == this || getParent().isVisible());
     }
 
     @Override
@@ -329,7 +329,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public boolean isEnabled()
     {
-        return enabled.get(getDataContext());
+        return isVisible() && enabled.get(getDataContext()) && (getParent() == this || getParent().isEnabled());
     }
 
     @Override

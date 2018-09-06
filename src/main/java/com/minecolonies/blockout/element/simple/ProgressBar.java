@@ -215,7 +215,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setBackGroundResource(@NotNull final ResourceLocation backGroundResource)
     {
-        this.backGroundResource = DependencyObjectHelper.createFromValue(backGroundResource);
+        this.backGroundResource.set(getDataContext(), backGroundResource);
     }
 
     @NotNull
@@ -226,7 +226,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setForeGroundResource(@NotNull final ResourceLocation foreGroundResource)
     {
-        this.foreGroundResource = DependencyObjectHelper.createFromValue(foreGroundResource);
+        this.foreGroundResource.set(getDataContext(), foreGroundResource);
     }
 
     @NotNull
@@ -237,7 +237,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setValue(@NotNull final Double value)
     {
-        this.value = DependencyObjectHelper.createFromValue(value);
+        this.value.set(getDataContext(), value);
     }
 
     @NotNull
@@ -248,7 +248,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setMin(@NotNull final Double min)
     {
-        this.min = DependencyObjectHelper.createFromValue(min);
+        this.min.set(getDataContext(), min);
     }
 
     @NotNull
@@ -259,7 +259,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setMax(@NotNull final Double max)
     {
-        this.max = DependencyObjectHelper.createFromValue(max);
+        this.max.set(getDataContext(), max);
     }
 
     @NotNull
@@ -270,7 +270,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setOrientation(@NotNull final ControlDirection orientation)
     {
-        this.orientation = DependencyObjectHelper.createFromValue(orientation);
+        this.orientation.set(getDataContext(), orientation);
     }
 
     public static class ProgressBarConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<ProgressBarConstructionDataBuilder, ProgressBar>

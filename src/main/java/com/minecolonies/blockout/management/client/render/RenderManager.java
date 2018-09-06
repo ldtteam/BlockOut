@@ -26,6 +26,11 @@ public class RenderManager implements IRenderManager
     @Override
     public void drawBackground(@NotNull final IUIElement host)
     {
+        if (!host.isVisible())
+        {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
@@ -53,6 +58,11 @@ public class RenderManager implements IRenderManager
     @Override
     public void drawForeground(@NotNull final IUIElement host)
     {
+        if (!host.isVisible())
+        {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 

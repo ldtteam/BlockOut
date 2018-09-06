@@ -422,7 +422,16 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             }
 
             wrapper.setMargin(newMargin);
+            wrapper.update(getUiManager().getUpdateManager());
             currentUsedHeight += wrapper.getElementSize().getY();
+        }
+
+        if (requiresUpdate && isVisible())
+        {
+            values().stream().forEach(e -> e.setVisible(
+              this.getAbsoluteInternalBoundingBox().intersects(e.getAbsoluteBoundingBox())
+              )
+            );
         }
 
         return requiresUpdate;

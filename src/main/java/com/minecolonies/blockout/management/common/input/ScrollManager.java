@@ -24,7 +24,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         attemptInputInteraction(
           localX,
           localY,
-          (u, x, y) -> u.canAcceptMouseInput(x, y, deltaWheel),
+          (u, x, y) -> u.isEnabled() && u.canAcceptMouseInput(x, y, deltaWheel),
           (u, x, y) -> u.onMouseScroll(x, y, deltaWheel));
     }
 
@@ -79,11 +79,11 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
       final IInteractionExecutionCallback executionCallback)
     {
         @NotNull final IScrollAcceptingUIElement t = (IScrollAcceptingUIElement) target;
-        @NotNull final BoundingBox absoluteTarget = convertToBoundingBox(localX, localY);
+        @NotNull final Vector2d absoluteTarget = new Vector2d(localX, localY);
 
         if (t.getAbsoluteBoundingBox().includes(absoluteTarget))
         {
-            @NotNull final BoundingBox localTarget = new BoundingBox(absoluteTarget.getLocalOrigin().move(t.getAbsoluteBoundingBox().getLocalOrigin().invert()), new Vector2d());
+            @NotNull final BoundingBox localTarget = new BoundingBox(absoluteTarget.move(t.getAbsoluteBoundingBox().getLocalOrigin().invert()), new Vector2d());
             if (acceptanceCallback.apply(t, (int) localTarget.getLocalOrigin().getX(), (int) localTarget.getLocalOrigin().getY()))
             {
                 executionCallback.apply(t, (int) localTarget.getLocalOrigin().getX(), (int) localTarget.getLocalOrigin().getY());
@@ -92,11 +92,6 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         }
 
         return false;
-    }
-
-    private BoundingBox convertToBoundingBox(final int localX, final int localY)
-    {
-        return new BoundingBox(new Vector2d(localX, localY), new Vector2d());
     }
 
     @FunctionalInterface
