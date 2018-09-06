@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.proxy;
 
 import com.minecolonies.blockout.connector.client.ClientGuiController;
+import com.minecolonies.blockout.connector.client.ClientSideOnlyGuiController;
 import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.core.management.IUIManager;
@@ -30,11 +31,17 @@ public class ClientProxy extends CommonProxy
 {
 
     @NotNull
-    private       MultiColoredFontRenderer multiColoredFontRenderer;
+    private       MultiColoredFontRenderer    multiColoredFontRenderer;
     @NotNull
-    private final ClientGuiController      guiController;
+    private final ClientGuiController         guiController;
+    @NotNull
+    private final ClientSideOnlyGuiController clientSideOnlyGuiController;
 
-    public ClientProxy() {guiController = new ClientGuiController();}
+    public ClientProxy()
+    {
+        guiController = new ClientGuiController();
+        clientSideOnlyGuiController = new ClientSideOnlyGuiController();
+    }
 
     @NotNull
     @Override
@@ -110,5 +117,15 @@ public class ClientProxy extends CommonProxy
     public MultiColoredFontRenderer getFontRenderer()
     {
         return multiColoredFontRenderer;
+    }
+
+    @NotNull
+    @Override
+    public IGuiController getClientSideOnlyGuiController()
+    {
+        return SideHelper.on(
+          () -> clientSideOnlyGuiController,
+          () -> null
+        );
     }
 }

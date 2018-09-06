@@ -408,13 +408,6 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         }
 
         @NotNull
-        @Override
-        public IBlockOutGuiConstructionDataBuilder done()
-        {
-            return data;
-        }
-
-        @NotNull
         public B withDependentAllignments(@NotNull final IDependencyObject<EnumSet<Alignment>> alignments)
         {
             return withDependency("alignments", alignments);

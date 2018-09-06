@@ -15,7 +15,4 @@ public interface IBlockOutUIElementConstructionDataBuilder<C extends IBlockOutUI
     <A> C withEventHandler(
       @NotNull final String eventName, @NotNull final Class<A> argumentTypeClass, @NotNull final
     IEventHandler<T, A> eventHandler);
-
-    @NotNull
-    IBlockOutGuiConstructionDataBuilder done();
 }

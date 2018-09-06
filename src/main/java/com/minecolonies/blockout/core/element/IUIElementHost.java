@@ -123,7 +123,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
         {
             if (element instanceof IUIElementHost)
             {
-                final Vector2d elementLocalCoord = localPoint.move(element.getLocalBoundingBox().getLocalOrigin().invert());
+                final Vector2d elementLocalCoord = localPoint.move(this.getLocalBoundingBox().getLocalOrigin().invert());
                 final IUIElementHost elementHost = (IUIElementHost) element;
                 final Optional<IUIElement> elementResult = elementHost.searchDeepestElementByCoordAndPredicate(elementLocalCoord, predicate);
                 if (elementResult.isPresent())

@@ -16,7 +16,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class BlockOutGui extends GuiContainer
+public class BlockOutGui extends GuiContainer implements IBlockOutGui
 {
     @NotNull
     private final IGuiKey        key;
@@ -149,12 +149,14 @@ public class BlockOutGui extends GuiContainer
         super.handleMouseInput();
     }
 
+    @Override
     @NotNull
     public IUIElementHost getRoot()
     {
         return root;
     }
 
+    @Override
     public void setRoot(@NotNull final IUIElementHost root)
     {
         this.root = root;
@@ -164,6 +166,7 @@ public class BlockOutGui extends GuiContainer
         ((BlockOutContainer) this.inventorySlots).setRoot(root);
     }
 
+    @Override
     @NotNull
     public IGuiKey getKey()
     {

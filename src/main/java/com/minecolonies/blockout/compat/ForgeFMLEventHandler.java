@@ -2,7 +2,7 @@ package com.minecolonies.blockout.compat;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.server.ServerGuiController;
-import com.minecolonies.blockout.gui.BlockOutGui;
+import com.minecolonies.blockout.gui.IBlockOutGui;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
 import com.minecolonies.blockout.management.server.update.ServerUpdateManager;
 import com.minecolonies.blockout.util.Constants;
@@ -38,9 +38,9 @@ public class ForgeFMLEventHandler
     public static void onTickClientTick(final TickEvent.ClientTickEvent event)
     {
         SideHelper.onClient(() -> {
-            if (Minecraft.getMinecraft().currentScreen instanceof BlockOutGui)
+            if (Minecraft.getMinecraft().currentScreen instanceof IBlockOutGui)
             {
-                BlockOutGui currentScreen = (BlockOutGui) Minecraft.getMinecraft().currentScreen;
+                IBlockOutGui currentScreen = (IBlockOutGui) Minecraft.getMinecraft().currentScreen;
                 currentScreen.getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getRoot());
 
                 ClientTickManager.getInstance().onClientTick();

@@ -11,6 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -65,6 +67,10 @@ public interface IGuiKeyBuilder
 
     @NotNull
     IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos);
+
+    @SideOnly(Side.CLIENT)
+    @NotNull
+    IGuiKeyBuilder forClientSideOnly();
 
     @NotNull
     IGuiKeyBuilder forContext(@NotNull final IContext context);

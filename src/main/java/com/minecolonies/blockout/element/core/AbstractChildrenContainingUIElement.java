@@ -483,13 +483,6 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         }
 
         @NotNull
-        @Override
-        public IBlockOutGuiConstructionDataBuilder done()
-        {
-            return data;
-        }
-
-        @NotNull
         public B withDependentDock(@NotNull final IDependencyObject<Dock> dock)
         {
             return withDependency("dock", dock);

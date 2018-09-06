@@ -176,4 +176,11 @@ public class CommonProxy implements IProxy
     {
         return SimpleTemplateEngine.getInstance();
     }
+
+    @NotNull
+    @Override
+    public IGuiController getClientSideOnlyGuiController()
+    {
+        return null;
+    }
 }

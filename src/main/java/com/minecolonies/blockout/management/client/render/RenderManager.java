@@ -5,7 +5,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.drawable.IChildDrawableUIElement;
 import com.minecolonies.blockout.core.element.drawable.IDrawableUIElement;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
-import com.minecolonies.blockout.gui.BlockOutGui;
+import com.minecolonies.blockout.gui.IBlockOutGui;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.render.standard.RenderingController;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,7 +20,7 @@ public class RenderManager implements IRenderManager
     private final IRenderingController renderingController = new RenderingController(this);
 
     @SideOnly(Side.CLIENT)
-    private BlockOutGui gui;
+    private IBlockOutGui gui;
 
     @SideOnly(Side.CLIENT)
     @Override
@@ -86,13 +86,13 @@ public class RenderManager implements IRenderManager
 
     @NotNull
     @Override
-    public BlockOutGui getGui()
+    public IBlockOutGui getGui()
     {
         return gui;
     }
 
     @Override
-    public void setGui(@NotNull final BlockOutGui gui)
+    public void setGui(@NotNull final IBlockOutGui gui)
     {
         this.gui = gui;
     }

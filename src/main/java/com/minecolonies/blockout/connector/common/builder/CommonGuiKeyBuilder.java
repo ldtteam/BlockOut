@@ -13,6 +13,7 @@ import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
+import com.minecolonies.blockout.context.ClientSideOnlyContext;
 import com.minecolonies.blockout.context.EntityContext;
 import com.minecolonies.blockout.context.PositionContext;
 import com.minecolonies.blockout.context.core.IContext;
@@ -20,6 +21,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -143,6 +146,15 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     public IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos)
     {
         this.context = new PositionContext(world, blockPos);
+        return this;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @NotNull
+    @Override
+    public IGuiKeyBuilder forClientSideOnly()
+    {
+        this.context = new ClientSideOnlyContext();
         return this;
     }
 

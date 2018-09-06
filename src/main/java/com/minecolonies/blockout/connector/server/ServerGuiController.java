@@ -3,17 +3,13 @@ package com.minecolonies.blockout.connector.server;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.minecolonies.blockout.BlockOut;
-import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
+import com.minecolonies.blockout.connector.common.CommonGuiInstantiationController;
 import com.minecolonies.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.minecolonies.blockout.connector.core.IGuiController;
 import com.minecolonies.blockout.connector.core.IGuiKey;
 import com.minecolonies.blockout.connector.core.builder.IGuiKeyBuilder;
-import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.element.root.RootGuiElement;
-import com.minecolonies.blockout.event.injector.EventHandlerInjector;
 import com.minecolonies.blockout.inventory.BlockOutContainer;
-import com.minecolonies.blockout.loader.IUIElementData;
-import com.minecolonies.blockout.management.UIManager;
 import com.minecolonies.blockout.network.NetworkManager;
 import com.minecolonies.blockout.network.message.CloseGuiCommandMessage;
 import com.minecolonies.blockout.network.message.OpenGuiCommandMessage;
@@ -80,37 +76,21 @@ public class ServerGuiController implements IGuiController
             return;
         }
 
-        final IUIElementData elementData = BlockOut.getBlockOut().getProxy().getLoaderManager().loadData(key.getGuiDefinitionLoader());
-
-        if (elementData == null)
-        {
-            Log.getLogger().error("Failed to open UI for: " + playerId.toString() + " from: " + key.toString() + ". No loader compatible.");
-            return;
-        }
-
         RootGuiElement host;
 
         if (!openUis.containsKey(key))
         {
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
-            if (!(element instanceof RootGuiElement))
+            try
             {
-                Log.getLogger().error("Failed to open UI for: " + playerId.toString() + " from: " + key.toString() + ". Component is not a Host.");
+                host = CommonGuiInstantiationController.getInstance().instantiateNewGui(key);
+            }
+            catch (IllegalArgumentException ex)
+            {
+                Log.getLogger().error("Failed to create gui for: " + playerId, ex);
                 return;
             }
 
-            host = (RootGuiElement) element;
-
-            DependencyObjectInjector.inject(host, key.getConstructionData());
-            host.getAllCombinedChildElements().values().forEach(c -> DependencyObjectInjector.inject(c, key.getConstructionData()));
-
-            EventHandlerInjector.inject(host, key.getConstructionData());
-            host.getAllCombinedChildElements().values().forEach(c -> EventHandlerInjector.inject(c, key.getConstructionData()));
-
-            host.setUiManager(new UIManager(host, key));
-
             openUis.put(key, host);
-            host.getUiManager().getUpdateManager().updateElement(host);
         }
         else
         {

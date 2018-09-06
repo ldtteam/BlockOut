@@ -2,6 +2,7 @@ package com.minecolonies.blockout.render.standard;
 
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.element.simple.Slot;
+import com.minecolonies.blockout.gui.BlockOutGui;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.render.core.IScissoringController;
 import com.minecolonies.blockout.util.color.Color;
@@ -371,34 +372,41 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawSlotContent(@NotNull final Slot slot)
     {
+        if (!(renderManager.getGui() instanceof BlockOutGui))
+        {
+            throw new IllegalArgumentException("Can not draw slot contents on ClientSide Only gui.");
+        }
+
+        final BlockOutGui gui = (BlockOutGui) renderManager.getGui();
+        
         int x = 1;
         int y = 1;
-        ItemStack itemstack = renderManager.getGui().getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId()).getStackInSlot(slot.getInventoryIndex());
-        net.minecraft.inventory.Slot slotIn = renderManager.getGui().inventorySlots.getSlot(slot.getSlotIndex());
+        ItemStack itemstack = gui.getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId()).getStackInSlot(slot.getInventoryIndex());
+        net.minecraft.inventory.Slot slotIn = gui.inventorySlots.getSlot(slot.getSlotIndex());
 
         boolean flag = false;
-        boolean isDraggingStartSlot = slotIn == renderManager.getGui().clickedSlot && !renderManager.getGui().draggedStack.isEmpty() && !renderManager.getGui().isRightMouseClick;
-        ItemStack itemstack1 = renderManager.getGui().mc.player.inventory.getItemStack();
+        boolean isDraggingStartSlot = slotIn == gui.clickedSlot && !gui.draggedStack.isEmpty() && !gui.isRightMouseClick;
+        ItemStack itemstack1 = gui.mc.player.inventory.getItemStack();
         String s = null;
 
-        if (slotIn == renderManager.getGui().clickedSlot && !renderManager.getGui().draggedStack.isEmpty() && renderManager.getGui().isRightMouseClick && !itemstack.isEmpty())
+        if (slotIn == gui.clickedSlot && !gui.draggedStack.isEmpty() && gui.isRightMouseClick && !itemstack.isEmpty())
         {
             itemstack = itemstack.copy();
             itemstack.setCount(itemstack.getCount() / 2);
         }
-        else if (renderManager.getGui().dragSplitting && renderManager.getGui().dragSplittingSlots.contains(slotIn) && !itemstack1.isEmpty())
+        else if (gui.dragSplitting && gui.dragSplittingSlots.contains(slotIn) && !itemstack1.isEmpty())
         {
-            if (renderManager.getGui().dragSplittingSlots.size() == 1)
+            if (gui.dragSplittingSlots.size() == 1)
             {
                 return;
             }
 
-            if (Container.canAddItemToSlot(slotIn, itemstack1, true) && renderManager.getGui().inventorySlots.canDragIntoSlot(slotIn))
+            if (Container.canAddItemToSlot(slotIn, itemstack1, true) && gui.inventorySlots.canDragIntoSlot(slotIn))
             {
                 itemstack = itemstack1.copy();
                 flag = true;
-                Container.computeStackSize(renderManager.getGui().dragSplittingSlots,
-                  renderManager.getGui().dragSplittingLimit,
+                Container.computeStackSize(gui.dragSplittingSlots,
+                  gui.dragSplittingLimit,
                   itemstack,
                   slotIn.getStack().isEmpty() ? 0 : slotIn.getStack().getCount());
                 int k = Math.min(itemstack.getMaxStackSize(), slotIn.getItemStackLimit(itemstack));
@@ -411,12 +419,12 @@ public class RenderingController implements IRenderingController
             }
             else
             {
-                renderManager.getGui().dragSplittingSlots.remove(slotIn);
-                renderManager.getGui().updateDragSplitting();
+                gui.dragSplittingSlots.remove(slotIn);
+                gui.updateDragSplitting();
             }
         }
 
-        renderManager.getGui().itemRender.zLevel = 100.0F;
+        gui.itemRender.zLevel = 100.0F;
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
@@ -425,8 +433,8 @@ public class RenderingController implements IRenderingController
             if (textureatlassprite != null)
             {
                 GlStateManager.disableLighting();
-                renderManager.getGui().mc.getTextureManager().bindTexture(slotIn.getBackgroundLocation());
-                renderManager.getGui().drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
+                gui.mc.getTextureManager().bindTexture(slotIn.getBackgroundLocation());
+                gui.drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
                 GlStateManager.enableLighting();
                 isDraggingStartSlot = true;
             }
@@ -443,7 +451,7 @@ public class RenderingController implements IRenderingController
             drawItemStack(itemstack, x, y, s);
         }
 
-        renderManager.getGui().itemRender.zLevel = 0.0F;
+        gui.itemRender.zLevel = 0.0F;
     }
 
     /**
@@ -454,20 +462,25 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawSlotMouseOverlay(@NotNull final Slot slot)
     {
+        if (!(renderManager.getGui() instanceof BlockOutGui))
+        {
+            throw new IllegalArgumentException("Can not draw slot overlay on ClientSide Only gui.");
+        }
+
+        final BlockOutGui gui = (BlockOutGui) renderManager.getGui();
+        
         if (!slot.getAbsoluteBoundingBox().includes(getMousePosition()))
         {
             return;
         }
 
-        net.minecraft.inventory.Slot slotIn = renderManager.getGui().inventorySlots.getSlot(slot.getSlotIndex());
-
-        renderManager.getGui().hoveredSlot = slotIn;
+        gui.hoveredSlot = gui.inventorySlots.getSlot(slot.getSlotIndex());
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         int x = 1;
         int y = 1;
         GlStateManager.colorMask(true, true, true, false);
-        renderManager.getGui().drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
+        gui.drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
         GlStateManager.colorMask(true, true, true, true);
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
