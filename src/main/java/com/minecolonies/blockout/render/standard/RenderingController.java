@@ -77,6 +77,12 @@ public class RenderingController implements IRenderingController
       @NotNull final Vector2d inTextureSize,
       @NotNull final Vector2d textureSize)
     {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableLighting();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
         double x = origin.getX();
         double y = origin.getY();
         double width = size.getX();
@@ -106,6 +112,11 @@ public class RenderingController implements IRenderingController
           .tex(textureX, textureY)
           .endVertex();
         tessellator.draw();
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.popMatrix();
     }
 
     /**
