@@ -6,6 +6,8 @@ import com.minecolonies.blockout.core.element.IUIElement;
 import com.minecolonies.blockout.event.IEventHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 public interface IBlockOutGuiConstructionDataBuilder
 {
 
@@ -18,7 +20,10 @@ public interface IBlockOutGuiConstructionDataBuilder
     IEventHandler<S, A> eventHandler);
 
     @NotNull
-    <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> B withControl(@NotNull final String controlId, @NotNull final Class<B> builderClass);
+    <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> IBlockOutGuiConstructionDataBuilder withControl(
+      @NotNull final String controlId,
+      @NotNull final Class<B> builderClass,
+      @NotNull final Consumer<B> builderInstanceConsumer);
 
     @NotNull
     IBlockOutGuiConstructionData build();

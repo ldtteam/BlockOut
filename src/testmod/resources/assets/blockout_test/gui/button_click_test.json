@@ -1,0 +1,23 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "style": "blockout:default",
+  "size": "150,250",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,250",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "test_click",
+      "type": "blockout:button",
+      "size": "100, 20",
+      "alignment": "LEFT,TOP,RIGHT,BOTTOM",
+      "defaultBackgroundImage": "image:button_normal",
+      "disabledBackgroundImage": "image:button_disabled",
+      "clickedBackgroundImage": "image:button_clicked"
+    }
+  ]
+}

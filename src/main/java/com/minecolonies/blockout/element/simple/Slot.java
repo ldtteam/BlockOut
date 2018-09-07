@@ -99,6 +99,8 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.pushMatrix();
         GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
         GlStateManager.disableAlpha();
         GlStateManager.enableBlend();
 
@@ -111,7 +113,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
         GlStateManager.popMatrix();
+
+        controller.drawSlotContent(this);
+        controller.drawSlotMouseOverlay(this);
     }
 
     @Override
@@ -134,7 +141,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setBackgroundImageResource(@NotNull final ResourceLocation location)
     {
-        backgroundImageResource = DependencyObjectHelper.createFromValue(location);
+        backgroundImageResource.set(getDataContext(), location);
     }
 
     @NotNull
@@ -145,7 +152,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setInventoryId(@NotNull final ResourceLocation inventoryId)
     {
-        this.inventoryId = DependencyObjectHelper.createFromValue(inventoryId);
+        this.inventoryId.set(getDataContext(), inventoryId);
     }
 
     @NotNull
@@ -156,7 +163,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
     void setInventoryIndex(@NotNull final Integer index)
     {
-        inventoryIndex = DependencyObjectHelper.createFromValue(index);
+        inventoryIndex.set(getDataContext(), index);
     }
 
     @NotNull

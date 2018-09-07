@@ -61,6 +61,6 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
         final T resolved = context == null ? def : property.apply(context).orElse(def);
         final int currentHash = resolved == null ? 0 : resolved.hashCode();
 
-        return lastResolvedHash == currentHash;
+        return lastResolvedHash != currentHash;
     }
 }

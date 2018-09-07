@@ -5,6 +5,7 @@ import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.element.drawable.IChildDrawableUIElement;
 import com.minecolonies.blockout.core.element.drawable.IDrawableUIElement;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
+import com.minecolonies.blockout.gui.IBlockOutGui;
 import com.minecolonies.blockout.render.core.IRenderingController;
 import com.minecolonies.blockout.render.standard.RenderingController;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,12 +17,20 @@ import org.jetbrains.annotations.NotNull;
 public class RenderManager implements IRenderManager
 {
     @SideOnly(Side.CLIENT)
-    private final IRenderingController renderingController = new RenderingController();
+    private final IRenderingController renderingController = new RenderingController(this);
+
+    @SideOnly(Side.CLIENT)
+    private IBlockOutGui gui;
 
     @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IUIElement host)
     {
+        if (!host.isVisible())
+        {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
@@ -49,6 +58,11 @@ public class RenderManager implements IRenderManager
     @Override
     public void drawForeground(@NotNull final IUIElement host)
     {
+        if (!host.isVisible())
+        {
+            return;
+        }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
@@ -78,5 +92,18 @@ public class RenderManager implements IRenderManager
     public IRenderingController getRenderingController()
     {
         return renderingController;
+    }
+
+    @NotNull
+    @Override
+    public IBlockOutGui getGui()
+    {
+        return gui;
+    }
+
+    @Override
+    public void setGui(@NotNull final IBlockOutGui gui)
+    {
+        this.gui = gui;
     }
 }

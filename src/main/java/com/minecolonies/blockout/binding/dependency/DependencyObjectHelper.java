@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public final class DependencyObjectHelper
 {
@@ -30,5 +31,12 @@ public final class DependencyObjectHelper
       final Function<T, I> setTransformer)
     {
         return new TransformingDependencyObject<>(inputDependency, getTransformer, setTransformer);
+    }
+
+    public static <T> IDependencyObject<T> wrapForChangeTracking(
+      final Supplier<IDependencyObject<T>> dependencyToChangeTrackSupplier
+    )
+    {
+        return new WrappedForChangeTrackingDependencyObject<>(dependencyToChangeTrackSupplier);
     }
 }

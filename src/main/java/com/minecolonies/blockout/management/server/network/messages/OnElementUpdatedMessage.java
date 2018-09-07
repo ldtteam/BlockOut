@@ -37,10 +37,10 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
                 throw new IllegalStateException("The synced element is not a root.");
             }
 
-            final IUIElementHost iuiManager = blockOutGui.getRoot();
-            if (!(iuiManager instanceof RootGuiElement))
+            final IUIElementHost root = blockOutGui.getRoot();
+            if (!(root instanceof RootGuiElement))
             {
-                throw new IllegalStateException("The client side ui manager is not a UIManager instance");
+                throw new IllegalStateException("The client root is not a root instance");
             }
 
             final RootGuiElement rootGuiElement = (RootGuiElement) containedElement;
@@ -49,7 +49,6 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             uiManager.setRootGuiElement(rootGuiElement);
             rootGuiElement.setUiManager(uiManager);
             blockOutGui.setRoot(rootGuiElement);
-            blockOutGui.initGui();
         }
         else
         {

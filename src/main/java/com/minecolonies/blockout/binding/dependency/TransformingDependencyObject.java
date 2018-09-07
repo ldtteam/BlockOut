@@ -46,6 +46,6 @@ public class TransformingDependencyObject<T, I> implements IDependencyObject<T>
         final T resolved = getTransformer.apply(inputDependency.get(context));
         final int resolvedHash = resolved == null ? 0 : resolved.hashCode();
 
-        return resolvedHash == lastResolvedHash;
+        return resolvedHash != lastResolvedHash;
     }
 }

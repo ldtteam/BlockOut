@@ -181,22 +181,16 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         return alignments.get(getDataContext());
     }
 
-    private void updateAbsoluteBoundingBox()
+    @Override
+    public void setPadding(@NotNull final AxisDistance padding)
     {
-        if (getParent() == this)
-        {
-            this.absoluteBoundingBox = getLocalBoundingBox();
-            return;
-        }
-
-        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
-        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
+        this.padding.set(getDataContext(), padding);
     }
 
     @Override
     public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
     {
-        this.alignments = DependencyObjectHelper.createFromValue(alignment);
+        this.alignments.set(getDataContext(), alignment);
     }
 
     @Override
@@ -206,21 +200,52 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     }
 
     @Override
+    public BoundingBox getLocalInternalBoundingBox()
+    {
+        return localInternalBoundingBox;
+    }
+
+    @Override
     public Dock getDock()
     {
         return dock.get(getDataContext());
     }
 
     @Override
-    public void setPadding(@NotNull final AxisDistance padding)
+    public BoundingBox getAbsoluteInternalBoundingBox()
     {
-        this.padding = DependencyObjectHelper.createFromValue(padding);
+        return absoluteInternalBoundingBox;
     }
 
     @Override
     public void setDock(@NotNull final Dock dock)
     {
-        this.dock = DependencyObjectHelper.createFromValue(dock);
+        this.dock.set(getDataContext(), dock);
+    }
+
+    @Override
+    public AxisDistance getMargin()
+    {
+        return margin.get(getDataContext());
+    }
+
+    @Override
+    public void setDataContext(@Nullable final Object dataContext)
+    {
+        this.dataContext.set(getParent().getDataContext(), dataContext);
+    }
+
+    @Override
+    public void setMargin(@NotNull final AxisDistance margin)
+    {
+        this.margin.set(getDataContext(), margin);
+    }
+
+    @Nullable
+    @Override
+    public Object getDataContext()
+    {
+        return dataContext.get(getParent().getDataContext());
     }
 
     private boolean updateBoundingBoxes()
@@ -239,40 +264,34 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     }
 
     @Override
-    public AxisDistance getMargin()
-    {
-        return margin.get(getDataContext());
-    }
-
-    @Nullable
-    @Override
-    public Object getDataContext()
-    {
-        return dataContext.get(getParent().getDataContext());
-    }
-
-    @Override
-    public void setMargin(@NotNull final AxisDistance margin)
-    {
-        this.margin = DependencyObjectHelper.createFromValue(margin);
-    }
-
-    @Override
-    public void setDataContext(@Nullable final Object dataContext)
-    {
-        this.dataContext = DependencyObjectHelper.createFromValue(dataContext);
-    }
-
-    @Override
     public Vector2d getElementSize()
     {
         return elementSize.get(getDataContext());
     }
 
+    private void updateAbsoluteBoundingBox()
+    {
+        if (getParent() == this)
+        {
+            this.absoluteBoundingBox = getLocalBoundingBox();
+            return;
+        }
+
+        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
+        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
+    }
+
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
+        this.elementSize.set(getDataContext(), elementSize);
+    }
+
+    @NotNull
+    @Override
+    public BoundingBox getLocalBoundingBox()
+    {
+        return localBoundingBox;
     }
 
     @NotNull
@@ -282,11 +301,44 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         return absoluteBoundingBox;
     }
 
+    @NotNull
+    @Override
+    public IUIElementHost getParent()
+    {
+        return parent;
+    }
+
     @Override
     public void setParent(@NotNull final IUIElementHost parent)
     {
         this.parent = parent;
     }
+
+    @Override
+    public boolean isVisible()
+    {
+        return visible.get(getDataContext()) && (getParent() == this || getParent().isVisible());
+    }
+
+    @Override
+    public void setVisible(final boolean visible)
+    {
+        this.visible.set(getDataContext(), visible);
+    }
+
+    @Override
+    public boolean isEnabled()
+    {
+        return isVisible() && enabled.get(getDataContext()) && (getParent() == this || getParent().isEnabled());
+    }
+
+    @Override
+    public void setEnabled(final boolean enabled)
+    {
+        this.enabled.set(getDataContext(), enabled);
+    }
+
+
 
     private boolean updateLocalBoundingBox()
     {
@@ -394,56 +446,6 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         this.absoluteInternalBoundingBox = new BoundingBox(origin, size);
     }
 
-    @NotNull
-    @Override
-    public BoundingBox getLocalBoundingBox()
-    {
-        return localBoundingBox;
-    }
-
-    @NotNull
-    @Override
-    public IUIElementHost getParent()
-    {
-        return parent;
-    }
-
-    @Override
-    public BoundingBox getLocalInternalBoundingBox()
-    {
-        return localInternalBoundingBox;
-    }
-
-    @Override
-    public BoundingBox getAbsoluteInternalBoundingBox()
-    {
-        return absoluteInternalBoundingBox;
-    }
-
-    @Override
-    public boolean isVisible()
-    {
-        return visible.get(getDataContext());
-    }
-
-    @Override
-    public void setVisible(final boolean visible)
-    {
-        this.visible = DependencyObjectHelper.createFromValue(visible);
-    }
-
-    @Override
-    public boolean isEnabled()
-    {
-        return enabled.get(getDataContext());
-    }
-
-    @Override
-    public void setEnabled(final boolean enabled)
-    {
-        this.enabled = DependencyObjectHelper.createFromValue(enabled);
-    }
-
     public static abstract class SimpleControlConstructionDataBuilder<B extends SimpleControlConstructionDataBuilder<B, S>, S extends AbstractChildrenContainingUIElement>
       implements IBlockOutUIElementConstructionDataBuilder<B, S>
     {
@@ -480,13 +482,6 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             data.withEventHandler(controlId, eventName, controlClass, argumentTypeClass, eventHandler);
             return (B) this;
-        }
-
-        @NotNull
-        @Override
-        public IBlockOutGuiConstructionDataBuilder done()
-        {
-            return data;
         }
 
         @NotNull

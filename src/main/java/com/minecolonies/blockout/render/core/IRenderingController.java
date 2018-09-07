@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.render.core;
 
+import com.minecolonies.blockout.element.simple.Slot;
 import com.minecolonies.blockout.util.color.Color;
 import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
@@ -128,4 +129,54 @@ public interface IRenderingController
      * @param altText the alt text.
      */
     void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText);
+
+    /**
+     * Draws the slot contents.
+     *
+     * @param slot The slot.
+     */
+    void drawSlotContent(@NotNull final Slot slot);
+
+    /**
+     * Draws the slot overlay.
+     *
+     * @param slot The slot
+     */
+    void drawSlotMouseOverlay(@NotNull final Slot slot);
+
+    /**
+     * Returns the mouse position for rendering.
+     *
+     * @return The mouse position.
+     */
+    Vector2d getMousePosition();
+
+    /**
+     * Sets the mouse position for rendering.
+     *
+     * @param mousePosition The mouse position.
+     */
+    void setMousePosition(@NotNull final Vector2d mousePosition);
+
+    /**
+     * Sets the mouse position for rendering from coordinates.
+     *
+     * @param mouseX The mouse positions x coordinate.
+     * @param mouseY The mouse positions y coordinate.
+     */
+    default void setMousePosition(@NotNull final int mouseX, @NotNull final int mouseY)
+    {
+        this.setMousePosition((double) mouseX, (double) mouseY);
+    }
+
+    /**
+     * Sets the mouse position for rendering from accurate coordinates.
+     *
+     * @param mouseX The mouse positions x coordinate.
+     * @param mouseY The mouse positions y coordinate.
+     */
+    default void setMousePosition(@NotNull final double mouseX, @NotNull final double mouseY)
+    {
+        this.setMousePosition(new Vector2d(mouseX, mouseY));
+    }
 }

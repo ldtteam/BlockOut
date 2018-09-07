@@ -119,7 +119,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public void setIconResource(@NotNull final ResourceLocation icon)
     {
-        this.iconResource = DependencyObjectHelper.createFromValue(icon);
+        this.iconResource.set(getDataContext(), icon);
     }
 
     public static class ImageConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<ImageConstructionDataBuilder, Image>

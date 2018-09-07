@@ -14,8 +14,18 @@ public class SlotBlockOut extends SlotItemHandler
     {
         super(itemHandler,
           uiSlotInstance.getInventoryIndex(),
-          (int) uiSlotInstance.getAbsoluteBoundingBox().getLocalOrigin().getX() + 1,
-          (int) uiSlotInstance.getAbsoluteBoundingBox().getLocalOrigin().getY() + 1);
+          (int) (uiSlotInstance.getAbsoluteBoundingBox().getLocalOrigin().getX() + 1 - uiSlotInstance.getParent()
+                                                                                         .getUiManager()
+                                                                                         .getHost()
+                                                                                         .getLocalBoundingBox()
+                                                                                         .getLocalOrigin()
+                                                                                         .getX()),
+          (int) (uiSlotInstance.getAbsoluteBoundingBox().getLocalOrigin().getY() + 1 - uiSlotInstance.getParent()
+                                                                                         .getUiManager()
+                                                                                         .getHost()
+                                                                                         .getLocalBoundingBox()
+                                                                                         .getLocalOrigin()
+                                                                                         .getY()));
 
         this.uiSlotInstance = uiSlotInstance;
     }

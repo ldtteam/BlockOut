@@ -36,7 +36,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private IDependencyObject<Dock>             dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    private IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
     private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
@@ -94,6 +94,28 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         
     }
 
+    @NotNull
+    @Override
+    public ResourceLocation getType()
+    {
+        return type;
+    }
+
+    @NotNull
+    @Override
+    public String getId()
+    {
+        return id;
+    }
+
+    @Nullable
+    @Override
+    public Object getDataContext()
+    {
+        return dataContext.get(getParent().getDataContext());
+    }
+
+
     @Override
     public void update(@NotNull final IUpdateManager updateManager)
     {
@@ -136,43 +158,6 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         }
     }
 
-    private void updateAbsoluteBoundingBox()
-    {
-        if (getParent() == this)
-        {
-            this.absoluteBoundingBox = getLocalBoundingBox();
-        }
-
-        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
-        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
-    }
-
-    @NotNull
-    @Override
-    public ResourceLocation getType()
-    {
-        return type;
-    }
-
-    /**
-     * Returns the style of this IUIElement.
-     *
-     * @return The style of the element.
-     */
-    @NotNull
-    @Override
-    public ResourceLocation getStyleId()
-    {
-        return style.get(getDataContext());
-    }
-
-    @NotNull
-    @Override
-    public String getId()
-    {
-        return id;
-    }
-
     @Override
     public EnumSet<Alignment> getAlignment()
     {
@@ -180,9 +165,9 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     }
 
     @Override
-    public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
+    public void setDataContext(@Nullable final Object dataContext)
     {
-        this.alignments = DependencyObjectHelper.createFromValue(alignment);
+        this.dataContext.set(getParent().getDataContext(), dataContext);
     }
 
     @Override
@@ -192,9 +177,9 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     }
 
     @Override
-    public void setDock(@NotNull final Dock dock)
+    public void setEnabled(final boolean enabled)
     {
-        this.dock = DependencyObjectHelper.createFromValue(dock);
+        this.enabled.set(getDataContext(), enabled);
     }
 
     @Override
@@ -204,9 +189,21 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     }
 
     @Override
+    public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
+    {
+        this.alignments.set(getDataContext(), alignment);
+    }
+
+    @Override
+    public void setDock(@NotNull final Dock dock)
+    {
+        this.dock.set(getDataContext(), dock);
+    }
+
+    @Override
     public void setMargin(@NotNull final AxisDistance margin)
     {
-        this.margin = DependencyObjectHelper.createFromValue(margin);
+        this.margin.set(getDataContext(), margin);
     }
 
     @Override
@@ -218,20 +215,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize = DependencyObjectHelper.createFromValue(elementSize);
-    }
-
-    private boolean updateBoundingBoxes()
-    {
-        boolean updated = false;
-
-        if (updateLocalBoundingBox())
-        {
-            updated = true;
-        }
-        updateAbsoluteBoundingBox();
-
-        return updated;
+        this.elementSize.set(getDataContext(), elementSize);
     }
 
     @NotNull
@@ -264,38 +248,44 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public boolean isVisible()
     {
-        return visible.get(getDataContext());
+        return visible.get(getDataContext()) && (this == getParent() || getParent().isVisible());
     }
 
     @Override
     public void setVisible(final boolean visible)
     {
-        this.visible = DependencyObjectHelper.createFromValue(visible);
+        this.visible.set(getDataContext(), visible);
     }
 
     @Override
     public boolean isEnabled()
     {
-        return enabled.get(getDataContext());
+        return isVisible() && enabled.get(getDataContext()) && (this == getParent() || getParent().isEnabled());
     }
 
+    /**
+     * Returns the style of this IUIElement.
+     *
+     * @return The style of the element.
+     */
+    @NotNull
     @Override
-    public void setEnabled(final boolean enabled)
+    public ResourceLocation getStyleId()
     {
-        this.enabled = DependencyObjectHelper.createFromValue(enabled);
+        return style.get(getDataContext());
     }
 
-    @Nullable
-    @Override
-    public Object getDataContext()
+    private boolean updateBoundingBoxes()
     {
-        return dataContext.get(parent.getDataContext());
-    }
+        boolean updated = false;
 
-    @Override
-    public void setDataContext(@Nullable final Object dataContext)
-    {
-        this.dataContext = DependencyObjectHelper.createFromValue(dataContext);
+        if (updateLocalBoundingBox())
+        {
+            updated = true;
+        }
+        updateAbsoluteBoundingBox();
+
+        return updated;
     }
 
     private boolean updateLocalBoundingBox()
@@ -336,7 +326,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         }
         else if (Alignment.RIGHT.isActive(this))
         {
-            marginLeft = Optional.of(parentSize.getX() - width - marginRight.orElse(0d));    
+            marginLeft = Optional.of(parentSize.getX() - width - marginRight.orElse(0d));
         }
 
         if (Alignment.TOP.isActive(this) && Alignment.BOTTOM.isActive(this))
@@ -366,6 +356,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
         final Vector2d origin = new Vector2d(marginLeft.orElse(0d), marginTop.orElse(0d));
 
+
         final Vector2d size =
           new Vector2d(width, height).nullifyNegatives();
 
@@ -373,6 +364,18 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
 
         return currentBoundingBox == null || !currentBoundingBox.equals(this.localBoundingBox);
+    }
+
+    private void updateAbsoluteBoundingBox()
+    {
+        if (getParent() == this)
+        {
+            this.absoluteBoundingBox = getLocalBoundingBox();
+            return;
+        }
+
+        final BoundingBox parentAbsoluteBindingBox = getParent().getAbsoluteInternalBoundingBox();
+        this.absoluteBoundingBox = new BoundingBox(parentAbsoluteBindingBox.getLocalOrigin().move(getLocalBoundingBox().getLocalOrigin()), getLocalBoundingBox().getSize());
     }
 
     public static abstract class SimpleControlConstructionDataBuilder<B extends SimpleControlConstructionDataBuilder<B, S>, S extends AbstractSimpleUIElement>
@@ -405,13 +408,6 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         {
             data.withEventHandler(controlId, eventName, controlClass, argumentTypeClass, eventHandler);
             return (B) this;
-        }
-
-        @NotNull
-        @Override
-        public IBlockOutGuiConstructionDataBuilder done()
-        {
-            return data;
         }
 
         @NotNull

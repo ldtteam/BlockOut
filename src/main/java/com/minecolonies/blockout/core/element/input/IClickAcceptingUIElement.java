@@ -7,9 +7,18 @@ public interface IClickAcceptingUIElement extends IUIElement
 {
     boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button);
 
-    void onMouseClickBegin(final int localX, final int localY, final MouseButton button);
+    default void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
+    {
+        //Noop
+    }
 
-    void onMouseClickEnd(final int localX, final int localY, final MouseButton button);
+    default void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
+    {
+        //Noop
+    }
 
-    void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed);
+    default void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
+    {
+        //Noop
+    }
 }

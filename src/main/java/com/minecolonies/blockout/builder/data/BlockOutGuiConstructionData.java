@@ -7,7 +7,6 @@ import com.minecolonies.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.minecolonies.blockout.event.IEventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,18 +55,18 @@ public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
     }
 
     @Override
-    public boolean hasDependencyData(@NotNull final String name, @NotNull final Class<? extends IDependencyObject> searchedType)
+    public boolean hasDependencyData(@NotNull final String name)
     {
-        return dependencyData.containsKey(name) && searchedType.isInstance(dependencyData.get(name));
+        return dependencyData.containsKey(name);
     }
 
     @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public <T> IDependencyObject<T> get(
-      @NotNull final String name, @NotNull final IDependencyObject<T> current, @NotNull final Type requestedType)
+      @NotNull final String name)
     {
-        if (!hasDependencyData(name, (Class<? extends IDependencyObject>) requestedType))
+        if (!hasDependencyData(name))
         {
             throw new IllegalArgumentException("No known dependency data available for the requested name and type.");
         }

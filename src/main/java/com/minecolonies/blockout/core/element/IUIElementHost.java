@@ -7,12 +7,10 @@ import com.minecolonies.blockout.util.math.BoundingBox;
 import com.minecolonies.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
 {
@@ -91,27 +89,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
             return Optional.of(this);
         }
 
-        final List<IUIElement> childElements = values().stream().filter(element -> !(element instanceof IUIElementHost)).filter(predicate).collect(Collectors.toList());
-        if (!childElements.isEmpty())
-        {
-            return childElements.stream().findFirst();
-        }
-        
-        return Optional.ofNullable(values()
-                                     .stream()
-                                     .filter(element -> !(element instanceof IUIElementHost))
-                                     .filter(predicate)
-                                     .findFirst()
-                                     .orElse(
-                                       values()
-                                         .stream()
-                                         .filter(element -> (element instanceof IUIElementHost))
-                                         .flatMap(iuiElement -> ((IUIElementHost) iuiElement).values().stream().filter(element -> !(element instanceof IUIElementHost) || ((IUIElementHost) element).searchFirstElementByPredicate(predicate).isPresent()))
-                                         .filter(predicate)
-                                         .findFirst()
-                                         .orElse(null)
-                                     )
-        );
+        return getAllCombinedChildElements().values().stream().filter(predicate).findFirst();
     }
 
     /**
@@ -145,7 +123,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
         {
             if (element instanceof IUIElementHost)
             {
-                final Vector2d elementLocalCoord = localPoint.move(element.getLocalBoundingBox().getLocalOrigin().invert());
+                final Vector2d elementLocalCoord = localPoint.move(this.getLocalBoundingBox().getLocalOrigin().invert());
                 final IUIElementHost elementHost = (IUIElementHost) element;
                 final Optional<IUIElement> elementResult = elementHost.searchDeepestElementByCoordAndPredicate(elementLocalCoord, predicate);
                 if (elementResult.isPresent())
@@ -180,7 +158,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
     @NotNull
     default Map<String, IUIElement> getAllCombinedChildElements()
     {
-        final Map<String, IUIElement> combinedChildren = new HashMap<>(this);
+        final Map<String, IUIElement> combinedChildren = new LinkedHashMap<>(this);
         values().stream().filter(element -> element instanceof IUIElementHost)
           .map(element -> (IUIElementHost) element)
           .flatMap(iuiElementHost -> iuiElementHost.getAllCombinedChildElements().values().stream())

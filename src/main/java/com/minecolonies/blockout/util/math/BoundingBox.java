@@ -73,7 +73,20 @@ public final class BoundingBox
                   getUpperRightCoordinate().getY() >= point.getY());
     }
 
-    public boolean includes(@NotNull final BoundingBox box)
+    public boolean intersects(@NotNull final BoundingBox box)
+    {
+        return
+          includes(box.getLowerLeftCoordinate()) ||
+            includes(box.getLowerRightCoordinate()) ||
+            includes(box.getUpperLeftCoordinate()) ||
+            includes(box.getUpperRightCoordinate()) ||
+            box.includes(getLowerLeftCoordinate()) ||
+            box.includes(getLowerRightCoordinate()) ||
+            box.includes(getUpperLeftCoordinate()) ||
+            box.includes(getUpperRightCoordinate());
+    }
+
+    public boolean includesEntirely(@NotNull final BoundingBox box)
     {
         return this.equals(include(box));
     }

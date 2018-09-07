@@ -16,6 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class BlockOutContainer extends Container
     @NotNull
     private final IGuiKey        key;
     @NotNull
-    private final IUIElementHost root;
+    private       IUIElementHost root;
 
     public BlockOutContainer(@NotNull final IGuiKey key, @NotNull final IUIElementHost root, @NotNull final int windowId)
     {
@@ -47,13 +48,28 @@ public class BlockOutContainer extends Container
         return root;
     }
 
+    public void setRoot(@NotNull final IUIElementHost root)
+    {
+        this.root = root;
+        reinitializeSlots();
+    }
+
+    public void reinitializeSlots()
+    {
+        this.inventorySlots.clear();
+        this.inventoryItemStacks.clear();
+        initializeSlots();
+
+        detectAndSendChanges();
+    }
+
     private void initializeSlots()
     {
         int slotIndex = 0;
         final List<Slot> slots =
           getRoot().getAllCombinedChildElements().values().stream()
             .filter(element -> element instanceof Slot)
-            .map(element -> (Slot) element).collect(Collectors.toList());
+            .map(element -> (Slot) element).collect(Collectors.toCollection(LinkedList::new));
 
         for (Slot slot :
           slots)
@@ -85,14 +101,6 @@ public class BlockOutContainer extends Container
 
             addSlotToContainer(slotItemHandler);
         }
-    }
-
-    public void reinitializeSlots()
-    {
-        this.inventorySlots.clear();
-        initializeSlots();
-
-        detectAndSendChanges();
     }
 
     @Override

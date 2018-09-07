@@ -132,7 +132,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public void setContents(String contents)
     {
-        this.contents = DependencyObjectHelper.createFromValue(contents);
+        this.contents.set(getDataContext(), contents);
     }
 
     public static class LabelConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<LabelConstructionDataBuilder, Label>

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class BlockOutGuiConstructionDataBuilder implements IBlockOutGuiConstructionDataBuilder
 {
@@ -61,13 +62,19 @@ public class BlockOutGuiConstructionDataBuilder implements IBlockOutGuiConstruct
 
     @NotNull
     @Override
-    public <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> B withControl(
-      @NotNull final String controlId, @NotNull final Class<B> builderClass)
+    public <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> IBlockOutGuiConstructionDataBuilder withControl(
+      @NotNull final String controlId,
+      @NotNull final Class<B> builderClass,
+      @NotNull final Consumer<B> builderInstanceConsumer)
     {
         try
         {
             final Constructor<B> constructor = builderClass.getConstructor(String.class, IBlockOutGuiConstructionDataBuilder.class);
-            return constructor.newInstance(controlId, this);
+            final B builder = constructor.newInstance(controlId, this);
+
+            builderInstanceConsumer.accept(builder);
+
+            return this;
         }
         catch (Exception ex)
         {

@@ -13,7 +13,6 @@ import com.minecolonies.blockout.core.element.values.AxisDistance;
 import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
-import com.minecolonies.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.minecolonies.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
 import com.minecolonies.blockout.event.Event;
 import com.minecolonies.blockout.event.IEventHandler;
@@ -33,38 +32,38 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static com.minecolonies.blockout.util.Constants.Controls.Button.*;
+import static com.minecolonies.blockout.util.Constants.Controls.CheckBox.*;
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 
-public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
+public class CheckBox extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
     private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
+    private IDependencyObject<ResourceLocation> checkedBackgroundImageResource;
     @NotNull
     private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
-    private IDependencyObject<Boolean>          clicked;
+    private IDependencyObject<Boolean>          checked;
 
     @NotNull
-    private Event<Button, ButtonClickedEventArgs> onClicked = new Event<>(Button.class, Button.ButtonClickedEventArgs.class);
+    private Event<CheckBox, CheckBoxCheckChangedEventArgs> onCheckedChanged = new Event<>(CheckBox.class, CheckBoxCheckChangedEventArgs.class);
 
-    public Button(
+    public CheckBox(
       @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent)
     {
-        super(KEY_BUTTON, style, id, parent);
+        super(KEY_CHECKBOX, style, id, parent);
 
         this.normalBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.clickedBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
+        this.checkedBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
         this.disabledBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
 
-        this.clicked = DependencyObjectHelper.createFromValue(false);
+        this.checked = DependencyObjectHelper.createFromValue(false);
     }
 
-    public Button(
+    public CheckBox(
       @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
@@ -77,17 +76,17 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource,
-      @NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> checkedBackgroundImageResource,
       @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
-      @NotNull final IDependencyObject<Boolean> clicked)
+      @NotNull final IDependencyObject<Boolean> checked)
     {
-        super(KEY_BUTTON, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_CHECKBOX, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.normalBackgroundImageResource = normalBackgroundImageResource;
-        this.clickedBackgroundImageResource = clickedBackgroundImageResource;
+        this.checkedBackgroundImageResource = checkedBackgroundImageResource;
         this.disabledBackgroundImageResource = disabledBackgroundImageResource;
 
-        this.clicked = clicked;
+        this.checked = checked;
     }
 
     @Override
@@ -99,7 +98,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         {
             updateManager.markDirty();
         }
-        if (clickedBackgroundImageResource.hasChanged(getDataContext()))
+        if (checkedBackgroundImageResource.hasChanged(getDataContext()))
         {
             updateManager.markDirty();
         }
@@ -107,7 +106,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         {
             updateManager.markDirty();
         }
-        if (clicked.hasChanged(getDataContext()))
+        if (checked.hasChanged(getDataContext()))
         {
             updateManager.markDirty();
         }
@@ -127,10 +126,10 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             drawBackground(controller,
               this::getDisabledBackgroundImage);
         }
-        else if (isClicked())
+        else if (isChecked())
         {
             drawBackground(controller,
-              this::getClickedBackgroundImage);
+              this::getCheckedBackgroundImage);
         }
         else
         {
@@ -158,17 +157,17 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         GlStateManager.popMatrix();
     }
 
-    public boolean isClicked()
+    public boolean isChecked()
     {
-        return clicked.get(getDataContext());
+        return checked.get(getDataContext());
     }
 
-    public void setClicked(@NotNull final boolean clicked)
+    public void setChecked(@NotNull final boolean checked)
     {
-        final boolean currentClickState = isClicked();
-        this.clicked.set(getDataContext(), clicked);
+        final boolean currentClickState = isChecked();
+        this.checked.set(getDataContext(), checked);
 
-        if (currentClickState != clicked)
+        if (currentClickState != checked)
         {
             getUiManager().getUpdateManager().markDirty();
         }
@@ -199,20 +198,20 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     }
 
     @NotNull
-    public ImageResource getClickedBackgroundImage()
+    public ImageResource getCheckedBackgroundImage()
     {
-        return getResource(getClickedBackgroundImageResource());
+        return getResource(getCheckedBackgroundImageResource());
     }
 
     @NotNull
-    public ResourceLocation getClickedBackgroundImageResource()
+    public ResourceLocation getCheckedBackgroundImageResource()
     {
-        return clickedBackgroundImageResource.get(getDataContext());
+        return checkedBackgroundImageResource.get(getDataContext());
     }
 
-    public void setClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImage)
+    public void setCheckedBackgroundImageResource(@NotNull final ResourceLocation checkedBackgroundImage)
     {
-        this.clickedBackgroundImageResource.set(getDataContext(), clickedBackgroundImage);
+        this.checkedBackgroundImageResource.set(getDataContext(), checkedBackgroundImage);
     }
 
     @NotNull
@@ -241,22 +240,8 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     @Override
     public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
     {
-        setClicked(true);
-        onClicked.raise(this, new ButtonClickedEventArgs(true, localX, localY, button));
-    }
-
-    @Override
-    public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
-    {
-        setClicked(false);
-        onClicked.raise(this, new ButtonClickedEventArgs(false, localX, localY, button));
-    }
-
-    @Override
-    public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
-    {
-        setClicked(true);
-        onClicked.raise(this, new ButtonClickedEventArgs(true, localX, localY, button, timeElapsed));
+        setChecked(!isChecked());
+        onCheckedChanged.raise(this, new CheckBoxCheckChangedEventArgs(isChecked(), localX, localY, button));
     }
 
     @Override
@@ -265,14 +250,14 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         return iuiElement -> !(iuiElement instanceof IClickAcceptingUIElement);
     }
 
-    public static class ButtonConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, Button>
+    public static class ButtonConstructionDataBuilder extends SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, CheckBox>
     {
 
         public ButtonConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {
-            super(controlId, data, Button.class);
+            super(controlId, data, CheckBox.class);
         }
 
         @NotNull
@@ -288,15 +273,15 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource)
+        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> checkedBackgroundImageResource)
         {
-            return withDependency("clickedBackgroundImageResource", clickedBackgroundImageResource);
+            return withDependency("checkedBackgroundImageResource", checkedBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImageResource)
+        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final ResourceLocation checkedBackgroundImageResource)
         {
-            return withDependency("clickedBackgroundImageResource", DependencyObjectHelper.createFromValue(clickedBackgroundImageResource));
+            return withDependency("checkedBackgroundImageResource", DependencyObjectHelper.createFromValue(checkedBackgroundImageResource));
         }
 
         @NotNull
@@ -311,27 +296,26 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             return withDependency("disabledBackgroundImageResource", DependencyObjectHelper.createFromValue(disabledBackgroundImageResource));
         }
 
-
         @NotNull
-        public ButtonConstructionDataBuilder withClickedEventHandler(@NotNull final IEventHandler<Button, ButtonClickedEventArgs> eventHandler)
+        public ButtonConstructionDataBuilder withCheckedChangedEventHandler(@NotNull final IEventHandler<CheckBox, CheckBoxCheckChangedEventArgs> eventHandler)
         {
-            return withEventHandler("onClicked", ButtonClickedEventArgs.class, eventHandler);
+            return withEventHandler("onCheckedChanged", CheckBoxCheckChangedEventArgs.class, eventHandler);
         }
     }
 
-    public static class Factory implements IUIElementFactory<Button>
+    public static class Factory implements IUIElementFactory<CheckBox>
     {
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
-            return KEY_BUTTON;
+            return KEY_CHECKBOX;
         }
 
         @NotNull
         @Override
-        public Button readFromElementData(@NotNull final IUIElementData elementData)
+        public CheckBox readFromElementData(@NotNull final IUIElementData elementData)
         {
             final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
             final String id = elementData.getElementId();
@@ -344,12 +328,12 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
             final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
             final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
-            final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
+            final IDependencyObject<ResourceLocation> checkedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CHECKED_BACKGROUND_IMAGE);
             final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
-            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED);
+            final IDependencyObject<Boolean> checked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CHECKED);
 
 
-            final Button button = new Button(
+            final CheckBox button = new CheckBox(
               style,
               id,
               elementData.getParentView(),
@@ -362,9 +346,9 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
               visible,
               enabled,
               defaultBackgroundImage,
-              clickedBackgroundImage,
+              checkedBackgroundImage,
               disabledBackgroundImage,
-              clicked);
+              checked);
 
             elementData.getChildren(button).forEach(childData -> {
                 IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
@@ -375,7 +359,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @Override
-        public void writeToElementData(@NotNull final Button element, @NotNull final IUIElementDataBuilder builder)
+        public void writeToElementData(@NotNull final CheckBox element, @NotNull final IUIElementDataBuilder builder)
         {
 
             builder
@@ -388,8 +372,8 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
               .addBoolean(CONST_ENABLED, element.isEnabled())
               .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
               .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
-              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
-              .addBoolean(CONST_INITIALLY_CLICKED, element.isClicked());
+              .addResourceLocation(CONST_CHECKED_BACKGROUND_IMAGE, element.getCheckedBackgroundImageResource())
+              .addBoolean(CONST_INITIALLY_CHECKED, element.isChecked());
 
             element.values().forEach(child -> {
                 builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
@@ -397,35 +381,35 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
     }
 
-    public static class ButtonClickedEventArgs
+    public static class CheckBoxCheckChangedEventArgs
     {
-        private final boolean start;
-        private final int localX;
-        private final int localY;
+        private final boolean     isChecked;
+        private final int         localX;
+        private final int         localY;
         private final MouseButton button;
-        private final float timeDelta;
+        private final float       timeDelta;
 
-        public ButtonClickedEventArgs(final boolean start, final int localX, final int localY, final MouseButton button)
+        public CheckBoxCheckChangedEventArgs(final boolean isChecked, final int localX, final int localY, final MouseButton button)
         {
-            this.start = start;
+            this.isChecked = isChecked;
             this.localX = localX;
             this.localY = localY;
             this.button = button;
             this.timeDelta = 0f;
         }
 
-        public ButtonClickedEventArgs(final boolean start, final int localX, final int localY, final MouseButton button, final float timeDelta)
+        public CheckBoxCheckChangedEventArgs(final boolean isChecked, final int localX, final int localY, final MouseButton button, final float timeDelta)
         {
-            this.start = start;
+            this.isChecked = isChecked;
             this.localX = localX;
             this.localY = localY;
             this.button = button;
             this.timeDelta = timeDelta;
         }
 
-        public boolean isStart()
+        public boolean isChecked()
         {
-            return start;
+            return isChecked;
         }
 
         public int getLocalX()
@@ -448,8 +432,4 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             return timeDelta;
         }
     }
-
-
-
-
 }

@@ -2,7 +2,6 @@ package com.minecolonies.blockout.management;
 
 import com.minecolonies.blockout.BlockOut;
 import com.minecolonies.blockout.connector.core.IGuiKey;
-import com.minecolonies.blockout.core.element.IUIElementHost;
 import com.minecolonies.blockout.core.management.IUIManager;
 import com.minecolonies.blockout.core.management.focus.IFocusManager;
 import com.minecolonies.blockout.core.management.input.IClickManager;
@@ -51,7 +50,7 @@ public class UIManager implements IUIManager
 
     @NotNull
     @Override
-    public IUIElementHost getHost()
+    public RootGuiElement getHost()
     {
         return rootGuiElement;
     }

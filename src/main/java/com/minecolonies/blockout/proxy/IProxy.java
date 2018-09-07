@@ -66,4 +66,7 @@ public interface IProxy
 
     @NotNull
     ITemplateEngine getTemplateEngine();
+
+    @NotNull
+    IGuiController getClientSideOnlyGuiController();
 }

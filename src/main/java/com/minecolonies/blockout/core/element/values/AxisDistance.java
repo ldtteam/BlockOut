@@ -69,6 +69,45 @@ public final class AxisDistance
     }
 
     @Override
+    public int hashCode()
+    {
+        int result = getLeft().hashCode();
+        result = 31 * result + getTop().hashCode();
+        result = 31 * result + getRight().hashCode();
+        result = 31 * result + getBottom().hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        final AxisDistance that = (AxisDistance) o;
+
+        if (!getLeft().equals(that.getLeft()))
+        {
+            return false;
+        }
+        if (!getTop().equals(that.getTop()))
+        {
+            return false;
+        }
+        if (!getRight().equals(that.getRight()))
+        {
+            return false;
+        }
+        return getBottom().equals(that.getBottom());
+    }
+
+    @Override
     public String toString()
     {
         return String.format("%s,%s,%s,%s",

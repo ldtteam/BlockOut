@@ -49,4 +49,14 @@ public class ServerUpdateManager implements IUpdateManager
             dirty = false;
         }
     }
+
+    /**
+     * Indicates if the server side is dirty and needs to be updated.
+     *
+     * @return true when dirty false when not.
+     */
+    public boolean isDirty()
+    {
+        return dirty;
+    }
 }

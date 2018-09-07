@@ -28,8 +28,8 @@ public final class StaticDependencyObject<T> implements IDependencyObject<T>
     @Override
     public void set(@Nullable final Object context, @Nullable final T value)
     {
+        this.hasChanged = this.value == value;
         this.value = value;
-        this.hasChanged = true;
     }
 
     @Override
