@@ -257,6 +257,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     public void setContents(@NotNull final String contents)
     {
         this.contents.set(getDataContext(), contents);
+        getParent().getUiManager().getUpdateManager().markDirty();
     }
 
     @Override
@@ -281,6 +282,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final int oldScrollOffset = scrollOffset;
         scrollOffset = oldScrollOffset;
         setCursorPosition(trimmedString.length() + scrollOffset);
+        getParent().getUiManager().getUpdateManager().markDirty();
     }
 
     /**
@@ -307,6 +309,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final int oldScrollOffset = scrollOffset;
         scrollOffset = oldScrollOffset;
         setSelectionEnd(trimmedString.length() + scrollOffset);
+        getParent().getUiManager().getUpdateManager().markDirty();
     }
 
     @Override
@@ -518,6 +521,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         cursorPosition = MathHelper.clamp(pos, 0, getContents().length());
         setSelectionEnd(cursorPosition);
+        getParent().getUiManager().getUpdateManager().markDirty();
     }
 
     /**
@@ -575,6 +579,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             }
 
             scrollOffset = MathHelper.clamp(scrollOffset, 0, getContents().length());
+            getParent().getUiManager().getUpdateManager().markDirty();
         }
     }
 
