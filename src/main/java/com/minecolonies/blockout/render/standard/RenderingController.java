@@ -82,6 +82,7 @@ public class RenderingController implements IRenderingController
         GlStateManager.disableAlpha();
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.color(1, 1, 1, 1);
 
         double x = origin.getX();
         double y = origin.getY();
