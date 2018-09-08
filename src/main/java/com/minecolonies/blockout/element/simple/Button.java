@@ -38,12 +38,9 @@ import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
-    @NotNull
-    private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
-    @NotNull
-    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
-    @NotNull
-    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
+    private IDependencyObject<ResourceLocation> normalBackgroundImageResource = null;
+    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource = null;
+    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource = null;
     @NotNull
     private IDependencyObject<Boolean>          clicked;
 
@@ -83,9 +80,18 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     {
         super(KEY_BUTTON, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
-        this.normalBackgroundImageResource = normalBackgroundImageResource;
-        this.clickedBackgroundImageResource = clickedBackgroundImageResource;
-        this.disabledBackgroundImageResource = disabledBackgroundImageResource;
+        if (this.normalBackgroundImageResource == null)
+        {
+            this.normalBackgroundImageResource = normalBackgroundImageResource;
+            this.clickedBackgroundImageResource = clickedBackgroundImageResource;
+            this.disabledBackgroundImageResource = disabledBackgroundImageResource;
+        }
+        else
+        {
+            this.normalBackgroundImageResource.set(dataContext, normalBackgroundImageResource.get(dataContext));
+            this.clickedBackgroundImageResource.set(dataContext, clickedBackgroundImageResource.get(dataContext));
+            this.disabledBackgroundImageResource.set(dataContext, disabledBackgroundImageResource.get(dataContext));
+        }
 
         this.clicked = clicked;
     }
