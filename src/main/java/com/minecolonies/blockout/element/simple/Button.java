@@ -38,9 +38,12 @@ import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
-    private IDependencyObject<ResourceLocation> normalBackgroundImageResource = null;
-    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource = null;
-    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource = null;
+    @NotNull
+    private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
+    @NotNull
+    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
+    @NotNull
+    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
     private IDependencyObject<Boolean>          clicked;
 
@@ -80,18 +83,9 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     {
         super(KEY_BUTTON, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
-        if (this.normalBackgroundImageResource == null)
-        {
-            this.normalBackgroundImageResource = normalBackgroundImageResource;
-            this.clickedBackgroundImageResource = clickedBackgroundImageResource;
-            this.disabledBackgroundImageResource = disabledBackgroundImageResource;
-        }
-        else
-        {
-            this.normalBackgroundImageResource.set(dataContext, normalBackgroundImageResource.get(dataContext));
-            this.clickedBackgroundImageResource.set(dataContext, clickedBackgroundImageResource.get(dataContext));
-            this.disabledBackgroundImageResource.set(dataContext, disabledBackgroundImageResource.get(dataContext));
-        }
+        this.normalBackgroundImageResource = normalBackgroundImageResource;
+        this.clickedBackgroundImageResource = clickedBackgroundImageResource;
+        this.disabledBackgroundImageResource = disabledBackgroundImageResource;
 
         this.clicked = clicked;
     }
@@ -317,7 +311,6 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             return withDependency("disabledBackgroundImageResource", DependencyObjectHelper.createFromValue(disabledBackgroundImageResource));
         }
 
-
         @NotNull
         public ButtonConstructionDataBuilder withClickedEventHandler(@NotNull final IEventHandler<Button, ButtonClickedEventArgs> eventHandler)
         {
@@ -405,11 +398,11 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public static class ButtonClickedEventArgs
     {
-        private final boolean start;
-        private final int localX;
-        private final int localY;
+        private final boolean     start;
+        private final int         localX;
+        private final int         localY;
         private final MouseButton button;
-        private final float timeDelta;
+        private final float       timeDelta;
 
         public ButtonClickedEventArgs(final boolean start, final int localX, final int localY, final MouseButton button)
         {
@@ -454,8 +447,4 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             return timeDelta;
         }
     }
-
-
-
-
 }
