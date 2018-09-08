@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class TransformingDependencyObject<T, I> implements IDependencyObject<T>
+public final class TransformingDependencyObject<T, I> implements IDependencyObject<T>
 {
     private final Function<I, T> getTransformer;
     private final Function<T, I> setTransformer;
@@ -14,7 +14,7 @@ public class TransformingDependencyObject<T, I> implements IDependencyObject<T>
     @Nullable
     private int lastResolvedHash = 0;
 
-    public TransformingDependencyObject(
+    TransformingDependencyObject(
       final IDependencyObject<I> inputDependency,
       final Function<I, T> getTransformer,
       final Function<T, I> setTransformer)

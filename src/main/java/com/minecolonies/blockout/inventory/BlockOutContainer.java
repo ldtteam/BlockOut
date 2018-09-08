@@ -156,7 +156,7 @@ public class BlockOutContainer extends Container
         ResourceLocation workingInventory = slotBlockOut.getUiSlotInstance().getInventoryId();
         SlotBlockOut workingSlot = slotBlockOut;
 
-        while (currentInventory == workingInventory)
+        while (currentInventory.equals(workingInventory))
         {
             workingSlot =
               (SlotBlockOut) ((workingSlot.slotNumber + 1) == this.inventorySlots.size() ? this.inventorySlots.get(0) : this.inventorySlots.get(workingSlot.slotNumber + 1));
