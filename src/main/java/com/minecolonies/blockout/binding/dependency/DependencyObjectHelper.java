@@ -81,7 +81,7 @@ public final class DependencyObjectHelper
 
     /**
      * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional)}.
-     * <p>
+     *
      * Useful for when code clutter wants to be prevented and only a getter is required (EG in cases where the {@link IDependencyObject} should only be read by the respective consumer.
      * All calls to {@link IDependencyObject#set(Object, Object)} will be disregarded.
      *
@@ -106,10 +106,11 @@ public final class DependencyObjectHelper
 
     /**
      * Creates a {@link IDependencyObject} from a {@link Property}.
+     *
      * This means that when ever {@link IDependencyObject#get(Object)} or {@link IDependencyObject#set(Object, Object)}
      * are called the respective methods {@link Property#apply(Object)} and {@link IDependencyObject#set(Object, Object)}
      * allowing the {@link IDependencyObject} to dynamically return a value depending on the given datacontext or other external factors.
-     * <p>
+     *
      * If the {@link Property} returns{@code null} from its {@link Property#apply(Object)} during a call to {@link IDependencyObject#get(Object)}
      * then the given default value will be returned.
      *
@@ -125,10 +126,10 @@ public final class DependencyObjectHelper
 
     /**
      * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional)}.
-     * <p>
+     *
      * Since this has a nasty side effect of always returning the given defaultValue i am not sure how much this method will be used.
      * It is here for completeness sake.
-     * <p>
+     *
      * Useful for when code clutter wants to be prevented and only a setter is required (EG in cases where the {@link IDependencyObject} should only be written by the respective consumer.
      * All calls to {@link IDependencyObject#get(Object)} will be disregarded.
      *
@@ -153,7 +154,7 @@ public final class DependencyObjectHelper
 
     /**
      * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional)}.
-     * <p>
+     *
      * Useful for when code clutter wants to be prevented.
      *
      * @param dependencyGetter The {@link Function} that functions as a getter. This will be called when {@link IDependencyObject#get(Object)} is called.
