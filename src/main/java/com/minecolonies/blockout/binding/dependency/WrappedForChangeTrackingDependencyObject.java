@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class WrappedForChangeTrackingDependencyObject<T> implements IDependencyObject<T>
+public final class WrappedForChangeTrackingDependencyObject<T> implements IDependencyObject<T>
 {
 
     @NotNull
@@ -14,7 +14,7 @@ public class WrappedForChangeTrackingDependencyObject<T> implements IDependencyO
     @NotNull
     private int lastResolvedHash = 0;
 
-    public WrappedForChangeTrackingDependencyObject(
+    WrappedForChangeTrackingDependencyObject(
       @NotNull final Supplier<IDependencyObject<T>> watchedSupplier)
     {
         this.watchedSupplier = watchedSupplier;

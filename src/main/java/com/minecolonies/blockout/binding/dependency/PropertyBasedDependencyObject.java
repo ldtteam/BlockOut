@@ -15,12 +15,7 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Nullable
     private       int         lastResolvedHash;
 
-    public PropertyBasedDependencyObject(@NotNull final Property<T> property)
-    {
-        this(property, null);
-    }
-
-    public PropertyBasedDependencyObject(@NotNull final Property<T> property, final T def)
+    PropertyBasedDependencyObject(@NotNull final Property<T> property, final T def)
     {
         this.property = property;
         this.def = def;
