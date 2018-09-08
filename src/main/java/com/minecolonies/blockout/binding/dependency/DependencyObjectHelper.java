@@ -38,10 +38,10 @@ public final class DependencyObjectHelper
      * Creates a {@link IDependencyObject} that transforms the given {@link IDependencyObject} as input into a different type.
      *
      * This means that when {@link IDependencyObject#get(Object)} is called on the returned instance, first {@link IDependencyObject#get(Object)}
-     * is called on the given {@param inputDependency} after which the {@link Function#apply(Object)} method is called on the {@param getTransformer}.
+     * is called on the given {@code inputDependency} after which the {@link Function#apply(Object)} method is called on the {@code getTransformer}.
      *
      * Reversely when {@link IDependencyObject#set(Object, Object)} is called first the {@link Function#apply(Object)} method is called on the given
-     * {@param setTransformer} before calling {@link IDependencyObject#set(Object, Object)} with the result of that {@link Function#apply(Object)} call.
+     * {@code setTransformer} before calling {@link IDependencyObject#set(Object, Object)} with the result of that {@link Function#apply(Object)} call.
      *
      * @param inputDependency The input {@link IDependencyObject}.
      * @param getTransformer The converter function for the getter. Converts elements from type I into T.
