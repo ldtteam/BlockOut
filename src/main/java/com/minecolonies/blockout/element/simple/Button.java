@@ -345,7 +345,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
             final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
             final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
             final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
-            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED);
+            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED, false);
 
 
             final Button button = new Button(
