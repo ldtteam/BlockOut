@@ -13,7 +13,7 @@ public final class StaticDependencyObject<T> implements IDependencyObject<T>
     @Nullable
     private T value;
     @NotNull
-    private boolean hasChanged = false;
+    private boolean hasChanged = true;
 
     StaticDependencyObject(@Nullable final T value) {this.value = value;}
 

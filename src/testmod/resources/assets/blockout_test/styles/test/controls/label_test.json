@@ -7,7 +7,7 @@
       "type": "blockout:label",
       "alignment": "LEFT,BOTTOM",
       "size": "100,13",
-      "content": "{Binding:SlotIndexString}"
+      "content": "{Binding:Desc}"
     }
   ]
 }

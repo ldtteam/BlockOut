@@ -1,11 +1,13 @@
 package com.minecolonies.blockout.loader.json;
 
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.minecolonies.blockout.binding.dependency.DependencyObjectHelper;
 import com.minecolonies.blockout.binding.dependency.IDependencyObject;
+import com.minecolonies.blockout.binding.dependency.injection.DependencyObjectInjector;
 import com.minecolonies.blockout.binding.property.Property;
 import com.minecolonies.blockout.binding.property.PropertyCreationHelper;
 import com.minecolonies.blockout.core.element.IUIElementHost;
@@ -418,6 +420,21 @@ public class JsonUIElementData implements IUIElementData
         return bindOrReturnStatic(object.get("datacontext"), e -> false, e -> new Object(), new Object());
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundObject(@NotNull final String name, final Object def)
+    {
+        if (!object.has(name))
+        {
+            return DependencyObjectHelper.createFromValue(def);
+        }
+
+        return bindOrReturnStatic(
+          object.get(name),
+          e -> false,
+          JsonElement::getAsString,
+          def);
+    }
+
     /**
      * Returns the nbt stored in the attribute with the given name.
      *
@@ -469,41 +486,49 @@ public class JsonUIElementData implements IUIElementData
       @NotNull final Function<JsonElement, T> jsonExtractor,
       T defaultValue)
     {
-        if (!elementMatchesTypePredicate.test(element) || defaultValue.getClass() == String.class)
+        if (element.isJsonPrimitive())
         {
-            if (!element.isJsonPrimitive())
-            {
-                return DependencyObjectHelper.createFromValue(defaultValue);
-            }
-
-            final String elementContents = element.getAsString();
-
-            final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(elementContents);
+            final String stringContent = element.getAsString();
+            final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(stringContent);
+            final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(stringContent);
+            String getterName = "";
+            String setterName = "";
             if (singleNameMatcher.matches())
             {
-                final String fieldName = singleNameMatcher.group("singleName");
-                final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+                getterName = singleNameMatcher.group("singleName");
+                setterName = getterName;
+            }
+            else if (multiNameMatcher.matches())
+            {
+                getterName = multiNameMatcher.group("getterName");
+                setterName = multiNameMatcher.group("setterName");
+            }
+
+            if (!getterName.equals("") && !setterName.equals(""))
+            {
+                final Property<T> fieldProperty;
+                if (getterName.equalsIgnoreCase("this") && getterName.equals(setterName))
+                {
+                    fieldProperty = PropertyCreationHelper.createFromNonOptional(
+                      Optional.of((context) -> (T) context),
+                      Optional.empty()
+                    );
+                }
+                else
+                {
+                    fieldProperty = PropertyCreationHelper.createFromName(Optional.of(String.format("get%s", getterName)), Optional.of(String.format("set%s", setterName)));
+                }
+
                 return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
             }
-
-            final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(elementContents);
-            if (multiNameMatcher.matches())
-            {
-                final String getterName = multiNameMatcher.group("getterName");
-                final String setterName = multiNameMatcher.group("setterName");
-                final Property<T> getterSetterProperty = PropertyCreationHelper.createFromName(Optional.of(getterName), Optional.of(setterName));
-                return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
-            }
-
-            if (defaultValue.getClass() == String.class && elementMatchesTypePredicate.test(element))
-            {
-                return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
-            }
-
-            return DependencyObjectHelper.createFromValue(defaultValue);
         }
 
-        return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+        if (elementMatchesTypePredicate.test(element))
+        {
+            return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+        }
+
+        return DependencyObjectHelper.createFromValue(defaultValue);
     }
 
     private <T> IDependencyObject<T> bindOrReturnBoundTo(
@@ -513,40 +538,48 @@ public class JsonUIElementData implements IUIElementData
       @NotNull final Property<T> boundTo,
       @NotNull final T defaultValue)
     {
-        if (!elementMatchesTypePredicate.test(element) || defaultValue.getClass() == String.class)
+        if (element.isJsonPrimitive())
         {
-            if (!element.isJsonPrimitive())
-            {
-                return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
-            }
-
-            final String elementContents = element.getAsString();
-
-            final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(elementContents);
+            final String stringContent = element.getAsString();
+            final Matcher singleNameMatcher = IUIElementData.SINGLE_NAME_BINDING_REGEX.matcher(stringContent);
+            final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(stringContent);
+            String getterName = "";
+            String setterName = "";
             if (singleNameMatcher.matches())
             {
-                final String fieldName = singleNameMatcher.group("singleName");
-                final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+                getterName = singleNameMatcher.group("singleName");
+                setterName = getterName;
+            }
+            else if (multiNameMatcher.matches())
+            {
+                getterName = multiNameMatcher.group("getterName");
+                setterName = multiNameMatcher.group("setterName");
+            }
+
+            if (!getterName.equals("") && !setterName.equals(""))
+            {
+                final Property<T> fieldProperty;
+                if (getterName.equalsIgnoreCase("this") && getterName.equals(setterName))
+                {
+                    fieldProperty = PropertyCreationHelper.createFromNonOptional(
+                      Optional.of((context) -> (T) context),
+                      Optional.empty()
+                    );
+                }
+                else
+                {
+                    fieldProperty = PropertyCreationHelper.createFromName(Optional.of(String.format("get%s", getterName)), Optional.of(String.format("set%s", setterName)));
+                }
+
                 return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
             }
-
-            final Matcher multiNameMatcher = IUIElementData.SPLIT_NAME_BINDING_REGEX.matcher(elementContents);
-            if (multiNameMatcher.matches())
-            {
-                final String getterName = multiNameMatcher.group("getterName");
-                final String setterName = multiNameMatcher.group("setterName");
-                final Property<T> getterSetterProperty = PropertyCreationHelper.createFromName(Optional.of(getterName), Optional.of(setterName));
-                return DependencyObjectHelper.createFromProperty(getterSetterProperty, defaultValue);
-            }
-
-            if (defaultValue.getClass() == String.class && elementMatchesTypePredicate.test(element))
-            {
-                return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
-            }
-
-            return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
         }
 
-        return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+        if (elementMatchesTypePredicate.test(element))
+        {
+            return DependencyObjectHelper.createFromValue(jsonExtractor.apply(element));
+        }
+
+        return DependencyObjectHelper.createFromProperty(boundTo, defaultValue);
     }
 }

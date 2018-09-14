@@ -6,7 +6,10 @@ import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.root.RootGuiElement;
 import com.minecolonies.blockout.management.common.update.ChildUpdateManager;
 import com.minecolonies.blockout.util.Log;
+import com.minecolonies.blockout.util.profiler.ProfilerExporter;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
 
 public class ServerUpdateManager implements IUpdateManager
 {
@@ -23,8 +26,18 @@ public class ServerUpdateManager implements IUpdateManager
         if (element instanceof RootGuiElement)
         {
             RootGuiElement rootGuiElement = (RootGuiElement) element;
+            rootGuiElement.getUiManager().getProfiler().clearProfiling();
+            rootGuiElement.getUiManager().getProfiler().startSection("Global Update");
+
             ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);
             childUpdateManager.updateElement(rootGuiElement);
+            rootGuiElement.getUiManager().getProfiler().endSection();
+
+            File tmpDir = new File("profiler.json");
+            if (!tmpDir.exists())
+            {
+                ProfilerExporter.exportProfiler(element);
+            }
         }
         else
         {

@@ -31,7 +31,7 @@ public class CommonItemHandlerManager implements IItemHandlerManager
     {
         if (providerMap.containsKey(id.toString()))
         {
-            return providerMap.get(id.toString()).get();
+            return providerMap.get(id.toString()).get(this);
         }
 
         return null;

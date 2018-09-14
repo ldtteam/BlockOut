@@ -18,6 +18,10 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.time.StopWatch;
+
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(modid = Constants.MOD_ID)
 public class ForgeFMLEventHandler
@@ -37,6 +41,9 @@ public class ForgeFMLEventHandler
     @SubscribeEvent
     public static void onTickClientTick(final TickEvent.ClientTickEvent event)
     {
+        if (event.phase != TickEvent.Phase.END)
+            return;
+
         SideHelper.onClient(() -> {
             if (Minecraft.getMinecraft().currentScreen instanceof IBlockOutGui)
             {
@@ -48,41 +55,50 @@ public class ForgeFMLEventHandler
         });
     }
 
+    private static Thread updateThread = null;
+
     @SubscribeEvent
     public static void onTickServerTick(final TickEvent.ServerTickEvent event)
     {
         SideHelper.onServer(() -> {
-            if (BlockOut.getBlockOut().getProxy().getGuiController() instanceof ServerGuiController)
-            {
-                ServerGuiController guiController = (ServerGuiController) BlockOut.getBlockOut().getProxy().getGuiController();
+            ServerGuiController guiController = (ServerGuiController) BlockOut.getBlockOut().getProxy().getGuiController();
 
-                guiController.getOpenUis().entrySet().forEach(e -> {
-                    if (e.getValue().getUiManager().getUpdateManager() instanceof ServerUpdateManager)
+            guiController.getOpenUis().entrySet().forEach(e -> {
+                if (e.getValue().getUiManager().getUpdateManager() instanceof ServerUpdateManager)
+                {
+                    ServerUpdateManager updateManager = (ServerUpdateManager) e.getValue().getUiManager().getUpdateManager();
+
+                    final StopWatch stopWatch = StopWatch.createStarted();
+                    updateManager.updateElement(e.getValue());
+                    stopWatch.stop();
+
+                    if (stopWatch.getTime(TimeUnit.MILLISECONDS) > 5)
                     {
-                        ServerUpdateManager updateManager = (ServerUpdateManager) e.getValue().getUiManager().getUpdateManager();
-                        updateManager.updateElement(e.getValue());
-
-                        if (updateManager.isDirty())
-                        {
-                            updateManager.onNetworkTick();
-                            guiController.getUUIDsOfPlayersWatching(e.getKey()).forEach(uuid -> {
-                                final Container blockOutCandidate = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid).openContainer;
-                                if (blockOutCandidate instanceof BlockOutContainer)
-                                {
-                                    final BlockOutContainer blockOutContainer = (BlockOutContainer) blockOutCandidate;
-                                    blockOutContainer.reinitializeSlots();
-                                }
-                                else
-                                {
-                                    Log.getLogger()
-                                      .error("Can not reinitialize slots. Container is not owned by BlockOut.",
-                                        new IllegalStateException("Unknown container type: " + blockOutCandidate.getClass().toString()));
-                                }
-                            });
-                        }
+                        Log.getLogger().warn("#################################################");
+                        Log.getLogger().warn("Update of BO UI took too long: " + stopWatch.getTime(TimeUnit.MILLISECONDS) + "ms." +e.getKey().getGuiContext().toString());
+                        Log.getLogger().warn("#################################################");
                     }
-                });
-            }
+
+                    if (updateManager.isDirty())
+                    {
+                        updateManager.onNetworkTick();
+                        guiController.getUUIDsOfPlayersWatching(e.getKey()).forEach(uuid -> {
+                            final Container blockOutCandidate = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid).openContainer;
+                            if (blockOutCandidate instanceof BlockOutContainer)
+                            {
+                                final BlockOutContainer blockOutContainer = (BlockOutContainer) blockOutCandidate;
+                                blockOutContainer.reinitializeSlots();
+                            }
+                            else
+                            {
+                                Log.getLogger()
+                                  .error("Can not reinitialize slots. Container is not owned by BlockOut.",
+                                    new IllegalStateException("Unknown container type: " + blockOutCandidate.getClass().toString()));
+                            }
+                        });
+                    }
+                }
+            });
         });
     }
 }

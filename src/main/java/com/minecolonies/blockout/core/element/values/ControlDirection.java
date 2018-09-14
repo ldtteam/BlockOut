@@ -5,10 +5,10 @@ import java.util.Map;
 
 public enum ControlDirection
 {
-    TOP_BOTTOM("tb", "topbottom", "top_bottom", "top bottom"),
-    BOTTOM_TOP("bt", "bottomtop", "bottom_top", "bottom top"),
-    LEFT_RIGHT("lr", "leftright", "left_right", "left right"),
-    RIGHT_LEFT("rl", "rightleft", "right_left", "right left");
+    TOP_BOTTOM("tb", "topbottom", "top_bottom", "top bottom", "vertical"),
+    BOTTOM_TOP("bt", "bottomtop", "bottom_top", "bottom top", "vertical_inverted"),
+    LEFT_RIGHT("lr", "leftright", "left_right", "left right", "horizontal"),
+    RIGHT_LEFT("rl", "rightleft", "right_left", "right left", "horizontal_inverted");
 
     private static final Map<String, ControlDirection> shorthandMap = new HashMap<>();
     static

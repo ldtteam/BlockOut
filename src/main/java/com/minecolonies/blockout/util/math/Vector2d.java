@@ -197,4 +197,28 @@ public final class Vector2d
     {
         return String.format("%s,%s", x, y);
     }
+
+    @NotNull
+    public Vector2d maximize(@NotNull final Vector2d other)
+    {
+        return new Vector2d(Math.max(getX(), other.getX()), Math.max(getY(), other.getY()));
+    }
+
+    @NotNull
+    public static Vector2d maximize(@NotNull final Vector2d first, @NotNull final Vector2d second)
+    {
+        return first.maximize(second);
+    }
+    
+    @NotNull
+    public Vector2d minimize(@NotNull final Vector2d other)
+    {
+        return new Vector2d(Math.min(getX(), other.getX()), Math.min(getY(), other.getY()));
+    }
+
+    @NotNull
+    public static Vector2d minimize(@NotNull final Vector2d first, @NotNull final Vector2d second)
+    {
+        return first.minimize(second);
+    }
 }

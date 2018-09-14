@@ -16,9 +16,12 @@ import com.minecolonies.blockout.management.common.input.ClickManager;
 import com.minecolonies.blockout.management.common.input.KeyManager;
 import com.minecolonies.blockout.management.common.input.ScrollManager;
 import com.minecolonies.blockout.util.SideHelper;
+import net.minecraft.profiler.Profiler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedHashMap;
 
 public class UIManager implements IUIManager
 {
@@ -39,6 +42,9 @@ public class UIManager implements IUIManager
     private final IUpdateManager updateManager;
     @NotNull
     private final IRenderManager renderManager;
+    @NotNull
+    private final Profiler profiler;
+
 
     public UIManager(@NotNull final RootGuiElement rootGuiElement, @NotNull final IGuiKey key)
     {
@@ -46,6 +52,9 @@ public class UIManager implements IUIManager
         this.networkManager = BlockOut.getBlockOut().getProxy().generateNewNetworkManagerForGui(key);
         this.updateManager = BlockOut.getBlockOut().getProxy().generateNewUpdateManager(this);
         this.renderManager = SideHelper.on(() -> BlockOut.getBlockOut().getProxy().generateNewRenderManager(), () -> null);
+        this.profiler = new Profiler();
+        this.profiler.profilingEnabled = true;
+        this.profiler.profilingMap = new LinkedHashMap<>();
     }
 
     @NotNull
@@ -103,6 +112,12 @@ public class UIManager implements IUIManager
     public IRenderManager getRenderManager()
     {
         return renderManager;
+    }
+
+    @Override
+    public Profiler getProfiler()
+    {
+        return profiler;
     }
 
     public void setRootGuiElement(@NotNull final RootGuiElement rootGuiElement)

@@ -23,5 +23,5 @@ public interface IItemHandlerProvider extends Serializable
      * @return
      */
     @Nullable
-    IItemHandler get();
+    IItemHandler get(IItemHandlerManager manager);
 }

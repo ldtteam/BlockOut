@@ -343,6 +343,12 @@ public class WrappedUIElementData implements IUIElementData
         return wrapped.getBoundDataContext();
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundObject(@NotNull final String name, final Object def)
+    {
+        return wrapped.getBoundObject(name, def);
+    }
+
     /**
      * Returns the nbt stored in the attribute with the given name.
      *

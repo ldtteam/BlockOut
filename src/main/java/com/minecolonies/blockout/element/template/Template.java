@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.CONST_ID;
 import static com.minecolonies.blockout.util.Constants.Controls.Template.KEY_TEMPLATE;
@@ -66,11 +67,12 @@ public class Template extends AbstractChildrenContainingUIElement
      * Generates a new instance of the template.
      *
      * @param instanceParent  The instances parent.
-     * @param contextProperty The property for the context retrieval.
+     * @param boundContext The property for the context retrieval.
      * @param controlId       The id of the new instance.
      * @return The instance from the parent.
      */
-    public IUIElement generateInstance(@NotNull final IUIElementHost instanceParent, @NotNull final Property<Object> contextProperty, @NotNull final String controlId)
+    public IUIElement generateInstance(@NotNull final IUIElementHost instanceParent, @NotNull final IDependencyObject<Object> boundContext, @NotNull final String controlId, @NotNull final
+    Function<IUIElementData, IUIElementData> dataOverrideCallback)
     {
         final List<IUIElementData> childDatas = ownData.getChildren(instanceParent);
         if (childDatas.size() != 1)
@@ -79,9 +81,10 @@ public class Template extends AbstractChildrenContainingUIElement
         }
 
         final IUIElementData childData = childDatas.get(0);
+        final IUIElementData convertedChildData = dataOverrideCallback.apply(childData);
 
         //Generate a wrapped element so we can overload the values for id and datacontext.
-        final WrappedUIElementData wrappedUIElementData = new WrappedUIElementData(childData)
+        final WrappedUIElementData wrappedUIElementData = new WrappedUIElementData(convertedChildData)
         {
             /**
              * Get the String attribute from the name and definition.
@@ -112,7 +115,7 @@ public class Template extends AbstractChildrenContainingUIElement
             @Override
             public IDependencyObject<Object> getBoundDataContext()
             {
-                return DependencyObjectHelper.createFromProperty(contextProperty, new Object());
+                return boundContext;
             }
         };
 

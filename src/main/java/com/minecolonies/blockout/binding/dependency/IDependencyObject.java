@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.binding.dependency;
 
+import com.minecolonies.blockout.core.element.IUIElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -9,6 +11,61 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface IDependencyObject<T>
 {
+
+    /**
+     * Indicates if this dependency object requires a data context or not.
+     *
+     * @return True if required, false if not.
+     */
+    default boolean requiresDataContext()
+    {
+        return false;
+    }
+
+    default T get(@NotNull final IUIElement element)
+    {
+        final Object dataContext;
+        if (requiresDataContext())
+        {
+            dataContext = element.getDataContext();
+        }
+        else
+        {
+            dataContext = null;
+        }
+
+        return get(dataContext);
+    }
+
+    default void set(@NotNull final IUIElement element, T value)
+    {
+        final Object dataContext;
+        if (requiresDataContext())
+        {
+            dataContext = element.getDataContext();
+        }
+        else
+        {
+            dataContext = null;
+        }
+
+        set(dataContext, value);
+    }
+
+    default boolean hasChanged(@NotNull final IUIElement element)
+    {
+        final Object dataContext;
+        if (requiresDataContext())
+        {
+            dataContext = element.getDataContext();
+        }
+        else
+        {
+            dataContext = null;
+        }
+
+        return hasChanged(dataContext);
+    }
 
     /**
      * Method used to get the value of the dependency object.

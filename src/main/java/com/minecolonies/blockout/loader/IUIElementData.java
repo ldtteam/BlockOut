@@ -594,6 +594,14 @@ public interface IUIElementData
     IDependencyObject<Object> getBoundDataContext();
 
     /**
+     * Returns a bound object.
+     * @param name The object.
+     * @param def The default value.
+     * @return A bound object.
+     */
+    IDependencyObject<Object> getBoundObject(@NotNull String name, final Object def);
+
+    /**
      * Returns the itemstack stored in the attribute with the given name.
      * Converts the NBT data stored in the attribute into a ItemStack.
      *

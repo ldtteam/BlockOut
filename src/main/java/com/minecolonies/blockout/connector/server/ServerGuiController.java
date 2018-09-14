@@ -192,6 +192,9 @@ public class ServerGuiController implements IGuiController
      */
     public ImmutableList<UUID> getUUIDsOfPlayersWatching(@NotNull final IGuiKey key)
     {
+        if (watchers.get(key) == null)
+            return ImmutableList.of();
+
         return ImmutableList.copyOf(watchers.get(key));
     }
 
