@@ -1,5 +1,7 @@
 package com.minecolonies.blockout.binding.dependency;
 
+import com.minecolonies.blockout.core.element.IUIElement;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -22,6 +24,12 @@ public final class TransformingDependencyObject<T, I> implements IDependencyObje
         this.getTransformer = getTransformer;
         this.setTransformer = setTransformer;
         this.inputDependency = inputDependency;
+    }
+
+    @Override
+    public boolean requiresDataContext()
+    {
+        return inputDependency.requiresDataContext();
     }
 
     @Nullable

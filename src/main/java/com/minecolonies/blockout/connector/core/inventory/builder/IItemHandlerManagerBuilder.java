@@ -21,7 +21,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @NotNull final
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
     EnumFacing facing);
 
     @NotNull
@@ -59,6 +59,11 @@ public interface IItemHandlerManagerBuilder
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
       @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing
+    );
+
+    @NotNull
+    IItemHandlerManagerBuilder withWrapped(
+      @NotNull final ResourceLocation id, @NotNull final ResourceLocation wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding
     );
 
     @NotNull

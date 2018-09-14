@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.connector.common.inventory.provider;
 
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
@@ -91,7 +92,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
      */
     @Nullable
     @Override
-    public IItemHandler get()
+    public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
         final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
         final Entity entity = blockAccess.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(entityId)).findFirst().orElse(null);

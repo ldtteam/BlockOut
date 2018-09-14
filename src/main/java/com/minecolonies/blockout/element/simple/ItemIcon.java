@@ -99,12 +99,12 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
     @NotNull
     public ResourceLocation getIconResource()
     {
-        return iconResource.get(getDataContext());
+        return iconResource.get(this);
     }
 
     public void setIconResource(@NotNull final ResourceLocation icon)
     {
-        this.iconResource.set(getDataContext(), icon);
+        this.iconResource.set(this, icon);
     }
 
     @SideOnly(Side.CLIENT)

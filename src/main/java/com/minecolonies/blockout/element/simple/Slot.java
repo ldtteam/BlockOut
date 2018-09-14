@@ -136,34 +136,34 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     @NotNull
     public ResourceLocation getBackgroundImageResource()
     {
-        return backgroundImageResource.get(getDataContext());
+        return backgroundImageResource.get(this);
     }
 
     void setBackgroundImageResource(@NotNull final ResourceLocation location)
     {
-        backgroundImageResource.set(getDataContext(), location);
+        backgroundImageResource.set(this, location);
     }
 
     @NotNull
     public ResourceLocation getInventoryId()
     {
-        return inventoryId.get(getDataContext());
+        return inventoryId.get(this);
     }
 
     void setInventoryId(@NotNull final ResourceLocation inventoryId)
     {
-        this.inventoryId.set(getDataContext(), inventoryId);
+        this.inventoryId.set(this, inventoryId);
     }
 
     @NotNull
     public Integer getInventoryIndex()
     {
-        return inventoryIndex.get(getDataContext());
+        return inventoryIndex.get(this);
     }
 
     void setInventoryIndex(@NotNull final Integer index)
     {
-        inventoryIndex.set(getDataContext(), index);
+        inventoryIndex.set(this, index);
     }
 
     @NotNull

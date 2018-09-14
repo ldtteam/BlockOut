@@ -246,7 +246,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     public String getContents()
     {
-        return contents.get(getDataContext());
+        return contents.get(this);
     }
 
     /**
@@ -256,7 +256,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     public void setContents(@NotNull final String contents)
     {
-        this.contents.set(getDataContext(), contents);
+        this.contents.set(this, contents);
         getParent().getUiManager().getUpdateManager().markDirty();
     }
 

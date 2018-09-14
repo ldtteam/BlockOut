@@ -1,5 +1,6 @@
 package com.minecolonies.blockout.binding.property;
 
+import com.esotericsoftware.reflectasm.MethodAccess;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.minecolonies.blockout.binding.property.reflective.ReflectiveConsumer;
@@ -18,8 +19,8 @@ import java.util.function.Function;
 public final class PropertyCreationHelper
 {
     //Caches used to minimize heavy reflective look ups, but keep memory footprint relatively low.
-    private static final Cache<Tuple<Class, String>, Optional<Method>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
-    private static final Cache<Tuple<Class, String>, Optional<Method>> SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>>       SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
 
     private PropertyCreationHelper()
     {
@@ -58,13 +59,11 @@ public final class PropertyCreationHelper
     {
         final Optional<Function<Object, Optional<T>>> getter = getMethodName.map((name) -> (Function<Object, Optional<T>>) o -> {
             final Class<?> clazz = o.getClass();
-            final Optional<Method> getterMethod = getGetter(clazz, name);
+            final Optional<Tuple<MethodAccess, Integer>> getterMethod = getGetter(clazz, name);
             return getterMethod.map(method -> {
-                method.setAccessible(true);
-
                 try
                 {
-                    return (T) method.invoke(o);
+                    return (T) method.getFirst().invoke(o, method.getSecond());
                 }
                 catch (Exception e)
                 {
@@ -76,13 +75,11 @@ public final class PropertyCreationHelper
 
         final Optional<BiConsumer<Object, Optional<T>>> setter = setMethodName.map((name) -> (BiConsumer<Object, Optional<T>>) (o, t) -> {
             final Class<?> clazz = o.getClass();
-            final Optional<Method> settterMethod = getSetter(clazz, name);
+            final Optional<Tuple<MethodAccess, Integer>> settterMethod = getSetter(clazz, name);
             settterMethod.ifPresent(method -> {
-                method.setAccessible(true);
-
                 try
                 {
-                    method.invoke(o, t);
+                    method.getFirst().invoke(o, method.getSecond(), t);
                 }
                 catch (Exception e)
                 {
@@ -104,7 +101,7 @@ public final class PropertyCreationHelper
         return create(Optional.ofNullable(getter), Optional.ofNullable(setter));
     }
 
-    private static Optional<Method> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
+    private static Optional<Tuple<MethodAccess, Integer>> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
     {
         if (targetClass == null)
         {
@@ -113,12 +110,19 @@ public final class PropertyCreationHelper
 
         try
         {
-            return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> Optional.ofNullable(Arrays.stream(targetClass.getDeclaredMethods())
-                                                                                                         .filter(method -> method.getName().equals(getMethodName))
-                                                                                                         .filter(method -> method.getParameterCount() == 0)
-                                                                                                         .findFirst()
-                                                                                                         .orElse(getGetter(targetClass.getSuperclass(),
-                                                                                                           getMethodName).orElse(null))));
+            return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> {
+                try
+                {
+                    final MethodAccess methodAccess = MethodAccess.get(targetClass);
+                    final Integer accessIndex = methodAccess.getIndex(getMethodName);
+
+                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
+                }
+                catch (Exception ex)
+                {
+                    return Optional.empty();
+                }
+            });
         }
         catch (Exception e)
         {
@@ -126,7 +130,7 @@ public final class PropertyCreationHelper
         }
     }
 
-    private static Optional<Method> getSetter(@Nullable final Class<?> targetClass, @NotNull final String setMethodName)
+    private static Optional<Tuple<MethodAccess, Integer>> getSetter(@Nullable final Class<?> targetClass, @NotNull final String setMethodName)
     {
         if (targetClass == null)
         {
@@ -135,13 +139,19 @@ public final class PropertyCreationHelper
 
         try
         {
-            return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> Optional.ofNullable(Arrays.stream(targetClass.getDeclaredMethods())
-                                                                                                         .filter(method -> method.getName().equals(setMethodName))
-                                                                                                         .filter(method -> method.getParameterCount() == 1)
-                                                                                                         .filter(method -> method.getReturnType() == Void.TYPE)
-                                                                                                         .findFirst()
-                                                                                                         .orElse(getSetter(targetClass.getSuperclass(),
-                                                                                                           setMethodName).orElse(null))));
+            return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> {
+                try
+                {
+                    final MethodAccess methodAccess = MethodAccess.get(targetClass);
+                    final Integer accessIndex = methodAccess.getIndex(setMethodName, 1);
+
+                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
+                }
+                catch (Exception ex)
+                {
+                    return Optional.empty();
+                }
+            });
         }
         catch (Exception e)
         {

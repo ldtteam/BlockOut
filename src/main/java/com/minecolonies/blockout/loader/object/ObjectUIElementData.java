@@ -226,6 +226,12 @@ public class ObjectUIElementData implements IUIElementData, Serializable
         return DependencyObjectHelper.createFromValue(new Object());
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundObject(@NotNull final String name, final Object def)
+    {
+        return DependencyObjectHelper.createFromValue(def);
+    }
+
     /**
      * Returns the nbt stored in the attribute with the given name.
      *

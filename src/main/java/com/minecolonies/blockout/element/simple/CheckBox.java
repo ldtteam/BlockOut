@@ -14,6 +14,7 @@ import com.minecolonies.blockout.core.element.values.Dock;
 import com.minecolonies.blockout.core.factory.IUIElementFactory;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
+import com.minecolonies.blockout.element.core.AbstractSimpleUIElement;
 import com.minecolonies.blockout.event.Event;
 import com.minecolonies.blockout.event.IEventHandler;
 import com.minecolonies.blockout.loader.IUIElementData;
@@ -35,7 +36,7 @@ import java.util.function.Supplier;
 import static com.minecolonies.blockout.util.Constants.Controls.CheckBox.*;
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 
-public class CheckBox extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
+public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
     private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
@@ -71,7 +72,6 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
       @NotNull final IDependencyObject<Vector2d> elementSize,
-      @NotNull final IDependencyObject<AxisDistance> padding,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
@@ -80,7 +80,7 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
       @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
       @NotNull final IDependencyObject<Boolean> checked)
     {
-        super(KEY_CHECKBOX, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_CHECKBOX, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
 
         this.normalBackgroundImageResource = normalBackgroundImageResource;
         this.checkedBackgroundImageResource = checkedBackgroundImageResource;
@@ -159,17 +159,17 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
 
     public boolean isChecked()
     {
-        return checked.get(getDataContext());
+        return checked.get(this);
     }
 
     public void setChecked(@NotNull final boolean checked)
     {
         final boolean currentClickState = isChecked();
-        this.checked.set(getDataContext(), checked);
+        this.checked.set(this, checked);
 
         if (currentClickState != checked)
         {
-            getUiManager().getUpdateManager().markDirty();
+            getParent().getUiManager().getUpdateManager().markDirty();
         }
     }
 
@@ -189,12 +189,12 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
     @NotNull
     public ResourceLocation getNormalBackgroundImageResource()
     {
-        return normalBackgroundImageResource.get(getDataContext());
+        return normalBackgroundImageResource.get(this);
     }
 
     public void setNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImage)
     {
-        this.normalBackgroundImageResource.set(getDataContext(), normalBackgroundImage);
+        this.normalBackgroundImageResource.set(this, normalBackgroundImage);
     }
 
     @NotNull
@@ -206,12 +206,12 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
     @NotNull
     public ResourceLocation getCheckedBackgroundImageResource()
     {
-        return checkedBackgroundImageResource.get(getDataContext());
+        return checkedBackgroundImageResource.get(this);
     }
 
     public void setCheckedBackgroundImageResource(@NotNull final ResourceLocation checkedBackgroundImage)
     {
-        this.checkedBackgroundImageResource.set(getDataContext(), checkedBackgroundImage);
+        this.checkedBackgroundImageResource.set(this, checkedBackgroundImage);
     }
 
     @NotNull
@@ -223,12 +223,12 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
     @NotNull
     public ResourceLocation getDisabledBackgroundImageResource()
     {
-        return disabledBackgroundImageResource.get(getDataContext());
+        return disabledBackgroundImageResource.get(this);
     }
 
     public void setDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImage)
     {
-        this.disabledBackgroundImageResource.set(getDataContext(), disabledBackgroundImage);
+        this.disabledBackgroundImageResource.set(this, disabledBackgroundImage);
     }
 
     @Override
@@ -242,12 +242,6 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
     {
         setChecked(!isChecked());
         onCheckedChanged.raise(this, new CheckBoxCheckChangedEventArgs(isChecked(), localX, localY, button));
-    }
-
-    @Override
-    public Predicate<IUIElement> IsValidChildPredicate()
-    {
-        return iuiElement -> !(iuiElement instanceof IClickAcceptingUIElement);
     }
 
     public static class ButtonConstructionDataBuilder extends SimpleControlConstructionDataBuilder<ButtonConstructionDataBuilder, CheckBox>
@@ -322,7 +316,6 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
             final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
             final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
             final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
             final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
@@ -333,7 +326,7 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
             final IDependencyObject<Boolean> checked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CHECKED);
 
 
-            final CheckBox button = new CheckBox(
+            final CheckBox checkBox = new CheckBox(
               style,
               id,
               elementData.getParentView(),
@@ -341,7 +334,6 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
               dock,
               margin,
               elementSize,
-              padding,
               dataContext,
               visible,
               enabled,
@@ -350,12 +342,7 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
               disabledBackgroundImage,
               checked);
 
-            elementData.getChildren(button).forEach(childData -> {
-                IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                button.put(child.getId(), child);
-            });
-
-            return button;
+            return checkBox;
         }
 
         @Override
@@ -367,17 +354,12 @@ public class CheckBox extends AbstractFilteringChildrenContainingUIElement imple
               .addEnum(CONST_DOCK, element.getDock())
               .addAxisDistance(CONST_MARGIN, element.getMargin())
               .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
               .addBoolean(CONST_VISIBLE, element.isVisible())
               .addBoolean(CONST_ENABLED, element.isEnabled())
               .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
               .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
               .addResourceLocation(CONST_CHECKED_BACKGROUND_IMAGE, element.getCheckedBackgroundImageResource())
               .addBoolean(CONST_INITIALLY_CHECKED, element.isChecked());
-
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
         }
     }
 

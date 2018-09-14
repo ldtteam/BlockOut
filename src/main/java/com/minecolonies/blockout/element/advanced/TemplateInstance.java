@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.minecolonies.blockout.util.Constants.Controls.General.*;
 import static com.minecolonies.blockout.util.Constants.Controls.TemplateInstance.CONST_TEMPLATE;
@@ -34,7 +35,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
       extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<TemplateInstanceConstructionDataBuilder, TemplateInstance>
     {
 
-        protected TemplateInstanceConstructionDataBuilder(
+        public TemplateInstanceConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {
@@ -106,6 +107,18 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
               templateResource
             );
 
+            //Client side additional check for loading incase we get send a instance that has already resolved.
+            if (elementData.hasChildren())
+            {
+                //nullify the hasChanged.
+                templateResource.get(templateInstance);
+
+                elementData.getChildren(templateInstance).forEach(childData -> {
+                    IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                    templateInstance.put(child.getId(), child);
+                });
+            }
+
             return templateInstance;
         }
 
@@ -136,7 +149,6 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
     }
 
-    private ResourceLocation                    resolvedTemplateResource;
     private IDependencyObject<ResourceLocation> templateResource;
 
     public TemplateInstance(
@@ -173,33 +185,53 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
     {
         super.update(updateManager);
 
-        if (resolvedTemplateResource != getTemplateResource())
+        getParent().getUiManager().getProfiler().startSection("Template instantiation");
+        if (templateResource.hasChanged(getDataContext()))
         {
+            getParent().getUiManager().getProfiler().startSection("Template instance creation.");
             updateManager.markDirty();
             this.clear();
 
-            resolvedTemplateResource = getTemplateResource();
+            final ResourceLocation resolvedTemplateResource = getTemplateResource();
 
             final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
               this,
-              PropertyCreationHelper.create(
-                parentContext -> Optional.of(parentContext),
-                null
-              ),
+              DependencyObjectHelper.createFromGetterOnly(Function.identity(), new Object()),
               resolvedTemplateResource,
               getId() + "_instance");
 
             put(element.getId(), element);
+            getParent().getUiManager().getProfiler().endSection();
         }
+        getParent().getUiManager().getProfiler().endSection();
     }
 
     public ResourceLocation getTemplateResource()
     {
-        return templateResource.get(getDataContext());
+        return templateResource.get(this);
     }
 
     public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
-        this.templateResource.set(getDataContext(), templateResource);
+        this.templateResource.set(this, templateResource);
+    }
+
+    @Override
+    public Vector2d  getMinimalContentSize()
+    {
+        getParent().getUiManager().getProfiler().startSection("Template minimal content size: " + getId());
+        final Vector2d currentElementSize = getElementSize();
+        if (currentElementSize.getX() != 0d && currentElementSize.getY() != 0d)
+        {
+            getParent().getUiManager().getProfiler().endSection();
+            return currentElementSize;
+        }
+
+        getParent().getUiManager().getProfiler().startSection("Template instantiation for content size.");
+        update(getParent().getUiManager().getUpdateManager());
+        getParent().getUiManager().getProfiler().endSection();
+        getParent().getUiManager().getProfiler().endSection();
+
+        return super.getMinimalContentSize();
     }
 }

@@ -112,7 +112,12 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public Object getDataContext()
     {
-        return dataContext.get(getParent().getDataContext());
+        if (dataContext.requiresDataContext())
+        {
+            return dataContext.get(getParent().getDataContext());
+        }
+        
+        return dataContext.get(this);
     }
 
 
@@ -161,61 +166,66 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public EnumSet<Alignment> getAlignment()
     {
-        return alignments.get(getDataContext());
+        return alignments.get(this);
     }
 
     @Override
     public void setDataContext(@Nullable final Object dataContext)
     {
-        this.dataContext.set(getParent().getDataContext(), dataContext);
+        if (this.dataContext.requiresDataContext())
+        {
+            this.dataContext.set(getParent().getDataContext(), dataContext);
+        }
+        
+        this.dataContext.set(this, dataContext);
     }
 
     @Override
     public Dock getDock()
     {
-        return dock.get(getDataContext());
+        return dock.get(this);
     }
 
     @Override
     public void setEnabled(final boolean enabled)
     {
-        this.enabled.set(getDataContext(), enabled);
+        this.enabled.set(this, enabled);
     }
 
     @Override
     public AxisDistance getMargin()
     {
-        return margin.get(getDataContext());
+        return margin.get(this);
     }
 
     @Override
     public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
     {
-        this.alignments.set(getDataContext(), alignment);
+        this.alignments.set(this, alignment);
     }
 
     @Override
     public void setDock(@NotNull final Dock dock)
     {
-        this.dock.set(getDataContext(), dock);
+        this.dock.set(this, dock);
     }
 
     @Override
     public void setMargin(@NotNull final AxisDistance margin)
     {
-        this.margin.set(getDataContext(), margin);
+        this.margin.set(this, margin);
     }
 
     @Override
     public Vector2d getElementSize()
     {
-        return elementSize.get(getDataContext());
+        return elementSize.get(this);
     }
 
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize.set(getDataContext(), elementSize);
+        this.elementSize.set(this, elementSize);
     }
 
     @NotNull
@@ -248,19 +258,19 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public boolean isVisible()
     {
-        return visible.get(getDataContext()) && (this == getParent() || getParent().isVisible());
+        return visible.get(this) && (this == getParent() || getParent().isVisible());
     }
 
     @Override
     public void setVisible(final boolean visible)
     {
-        this.visible.set(getDataContext(), visible);
+        this.visible.set(this, visible);
     }
 
     @Override
     public boolean isEnabled()
     {
-        return isVisible() && enabled.get(getDataContext()) && (this == getParent() || getParent().isEnabled());
+        return isVisible() && enabled.get(this) && (this == getParent() || getParent().isEnabled());
     }
 
     /**
@@ -272,7 +282,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public ResourceLocation getStyleId()
     {
-        return style.get(getDataContext());
+        return style.get(this);
     }
 
     private boolean updateBoundingBoxes()

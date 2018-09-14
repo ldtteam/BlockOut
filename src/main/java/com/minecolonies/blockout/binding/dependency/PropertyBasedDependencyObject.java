@@ -21,6 +21,12 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
         this.def = def;
     }
 
+    @Override
+    public boolean requiresDataContext()
+    {
+        return true;
+    }
+
     @Nullable
     @Override
     public T get(@Nullable final Object context)

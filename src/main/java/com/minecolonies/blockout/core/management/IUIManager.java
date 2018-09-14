@@ -8,6 +8,7 @@ import com.minecolonies.blockout.core.management.network.INetworkManager;
 import com.minecolonies.blockout.core.management.render.IRenderManager;
 import com.minecolonies.blockout.core.management.update.IUpdateManager;
 import com.minecolonies.blockout.element.root.RootGuiElement;
+import net.minecraft.profiler.Profiler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -38,4 +39,6 @@ public interface IUIManager
     @SideOnly(Side.CLIENT)
     @NotNull
     IRenderManager getRenderManager();
+
+    Profiler getProfiler();
 }

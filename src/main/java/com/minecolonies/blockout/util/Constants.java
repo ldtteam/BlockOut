@@ -134,7 +134,10 @@ public class Constants
             public static final ResourceLocation KEY_REGION = new ResourceLocation(MOD_ID, "region");
         }
 
-        public static class List
+        public static class
+
+
+        List
         {
             public static final ResourceLocation KEY_LIST = new ResourceLocation(MOD_ID, "list");
 
@@ -142,6 +145,9 @@ public class Constants
             public static final String CONST_SCROLL_FOREGROUND = "scrollForeground";
             public static final String CONST_TEMPLATE          = "template";
             public static final String CONST_SCROLLOFFSET      = "initialOffset";
+            public static final String CONST_ORIENTATION = "orientation";
+            public static final String CONST_SHOW_BAR = "showScrollBar";
+            public static final String CONST_SOURCE = "source";
         }
 
         public static class TemplateInstance

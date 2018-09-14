@@ -20,6 +20,12 @@ public final class WrappedForChangeTrackingDependencyObject<T> implements IDepen
         this.watchedSupplier = watchedSupplier;
     }
 
+    @Override
+    public boolean requiresDataContext()
+    {
+        return watchedSupplier.get().requiresDataContext();
+    }
+
     /**
      * Method used to get the value of the dependency object.
      *

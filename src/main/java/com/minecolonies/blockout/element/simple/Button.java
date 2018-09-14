@@ -160,13 +160,13 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
     public boolean isClicked()
     {
-        return clicked.get(getDataContext());
+        return clicked.get(this);
     }
 
     public void setClicked(@NotNull final boolean clicked)
     {
         final boolean currentClickState = isClicked();
-        this.clicked.set(getDataContext(), clicked);
+        this.clicked.set(this, clicked);
 
         if (currentClickState != clicked)
         {
@@ -190,12 +190,12 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     @NotNull
     public ResourceLocation getNormalBackgroundImageResource()
     {
-        return normalBackgroundImageResource.get(getDataContext());
+        return normalBackgroundImageResource.get(this);
     }
 
     public void setNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImage)
     {
-        this.normalBackgroundImageResource.set(getDataContext(), normalBackgroundImage);
+        this.normalBackgroundImageResource.set(this, normalBackgroundImage);
     }
 
     @NotNull
@@ -207,12 +207,12 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     @NotNull
     public ResourceLocation getClickedBackgroundImageResource()
     {
-        return clickedBackgroundImageResource.get(getDataContext());
+        return clickedBackgroundImageResource.get(this);
     }
 
     public void setClickedBackgroundImageResource(@NotNull final ResourceLocation clickedBackgroundImage)
     {
-        this.clickedBackgroundImageResource.set(getDataContext(), clickedBackgroundImage);
+        this.clickedBackgroundImageResource.set(this, clickedBackgroundImage);
     }
 
     @NotNull
@@ -224,12 +224,12 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     @NotNull
     public ResourceLocation getDisabledBackgroundImageResource()
     {
-        return disabledBackgroundImageResource.get(getDataContext());
+        return disabledBackgroundImageResource.get(this);
     }
 
     public void setDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImage)
     {
-        this.disabledBackgroundImageResource.set(getDataContext(), disabledBackgroundImage);
+        this.disabledBackgroundImageResource.set(this, disabledBackgroundImage);
     }
 
     @Override

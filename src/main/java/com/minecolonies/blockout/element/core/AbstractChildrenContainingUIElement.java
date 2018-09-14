@@ -119,7 +119,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public ResourceLocation getStyleId()
     {
-        return style.get(getDataContext());
+        return style.get(this);
     }
 
     @NotNull
@@ -132,6 +132,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public void update(@NotNull final IUpdateManager updateManager)
     {
+        getParent().getUiManager().getProfiler().startSection("Update: " + getId());
         if (updateBoundingBoxes())
         {
             updateManager.markDirty();
@@ -173,30 +174,31 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             updateManager.markDirty();
         }
+        getParent().getUiManager().getProfiler().endSection();
     }
 
     @Override
     public EnumSet<Alignment> getAlignment()
     {
-        return alignments.get(getDataContext());
+        return alignments.get(this);
     }
 
     @Override
     public void setPadding(@NotNull final AxisDistance padding)
     {
-        this.padding.set(getDataContext(), padding);
+        this.padding.set(this, padding);
     }
 
     @Override
     public void setAlignment(@NotNull final EnumSet<Alignment> alignment)
     {
-        this.alignments.set(getDataContext(), alignment);
+        this.alignments.set(this, alignment);
     }
 
     @Override
     public AxisDistance getPadding()
     {
-        return padding.get(getDataContext());
+        return padding.get(this);
     }
 
     @Override
@@ -208,7 +210,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public Dock getDock()
     {
-        return dock.get(getDataContext());
+        return dock.get(this);
     }
 
     @Override
@@ -220,32 +222,45 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public void setDock(@NotNull final Dock dock)
     {
-        this.dock.set(getDataContext(), dock);
+        this.dock.set(this, dock);
     }
 
     @Override
     public AxisDistance getMargin()
     {
-        return margin.get(getDataContext());
+        return margin.get(this);
     }
 
     @Override
     public void setDataContext(@Nullable final Object dataContext)
     {
-        this.dataContext.set(getParent().getDataContext(), dataContext);
+        if (this.dataContext.requiresDataContext())
+        {
+            this.dataContext.set(getParent().getDataContext(), dataContext);
+        }
+
+        this.dataContext.set(this, dataContext);
     }
 
     @Override
     public void setMargin(@NotNull final AxisDistance margin)
     {
-        this.margin.set(getDataContext(), margin);
+        this.margin.set(this, margin);
     }
 
     @Nullable
     @Override
     public Object getDataContext()
     {
-        return dataContext.get(getParent().getDataContext());
+        if (getParent() == this)
+            return new Object();
+        
+        if (dataContext.requiresDataContext())
+        {
+            return dataContext.get(getParent().getDataContext());
+        }
+
+        return dataContext.get(this);
     }
 
     private boolean updateBoundingBoxes()
@@ -266,7 +281,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public Vector2d getElementSize()
     {
-        return elementSize.get(getDataContext());
+        return elementSize.get(this);
     }
 
     private void updateAbsoluteBoundingBox()
@@ -284,7 +299,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public void setElementSize(@NotNull final Vector2d elementSize)
     {
-        this.elementSize.set(getDataContext(), elementSize);
+        this.elementSize.set(this, elementSize);
     }
 
     @NotNull
@@ -317,31 +332,30 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public boolean isVisible()
     {
-        return visible.get(getDataContext()) && (getParent() == this || getParent().isVisible());
+        return visible.get(this) && (getParent() == this || getParent().isVisible());
     }
 
     @Override
     public void setVisible(final boolean visible)
     {
-        this.visible.set(getDataContext(), visible);
+        this.visible.set(this, visible);
     }
 
     @Override
     public boolean isEnabled()
     {
-        return isVisible() && enabled.get(getDataContext()) && (getParent() == this || getParent().isEnabled());
+        return isVisible() && enabled.get(this) && (getParent() == this || getParent().isEnabled());
     }
 
     @Override
     public void setEnabled(final boolean enabled)
     {
-        this.enabled.set(getDataContext(), enabled);
+        this.enabled.set(this, enabled);
     }
-
-
 
     private boolean updateLocalBoundingBox()
     {
+        getParent().getUiManager().getProfiler().startSection("Size calculation of: " + getId());
         final BoundingBox currentBoundingBox = this.localBoundingBox;
 
         //If we have no parent we see our default size as parent.
@@ -380,6 +394,10 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             marginLeft = Optional.of(parentSize.getX() - width - marginRight.orElse(0d));
         }
+        else if (!Alignment.LEFT.isActive(this) && !Alignment.RIGHT.isActive(this) && width == 0d)
+        {
+            width = getMinimalContentSize().getX();
+        }
 
         if (Alignment.TOP.isActive(this) && Alignment.BOTTOM.isActive(this))
         {
@@ -405,6 +423,10 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             marginTop = Optional.of(parentSize.getY() - height - marginBottom.orElse(0d));
         }
+        else if (!Alignment.TOP.isActive(this) && !Alignment.BOTTOM.isActive(this) && height == 0d)
+        {
+            height = getMinimalContentSize().getY();
+        }
 
         final Vector2d origin = new Vector2d(marginLeft.orElse(0d), marginTop.orElse(0d));
 
@@ -414,6 +436,8 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
         this.localBoundingBox = new BoundingBox(origin, size);
         this.localBoundingBox = getDock().apply(this, this.localBoundingBox);
+
+        getParent().getUiManager().getProfiler().endSection();
 
         return currentBoundingBox == null || !currentBoundingBox.equals(this.localBoundingBox);
     }

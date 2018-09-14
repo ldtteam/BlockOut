@@ -3,6 +3,7 @@ package com.minecolonies.blockout.connector.common.inventory.builder;
 import com.google.common.collect.Lists;
 import com.minecolonies.blockout.connector.common.inventory.CommonItemHandlerManager;
 import com.minecolonies.blockout.connector.common.inventory.provider.CommonEntityBasedProvider;
+import com.minecolonies.blockout.connector.common.inventory.provider.CommonRangedBasedProvider;
 import com.minecolonies.blockout.connector.common.inventory.provider.CommonTileBasedProvider;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerProvider;
@@ -32,7 +33,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @NotNull final EnumFacing facing)
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final EnumFacing facing)
     {
         return withProvider(new CommonTileBasedProvider(id, dimId, x, y, z, facing));
     }
@@ -43,6 +44,14 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
       @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing)
     {
         return withProvider(new CommonEntityBasedProvider(id, dimId, entityId, facing));
+    }
+
+    @NotNull
+    @Override
+    public IItemHandlerManagerBuilder withWrapped(
+      @NotNull final ResourceLocation id, @NotNull final ResourceLocation wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding)
+    {
+        return withProvider(new CommonRangedBasedProvider(id.toString(), wrappedId.toString(), minSlot, maxSlotExcluding));
     }
 
     @NotNull

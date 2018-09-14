@@ -108,7 +108,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
      * Finds the child {@link IUIElement} that is deepest in the Component-Tree given the LOCAL coord that matches the predicate.
      *
      * @param localPoint The local coordinate to probe.
-     * @param predicate The predicate to filter the elements with.
+     * @param predicate  The predicate to filter the elements with.
      * @return An {@link Optional} with the deepest {@link IUIElement}. Empty optional is returned if the given coord is not in this {@link IUIElement}.
      */
     @NotNull
@@ -175,5 +175,30 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
     default void onPostChildUpdate(@NotNull final IUpdateManager updateManager)
     {
         //Noop
+    }
+
+    @Override
+    default Vector2d getMinimalContentSize()
+    {
+        getParent().getUiManager().getProfiler().startSection("Minimal content size: " + getId());
+
+        final Vector2d currentElementSize = getElementSize();
+        if (currentElementSize.getX() != 0d && currentElementSize.getY() != 0)
+        {
+            getParent().getUiManager().getProfiler().endSection();
+            return currentElementSize;
+        }
+
+        getParent().getUiManager().getProfiler().startSection("Content size Reduction");
+
+        final Vector2d currentMinimalRequiredSizeForChildren =
+          values().stream().map(IUIElement::getMinimalInternalSizeOfParent).reduce((f, s) -> f.maximize(s)).orElse(new Vector2d());
+
+        getParent().getUiManager().getProfiler().endSection();
+        getParent().getUiManager().getProfiler().endSection();
+
+        return currentMinimalRequiredSizeForChildren
+                 .move(getPadding().getLeft().orElse(0d), getPadding().getTop().orElse(0d))
+                 .move(getPadding().getRight().orElse(0d), getPadding().getBottom().orElse(0d));
     }
 }

@@ -326,6 +326,17 @@ public class XMLUIElementData implements IUIElementData
           new Object());
     }
 
+    @Override
+    public IDependencyObject<Object> getBoundObject(@NotNull final String name, final Object def)
+    {
+        return
+          bindOrReturnStaticViaString(
+            name,
+            s -> s,
+            def
+          );
+    }
+
     /**
      * Returns the nbt stored in the attribute with the given name.
      *
@@ -405,7 +416,19 @@ public class XMLUIElementData implements IUIElementData
         if (singleNameMatcher.matches())
         {
             final String fieldName = singleNameMatcher.group("singleName");
-            final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+
+            final Property<T> fieldProperty;
+            if (fieldName.equalsIgnoreCase("this"))
+            {
+                fieldProperty = PropertyCreationHelper.createFromNonOptional(
+                  Optional.of((context) -> (T) context),
+                  Optional.empty()
+                );
+            }
+            else
+            {
+                fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+            }
             return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
         }
 
@@ -456,7 +479,19 @@ public class XMLUIElementData implements IUIElementData
         if (singleNameMatcher.matches())
         {
             final String fieldName = singleNameMatcher.group("singleName");
-            final Property<T> fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+
+            final Property<T> fieldProperty;
+            if (fieldName.equalsIgnoreCase("this"))
+            {
+                fieldProperty = PropertyCreationHelper.createFromNonOptional(
+                  Optional.of((context) -> (T) context),
+                  Optional.empty()
+                );
+            }
+            else
+            {
+                fieldProperty = PropertyCreationHelper.createFromName(Optional.of(fieldName));
+            }
             return DependencyObjectHelper.createFromProperty(fieldProperty, defaultValue);
         }
 

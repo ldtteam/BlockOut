@@ -89,7 +89,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         BlockOut.getBlockOut()
           .getProxy()
           .getFontRenderer()
-          .drawSplitString(getTranslatedContents(), 0, 0, (int) getElementSize().getX(), 0);
+          .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), 0);
 
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
@@ -127,12 +127,12 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public String getContents()
     {
-        return contents.get(getDataContext());
+        return contents.get(this);
     }
 
     public void setContents(String contents)
     {
-        this.contents.set(getDataContext(), contents);
+        this.contents.set(this, contents);
     }
 
     public static class LabelConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<LabelConstructionDataBuilder, Label>

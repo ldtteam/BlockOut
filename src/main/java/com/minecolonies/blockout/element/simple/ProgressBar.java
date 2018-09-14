@@ -176,7 +176,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     @NotNull
     public ResourceLocation getBackGroundResource()
     {
-        return backGroundResource.get(getDataContext());
+        return backGroundResource.get(this);
     }
 
     public BoundingBox getForegroundRenderingBox(@NotNull final BoundingBox inputBox)
@@ -215,62 +215,62 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
     public void setBackGroundResource(@NotNull final ResourceLocation backGroundResource)
     {
-        this.backGroundResource.set(getDataContext(), backGroundResource);
+        this.backGroundResource.set(this, backGroundResource);
     }
 
     @NotNull
     public ResourceLocation getForeGroundResource()
     {
-        return foreGroundResource.get(getDataContext());
+        return foreGroundResource.get(this);
     }
 
     public void setForeGroundResource(@NotNull final ResourceLocation foreGroundResource)
     {
-        this.foreGroundResource.set(getDataContext(), foreGroundResource);
+        this.foreGroundResource.set(this, foreGroundResource);
     }
 
     @NotNull
     public Double getValue()
     {
-        return value.get(getDataContext());
+        return value.get(this);
     }
 
     public void setValue(@NotNull final Double value)
     {
-        this.value.set(getDataContext(), value);
+        this.value.set(this, value);
     }
 
     @NotNull
     public Double getMin()
     {
-        return min.get(getDataContext());
+        return min.get(this);
     }
 
     public void setMin(@NotNull final Double min)
     {
-        this.min.set(getDataContext(), min);
+        this.min.set(this, min);
     }
 
     @NotNull
     public Double getMax()
     {
-        return max.get(getDataContext());
+        return max.get(this);
     }
 
     public void setMax(@NotNull final Double max)
     {
-        this.max.set(getDataContext(), max);
+        this.max.set(this, max);
     }
 
     @NotNull
     public ControlDirection getOrientation()
     {
-        return orientation.get(getDataContext());
+        return orientation.get(this);
     }
 
     public void setOrientation(@NotNull final ControlDirection orientation)
     {
-        this.orientation.set(getDataContext(), orientation);
+        this.orientation.set(this, orientation);
     }
 
     public static class ProgressBarConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<ProgressBarConstructionDataBuilder, ProgressBar>

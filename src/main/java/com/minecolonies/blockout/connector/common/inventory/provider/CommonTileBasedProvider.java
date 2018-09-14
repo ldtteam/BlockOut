@@ -1,6 +1,7 @@
 package com.minecolonies.blockout.connector.common.inventory.provider;
 
 import com.minecolonies.blockout.BlockOut;
+import com.minecolonies.blockout.connector.core.inventory.IItemHandlerManager;
 import com.minecolonies.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -104,7 +105,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
 
     @Nullable
     @Override
-    public IItemHandler get()
+    public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
         final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
         final TileEntity tileEntity = blockAccess.getTileEntity(new BlockPos(x, y, z));

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 public interface IUIElement
 {
@@ -193,5 +194,93 @@ public interface IUIElement
      */
     @NotNull
     ResourceLocation getStyleId();
+
+    /**
+     * Returns the size the internal bounding box of the parent needs to have at least, to display this control correctly.
+     * Basically inverses the boundingbox calculation and makes an assumption on the minimal correct size for this element.
+     *
+     * @return The minimal size of the parent required to display this control properly.
+     */
+    default Vector2d getMinimalInternalSizeOfParent()
+    {
+        getParent().getUiManager().getProfiler().startSection("Minimal internal size: " + getId());
+        Optional<Double> marginLeft = getMargin().getLeft();
+        Optional<Double> marginTop = getMargin().getTop();
+        Optional<Double> marginRight = getMargin().getRight();
+        Optional<Double> marginBottom = getMargin().getBottom();
+
+        double width = getElementSize().getX();
+        double height = getElementSize().getY();
+
+        getParent().getUiManager().getProfiler().startSection("Minimal Content size: " + getId());
+        final Vector2d minimalContentSize = getMinimalContentSize();
+        getParent().getUiManager().getProfiler().endSection();
+
+        if (Alignment.LEFT.isActive(this) && Alignment.RIGHT.isActive(this))
+        {
+            if (!marginLeft.isPresent() && !marginRight.isPresent())
+            {
+                marginLeft = Optional.of(0d);
+                marginRight = Optional.of(0d);
+            }
+            else if (!marginLeft.isPresent())
+            {
+                marginLeft = Optional.of(0d);
+            }
+            else if (!marginRight.isPresent())
+            {
+                marginRight = Optional.of(0d);
+            }
+        }
+        else if (Alignment.RIGHT.isActive(this))
+        {
+            marginLeft = Optional.of(0d);
+        }
+
+        if (width == 0d)
+        {
+            width = minimalContentSize.getX();
+        }
+
+        if (Alignment.TOP.isActive(this) && Alignment.BOTTOM.isActive(this))
+        {
+            if (!marginTop.isPresent() && !marginBottom.isPresent())
+            {
+                marginTop = Optional.of(0d);
+                marginBottom = Optional.of(0d);
+            }
+            else if (!marginTop.isPresent())
+            {
+                marginTop = Optional.of(0d);
+            }
+            else if (!marginBottom.isPresent())
+            {
+                marginBottom = Optional.of(0d);
+            }
+        }
+        else if (Alignment.BOTTOM.isActive(this))
+        {
+            marginTop = Optional.of(0d);
+        }
+
+        if (height == 0d)
+        {
+            height = minimalContentSize.getY();
+        }
+
+        getParent().getUiManager().getProfiler().endSection();
+
+        return new Vector2d(width + marginLeft.orElse(0d) + marginRight.orElse(0d), height + marginTop.orElse(0d) + marginBottom.orElse(0d)).nullifyNegatives();
+    }
+
+    /**
+     * Used during assumptive calculations of minimal parent sizes, when a size is required to display this control properly.
+     *
+     * @return THe minimal size of this control that is required to display it properly.
+     */
+    default Vector2d getMinimalContentSize()
+    {
+        return getElementSize();
+    }
 
 }
