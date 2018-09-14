@@ -62,6 +62,13 @@ public class BlockOutGuiConstructionDataBuilder implements IBlockOutGuiConstruct
 
     @NotNull
     @Override
+    public <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> IBlockOutGuiConstructionDataBuilder forwardingControl(final boolean successful)
+    {
+       return this;
+    }
+
+    @NotNull
+    @Override
     public <T extends IUIElement, B extends IBlockOutUIElementConstructionDataBuilder<B, T>> IBlockOutGuiConstructionDataBuilder withControl(
       @NotNull final String controlId,
       @NotNull final Class<B> builderClass,
