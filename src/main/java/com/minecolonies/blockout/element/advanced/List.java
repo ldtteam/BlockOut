@@ -211,20 +211,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         manager.getRenderingController().getScissoringController().pop();
     }
 
-    /**
-     * Called by the update manager once all children have been updated.
-     *
-     * @param updateManager The update manager.
-     */
-    @Override
-    public void onPostChildUpdate(@NotNull final IUpdateManager updateManager)
-    {
-/*        if (updateScrollOffset())
-        {
-            updateManager.markDirty();
-        }*/
-    }
-
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
@@ -362,6 +348,8 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
             wrapNewElementAndRegister(element);
         }
+
+        updateScrollOffset();
     }
 
     /**
@@ -580,6 +568,8 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         wrappingRegion.put(element.getId(), element);
         wrappingRegion.setParent(this);
 
+        wrappingRegion.update(getUiManager().getUpdateManager());
+        element.update(getParent().getUiManager().getUpdateManager());
         put(wrappingRegion.getId(), wrappingRegion);
     }
 

@@ -72,7 +72,7 @@ public class ForgeFMLEventHandler
                     updateManager.updateElement(e.getValue());
                     stopWatch.stop();
 
-                    if (stopWatch.getTime(TimeUnit.MILLISECONDS) > 5)
+                    if (stopWatch.getTime(TimeUnit.MILLISECONDS) > 5 && false)
                     {
                         Log.getLogger().warn("#################################################");
                         Log.getLogger().warn("Update of BO UI took too long: " + stopWatch.getTime(TimeUnit.MILLISECONDS) + "ms." +e.getKey().getGuiContext().toString());
