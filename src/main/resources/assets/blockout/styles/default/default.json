@@ -1,7 +1,6 @@
 {
   "id": "blockout:default",
   "types": [
-    "blockout:styles/default/image/images.json",
-    "blockout:styles/default/controls/controls.json"
+    "blockout:styles/default/image/images.json"
   ]
 }
