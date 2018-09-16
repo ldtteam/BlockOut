@@ -34,12 +34,36 @@
       "data": "blockout:styles/default/image/progressbar_foreground.png"
     },
     {
-      "id": "image:scrollbar_foreground",
-      "data": "blockout:styles/default/image/scrollbar_foreground.png"
+      "id": "image:scrollbar_foreground#vertical",
+      "data": "blockout:styles/default/image/scrollbar_foreground_vertical.png"
     },
     {
-      "id": "image:scrollbar_background",
-      "data": "blockout:styles/default/image/scrollbar_background.png"
+      "id": "image:scrollbar_background#vertical",
+      "data": "blockout:styles/default/image/scrollbar_background_vertical.png"
+    },
+    {
+      "id": "image:scrollbar_foreground#horizontal",
+      "data": "blockout:styles/default/image/scrollbar_foreground_horizontal.png"
+    },
+    {
+      "id": "image:scrollbar_background#horizontal",
+      "data": "blockout:styles/default/image/scrollbar_background_horizontal.png"
+    },
+    {
+      "id": "image:checkbox_normal",
+      "data": "blockout:styles/default/image/checkbox_normal.png"
+    },
+    {
+      "id": "image:checkbox_disabled",
+      "data": "blockout:styles/default/image/checkbox_disabled.png"
+    },
+    {
+      "id": "image:checkbox_checked",
+      "data": "blockout:styles/default/image/checkbox_checked.png"
+    },
+    {
+      "id": "image:checkbox_checked_cross",
+      "data": "blockout:styles/default/image/checkbox_checked_cross.png"
     }
 
   ]

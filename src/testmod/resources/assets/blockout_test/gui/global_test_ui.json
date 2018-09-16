@@ -1,0 +1,24 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "size": "150,250",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "alignment":"LEFT,RIGHT,TOP,BOTTOM",
+      "margin":"0,0,0,0",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "tests",
+      "type": "blockout:list",
+      "size": "140,240",
+      "alignment":"LEFT,RIGHT,TOP,BOTTOM",
+      "scrollBackground": "image:scrollbar_background#vertical",
+      "scrollForeground": "image:scrollbar_foreground#vertical",
+      "template": "template:global_test_ui_button",
+      "source":"{Binding:this}"
+    }
+  ]
+}

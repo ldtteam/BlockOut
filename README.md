@@ -23,12 +23,12 @@ Add the following Maven repo as a repository to your buildscript:
 repositories {
     maven {
         name 'LDTTeam Artifactory'
-        url 'https://www.artifactory.orionminecraft.com/artifactory/LDTTeam-Modding'
+        url 'https://ldtteam.jfrog.io/ldtteam/modding/'
     }
 }
 ```
 
-Visit our [Artifactory](https://artifactory.orionminecraft.com/artifactory/webapp/#/artifacts/browse/tree/General/Libraries/com/ldtteam) and look for the correct BlockOut version you want to use.
+Visit our [Artifactory](https://ldtteam.jfrog.io/ldtteam/webapp/#/artifacts/browse/tree/General/modding) and look for the correct BlockOut version you want to use.
 If you do not care about a specific version you can always just get the latest version, by using a + as version number.
 
 Now that you have a version, add BlockOut as a dependency:

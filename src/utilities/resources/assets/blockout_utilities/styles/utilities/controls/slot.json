@@ -1,0 +1,15 @@
+{
+  "id": "template_slot",
+  "type": "blockout:template",
+  "children": [
+    {
+      "id": "slot",
+      "type": "blockout:slot",
+      "size": "18,18",
+      "margin": "0,0",
+      "background": "{Binding:Texture}",
+      "index": "{Binding:Index}",
+      "inventory": "{Binding:Inventory}"
+    }
+  ]
+}

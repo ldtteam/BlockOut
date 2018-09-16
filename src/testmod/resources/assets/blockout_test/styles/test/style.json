@@ -1,6 +1,7 @@
 {
   "id": "blockout_test:test",
   "types": [
-    "blockout_test:styles/test/image/images.json"
+    "blockout_test:styles/test/image/images.json",
+    "blockout_test:styles/test/controls/controls.json"
   ]
 }

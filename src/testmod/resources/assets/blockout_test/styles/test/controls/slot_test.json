@@ -1,0 +1,15 @@
+{
+  "id": "template_player_inventory_root",
+  "type": "blockout:template",
+  "children": [
+    {
+      "id": "player_inventory_test_slot_for_scrolling",
+      "type": "blockout:slot",
+      "size": "18,18",
+      "margin": "0,0",
+      "background": "image:slot_default_18x18",
+      "index": "{Binding:SlotIndex}",
+      "inventory": "blockout:test_inventory"
+    }
+  ]
+}

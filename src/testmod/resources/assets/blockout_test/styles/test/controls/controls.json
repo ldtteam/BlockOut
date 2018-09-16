@@ -1,0 +1,17 @@
+{
+  "id": "template",
+  "resources": [
+    {
+      "id": "template:slot_test",
+      "data": "blockout_test:styles/test/controls/slot_test.json"
+    },
+    {
+      "id": "template:label_test",
+      "data": "blockout_test:styles/test/controls/label_test.json"
+    },
+    {
+      "id": "template:global_test_ui_button",
+      "data": "blockout_test:styles/test/controls/global_test_ui_button.json"
+    }
+  ]
+}

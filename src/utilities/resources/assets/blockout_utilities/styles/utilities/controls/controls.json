@@ -1,0 +1,17 @@
+{
+  "id": "template",
+  "resources": [
+    {
+      "id": "template:grid",
+      "data": "blockout_utilities:styles/utilities/controls/grid.json"
+    },
+    {
+      "id": "template:horizontal_grid",
+      "data": "blockout_utilities:styles/utilities/controls/horizontal_grid.json"
+    },
+    {
+      "id": "template:slot",
+      "data": "blockout_utilities:styles/utilities/controls/slot.json"
+    }
+  ]
+}

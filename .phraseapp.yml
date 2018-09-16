@@ -4,7 +4,7 @@ phraseapp:
   file_format: "properties"
   push:
     sources:
-    - file: "src/main/resources/assets/minecolonies/lang/*.lang"
+    - file: "src/main/resources/assets/ldtteam/lang/*.lang"
   pull:
     targets:
-    - file: "src/main/resources/assets/minecolonies/lang/en_UK.lang"
+    - file: "src/main/resources/assets/ldtteam/lang/en_UK.lang"

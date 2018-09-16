@@ -50,8 +50,18 @@ sourceSets {
             srcDir 'src/test/resources'
         }
     }
-    testmod {
+    utilities {
         compileClasspath += main.compileClasspath + main.output
+
+        java {
+            srcDir 'src/utilities/java'
+        }
+        resources {
+            srcDir 'src/utilities/resources'
+        }
+    }
+    testmod {
+        compileClasspath += utilities.compileClasspath + utilities.output
 
         java {
             srcDir 'src/testmod/java'
@@ -76,9 +86,12 @@ configurations {
 }
 
 dependencies {
-    compile 'de.ruedigermoeller:fst:2.+'
+    compile ('com.esotericsoftware:kryo:4.+') {
+        exclude group: 'org.ow2.asm', module: 'asm'
+    }
 
-    testmodCompile sourceSets.main.output
+    utilitiesCompile sourceSets.main.output
+    testmodCompile sourceSets.utilities.output
 
     testCompile 'junit:junit:4.11'
     testCompile "org.mockito:mockito-core:1.+"
@@ -141,6 +154,16 @@ jar {
     from sourceSets.main.output
 
     dependsOn javadocJar
+
+    manifest {
+        attributes 'FMLAT': "blockout_at.cfg"
+    }
+}
+
+task utilitiesJar(type: Jar) {
+    from sourceSets.utilities.output
+
+    classifier 'utilities'
 }
 
 task testModJar(type: Jar) {
@@ -151,6 +174,7 @@ task testModJar(type: Jar) {
 
 reobf {
     jar{}
+    utilitiesJar {}
     testModJar{}
 }
 
@@ -165,6 +189,7 @@ idea {
 artifacts {
     archives jar
     archives javadocJar
+    archives utilitiesJar
     archives testModJar
     archives sourceJar
 }
