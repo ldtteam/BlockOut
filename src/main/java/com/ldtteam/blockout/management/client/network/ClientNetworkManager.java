@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management.client.network;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.management.network.INetworkManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.client.network.messages.*;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;

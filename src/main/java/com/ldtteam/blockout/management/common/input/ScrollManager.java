@@ -1,9 +1,9 @@
 package com.ldtteam.blockout.management.common.input;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.input.IScrollAcceptingUIElement;
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.input.IScrollManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.input.IScrollAcceptingUIElement;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.input.IScrollManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;

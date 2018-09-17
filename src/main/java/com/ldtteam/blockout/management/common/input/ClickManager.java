@@ -1,9 +1,9 @@
 package com.ldtteam.blockout.management.common.input;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.input.IClickAcceptingUIElement;
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.input.IClickManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.input.IClickManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;

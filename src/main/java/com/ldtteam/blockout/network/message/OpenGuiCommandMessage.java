@@ -2,11 +2,10 @@ package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.core.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
-import com.ldtteam.blockout.loader.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;

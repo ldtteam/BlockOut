@@ -1,9 +1,9 @@
 package com.ldtteam.blockout.management.common.input;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.input.IKeyAcceptingUIElement;
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.input.IKeyManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.input.IKeyManager;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

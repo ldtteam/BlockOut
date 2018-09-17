@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.management.server.network.messages;
 
-import com.ldtteam.blockout.core.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;

@@ -2,7 +2,7 @@ package com.ldtteam.blockout.gui;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.core.element.IUIElementHost;
+import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.Minecraft;

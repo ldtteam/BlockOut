@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management.client.update;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.management.update.IUpdateManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.management.common.update.ChildUpdateManager;
 import com.ldtteam.blockout.util.Log;

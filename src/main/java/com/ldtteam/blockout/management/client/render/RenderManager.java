@@ -1,10 +1,10 @@
 package com.ldtteam.blockout.management.client.render;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.IUIElementHost;
-import com.ldtteam.blockout.core.element.drawable.IChildDrawableUIElement;
-import com.ldtteam.blockout.core.element.drawable.IDrawableUIElement;
-import com.ldtteam.blockout.core.management.render.IRenderManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
+import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
+import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;

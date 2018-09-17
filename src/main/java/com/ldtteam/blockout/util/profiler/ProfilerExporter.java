@@ -2,7 +2,7 @@ package com.ldtteam.blockout.util.profiler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ldtteam.blockout.core.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.FileWriter;

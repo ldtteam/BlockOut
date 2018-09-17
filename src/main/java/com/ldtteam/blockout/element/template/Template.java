@@ -2,13 +2,11 @@ package com.ldtteam.blockout.element.template;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.IUIElementHost;
-import com.ldtteam.blockout.core.factory.IUIElementFactory;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.loader.IUIElementData;
-import com.ldtteam.blockout.loader.IUIElementDataBuilder;
-import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
+import com.ldtteam.blockout.json.loader.wrapped.WrappedUIElementData;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 

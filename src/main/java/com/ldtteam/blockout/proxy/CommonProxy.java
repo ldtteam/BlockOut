@@ -7,10 +7,12 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
 import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.network.INetworkManager;
-import com.ldtteam.blockout.core.management.render.IRenderManager;
-import com.ldtteam.blockout.core.management.update.IUpdateManager;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.network.INetworkManager;
+import com.ldtteam.blockout.management.render.IRenderManager;
+import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.json.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.json.loader.binding.engine.SimpleBindingEngine;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
@@ -182,5 +184,12 @@ public class CommonProxy implements IProxy
     public IGuiController getClientSideOnlyGuiController()
     {
         return null;
+    }
+
+    @NotNull
+    @Override
+    public IBindingEngine getBindingEngine()
+    {
+        return SimpleBindingEngine.getInstance();
     }
 }

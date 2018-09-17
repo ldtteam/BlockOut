@@ -5,7 +5,7 @@ import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutUIElementConstructionDataBuilder;
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
-import com.ldtteam.blockout.core.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.event.IEventHandler;
 import org.jetbrains.annotations.NotNull;
 

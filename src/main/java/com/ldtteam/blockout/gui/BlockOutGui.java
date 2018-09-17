@@ -2,8 +2,8 @@ package com.ldtteam.blockout.gui;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.core.element.IUIElementHost;
-import com.ldtteam.blockout.core.element.values.AxisDistance;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;

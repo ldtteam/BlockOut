@@ -2,8 +2,7 @@ package com.ldtteam.blockout.connector.common;
 
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
-import com.ldtteam.blockout.loader.ILoader;
-import com.ldtteam.blockout.loader.IUIElementData;
+import com.ldtteam.blockout.json.loader.ILoader;
 import com.ldtteam.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +30,7 @@ public class CommonLoaderManager implements ILoaderManager
                      .map(l -> {
                          try
                          {
-                             return l.createFromFile(dataLoader.getGuiDefinition());
+                             return l.createFromDataAndBindingEngine(dataLoader.getGuiDefinition());
                          }
                          catch (Exception e)
                          {

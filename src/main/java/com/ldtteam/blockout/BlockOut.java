@@ -5,11 +5,12 @@ import com.ldtteam.blockout.element.advanced.TemplateInstance;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
-import com.ldtteam.blockout.loader.json.JsonLoader;
-import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
-import com.ldtteam.blockout.loader.xml.XMLLoader;
+import com.ldtteam.blockout.json.loader.json.JsonLoader;
+import com.ldtteam.blockout.json.loader.object.loader.ObjectUIElementLoader;
+import com.ldtteam.blockout.json.loader.xml.XMLLoader;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.IProxy;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
@@ -41,7 +42,7 @@ public class BlockOut
 
     public IProxy getProxy()
     {
-        return proxy;
+        return ProxyHolder.getInstance();
     }
 
     /**
@@ -52,6 +53,7 @@ public class BlockOut
     @Mod.EventHandler
     public void preInit(@NotNull final FMLPreInitializationEvent event)
     {
+        ProxyHolder.getInstance().setProxy(proxy);
         NetworkManager.init();
 
         getProxy().getLoaderManager().registerLoader(new JsonLoader());

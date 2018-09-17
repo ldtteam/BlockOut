@@ -1,8 +1,8 @@
 package com.ldtteam.blockout.management.common.focus;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.focus.IFocusManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.focus.IFocusManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.render.standard;
 
-import com.ldtteam.blockout.core.management.render.IRenderManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
@@ -382,8 +383,15 @@ public class RenderingController implements IRenderingController
     }
 
     @Override
-    public void drawSlotContent(@NotNull final Slot slot)
+    public void drawSlotContent(@NotNull final IUIElement element)
     {
+        if (!(element instanceof Slot))
+        {
+            return;
+        }
+
+        final Slot slot = (Slot) element;
+
         if (!(renderManager.getGui() instanceof BlockOutGui))
         {
             throw new IllegalArgumentException("Can not draw slot contents on ClientSide Only gui.");
@@ -469,11 +477,18 @@ public class RenderingController implements IRenderingController
     /**
      * Draws the slot overlay.
      *
-     * @param slot The slot
+     * @param element The slot
      */
     @Override
-    public void drawSlotMouseOverlay(@NotNull final Slot slot)
+    public void drawSlotMouseOverlay(@NotNull final IUIElement element)
     {
+        if (!(element instanceof Slot))
+        {
+            return;
+        }
+
+        final Slot slot = (Slot) element;
+
         if (!(renderManager.getGui() instanceof BlockOutGui))
         {
             throw new IllegalArgumentException("Can not draw slot overlay on ClientSide Only gui.");

@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.inventory;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.core.element.IUIElementHost;
+import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
 import com.ldtteam.blockout.util.Log;

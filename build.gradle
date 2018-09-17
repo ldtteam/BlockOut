@@ -34,7 +34,30 @@ jacocoTestReport {
 }
 
 sourceSets {
+    api {
+        java {
+            srcDir 'src/api/java'
+        }
+    }
+    json {
+        compileClasspath += api.compileClasspath + api.output
+
+        java {
+            srcDir 'src/lang/json/java'
+        }
+    }
+    xml {
+        compileClasspath += api.compileClasspath + api.output
+
+        java {
+            srcDir 'src/lang/xml/java'
+        }
+    }
     main {
+        compileClasspath += api.compileClasspath + api.output
+        compileClasspath += json.compileClasspath + json.output
+        compileClasspath += xml.compileClasspath + xml.output
+
         java {
             srcDir 'src/main/java'
         }
@@ -86,20 +109,16 @@ configurations {
 }
 
 dependencies {
-    compile ('com.esotericsoftware:kryo:4.+') {
+    apiCompile 'com.intellij:annotations:+@jar'
+    apiCompile ('com.esotericsoftware:kryo:4.+') {
         exclude group: 'org.ow2.asm', module: 'asm'
     }
-
-    utilitiesCompile sourceSets.main.output
-    testmodCompile sourceSets.utilities.output
 
     testCompile 'junit:junit:4.11'
     testCompile "org.mockito:mockito-core:1.+"
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.5'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.5'
     testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-
-    compile 'com.intellij:annotations:+@jar'
 }
 
 group = "com.ldtteam"
@@ -152,12 +171,32 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
 
 jar {
     from sourceSets.main.output
+    from sourceSets.api.output
+    from sourceSets.json.output
 
     dependsOn javadocJar
 
     manifest {
         attributes 'FMLAT': "blockout_at.cfg"
     }
+}
+
+task apiJar(type: Jar) {
+    from sourceSets.api.output
+
+    classifier 'api'
+}
+
+task jsonJar(type: Jar) {
+    from sourceSets.json.output
+
+    classifier 'lang-json'
+}
+
+task xmlJar(type: Jar) {
+    from sourceSets.xml.output
+
+    classifier 'lang-xml'
 }
 
 task utilitiesJar(type: Jar) {
@@ -173,9 +212,12 @@ task testModJar(type: Jar) {
 }
 
 reobf {
-    jar{}
+    jar {}
+    apiJar {}
+    jsonJar {}
+    xmlJar {}
     utilitiesJar {}
-    testModJar{}
+    testModJar {}
 }
 
 idea {
@@ -188,10 +230,13 @@ idea {
 
 artifacts {
     archives jar
+    archives jsonJar
+    archives apiJar
     archives javadocJar
     archives utilitiesJar
     archives testModJar
     archives sourceJar
+    archives xmlJar
 }
 
 
@@ -228,6 +273,7 @@ curseforge {
             addArtifact javadocJar
             addArtifact testModJar
             addArtifact sourceJar
+            addArtifact xmlJar
         }
     }
     else

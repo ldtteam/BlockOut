@@ -1,8 +1,8 @@
 package com.ldtteam.blockout.management.common.update;
 
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.IUIElementHost;
-import com.ldtteam.blockout.core.management.update.IUpdateManager;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChildUpdateManager implements IUpdateManager

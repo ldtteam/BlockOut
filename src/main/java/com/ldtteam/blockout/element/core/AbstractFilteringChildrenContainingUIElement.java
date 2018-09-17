@@ -1,11 +1,11 @@
 package com.ldtteam.blockout.element.core;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.IUIElementHost;
-import com.ldtteam.blockout.core.element.values.Alignment;
-import com.ldtteam.blockout.core.element.values.AxisDistance;
-import com.ldtteam.blockout.core.element.values.Dock;
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.values.Alignment;
+import com.ldtteam.blockout.element.values.AxisDistance;
+import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

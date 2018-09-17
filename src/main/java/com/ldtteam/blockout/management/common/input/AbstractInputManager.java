@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management.common.input;
 
-import com.ldtteam.blockout.core.management.IUIManager;
-import com.ldtteam.blockout.core.management.input.IInputManager;
+import com.ldtteam.blockout.management.IUIManager;
+import com.ldtteam.blockout.management.input.IInputManager;
 
 public abstract class AbstractInputManager implements IInputManager
 {

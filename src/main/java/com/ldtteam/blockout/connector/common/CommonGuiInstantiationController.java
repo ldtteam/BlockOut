@@ -3,10 +3,9 @@ package com.ldtteam.blockout.connector.common;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.injection.DependencyObjectInjector;
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.core.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.event.injector.EventHandlerInjector;
-import com.ldtteam.blockout.loader.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import org.jetbrains.annotations.NotNull;
 
