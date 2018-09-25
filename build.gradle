@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.*;
+
 buildscript {
     repositories {
         jcenter()
@@ -7,12 +9,14 @@ buildscript {
         }
     }
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
 plugins {
     id "com.matthewprenger.cursegradle" version "1.1.0"
+
 }
 
 repositories {
@@ -24,14 +28,8 @@ repositories {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'jacoco'
 apply plugin: 'maven'
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceSets {
     main {
@@ -86,7 +84,7 @@ configurations {
 }
 
 dependencies {
-    compile ('com.esotericsoftware:kryo:4.+') {
+    shadow ('com.esotericsoftware:kryo:4.+') {
         exclude group: 'org.ow2.asm', module: 'asm'
     }
 
@@ -155,15 +153,34 @@ jar {
 
     dependsOn javadocJar
 
+    classifier 'minimal'
+
     manifest {
         attributes 'FMLAT': "blockout_at.cfg"
     }
 }
 
+shadowJar {
+    classifier = 'shadowed-minimal'
+}
+
 task utilitiesJar(type: Jar) {
     from sourceSets.utilities.output
 
-    classifier 'utilities'
+    classifier 'slim'
+}
+
+task normalJar(type: ShadowJar) {
+    from sourceSets.main.output
+    from sourceSets.utilities.output
+
+    configurations = [project.configurations.shadow]
+
+    manifest {
+        attributes 'FMLAT': "blockout_at.cfg"
+    }
+
+    classifier = ''
 }
 
 task testModJar(type: Jar) {
@@ -173,9 +190,11 @@ task testModJar(type: Jar) {
 }
 
 reobf {
-    jar{}
+    jar {}
     utilitiesJar {}
-    testModJar{}
+    testModJar {}
+    normalJar {}
+    shadowJar {}
 }
 
 idea {
@@ -191,6 +210,8 @@ artifacts {
     archives javadocJar
     archives utilitiesJar
     archives testModJar
+    archives shadowJar
+    archives normalJar
     archives sourceJar
 }
 
@@ -225,6 +246,13 @@ curseforge {
             changelogType = 'markdown'
             releaseType = System.getenv().CURSERELEASETYPE
 
+            mainArtifact(normalJar) {
+                displayName = "BlockOut: $project.version"
+            }
+
+            addArtifact jar
+            addArtifact utilitiesJar
+            addArtifact shadowJar
             addArtifact javadocJar
             addArtifact testModJar
             addArtifact sourceJar
