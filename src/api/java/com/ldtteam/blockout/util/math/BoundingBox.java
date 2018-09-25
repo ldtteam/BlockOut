@@ -168,7 +168,7 @@ public final class BoundingBox
 
         if (components.length != 4)
         {
-            throw new IllegalArgumentException("String does not contain 4 parts");
+            throw new IllegalArgumentException("StringConverter does not contain 4 parts");
         }
 
         return new BoundingBox(new Vector2d(components[0], components[1]), new Vector2d(components[2], components[3]));

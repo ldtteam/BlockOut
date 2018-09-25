@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.json;
 
-import com.ldtteam.blockout.json.loader.json.JsonLoader;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;

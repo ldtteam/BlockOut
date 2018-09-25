@@ -49,7 +49,7 @@ public class RenderingController implements IRenderingController
     }
 
     /**
-     * Convenient helper function to bind the texture to a String adress
+     * Convenient helper function to bind the texture to a StringConverter adress
      *
      * @param textureAddress The address of the Texture to bind.
      */

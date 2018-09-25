@@ -3,7 +3,7 @@ package com.ldtteam.blockout.template;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.json.loader.IUIElementData;
+import com.ldtteam.blockout.loader.IUIElementData;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 

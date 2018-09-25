@@ -5,7 +5,7 @@ import com.google.common.collect.HashBiMap;
 import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.json.loader.object.ObjectUIElementDataBuilder;
+import com.ldtteam.blockout.loader.object.ObjectUIElementDataBuilder;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

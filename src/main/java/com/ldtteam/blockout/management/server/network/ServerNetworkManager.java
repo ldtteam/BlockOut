@@ -5,7 +5,7 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.management.network.INetworkManager;
-import com.ldtteam.blockout.json.loader.object.ObjectUIElementData;
+import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
 import com.ldtteam.blockout.management.server.network.messages.OnFocusedElementChangedMessage;
 import com.ldtteam.blockout.network.NetworkManager;

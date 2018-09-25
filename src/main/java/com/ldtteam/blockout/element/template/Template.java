@@ -6,7 +6,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.json.loader.wrapped.WrappedUIElementData;
+import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -83,11 +83,11 @@ public class Template extends AbstractChildrenContainingUIElement
         final WrappedUIElementData wrappedUIElementData = new WrappedUIElementData(convertedChildData)
         {
             /**
-             * Get the String attribute from the name and definition.
+             * Get the StringConverter attribute from the name and definition.
              *
              * @param name the name.
              * @param def  the definition.
-             * @return the String.
+             * @return the StringConverter.
              */
             @NotNull
             @Override

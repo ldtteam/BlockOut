@@ -56,7 +56,7 @@ public class ImageResource implements IDiskResource
 
             if (!object.has("file") || !object.get("file").isJsonPrimitive())
             {
-                throw new IllegalArgumentException(String.format("File target for ImageResource: %s is not a String.", id));
+                throw new IllegalArgumentException(String.format("File target for ImageResource: %s is not a StringConverter.", id));
             }
 
             final String diskLocationPath = data.getAsString();

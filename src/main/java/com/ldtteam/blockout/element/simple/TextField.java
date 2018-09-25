@@ -834,7 +834,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         /**
          * Gets the new text field content after event.
-         * @return the content String.
+         * @return the content StringConverter.
          */
         public String getNewContent()
         {
@@ -863,7 +863,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         /**
          * Gets the new text field content after event.
-         * @return the content String.
+         * @return the content StringConverter.
          */
         public String getNewContent()
         {

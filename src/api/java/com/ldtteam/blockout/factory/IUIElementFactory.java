@@ -1,8 +1,9 @@
 package com.ldtteam.blockout.factory;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.json.loader.core.IUIElementBuilder;
-import com.ldtteam.blockout.json.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementBuilder;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,11 +28,11 @@ public interface IUIElementFactory<U extends IUIElement>
      * @return The {@link U} that is stored in the {@link IUIElementData}.
      */
     @NotNull
-    U readFromElementData(@NotNull final IUIElementData elementData);
+    U readFromElementData(@NotNull final IUIElementData elementData, @NotNull final IBindingEngine engine);
 
     /**
      * Populates the given {@link IUIElementBuilder} with the data from {@link U} so that
-     * the given {@link U} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
+     * the given {@link U} can be reconstructed with {@link #readFromElementData(IUIElementData, IBindingEngine)} created by
      * the given {@link IUIElementBuilder}.
      *
      * @param element The {@link U} to write into the {@link IUIElementBuilder}

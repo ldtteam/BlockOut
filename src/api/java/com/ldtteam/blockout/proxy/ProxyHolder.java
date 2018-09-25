@@ -4,7 +4,7 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
 import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
-import com.ldtteam.blockout.json.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
