@@ -215,12 +215,6 @@ artifacts {
     archives sourceJar
 }
 
-tasks.uploadArchives.dependsOn reobfJar
-tasks.uploadArchives.dependsOn reobfUtilitiesJar
-tasks.uploadArchives.dependsOn reobfTestModJar
-tasks.uploadArchives.dependsOn reobfNormalJar
-tasks.uploadArchives.dependsOn reobfShadowJar
-
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
@@ -265,6 +259,17 @@ curseforge {
     else
     {
         logger.lifecycle("Cannot run the CurseUpload sequence. No API-Key or release type has been provided.")
+    }
+}
+
+afterEvaluate {
+    curseforge.curseProjects.each {
+        tasks["curseforge${it.id}"].dependsOn reobfJar
+        tasks["curseforge${it.id}"].dependsOn normalJar
+        tasks["curseforge${it.id}"].dependsOn utilitiesJar
+        tasks["curseforge${it.id}"].dependsOn shadowJar
+        tasks["curseforge${it.id}"].dependsOn testModJar
+
     }
 }
 
