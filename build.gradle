@@ -262,11 +262,11 @@ curseforge {
     }
 }
 
-curseforge275314.dependsOn reobfJar
-curseforge275314.dependsOn reobfNormalJar
-curseforge275314.dependsOn reobfShadowJar
-curseforge275314.dependsOn reobfTestModJar
-curseforge275314.dependsOn reobfUtilitiesJar
+tasks.curseforge.dependsOn reobfJar
+tasks.curseforge.dependsOn reobfNormalJar
+tasks.curseforge.dependsOn reobfShadowJar
+tasks.curseforge.dependsOn reobfTestModJar
+tasks.curseforge.dependsOn reobfUtilitiesJar
 
 task("createChangelog") {
     group = 'upload'
