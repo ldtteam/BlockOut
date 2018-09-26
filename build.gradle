@@ -215,8 +215,6 @@ artifacts {
     archives sourceJar
 }
 
-
-
 task signJar(type: SignJar, dependsOn: reobfJar) {
     onlyIf { // Skip the task if our secret data isn't available
         project.hasProperty('keyStore')
@@ -263,6 +261,12 @@ curseforge {
         logger.lifecycle("Cannot run the CurseUpload sequence. No API-Key or release type has been provided.")
     }
 }
+
+curseforge275314.dependsOn reobfJar
+curseforge275314.dependsOn reobfNormalJar
+curseforge275314.dependsOn reobfShadowJar
+curseforge275314.dependsOn reobfTestModJar
+curseforge275314.dependsOn reobfUtilitiesJar
 
 task("createChangelog") {
     group = 'upload'
