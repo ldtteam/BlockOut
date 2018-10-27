@@ -9,6 +9,10 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementBuilder;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.util.Constants;
@@ -82,11 +86,11 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
 
         @NotNull
         @Override
-        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
+        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, IUIElementDataComponent::isString, engine, Constants.Styles.CONST_DEFAULT);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, IUIElementDataComponent::isString, engine, EnumSet.of(Alignment.LEFT, Alignment.RIGHT));
+            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, IUIElementDataComponent::isString, engine, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
             final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
             final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
@@ -111,6 +115,19 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
             });
 
             return element;
+        }
+
+        @Override
+        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementBuilder builder)
+        {
+
+        }
+
+        @NotNull
+        @Override
+        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
+        {
+
         }
 
         @Override

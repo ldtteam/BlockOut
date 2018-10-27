@@ -51,7 +51,7 @@ public class ObjectUIElementData implements IUIElementData, Serializable
     public Optional<IUIElementDataComponent> getComponentWithName(@NotNull final String name)
     {
         if (object.containsKey(name))
-            return Optional.of(new ObjectUIElementDataComponent(object.get(name), injector));
+            return Optional.of(new ObjectUIElementDataComponent(object.get(name)));
 
         return Optional.empty();
     }

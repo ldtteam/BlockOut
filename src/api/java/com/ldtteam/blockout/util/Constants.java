@@ -36,6 +36,7 @@ public class Constants
 
         public static class General
         {
+            public static final String CONST_TYPE = "type";
             public static final String CONST_ID           = "id";
             public static final String CONST_STYLE_ID     = "style";
             public static final String CONST_ALIGNMENT    = "alignment";

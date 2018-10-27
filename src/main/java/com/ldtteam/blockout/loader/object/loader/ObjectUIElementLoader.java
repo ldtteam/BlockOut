@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.loader.object.loader;
 
 import com.ldtteam.blockout.loader.ILoader;
-import com.ldtteam.blockout.loader.object.ObjectUIElementDataBuilder;
+import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
 import org.jetbrains.annotations.NotNull;
 
 public class ObjectUIElementLoader implements ILoader
@@ -23,7 +23,7 @@ public class ObjectUIElementLoader implements ILoader
             final Class<? extends IClassBasedUICreator> fileLoader = (Class<? extends IClassBasedUICreator>) potentialFileLoader;
             final IClassBasedUICreator instance = fileLoader.newInstance();
 
-            final ObjectUIElementDataBuilder builder = new ObjectUIElementDataBuilder();
+            final ObjectUIElementBuilder builder = new ObjectUIElementBuilder();
 
             instance.build(builder);
 

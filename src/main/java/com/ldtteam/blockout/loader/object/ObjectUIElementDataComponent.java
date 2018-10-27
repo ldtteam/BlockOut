@@ -16,6 +16,11 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
 {
     private Serializable serializable;
 
+    public ObjectUIElementDataComponent(final Serializable serializable)
+    {
+        this.serializable = serializable;
+    }
+
     @Override
     public String getAsString()
     {

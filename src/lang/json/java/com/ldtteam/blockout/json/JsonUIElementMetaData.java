@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public class JsonUIElementMetaData implements IUIElementMetaData
 {
     @NotNull
@@ -32,8 +34,8 @@ public class JsonUIElementMetaData implements IUIElementMetaData
     }
 
     @Override
-    public IUIElementHost getParent()
+    public Optional<IUIElementHost> getParent()
     {
-        return parent;
+        return Optional.ofNullable(parent);
     }
 }
