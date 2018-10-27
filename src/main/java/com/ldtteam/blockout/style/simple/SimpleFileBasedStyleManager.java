@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ProgressManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class SimpleFileBasedStyleManager implements IStyleManager
 {
-    public static final String                        CONST_STYLE_FILE_PATH = "styles/styles.json";
+    public static final String                        CONST_STYLE_FILE_PATH = "styles" + File.separator + "styles.json";
     private static      SimpleFileBasedStyleManager   ourInstance           = new SimpleFileBasedStyleManager();
     private final       Map<ResourceLocation, IStyle> styles                = new HashMap();
 

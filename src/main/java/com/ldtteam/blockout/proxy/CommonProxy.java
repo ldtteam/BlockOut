@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.proxy;
 
+import akka.util.ClassLoaderObjectInputStream;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
 import com.ldtteam.blockout.connector.common.CommonLoaderManager;
 import com.ldtteam.blockout.connector.core.IGuiController;
@@ -19,20 +20,25 @@ import com.ldtteam.blockout.style.simple.SimpleFileBasedStyleManager;
 import com.ldtteam.blockout.style.simple.SimpleResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.template.SimpleTemplateEngine;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class CommonProxy implements IProxy
@@ -76,11 +82,11 @@ public class CommonProxy implements IProxy
     }
 
     @Override
-    @NotNull
+    @Nullable
     public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
         final String modId = location.getNamespace().toLowerCase();
-        String path = "assets/" + modId + "/" + location.getPath();
+        String path = "assets" + File.separator + modId + File.separator + location.getPath();
 
         final Object mod;
         if (modId.equalsIgnoreCase("minecraft"))
@@ -92,6 +98,12 @@ public class CommonProxy implements IProxy
             mod = Loader.instance().getIndexedModList().get(modId).getMod();
         }
 
+        final InputStream fileTestStream = mod.getClass().getClassLoader().getResourceAsStream(path);
+        if (fileTestStream != null)
+        {
+            return fileTestStream;
+        }
+
         final Package pack = mod.getClass().getPackage();
         if (pack != null)
         {
@@ -100,6 +112,8 @@ public class CommonProxy implements IProxy
             {
                 path = "../" + path;
             }
+
+            path = path.substring(1);
         }
 
         return mod.getClass().getResourceAsStream(path);

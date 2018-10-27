@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = "blockout_test")
+@Mod.EventBusSubscriber(modid = "blockout_test", value = Side.CLIENT)
 public class ClientGuiEventHandler
 {
 
