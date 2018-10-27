@@ -86,7 +86,7 @@ public class ServerGuiController implements IGuiController
             }
             catch (IllegalArgumentException ex)
             {
-                Log.getLogger().error("Failed to create gui for: " + playerId, ex);
+                Log.getLogger().error("Failed to build gui for: " + playerId, ex);
                 return;
             }
 

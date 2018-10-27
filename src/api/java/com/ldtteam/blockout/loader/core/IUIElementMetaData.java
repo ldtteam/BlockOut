@@ -3,6 +3,8 @@ package com.ldtteam.blockout.loader.core;
 import com.ldtteam.blockout.element.IUIElementHost;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Optional;
+
 public interface IUIElementMetaData
 {
 
@@ -25,5 +27,5 @@ public interface IUIElementMetaData
      *
      * @return The parent.
      */
-    IUIElementHost getParent();
+    Optional<IUIElementHost> getParent();
 }

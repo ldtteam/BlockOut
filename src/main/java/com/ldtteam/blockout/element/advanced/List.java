@@ -58,8 +58,8 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     private IDependencyObject<ResourceLocation> scrollBarForegroundResource;
     private boolean                             dataBoundMode;
 
-    private IDependencyObject<Boolean> showScrollbar;
-    private IDependencyObject<ControlDirection> orientation;
+    private IDependencyObject<Boolean>     showScrollbar;
+    private IDependencyObject<Orientation> orientation;
 
     public List(
       @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
@@ -71,7 +71,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         this.scrollBarBackgroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
         this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
         this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
-        this.orientation = DependencyObjectHelper.createFromValue(ControlDirection.TOP_BOTTOM);
+        this.orientation = DependencyObjectHelper.createFromValue(Orientation.TOP_BOTTOM);
         this.showScrollbar = DependencyObjectHelper.createFromValue(true);
     }
 
@@ -92,7 +92,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
       @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
       @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
       @NotNull final double scrollOffset,
-      @NotNull final IDependencyObject<ControlDirection> orientation,
+      @NotNull final IDependencyObject<Orientation> orientation,
       @NotNull final IDependencyObject<Boolean> showScrollbar,
       @NotNull final IDependencyObject<Object> source)
     {
@@ -136,7 +136,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             return false;
         }
 
-        if (getOrientation() == ControlDirection.TOP_BOTTOM)
+        if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             final double offset = localBox.getSize().getX() - localX;
             return offset <= CONST_SCROLLBAR_SIZE;
@@ -217,7 +217,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
         GlStateManager.pushMatrix();
 
-        if (getOrientation() == ControlDirection.TOP_BOTTOM)
+        if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             final double localHeight = getLocalBoundingBox().getSize().getY();
             final double barLength = getScrollBarLength();
@@ -440,30 +440,30 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
     
     @NotNull
-    public ControlDirection getOrientation()
+    public Orientation getOrientation()
     {
-        final ControlDirection controlDirection = orientation.get(this);
-        if (controlDirection != ControlDirection.TOP_BOTTOM && controlDirection != ControlDirection.LEFT_RIGHT)
+        final Orientation orientation = this.orientation.get(this);
+        if (orientation != Orientation.TOP_BOTTOM && orientation != Orientation.LEFT_RIGHT)
         {
-            Log.getLogger().error("Failed to get valid ControlDirection for list: " + getId() + " current: " + controlDirection + " Valid are: TOP_BOTTOM, LEFT_RIGHT.");
-            setOrientation(ControlDirection.TOP_BOTTOM);
+            Log.getLogger().error("Failed to get valid Orientation for list: " + getId() + " current: " + orientation + " Valid are: TOP_BOTTOM, LEFT_RIGHT.");
+            setOrientation(Orientation.TOP_BOTTOM);
             
-            return ControlDirection.TOP_BOTTOM;
+            return Orientation.TOP_BOTTOM;
         }
         
-        return controlDirection;
+        return orientation;
     }
     
-    public void setOrientation(@NotNull final ControlDirection orientation)
+    public void setOrientation(@NotNull final Orientation orientation)
     {
         this.orientation.set(this,  orientation);
     }
     
     private boolean updateScrollOffset()
     {
-        final ControlDirection currentOrientation = getOrientation();
+        final Orientation currentOrientation = getOrientation();
         boolean requiresUpdate = false;
-        double maxOffset = currentOrientation == ControlDirection.TOP_BOTTOM ? (getTotalContentLength() - getLocalInternalBoundingBox().getSize().getY()) * scrollOffset : (getTotalContentLength() - getLocalInternalBoundingBox().getSize().getX()) * scrollOffset;
+        double maxOffset = currentOrientation == Orientation.TOP_BOTTOM ? (getTotalContentLength() - getLocalInternalBoundingBox().getSize().getY()) * scrollOffset : (getTotalContentLength() - getLocalInternalBoundingBox().getSize().getX()) * scrollOffset;
 
         if (maxOffset <= 0)
         {
@@ -474,13 +474,13 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         for (IUIElement wrapper : values())
         {
             final AxisDistance newMargin;
-            if (currentOrientation == ControlDirection.TOP_BOTTOM)
+            if (currentOrientation == Orientation.TOP_BOTTOM)
             {
-                newMargin = new AxisDistanceBuilder().setLeft(Optional.of(0d)).setRight(Optional.of(0d)).setTop(Optional.of(-maxOffset + currentUsedOffset)).create();
+                newMargin = new AxisDistanceBuilder().setLeft(Optional.of(0d)).setRight(Optional.of(0d)).setTop(Optional.of(-maxOffset + currentUsedOffset)).build();
             }
             else {
                 newMargin =
-                  new AxisDistanceBuilder().setLeft(Optional.of(-maxOffset + currentUsedOffset)).setTop(Optional.of(0d)).setBottom(Optional.of(0d)).create();
+                  new AxisDistanceBuilder().setLeft(Optional.of(-maxOffset + currentUsedOffset)).setTop(Optional.of(0d)).setBottom(Optional.of(0d)).build();
             }
 
             if (!newMargin.equals(wrapper.getMargin()))
@@ -490,7 +490,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
             wrapper.setMargin(newMargin);
             wrapper.update(getParent().getUiManager().getUpdateManager());
-            currentUsedOffset += (currentOrientation == ControlDirection.TOP_BOTTOM ? wrapper.getElementSize().getY() : wrapper.getElementSize().getX());
+            currentUsedOffset += (currentOrientation == Orientation.TOP_BOTTOM ? wrapper.getElementSize().getY() : wrapper.getElementSize().getX());
         }
 
         if (requiresUpdate && isVisible())
@@ -511,7 +511,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
      */
     private double getTotalContentLength()
     {
-        if (getOrientation() == ControlDirection.TOP_BOTTOM)
+        if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             return this.values().stream().mapToDouble(u -> u.getLocalBoundingBox().getSize().getY()).sum();    
         }
@@ -553,8 +553,8 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             {
                 return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
                   PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
-                    getOrientation() == ControlDirection.TOP_BOTTOM ? getLocalInternalBoundingBox().getSize().getX() : element.getMinimalInternalSizeOfParent().getX(),
-                    getOrientation() == ControlDirection.LEFT_RIGHT ? getLocalInternalBoundingBox().getSize().getY() : element.getMinimalInternalSizeOfParent().getY()
+                    getOrientation() == Orientation.TOP_BOTTOM ? getLocalInternalBoundingBox().getSize().getX() : element.getMinimalInternalSizeOfParent().getX(),
+                    getOrientation() == Orientation.LEFT_RIGHT ? getLocalInternalBoundingBox().getSize().getY() : element.getMinimalInternalSizeOfParent().getY()
                   )), (context, value) -> {
                       //Noop
                   }), new Vector2d());
@@ -640,7 +640,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
      */
     private void onScrollBarClick(int localX, int localY)
     {
-        if (getOrientation() == ControlDirection.TOP_BOTTOM)
+        if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             final double localHeight = getLocalBoundingBox().getSize().getY();
             final double barHeight = getScrollBarLength();
@@ -669,7 +669,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         final BoundingBox localBox = getLocalBoundingBox();
         final double contentLength = getTotalContentLength();
 
-        if (getOrientation() == ControlDirection.TOP_BOTTOM)
+        if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             return (int) Math.min(localBox.getSize().getY(), (localBox.getSize().getY() / contentLength) * localBox.getSize().getY());    
         }
@@ -751,7 +751,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_BACKGROUND);
             final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getBoundResourceLocationAttribute(CONST_SCROLL_FOREGROUND);
             final double scrollOffset = elementData.getDoubleAttribute(CONST_SCROLLOFFSET);
-            final IDependencyObject<ControlDirection> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION, ControlDirection.TOP_BOTTOM);
+            final IDependencyObject<Orientation> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION, Orientation.TOP_BOTTOM);
             final IDependencyObject<Boolean> showScrollBar = elementData.getBoundBooleanAttribute(CONST_SHOW_BAR);
 
             if (elementData.hasChildren())

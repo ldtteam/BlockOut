@@ -150,7 +150,7 @@ public class AxisDistanceBuilder
         }
     }
 
-    public AxisDistance create()
+    public AxisDistance build()
     {
         return new AxisDistance(left, top, right, bottom);
     }

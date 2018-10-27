@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a single entry in the {@link IUIElementData}
@@ -98,7 +99,6 @@ public interface IUIElementDataComponent
      */
     List<IUIElementDataComponent> getAsList();
 
-
     /**
      * Sets the list on the current IUIElementData.
      * @param list The list to set.
@@ -106,19 +106,20 @@ public interface IUIElementDataComponent
      */
     void setList(@NotNull final List<IUIElementDataComponent> list) throws IllegalArgumentException;
 
+    /**
+     * Returns the map based representation of this component.
+     *
+     * @return The map based representation of this component.
+     */
+    Map<String, IUIElementDataComponent> getAsMap();
 
     /**
-     * Returns the contained data as NBT.
-     * @return The NBT.
+     * Sets the map based representation of this component.
+     *
+     * @param map The map to set.
+     * @throws IllegalArgumentException when current component is not complex.
      */
-    NBTBase getAsNBT();
-
-    /**
-     * Sets the nbt on the current IUIElementData.
-     * @param nbt The nbt to set.
-     * @throws IllegalArgumentException when current component is not a Nbt.              
-     */
-    void setNbt(@NotNull final NBTBase nbt) throws IllegalArgumentException;
+    void setMap(@NotNull final Map<String, IUIElementDataComponent> map) throws IllegalArgumentException;
 
     /**
      * Turns this {@link IUIElementDataComponent} into a fullblown {@link IUIElementData} by parsing the {@link IUIElementMetaData}

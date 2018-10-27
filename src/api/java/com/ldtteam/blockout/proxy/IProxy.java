@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.proxy;
 
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
@@ -21,6 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
+import java.util.List;
+import java.util.Set;
 
 public interface IProxy
 {
@@ -73,4 +77,9 @@ public interface IProxy
 
     @NotNull
     IBindingEngine getBindingEngine();
+
+    @NotNull
+    Set<Module> getFactoryInjectionModules();
+
+    void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
 }

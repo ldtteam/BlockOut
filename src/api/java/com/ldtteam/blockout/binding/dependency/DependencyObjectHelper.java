@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Helper class used to create {@link IDependencyObject} in situations.
+ * Helper class used to build {@link IDependencyObject} in situations.
  */
 public final class DependencyObjectHelper
 {
@@ -144,7 +144,7 @@ public final class DependencyObjectHelper
      *
      * @param property The {@link Property} to link the {@link IDependencyObject} to.
      * @param def      The default value.
-     * @param <T>      The type of {@link IDependencyObject} to create. Needs to be the same as the type of the {@link Property}
+     * @param <T>      The type of {@link IDependencyObject} to build. Needs to be the same as the type of the {@link Property}
      * @return A dynamic {@link IDependencyObject} that links a datacontext to a {@link Property}
      */
     public static <T> IDependencyObject<T> createFromProperty(@NotNull Property<T> property, @Nullable T def)

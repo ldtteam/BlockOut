@@ -4,7 +4,7 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
-import com.ldtteam.blockout.element.values.ControlDirection;
+import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.nbt.NBTBase;
@@ -272,7 +272,7 @@ public class WrappedUIElementData implements IUIElementData
     }
 
     /**
-     * Returns a bound ControlDirection attribute from a name and a default value.
+     * Returns a bound Orientation attribute from a name and a default value.
      * If the value is not bound nor found, a static bound to the given default value is returned.
      *
      * @param name The name
@@ -280,8 +280,8 @@ public class WrappedUIElementData implements IUIElementData
      * @return The bound object.
      */
     @Override
-    public IDependencyObject<ControlDirection> getBoundControlDirectionAttribute(
-      @NotNull final String name, final ControlDirection def)
+    public IDependencyObject<Orientation> getBoundControlDirectionAttribute(
+      @NotNull final String name, final Orientation def)
     {
         return wrapped.getBoundControlDirectionAttribute(name, def);
     }

@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.util;
 
+import net.minecraft.nbt.NBTBase;
+
 public enum NBTType
 {
     TAG_BYTE,
@@ -11,5 +13,34 @@ public enum NBTType
     TAG_BYTE_ARRAY,
     TAG_STRING,
     TAG_LIST,
-    TAG_COMPOUND,
+    TAG_COMPOUND;
+
+    public static NBTType fromNBTBase(NBTBase base)
+    {
+        switch (base.getId())
+        {
+            case 1:
+                return TAG_BYTE;
+            case 2:
+                return TAG_SHORT;
+            case 3:
+                return TAG_INT;
+            case 4:
+                return TAG_LONG;
+            case 5:
+                return TAG_FLOAT;
+            case 6:
+                return TAG_DOUBLE;
+            case 7:
+                return TAG_BYTE_ARRAY;
+            case 8:
+                return TAG_STRING;
+            case 9:
+                return TAG_LIST;
+            case 10:
+                return TAG_COMPOUND;
+            default:
+                throw new IllegalArgumentException("Unknown NBTBase type with Id: " + base.getId() + " with name: " + NBTBase.getTypeName(base.getId()));
+        }
+    }
 }

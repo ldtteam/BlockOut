@@ -61,7 +61,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
         if (!key.getItemHandlerManager().getAllItemHandlerIds().isEmpty())
         {
-            throw new IllegalArgumentException("Can not create a ClientSide only gui with inventory support.");
+            throw new IllegalArgumentException("Can not build a ClientSide only gui with inventory support.");
         }
 
         RootGuiElement host;
@@ -77,7 +77,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         }
         catch (IllegalArgumentException ex)
         {
-            Log.getLogger().error("Failed to create client side only gui.", ex);
+            Log.getLogger().error("Failed to build client side only gui.", ex);
             return;
         }
 

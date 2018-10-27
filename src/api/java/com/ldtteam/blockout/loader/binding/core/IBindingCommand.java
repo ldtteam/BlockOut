@@ -50,7 +50,7 @@ public interface IBindingCommand
      *
      * @param bindMatcher The regex matcher build from the syntax information that indicated that this command should be used.
      *                    Can be used to extract data from the command, since the {@link #getBindDataSyntax()} is embedded into the
-     *                    regex that has been used to create this matching {@link Matcher}. It is guaranteed that {@link Matcher#matches()}
+     *                    regex that has been used to build this matching {@link Matcher}. It is guaranteed that {@link Matcher#matches()}
      *                    has been called to verify that the given {@link Matcher} matches this command, it is however possible that other commands
      *                    also match, and those will be called if binding failed.
      * @param defaultValue The default value in case the binding false.

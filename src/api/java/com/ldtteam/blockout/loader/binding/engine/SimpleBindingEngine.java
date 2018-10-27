@@ -58,7 +58,7 @@ public class SimpleBindingEngine implements IBindingEngine
         }
         catch (Exception ex)
         {
-            Log.getLogger().error("Failed to create binding.", ex);
+            Log.getLogger().error("Failed to build binding.", ex);
             return Optional.of(DependencyObjectHelper.createFromValue(defaultValue));
         }
 

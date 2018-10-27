@@ -3,28 +3,28 @@ package com.ldtteam.blockout.element.values;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ControlDirection
+public enum Orientation
 {
     TOP_BOTTOM("tb", "topbottom", "top_bottom", "top bottom", "vertical"),
     BOTTOM_TOP("bt", "bottomtop", "bottom_top", "bottom top", "vertical_inverted"),
     LEFT_RIGHT("lr", "leftright", "left_right", "left right", "horizontal"),
     RIGHT_LEFT("rl", "rightleft", "right_left", "right left", "horizontal_inverted");
 
-    private static final Map<String, ControlDirection> shorthandMap = new HashMap<>();
+    private static final Map<String, Orientation> shorthandMap = new HashMap<>();
     static
     {
-        for (final ControlDirection controlDirection : ControlDirection.values())
+        for (final Orientation orientation : Orientation.values())
         {
-            for (final String shortHand : controlDirection.getShortHands())
+            for (final String shortHand : orientation.getShortHands())
             {
-                shorthandMap.put(shortHand, controlDirection);
+                shorthandMap.put(shortHand, orientation);
             }
         }
     }
 
     private final String[] shortHands;
 
-    ControlDirection(final String... shortHands)
+    Orientation(final String... shortHands)
     {
         if (shortHands.length == 0)
         {
@@ -34,11 +34,11 @@ public enum ControlDirection
         this.shortHands = shortHands;
     }
 
-    public static ControlDirection fromString(final String string)
+    public static Orientation fromString(final String string)
     {
         if (!shorthandMap.containsKey(string))
         {
-            throw new IllegalArgumentException("Not a valid shorthand for a ControlDirection");
+            throw new IllegalArgumentException("Not a valid shorthand for a Orientation");
         }
 
         return shorthandMap.get(string);

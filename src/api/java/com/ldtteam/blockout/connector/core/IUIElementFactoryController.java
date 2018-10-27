@@ -18,7 +18,7 @@ public interface IUIElementFactoryController
 
     /**
      * Creates a {@link IUIElement} from the given {@link IUIElementData}.
-     * @param data The {@link IUIElementData} to create the {@link IUIElement} from.
+     * @param data The {@link IUIElementData} to build the {@link IUIElement} from.
      * @return The {@link IUIElement} that has been created using the given {@link IUIElementData}.
      */
     @NotNull

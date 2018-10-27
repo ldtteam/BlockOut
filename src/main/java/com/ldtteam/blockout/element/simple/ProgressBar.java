@@ -7,7 +7,7 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
-import com.ldtteam.blockout.element.values.ControlDirection;
+import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.management.update.IUpdateManager;
@@ -39,7 +39,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     @NotNull
     private IDependencyObject<Double>           max;
     @Nonnull
-    private IDependencyObject<ControlDirection> orientation;
+    private IDependencyObject<Orientation>      orientation;
 
     public ProgressBar(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -65,7 +65,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
       @NotNull final IDependencyObject<Double> value,
       @NotNull final IDependencyObject<Double> min,
       @NotNull final IDependencyObject<Double> max,
-      @NotNull final IDependencyObject<ControlDirection> orientation)
+      @NotNull final IDependencyObject<Orientation> orientation)
     {
         super(KEY_PROGRESS_BAR, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
 
@@ -261,12 +261,12 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     }
 
     @NotNull
-    public ControlDirection getOrientation()
+    public Orientation getOrientation()
     {
         return orientation.get(this);
     }
 
-    public void setOrientation(@NotNull final ControlDirection orientation)
+    public void setOrientation(@NotNull final Orientation orientation)
     {
         this.orientation.set(this, orientation);
     }
@@ -339,12 +339,12 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withDependentOrientation(@NotNull final IDependencyObject<ControlDirection> orientation)
+        public ProgressBarConstructionDataBuilder withDependentOrientation(@NotNull final IDependencyObject<Orientation> orientation)
         {
             return withDependency("orientation", orientation);
         }
 
-        public ProgressBarConstructionDataBuilder withOrientation(@NotNull final ControlDirection orientation)
+        public ProgressBarConstructionDataBuilder withOrientation(@NotNull final Orientation orientation)
         {
             return withDependency("orientation", DependencyObjectHelper.createFromValue(orientation));
         }
@@ -389,7 +389,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
             final IDependencyObject<Double> min = elementData.getBoundDoubleAttribute(CONST_MIN);
             final IDependencyObject<Double> max = elementData.getBoundDoubleAttribute(CONST_MAX);
             final IDependencyObject<Double> value = elementData.getBoundDoubleAttribute(CONST_VALUE);
-            final IDependencyObject<ControlDirection> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION);
+            final IDependencyObject<Orientation> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION);
 
             return new ProgressBar(
               style,

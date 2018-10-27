@@ -1,13 +1,26 @@
 package com.ldtteam.blockout.loader.factory;
 
+import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.values.Alignment;
+import com.ldtteam.blockout.element.values.AxisDistance;
+import com.ldtteam.blockout.element.values.AxisDistanceBuilder;
+import com.ldtteam.blockout.element.values.Orientation;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.util.math.BoundingBox;
+import com.ldtteam.blockout.util.math.Vector2d;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+@SuppressWarnings("unchecked")
 public final class BaseValueComponentConverters
 {
 
@@ -16,8 +29,9 @@ public final class BaseValueComponentConverters
     public static final class StringConverter implements IUIElementDataComponentConverter<String>
     {
 
+        @NotNull
         @Override
-        public String readFromElement(@NotNull final IUIElementDataComponent component)
+        public String readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
             if(!component.isString())
                 throw new IllegalArgumentException("Required a component of type string.");
@@ -39,8 +53,9 @@ public final class BaseValueComponentConverters
     public static final class BooleanConverter implements IUIElementDataComponentConverter<Boolean>
     {
 
+        @NotNull
         @Override
-        public Boolean readFromElement(@NotNull final IUIElementDataComponent component)
+        public Boolean readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
             if(!component.isBool())
                 throw new IllegalArgumentException("Required a component of type boolean.");
@@ -62,8 +77,9 @@ public final class BaseValueComponentConverters
     public static final class DoubleConverter implements IUIElementDataComponentConverter<Double>
     {
 
+        @NotNull
         @Override
-        public Double readFromElement(@NotNull final IUIElementDataComponent component)
+        public Double readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
             if(!component.isNumber())
                 throw new IllegalArgumentException("Required a component of type double.");
@@ -85,8 +101,9 @@ public final class BaseValueComponentConverters
     public static final class FloatConverter implements IUIElementDataComponentConverter<Float>
     {
 
+        @NotNull
         @Override
-        public Float readFromElement(@NotNull final IUIElementDataComponent component)
+        public Float readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
             if(!component.isNumber())
                 throw new IllegalArgumentException("Required a component of type float.");
@@ -108,8 +125,9 @@ public final class BaseValueComponentConverters
     public static final class IntegerConverter implements IUIElementDataComponentConverter<Integer>
     {
 
+        @NotNull
         @Override
-        public Integer readFromElement(@NotNull final IUIElementDataComponent component)
+        public Integer readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
             if(!component.isNumber())
                 throw new IllegalArgumentException("Required a component of type integer.");
@@ -128,26 +146,183 @@ public final class BaseValueComponentConverters
         }
     }
 
-    public static final class ListConverter implements IUIElementDataComponentConverter<List<IUIElementDataComponent>>
+    public static final class ResourceLocationConverter implements IUIElementDataComponentConverter<ResourceLocation>
     {
 
+        @NotNull
         @Override
-        public List<IUIElementDataComponent> readFromElement(@NotNull final IUIElementDataComponent component)
+        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
         {
-            if(!component.isList())
-                throw new IllegalArgumentException("Required a component of type list.");
-
-            return component.getAsList();
+            return new ResourceLocation(component.getAsString());
         }
 
         @Override
         public IUIElementDataComponent writeToElement(
-          @NotNull final List<IUIElementDataComponent> value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+          @NotNull final ResourceLocation value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.LIST);
-            newInstance.setList(value);
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.toString());
 
             return newInstance;
         }
     }
+
+    public static final class EnumValueConverter<E extends Enum<E>> implements IUIElementDataComponentConverter<E>
+    {
+
+        @NotNull
+        @Override
+        public E readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            final Class<E> clz = (Class<E>) params[0];
+            return E.valueOf(clz, component.getAsString());
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final E value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.name());
+
+            return newInstance;
+        }
+    }
+
+    public static final class EnumSetValueConverter<E extends Enum<E>> implements IUIElementDataComponentConverter<EnumSet<E>>
+    {
+
+        @NotNull
+        @Override
+        public EnumSet<E> readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            final Class<E> clz = (Class<E>) params[0];
+            final String contents = component.getAsString();
+
+            return Arrays.stream(contents.split(",")).map(s -> E.valueOf(clz, s)).collect(Collectors.toCollection(() ->EnumSet.noneOf(clz)));
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final EnumSet<E> value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.stream().map(Enum::name).reduce((s1, s2)->s1 + "," + s2).orElse(""));
+
+            return newInstance;
+        }
+    }
+
+
+    public static final class AxisDistanceConverter implements IUIElementDataComponentConverter<AxisDistance>
+    {
+        @NotNull
+        @Override
+        public AxisDistance readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            final AxisDistanceBuilder builder = new AxisDistanceBuilder();
+            builder.readFromString(sourceData.getMetaData().getParent().map(IUIElement::getElementSize).orElse(new Vector2d()), component.getAsString());
+            
+            return builder.build();
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final AxisDistance value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.toString());
+            
+            return newInstance;
+        }
+    }
+    
+    public static final class AlignmentConverter implements IUIElementDataComponentConverter<EnumSet<Alignment>>
+    {
+
+        @NotNull
+        @Override
+        public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            return component.isNumber()
+                     ? Alignment.fromInt(component.getAsInteger())
+                     : Alignment.fromString(component.getAsString());
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final EnumSet<Alignment> value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
+            newInstance.setInteger(Alignment.toInt(value));
+
+            return newInstance;
+        }
+    }
+    
+    public final class OrientationConverter implements IUIElementDataComponentConverter<Orientation>
+    {
+
+        @NotNull
+        @Override
+        public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            return Orientation.fromString(component.getAsString());
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final Orientation value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.toString());
+            
+            return newInstance;
+        }
+    }
+    
+    public final class Vector2dConverter implements IUIElementDataComponentConverter<Vector2d>
+    {
+
+        @NotNull
+        @Override
+        public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            return Vector2d.fromString(component.getAsString());
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final Vector2d value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.toString());
+            
+            return newInstance;
+        }
+    }
+
+    public final class BoundingBoxConverter implements IUIElementDataComponentConverter<BoundingBox>
+    {
+
+        @NotNull
+        @Override
+        public BoundingBox readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            return BoundingBox.fromString(component.getAsString());
+        }
+
+        @Override
+        public IUIElementDataComponent writeToElement(
+          @NotNull final BoundingBox value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        {
+            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            newInstance.setString(value.toString());
+
+            return newInstance;
+        }
+    }
+
+
+    
 }

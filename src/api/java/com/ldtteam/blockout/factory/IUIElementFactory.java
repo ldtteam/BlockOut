@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Interface describing classes that can create a new {@link IUIElement} from a {@link IUIElementData} instance.
+ * Interface describing classes that can build a new {@link IUIElement} from a {@link IUIElementData} instance.
  *
  * @param <U> The type of {@link IUIElement} it creates
  */

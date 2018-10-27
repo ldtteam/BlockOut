@@ -1,5 +1,10 @@
 package com.ldtteam.blockout.proxy;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.inject.Module;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
 import com.ldtteam.blockout.connector.common.CommonLoaderManager;
 import com.ldtteam.blockout.connector.core.IGuiController;
@@ -36,12 +41,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
+import java.util.List;
+import java.util.Set;
 
 public class CommonProxy implements IProxy
 {
     private final ServerGuiController     controller;
     private final CommonLoaderManager     commonLoaderManager;
     private final CommonFactoryController commonFactoryController;
+    private final Set<Module>             factoryInjectionModules = Sets.newHashSet();
 
     public CommonProxy()
     {
@@ -191,5 +199,18 @@ public class CommonProxy implements IProxy
     public IBindingEngine getBindingEngine()
     {
         return SimpleBindingEngine.getInstance();
+    }
+
+    @NotNull
+    @Override
+    public Set<Module> getFactoryInjectionModules()
+    {
+        return ImmutableSet.copyOf(factoryInjectionModules);
+    }
+
+    @Override
+    public void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule)
+    {
+        factoryInjectionModules.add(factoryInjectionModule);
     }
 }

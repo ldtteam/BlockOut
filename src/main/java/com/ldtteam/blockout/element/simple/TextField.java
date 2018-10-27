@@ -69,7 +69,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private Event<TextField, TextFieldEnterEventArgs> onEnter = new Event<>(TextField.class, TextFieldEnterEventArgs.class);
 
     /**
-     * Public constructor to create textField.
+     * Public constructor to build textField.
      *
      * @param style  the used style.
      * @param id     the unique id.

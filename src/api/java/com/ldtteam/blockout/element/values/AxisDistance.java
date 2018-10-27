@@ -65,7 +65,7 @@ public final class AxisDistance
         final Optional<Double> right = this.right.map(aDouble -> aDouble - delta.getX());
         final Optional<Double> bottom = this.bottom.map(aDouble -> aDouble - delta.getY());
 
-        return new AxisDistanceBuilder().setLeft(left).setTop(top).setRight(right).setBottom(bottom).create();
+        return new AxisDistanceBuilder().setLeft(left).setTop(top).setRight(right).setBottom(bottom).build();
     }
 
     @Override
