@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.common.definition.loader.CommonResourceLocationBasedGuiDefinitionLoader;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;

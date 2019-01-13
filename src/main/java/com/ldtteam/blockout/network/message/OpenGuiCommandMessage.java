@@ -6,6 +6,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;

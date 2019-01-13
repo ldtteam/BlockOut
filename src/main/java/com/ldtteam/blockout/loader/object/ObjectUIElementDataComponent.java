@@ -1,5 +1,8 @@
 package com.ldtteam.blockout.loader.object;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
@@ -8,17 +11,37 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ObjectUIElementDataComponent implements IUIElementDataComponent, Serializable
 {
-    private Serializable serializable;
+    private       Serializable serializable;
+    private final Injector     injector;
+
+    public ObjectUIElementDataComponent()
+    {
+        this.injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
+    }
+
+    public ObjectUIElementDataComponent(final Injector injector)
+    {
+        this.injector = injector;
+    }
 
     public ObjectUIElementDataComponent(final Serializable serializable)
     {
         this.serializable = serializable;
+        this.injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
+    }
+
+    public ObjectUIElementDataComponent(final Serializable serializable, final Injector injector)
+    {
+        this.serializable = serializable;
+        this.injector = injector;
     }
 
     @Override
@@ -72,11 +95,11 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
     @Override
     public List<IUIElementDataComponent> getAsList()
     {
-        return (List<IUIElementDataComponent>) serializable;
+        return ((List<IUIElementDataComponent>) serializable);
     }
 
     @Override
-    public void setList(@NotNull final List<IUIElementDataComponent> list) throws IllegalArgumentException
+    public void setList(@NotNull final List<? extends IUIElementDataComponent> list) throws IllegalArgumentException
     {
         serializable = (Serializable) list.stream().filter(e -> e instanceof ObjectUIElementDataComponent).collect(Collectors.toList());
     }
@@ -84,24 +107,42 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
     @Override
     public Map<String, IUIElementDataComponent> getAsMap()
     {
-        return (Map<String, IUIElementDataComponent>) serializable;
+        return ((Map<String, IUIElementDataComponent>) serializable);
     }
 
     @Override
-    public void setMap(@NotNull final Map<String, IUIElementDataComponent> map) throws IllegalArgumentException
+    public void setMap(@NotNull final Map<String, ? extends IUIElementDataComponent> map) throws IllegalArgumentException
     {
         serializable = (Serializable) map.entrySet().stream().filter(e -> e.getValue() instanceof ObjectUIElementDataComponent).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
-    public IUIElementData toIUIElementData(@Nullable final IUIElementHost parent)
+    public IUIElementData<?> toIUIElementData(@Nullable final IUIElementHost parent)
     {
-        return new ObjectUIElementData(object, metaData, injector);
+        final Map<String, ObjectUIElementDataComponent> map = new HashMap<>();
+        getAsMap().forEach((key, value) -> map.put(key, (ObjectUIElementDataComponent) value));
+
+        return new ObjectUIElementData(map, new ObjectUIElementMetaData(map, parent), injector);
     }
 
     @Override
     public ComponentType getType()
     {
-        return null;
+        if (serializable instanceof String)
+            return ComponentType.STRING;
+
+        if (serializable instanceof Number)
+            return ComponentType.NUMBER;
+
+        if (serializable instanceof Boolean)
+            return ComponentType.BOOL;
+
+        if (serializable instanceof List)
+            return ComponentType.LIST;
+
+        if (serializable instanceof Map)
+            return ComponentType.COMPLEX;
+
+        return ComponentType.UNKNOWN;
     }
 }

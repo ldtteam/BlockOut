@@ -40,9 +40,6 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     @Override
     public void setString(@NotNull final String string) throws IllegalArgumentException
     {
-        if (!element.isJsonPrimitive())
-            throw new IllegalArgumentException("Can not set string.");
-
         element = new JsonPrimitive(string);
     }
 
@@ -55,18 +52,12 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     @Override
     public void setBoolean(@NotNull final Boolean bool) throws IllegalArgumentException
     {
-        if (!element.isJsonPrimitive())
-            throw new IllegalArgumentException("Can not set boolean.");
-
         element = new JsonPrimitive(bool);
     }
 
     @Override
     public void setInteger(@NotNull final Integer integer) throws IllegalArgumentException
     {
-        if (!element.isJsonPrimitive())
-            throw new IllegalArgumentException("Can not set integer.");
-
         element = new JsonPrimitive(integer);
     }
 
@@ -79,18 +70,12 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     @Override
     public void setDouble(@NotNull final Double d) throws IllegalArgumentException
     {
-        if (!element.isJsonPrimitive())
-            throw new IllegalArgumentException("Can not set double.");
-
         element = new JsonPrimitive(d);
     }
 
     @Override
     public void setFloat(@NotNull final Float f) throws IllegalArgumentException
     {
-        if (!element.isJsonPrimitive())
-            throw new IllegalArgumentException("Can not set float.");
-
         element = new JsonPrimitive(f);
     }
 
@@ -101,11 +86,8 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     }
 
     @Override
-    public void setList(@NotNull final List<IUIElementDataComponent> list) throws IllegalArgumentException
+    public void setList(@NotNull final List<? extends IUIElementDataComponent> list) throws IllegalArgumentException
     {
-        if (!element.isJsonArray())
-            throw new IllegalArgumentException("Can not set list.");
-
         element = new JsonArray();
         list.stream()
           .filter(e -> e instanceof JsonUIElementDataComponent)
@@ -120,11 +102,8 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     }
 
     @Override
-    public void setMap(@NotNull final Map<String, IUIElementDataComponent> map) throws IllegalArgumentException
+    public void setMap(@NotNull final Map<String, ? extends IUIElementDataComponent> map) throws IllegalArgumentException
     {
-        if (!element.isJsonObject())
-            throw new IllegalArgumentException("Can not set map");
-
         element = new JsonObject();
 
         map.entrySet().stream()
@@ -133,7 +112,7 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     }
 
     @Override
-    public IUIElementData toIUIElementData(@Nullable final IUIElementHost parent)
+    public IUIElementData<?> toIUIElementData(@Nullable final IUIElementHost parent)
     {
         if (!isComplex())
             throw new IllegalStateException("Need complex Json Object for UIElementData.");

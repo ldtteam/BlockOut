@@ -37,7 +37,7 @@ public class OnMouseClickEndMessage implements IBlockOutClientToServerMessage
             return;
         }
 
-        final RootGuiElement rootGuiElement = BlockOut.getBlockOut().getProxy().getGuiController().getRoot(key);
+        final RootGuiElement rootGuiElement = (RootGuiElement) BlockOut.getBlockOut().getProxy().getGuiController().getRoot(key);
         if (rootGuiElement == null)
         {
             Log.getLogger().error("Player seems to be watching an unknown Gui.");

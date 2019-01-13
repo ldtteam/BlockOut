@@ -104,7 +104,7 @@ public interface IUIElementDataComponent
      * @param list The list to set.
      * @throws IllegalArgumentException when current component is not a List.              
      */
-    void setList(@NotNull final List<IUIElementDataComponent> list) throws IllegalArgumentException;
+    void setList(@NotNull final List<? extends IUIElementDataComponent> list) throws IllegalArgumentException;
 
     /**
      * Returns the map based representation of this component.
@@ -119,7 +119,7 @@ public interface IUIElementDataComponent
      * @param map The map to set.
      * @throws IllegalArgumentException when current component is not complex.
      */
-    void setMap(@NotNull final Map<String, IUIElementDataComponent> map) throws IllegalArgumentException;
+    void setMap(@NotNull final Map<String, ? extends IUIElementDataComponent> map) throws IllegalArgumentException;
 
     /**
      * Turns this {@link IUIElementDataComponent} into a fullblown {@link IUIElementData} by parsing the {@link IUIElementMetaData}
@@ -127,7 +127,7 @@ public interface IUIElementDataComponent
      * @param parent The parent control of the target.
      * @return The {@link IUIElementData}.
      */
-    IUIElementData toIUIElementData(@Nullable final IUIElementHost parent);
+    IUIElementData<?> toIUIElementData(@Nullable final IUIElementHost parent);
 
     /**
      * Returns the type of data stored in this data component.

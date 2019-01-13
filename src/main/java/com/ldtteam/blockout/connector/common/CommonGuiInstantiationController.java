@@ -6,6 +6,7 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.event.injector.EventHandlerInjector;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import org.jetbrains.annotations.NotNull;
 

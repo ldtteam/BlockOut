@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.loader.object.loader;
 
 import com.ldtteam.blockout.loader.ILoader;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
 import org.jetbrains.annotations.NotNull;
 

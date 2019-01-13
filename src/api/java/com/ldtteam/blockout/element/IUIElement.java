@@ -4,6 +4,7 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
@@ -45,7 +46,10 @@ public interface IUIElement
      * @see com.ldtteam.blockout.style.core.IStyleManager#getResource(ResourceLocation, ResourceLocation)
      */
     @NotNull
-    <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException;
+    default <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
+    {
+        return ProxyHolder.getInstance().getStyleManager().getResource(getStyleId(), resourceId);
+    }
 
     /**
      * Called before the drawing of the UI.

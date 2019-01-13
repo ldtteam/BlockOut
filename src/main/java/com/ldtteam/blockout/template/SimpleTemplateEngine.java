@@ -7,6 +7,7 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.template.Template;
+import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

@@ -46,17 +46,17 @@ sourceSets {
             srcDir 'src/lang/json/java'
         }
     }
-    xml {
+    /*xml {
         compileClasspath += api.compileClasspath + api.output
 
         java {
             srcDir 'src/lang/xml/java'
         }
-    }
+    }*/
     main {
         compileClasspath += api.compileClasspath + api.output
         compileClasspath += json.compileClasspath + json.output
-        compileClasspath += xml.compileClasspath + xml.output
+//        compileClasspath += xml.compileClasspath + xml.output
 
         java {
             srcDir 'src/main/java'
@@ -194,11 +194,11 @@ task jsonJar(type: Jar) {
     classifier 'lang-json'
 }
 
-task xmlJar(type: Jar) {
+/*task xmlJar(type: Jar) {
     from sourceSets.xml.output
 
     classifier 'lang-xml'
-}
+}*/
 
 task utilitiesJar(type: Jar) {
     from sourceSets.utilities.output
@@ -216,7 +216,7 @@ reobf {
     jar {}
     apiJar {}
     jsonJar {}
-    xmlJar {}
+//    xmlJar {}
     utilitiesJar {}
     testModJar {}
 }
@@ -237,7 +237,7 @@ artifacts {
     archives utilitiesJar
     archives testModJar
     archives sourceJar
-    archives xmlJar
+//    archives xmlJar
 }
 
 
@@ -274,7 +274,7 @@ curseforge {
             addArtifact javadocJar
             addArtifact testModJar
             addArtifact sourceJar
-            addArtifact xmlJar
+//            addArtifact xmlJar
         }
     }
     else

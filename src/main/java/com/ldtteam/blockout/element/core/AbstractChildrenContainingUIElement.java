@@ -11,6 +11,8 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;

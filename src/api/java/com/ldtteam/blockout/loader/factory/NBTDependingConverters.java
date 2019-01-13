@@ -32,8 +32,8 @@ public class NBTDependingConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final ItemStack value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final ItemStack value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final NBTTagCompound compound = value.writeToNBT(new NBTTagCompound());
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);
@@ -52,8 +52,8 @@ public class NBTDependingConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final IBlockState value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final IBlockState value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final NBTTagCompound compound = NBTUtil.writeBlockState(new NBTTagCompound(), value);
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);
@@ -72,8 +72,8 @@ public class NBTDependingConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Entity value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Entity value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final NBTTagCompound compound = value.writeToNBT(new NBTTagCompound());
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);

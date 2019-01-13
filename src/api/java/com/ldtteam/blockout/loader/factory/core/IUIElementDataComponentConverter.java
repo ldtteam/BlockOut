@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface IUIElementDataComponentConverter<T>
 {
@@ -20,7 +21,7 @@ public interface IUIElementDataComponentConverter<T>
      * @return The instance of T.
      */
     @NotNull
-    T readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params);
+    T readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params);
 
     /**
      * Creates a new component from the given instance of T.
@@ -30,5 +31,5 @@ public interface IUIElementDataComponentConverter<T>
      *
      * @return The new instance.
      */
-    IUIElementDataComponent writeToElement(@NotNull final T value, @NotNull Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer);
+    <C extends IUIElementDataComponent> C writeToElement(@NotNull final T value, @NotNull Function<ComponentType, C> newComponentInstanceProducer);
 }

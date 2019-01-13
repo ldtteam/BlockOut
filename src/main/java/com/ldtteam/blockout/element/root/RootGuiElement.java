@@ -10,7 +10,7 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementBuilder;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.management.IUIManager;
@@ -86,9 +86,9 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
 
         @NotNull
         @Override
-        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData, @NotNull final IBindingEngine engine)
+        public RootGuiElement readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, IUIElementDataComponent::isString, engine, Constants.Styles.CONST_DEFAULT);
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, IUIElementDataComponent::isList, engine, Constants.Styles.CONST_DEFAULT);
             final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, IUIElementDataComponent::isString, engine, EnumSet.of(Alignment.LEFT, Alignment.RIGHT));
             final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, IUIElementDataComponent::isString, engine, Dock.NONE);
             final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
@@ -118,7 +118,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
         }
 
         @Override
-        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementBuilder builder)
+        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
         {
 
         }

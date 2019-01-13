@@ -38,6 +38,7 @@ public class Constants
         {
             public static final String CONST_TYPE = "type";
             public static final String CONST_ID           = "id";
+            public static final String CONST_DATACONTEXT           = "context";
             public static final String CONST_STYLE_ID     = "style";
             public static final String CONST_ALIGNMENT    = "alignment";
             public static final String CONST_DOCK         = "dock";
@@ -46,6 +47,7 @@ public class Constants
             public static final String CONST_ELEMENT_SIZE = "size";
             public static final String CONST_VISIBLE      = "visible";
             public static final String CONST_ENABLED      = "enabled";
+            public static final String CONST_CHILDREN = "children";
         }
 
         public static class Image

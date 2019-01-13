@@ -6,12 +6,15 @@ import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementBuilder;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public class CommonFactoryController implements IUIElementFactoryController
 {
@@ -52,13 +55,19 @@ public class CommonFactoryController implements IUIElementFactoryController
 
         final IUIElementFactory<T> factory = (IUIElementFactory<T>) factoryBiMap.get(type);
 
-        final IUIElementBuilder builder = new ObjectUIElementBuilder();
-        builder.setType(type);
-        builder.addString(Constants.Controls.General.CONST_ID, element.getId());
-        builder.addResourceLocation(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId());
+        final IUIElementDataBuilder builder = new ObjectUIElementBuilder();
+
+        builder.withMetaData(buildMetaDataBuilder(element));
+
+        builder.addComponent(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId());
 
         factory.writeToElementData(element, builder);
 
         return builder.build();
+    }
+
+    private <T extends IUIElement> Consumer<IUIElementMetaDataBuilder<?>> buildMetaDataBuilder(@NotNull final T element)
+    {
+        return (metaDataBuilder) -> metaDataBuilder.withId(element.getId()).withType(element.getType());
     }
 }

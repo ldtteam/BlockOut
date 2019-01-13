@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.text.html.Option;
 import java.util.Optional;
 
-public class JsonUIElementData implements IUIElementData
+public class JsonUIElementData implements IUIElementData<JsonUIElementDataComponent>
 {
     @NotNull
     private final JsonObject object;
@@ -55,11 +55,25 @@ public class JsonUIElementData implements IUIElementData
 
     @Nullable
     @Override
-    public Optional<IUIElementDataComponent> getComponentWithName(@NotNull final String name)
+    public Optional<JsonUIElementDataComponent> getComponentWithName(@NotNull final String name)
     {
         if (object.has(name))
             return Optional.of(new JsonUIElementDataComponent(object.get(name), injector));
 
         return Optional.empty();
+    }
+
+    @Override
+    public <D extends IUIElementDataComponent> D toDataComponent(@NotNull final D toWriteInto)
+    {
+        if (toWriteInto instanceof JsonUIElementDataComponent)
+            return (D) toDataComponent();
+
+        return toWriteInto;
+    }
+
+    public JsonUIElementDataComponent toDataComponent()
+    {
+        return new JsonUIElementDataComponent(object, injector);
     }
 }

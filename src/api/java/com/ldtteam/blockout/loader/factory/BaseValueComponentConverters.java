@@ -40,10 +40,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final String value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final String value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value);
             
             return newInstance;
@@ -64,10 +64,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Boolean value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Boolean value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.BOOL);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.BOOL);
             newInstance.setBoolean(value);
 
             return newInstance;
@@ -88,10 +88,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Double value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Double value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
             newInstance.setDouble(value);
 
             return newInstance;
@@ -112,10 +112,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Float value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Float value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
             newInstance.setFloat(value);
 
             return newInstance;
@@ -136,10 +136,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Integer value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Integer value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
             newInstance.setInteger(value);
 
             return newInstance;
@@ -157,10 +157,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final ResourceLocation value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final ResourceLocation value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());
 
             return newInstance;
@@ -179,10 +179,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final E value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final E value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.name());
 
             return newInstance;
@@ -203,10 +203,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final EnumSet<E> value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final EnumSet<E> value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.stream().map(Enum::name).reduce((s1, s2)->s1 + "," + s2).orElse(""));
 
             return newInstance;
@@ -227,10 +227,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final AxisDistance value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final AxisDistance value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());
             
             return newInstance;
@@ -250,10 +250,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final EnumSet<Alignment> value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final EnumSet<Alignment> value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.NUMBER);
             newInstance.setInteger(Alignment.toInt(value));
 
             return newInstance;
@@ -271,10 +271,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Orientation value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Orientation value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());
             
             return newInstance;
@@ -292,10 +292,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final Vector2d value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final Vector2d value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());
             
             return newInstance;
@@ -313,10 +313,10 @@ public final class BaseValueComponentConverters
         }
 
         @Override
-        public IUIElementDataComponent writeToElement(
-          @NotNull final BoundingBox value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final BoundingBox value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final IUIElementDataComponent newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
+            final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());
 
             return newInstance;

@@ -7,7 +7,6 @@ import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.json.JsonLoader;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
-import com.ldtteam.blockout.loader.xml.XMLLoader;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
@@ -57,7 +56,7 @@ public class BlockOut
         NetworkManager.init();
 
         getProxy().getLoaderManager().registerLoader(new JsonLoader());
-        getProxy().getLoaderManager().registerLoader(new XMLLoader());
+        //getProxy().getLoaderManager().registerLoader(new XMLLoader());
         getProxy().getLoaderManager().registerLoader(new ObjectUIElementLoader());
 
         getProxy().getFactoryController().registerFactory(new RootGuiElement.Factory());

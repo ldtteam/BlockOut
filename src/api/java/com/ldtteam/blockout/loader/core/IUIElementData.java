@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 /**
  * Represents the raw data of a {@link IUIElement}
  */
-public interface IUIElementData
+public interface IUIElementData<C extends IUIElementDataComponent>
 {
     /**
      * Returns the factory injector.
@@ -58,8 +58,8 @@ public interface IUIElementData
      * @param name               The name of the raw data to get.
      * @param typeMatcher        A function checking a {@link IUIElementDataComponent} for the right contained type.
      * @param defaultValue       The default value.
-     * @param engine The binding engine.
-     * @param params The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param engine             The binding engine.
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
      * @param <T>                The target type.
      * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
      */
@@ -87,8 +87,8 @@ public interface IUIElementData
      * @param name               The name of the raw data to get.
      * @param typeMatcher        A function checking a {@link IUIElementDataComponent} for the right contained type.
      * @param defaultProperty    The default property.
-     * @param engine The binding engine.
-     * @param params The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param engine             The binding engine.
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
      * @param <T>                The target type.
      * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
      */
@@ -118,5 +118,13 @@ public interface IUIElementData
      * @return The optional containing the component if known.
      */
     @Nullable
-    Optional<IUIElementDataComponent> getComponentWithName(@NotNull final String name);
+    Optional<C> getComponentWithName(@NotNull final String name);
+
+    /**
+     * Writes the current element into a data component.
+     *
+     * @param toWriteInto The component to write the data into.
+     * @return The data component containing this element datas data.
+     */
+    <D extends IUIElementDataComponent> D toDataComponent(@NotNull final D toWriteInto);
 }

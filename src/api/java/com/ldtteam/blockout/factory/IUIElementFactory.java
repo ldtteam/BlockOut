@@ -2,7 +2,7 @@ package com.ldtteam.blockout.factory;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementBuilder;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -28,15 +28,15 @@ public interface IUIElementFactory<U extends IUIElement>
      * @return The {@link U} that is stored in the {@link IUIElementData}.
      */
     @NotNull
-    U readFromElementData(@NotNull final IUIElementData elementData, @NotNull final IBindingEngine engine);
+    U readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine);
 
     /**
-     * Populates the given {@link IUIElementBuilder} with the data from {@link U} so that
+     * Populates the given {@link IUIElementDataBuilder} with the data from {@link U} so that
      * the given {@link U} can be reconstructed with {@link #readFromElementData(IUIElementData, IBindingEngine)} created by
-     * the given {@link IUIElementBuilder}.
+     * the given {@link IUIElementDataBuilder}.
      *
-     * @param element The {@link U} to write into the {@link IUIElementBuilder}
-     * @param builder The {@link IUIElementBuilder} to write the {@link U} into.
+     * @param element The {@link U} to write into the {@link IUIElementDataBuilder}
+     * @param builder The {@link IUIElementDataBuilder} to write the {@link U} into.
      */
-    void writeToElementData(@NotNull final U element, @NotNull final IUIElementBuilder builder);
+    void writeToElementData(@NotNull final U element, @NotNull final IUIElementDataBuilder<?> builder);
 }

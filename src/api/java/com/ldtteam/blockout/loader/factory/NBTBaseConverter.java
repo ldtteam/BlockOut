@@ -9,7 +9,6 @@ import com.ldtteam.blockout.util.elementdata.IUIElementDataComponentStreamSuppor
 import com.ldtteam.blockout.util.nbt.NBTStreamSupport;
 import net.minecraft.nbt.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -31,7 +30,7 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
       new LinkedHashMap<>();
     private static final Map<NBTType, Function<IUIElementDataComponent, NBTBase>>                                                     TYPE_CONVERSION_FUNCTIONS =
       new EnumMap<>(NBTType.class);
-    private static final Map<NBTType, BiFunction<NBTBase, Function<ComponentType, IUIElementDataComponent>, IUIElementDataComponent>> NBT_CONVERSION_FUNCTIONS  =
+    private static final Map<NBTType, BiFunction<NBTBase, Function<ComponentType, ? extends IUIElementDataComponent>, IUIElementDataComponent>> NBT_CONVERSION_FUNCTIONS  =
       new EnumMap<>(NBTType.class);
     static
     {
@@ -67,7 +66,7 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
     {
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, NBTBaseConverter::convertFromValue);
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, NBTBaseConverter::convertFromByteArray);
-        NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, NBTBaseConverter::convertFromCompount);
+        NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, NBTBaseConverter::convertFromCompound);
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, NBTBaseConverter::convertFromValue);
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, NBTBaseConverter::convertFromValue);
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, NBTBaseConverter::convertFromValue);
@@ -87,10 +86,10 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
     }
 
     @Override
-    public IUIElementDataComponent writeToElement(
-      @NotNull final T value, @NotNull final Function<ComponentType, IUIElementDataComponent> newComponentInstanceProducer)
+    public <C extends IUIElementDataComponent> C writeToElement(
+      @NotNull final T value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
     {
-        return NBT_CONVERSION_FUNCTIONS.get(NBTType.fromNBTBase(value)).apply(value, newComponentInstanceProducer);
+        return (C) NBT_CONVERSION_FUNCTIONS.get(NBTType.fromNBTBase(value)).apply(value, newComponentInstanceProducer);
     }
 
     private static NBTType getNBTType(@NotNull final IUIElementDataComponent component) throws IllegalArgumentException
@@ -183,18 +182,18 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
         return compound;
     }
 
-    private static IUIElementDataComponent convertFromValue(@NotNull final NBTBase base, Function<ComponentType, IUIElementDataComponent> newInstanceCreator)
+    private static <C extends IUIElementDataComponent> C convertFromValue(@NotNull final NBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
-        final IUIElementDataComponent newInstance = newInstanceCreator.apply(ComponentType.STRING);
+        final C newInstance = newInstanceCreator.apply(ComponentType.STRING);
         newInstance.setString(base.toString());
 
         return newInstance;
     }
 
-    private static IUIElementDataComponent convertFromByteArray(NBTBase base, Function<ComponentType, IUIElementDataComponent> newInstanceCreator)
+    private static <C extends IUIElementDataComponent> C convertFromByteArray(NBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
         final NBTTagByteArray byteArray = (NBTTagByteArray) base;
-        final IUIElementDataComponent newInstance = newInstanceCreator.apply(ComponentType.LIST);
+        final C newInstance = newInstanceCreator.apply(ComponentType.LIST);
 
         newInstance.setList(NBTStreamSupport.streamByteArray(byteArray)
                               .map(NBTTagByte::new)
@@ -204,10 +203,10 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
         return newInstance;
     }
 
-    private static IUIElementDataComponent convertFromList(NBTBase base, Function<ComponentType, IUIElementDataComponent> newInstanceCreator)
+    private static <C extends IUIElementDataComponent> C convertFromList(NBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
         final NBTTagList listTag = (NBTTagList) base;
-        final IUIElementDataComponent newInstance = newInstanceCreator.apply(ComponentType.LIST);
+        final C newInstance = newInstanceCreator.apply(ComponentType.LIST);
 
         newInstance.setList(NBTStreamSupport.streamList(listTag)
                               .map(b -> NBT_CONVERSION_FUNCTIONS.get(NBTType.fromNBTBase(b)).apply(b, newInstanceCreator))
@@ -216,10 +215,10 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
         return newInstance;
     }
 
-    private static IUIElementDataComponent convertFromCompount(NBTBase base, Function<ComponentType, IUIElementDataComponent> newInstanceCreator)
+    private static <C extends IUIElementDataComponent> C convertFromCompound(NBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
         final NBTTagCompound compoundTag = (NBTTagCompound) base;
-        final IUIElementDataComponent newInstance = newInstanceCreator.apply(ComponentType.COMPLEX);
+        final C newInstance = newInstanceCreator.apply(ComponentType.COMPLEX);
 
         newInstance.setMap(NBTStreamSupport.streamCompound(compoundTag)
                              .map(entry -> new HashMap.SimpleImmutableEntry<>(entry.getKey(),

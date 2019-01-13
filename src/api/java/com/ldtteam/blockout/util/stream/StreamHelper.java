@@ -18,4 +18,5 @@ public final class StreamHelper
     {
         return StreamSupport.stream(array.spliterator(), false);
     }
+
 }
