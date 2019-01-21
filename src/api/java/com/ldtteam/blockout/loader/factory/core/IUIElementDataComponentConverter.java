@@ -13,6 +13,14 @@ public interface IUIElementDataComponentConverter<T>
 {
 
     /**
+     * Checks if the given component is readable by this converter.
+     *
+     * @param component The component to check.
+     * @return True when this converter can read the element, false when not.
+     */
+    boolean matchesInputTypes(@NotNull final IUIElementDataComponent component);
+
+    /**
      * Creates a new Instance of T from the given component.
      *
      * @param component The component to read from.

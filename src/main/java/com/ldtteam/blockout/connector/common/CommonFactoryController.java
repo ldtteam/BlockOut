@@ -9,7 +9,9 @@ import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
+import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
+import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -41,10 +43,18 @@ public class CommonFactoryController implements IUIElementFactoryController
         return factoryBiMap.get(type).readFromElementData(data, SimpleBindingEngine.getInstance());
     }
 
-    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public <T extends IUIElement> IUIElementData getDataFromElement(@NotNull final T element)
+    {
+        return getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
+    }
+
+    @SuppressWarnings("unchecked")
+    @NotNull
+    @Override
+    public <T extends IUIElement, C extends IUIElementDataComponent, D extends IUIElementData<C>, B extends IUIElementDataBuilder<D>> D getDataFromElementWithBuilder(
+      @NotNull final T element, @NotNull final B builder)
     {
         final ResourceLocation type = element.getType();
 
@@ -54,8 +64,6 @@ public class CommonFactoryController implements IUIElementFactoryController
         }
 
         final IUIElementFactory<T> factory = (IUIElementFactory<T>) factoryBiMap.get(type);
-
-        final IUIElementDataBuilder builder = new ObjectUIElementBuilder();
 
         builder.withMetaData(buildMetaDataBuilder(element));
 

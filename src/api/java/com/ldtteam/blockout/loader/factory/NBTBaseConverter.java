@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataComponentConverter<T>
+public abstract class NBTBaseConverter<T extends NBTBase> implements IUIElementDataComponentConverter<T>
 {
     private static final Pattern DOUBLE_PATTERN_NOSUFFIX = Pattern.compile("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?", 2);
     private static final Pattern DOUBLE_PATTERN          = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d", 2);
@@ -75,7 +75,16 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, NBTBaseConverter::convertFromList);
         NBT_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, NBTBaseConverter::convertFromValue);
     }
+    
+    private final NBTType type;
 
+    protected NBTBaseConverter(final NBTType type) {this.type = type;}
+
+    @Override
+    public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+    {
+        return getNBTType(component) == type;
+    }
 
     @NotNull
     @Override
@@ -226,5 +235,85 @@ public class NBTBaseConverter<T extends NBTBase> implements IUIElementDataCompon
                              .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
         return newInstance;
+    }
+
+    public static final class ByteConverter extends NBTBaseConverter<NBTTagByte>
+    {
+        public ByteConverter()
+        {
+            super(NBTType.TAG_BYTE);
+        }    
+    }
+
+    public static final class ShortConverter extends NBTBaseConverter<NBTTagShort>
+    {
+        public ShortConverter()
+        {
+            super(NBTType.TAG_SHORT);
+        }
+    }
+
+    public static final class IntConverter extends NBTBaseConverter<NBTTagInt>
+    {
+        public IntConverter()
+        {
+            super(NBTType.TAG_INT);
+        }
+    }
+
+    public static final class LongConverter extends NBTBaseConverter<NBTTagLong>
+    {
+        public LongConverter()
+        {
+            super(NBTType.TAG_LONG);
+        }
+    }
+
+    public static final class FloatConverter extends NBTBaseConverter<NBTTagFloat>
+    {
+        public FloatConverter()
+        {
+            super(NBTType.TAG_FLOAT);
+        }
+    }
+
+    public static final class DoubleConverter extends NBTBaseConverter<NBTTagDouble>
+    {
+        public DoubleConverter()
+        {
+            super(NBTType.TAG_DOUBLE);
+        }
+    }
+
+    public static final class ByteArrayConverter extends NBTBaseConverter<NBTTagByteArray>
+    {
+        public ByteArrayConverter()
+        {
+            super(NBTType.TAG_BYTE_ARRAY);
+        }
+    }
+
+    public static final class StringConverter extends NBTBaseConverter<NBTTagString>
+    {
+        public StringConverter()
+        {
+            super(NBTType.TAG_STRING);
+        }
+    }
+
+    public static final class ListConverter extends NBTBaseConverter<NBTTagList>
+    {
+        public ListConverter()
+        {
+            super(NBTType.TAG_LIST);
+        }
+    }
+
+    public static final class CompoundConverter extends NBTBaseConverter<NBTTagCompound>
+    {
+        public CompoundConverter()
+        {
+            super(NBTType.TAG_COMPOUND);
+        }
     }
 }

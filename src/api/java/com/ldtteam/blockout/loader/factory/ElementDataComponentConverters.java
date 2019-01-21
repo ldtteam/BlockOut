@@ -22,6 +22,12 @@ public final class ElementDataComponentConverters
 
     public static final class ElementDataConverter implements IUIElementDataComponentConverter<IUIElementData<?>>
     {
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isComplex();
+        }
+
         @NotNull
         @Override
         public IUIElementData readFromElement(
@@ -41,6 +47,12 @@ public final class ElementDataComponentConverters
 
     public static final class ListElementDataConverter implements IUIElementDataComponentConverter<List<IUIElementData<?>>>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isList();
+        }
 
         @NotNull
         @Override

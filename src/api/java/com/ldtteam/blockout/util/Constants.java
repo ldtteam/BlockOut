@@ -48,6 +48,7 @@ public class Constants
             public static final String CONST_VISIBLE      = "visible";
             public static final String CONST_ENABLED      = "enabled";
             public static final String CONST_CHILDREN = "children";
+            public static final String CONST_CONTEXT = "context";
         }
 
         public static class Image

@@ -56,7 +56,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      * Returns a dependency target from raw data with a default value.
      *
      * @param name               The name of the raw data to get.
-     * @param typeMatcher        A function checking a {@link IUIElementDataComponent} for the right contained type.
      * @param defaultValue       The default value.
      * @param engine             The binding engine.
      * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
@@ -65,7 +64,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      */
     default <T> IDependencyObject<T> getFromRawDataWithDefault(
       @NotNull final String name,
-      @NotNull final Predicate<IUIElementDataComponent> typeMatcher,
       @NotNull final IBindingEngine engine,
       @Nullable final T defaultValue,
       @NotNull final Object... params
@@ -73,7 +71,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     {
         return getFromRawDataWithProperty(
           name,
-          typeMatcher,
           engine,
           PropertyCreationHelper.createNoneSettableFromStaticValue(defaultValue),
           defaultValue,
@@ -85,7 +82,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      * Returns a dependency target from raw data with a default value.
      *
      * @param name               The name of the raw data to get.
-     * @param typeMatcher        A function checking a {@link IUIElementDataComponent} for the right contained type.
      * @param defaultProperty    The default property.
      * @param engine             The binding engine.
      * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
@@ -94,7 +90,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      */
     default <T> IDependencyObject<T> getFromRawDataWithProperty(
       @NotNull final String name,
-      @NotNull final Predicate<IUIElementDataComponent> typeMatcher,
       @NotNull final IBindingEngine engine,
       @NotNull final Property<T> defaultProperty,
       @Nullable final T defaultValue,
@@ -103,10 +98,11 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     {
         return getComponentWithName(name)
           .map(targetComponent -> engine.attemptBind(targetComponent, defaultValue).orElseGet(() -> {
-              if (!typeMatcher.test(targetComponent))
+              final IUIElementDataComponentConverter<T> componentConverter = getFactoryInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>(){}));
+
+              if (!componentConverter.matchesInputTypes(targetComponent))
                   return DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue);
 
-              final IUIElementDataComponentConverter<T> componentConverter = getFactoryInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>(){}));
               return DependencyObjectHelper.createFromValue(componentConverter.readFromElement(targetComponent, this, params));
           }))
           .orElse(DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue));

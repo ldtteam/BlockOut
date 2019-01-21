@@ -11,16 +11,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
 public class NBTDependingConverters
 {
-    private static final NBTBaseConverter<NBTTagCompound> COMPOUND_NBT_BASE_CONVERTER = new NBTBaseConverter<>();
+    private static final NBTBaseConverter<NBTTagCompound> COMPOUND_NBT_BASE_CONVERTER = new NBTBaseConverter.CompoundConverter();
 
     public static final class ItemStackConverter implements IUIElementDataComponentConverter<ItemStack>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return COMPOUND_NBT_BASE_CONVERTER.matchesInputTypes(component);
+        }
 
         @NotNull
         @Override
@@ -42,6 +47,11 @@ public class NBTDependingConverters
 
     public static final class BlockStateConverter implements IUIElementDataComponentConverter<IBlockState>
     {
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return COMPOUND_NBT_BASE_CONVERTER.matchesInputTypes(component);
+        }
 
         @NotNull
         @Override
@@ -62,6 +72,11 @@ public class NBTDependingConverters
 
     public static final class EntityConverter implements IUIElementDataComponentConverter<Entity>
     {
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return COMPOUND_NBT_BASE_CONVERTER.matchesInputTypes(component);
+        }
 
         @NotNull
         @Override

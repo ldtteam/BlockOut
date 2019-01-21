@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
@@ -62,9 +63,10 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     }
 
     @Override
-    public IUIElementDataBuilder<ObjectUIElementData> addChild(final ObjectUIElementData elementData)
+    public IUIElementDataBuilder<ObjectUIElementData> addChild(final IUIElement element)
     {
-        this.children.add(elementData);
+        final ObjectUIElementData data = BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
+        this.children.add(data);
         return this;
     }
 

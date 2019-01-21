@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.element.root;
 
+import com.google.common.collect.Lists;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
@@ -21,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
@@ -88,15 +90,15 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
         @Override
         public RootGuiElement readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, IUIElementDataComponent::isList, engine, Constants.Styles.CONST_DEFAULT);
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, IUIElementDataComponent::isString, engine, EnumSet.of(Alignment.LEFT, Alignment.RIGHT));
-            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, IUIElementDataComponent::isString, engine, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, Constants.Styles.CONST_DEFAULT);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.RIGHT));
+            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, new AxisDistance());
+            final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, new Vector2d());
+            final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, new AxisDistance());
+            final IDependencyObject<Object> dataContext = elementData.getFromRawDataWithDefault(CONST_CONTEXT, engine, new Object());
+            final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true);
+            final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true);
 
             RootGuiElement element = new RootGuiElement(
               style,
@@ -109,42 +111,29 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
               visible,
               enabled);
 
-            elementData.getChildren(element).forEach(childData -> {
-                IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                element.put(child.getId(), child);
-            });
+            elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), element)
+              .get(element)
+              .forEach(childData -> {
+                  IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                  element.put(child.getId(), child);
+              });
 
             return element;
         }
 
         @Override
-        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
-        {
-
-        }
-
-        @NotNull
-        @Override
-        public RootGuiElement readFromElementData(@NotNull final IUIElementData elementData)
-        {
-
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder builder)
+        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder<?> builder)
         {
             builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled());
+              .addComponent(CONST_ALIGNMENT, element.getAlignment())
+              .addComponent(CONST_DOCK, element.getDock())
+              .addComponent(CONST_MARGIN, element.getMargin())
+              .addComponent(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addComponent(CONST_PADDING, element.getPadding())
+              .addComponent(CONST_VISIBLE, element.isVisible())
+              .addComponent(CONST_ENABLED, element.isEnabled());
 
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
+            element.values().forEach(builder::addChild);
         }
     }
 

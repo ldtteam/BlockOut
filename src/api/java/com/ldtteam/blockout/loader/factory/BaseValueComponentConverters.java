@@ -29,6 +29,12 @@ public final class BaseValueComponentConverters
     public static final class StringConverter implements IUIElementDataComponentConverter<String>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
+
         @NotNull
         @Override
         public String readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -52,6 +58,12 @@ public final class BaseValueComponentConverters
 
     public static final class BooleanConverter implements IUIElementDataComponentConverter<Boolean>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isBool();
+        }
 
         @NotNull
         @Override
@@ -77,6 +89,12 @@ public final class BaseValueComponentConverters
     public static final class DoubleConverter implements IUIElementDataComponentConverter<Double>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isNumber();
+        }
+
         @NotNull
         @Override
         public Double readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -100,6 +118,12 @@ public final class BaseValueComponentConverters
 
     public static final class FloatConverter implements IUIElementDataComponentConverter<Float>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isNumber();
+        }
 
         @NotNull
         @Override
@@ -125,6 +149,12 @@ public final class BaseValueComponentConverters
     public static final class IntegerConverter implements IUIElementDataComponentConverter<Integer>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isNumber();
+        }
+
         @NotNull
         @Override
         public Integer readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -149,6 +179,12 @@ public final class BaseValueComponentConverters
     public static final class ResourceLocationConverter implements IUIElementDataComponentConverter<ResourceLocation>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
+
         @NotNull
         @Override
         public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -169,6 +205,12 @@ public final class BaseValueComponentConverters
 
     public static final class EnumValueConverter<E extends Enum<E>> implements IUIElementDataComponentConverter<E>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
 
         @NotNull
         @Override
@@ -191,6 +233,12 @@ public final class BaseValueComponentConverters
 
     public static final class EnumSetValueConverter<E extends Enum<E>> implements IUIElementDataComponentConverter<EnumSet<E>>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
 
         @NotNull
         @Override
@@ -216,6 +264,12 @@ public final class BaseValueComponentConverters
 
     public static final class AxisDistanceConverter implements IUIElementDataComponentConverter<AxisDistance>
     {
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
+
         @NotNull
         @Override
         public AxisDistance readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -240,6 +294,12 @@ public final class BaseValueComponentConverters
     public static final class AlignmentConverter implements IUIElementDataComponentConverter<EnumSet<Alignment>>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isNumber() || component.isString();
+        }
+
         @NotNull
         @Override
         public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -263,6 +323,12 @@ public final class BaseValueComponentConverters
     public final class OrientationConverter implements IUIElementDataComponentConverter<Orientation>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
+
         @NotNull
         @Override
         public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -284,6 +350,12 @@ public final class BaseValueComponentConverters
     public final class Vector2dConverter implements IUIElementDataComponentConverter<Vector2d>
     {
 
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
+
         @NotNull
         @Override
         public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
@@ -304,6 +376,12 @@ public final class BaseValueComponentConverters
 
     public final class BoundingBoxConverter implements IUIElementDataComponentConverter<BoundingBox>
     {
+
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isString();
+        }
 
         @NotNull
         @Override
