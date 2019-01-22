@@ -109,6 +109,33 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     }
 
     /**
+     * Returns raw data with a default value if not found
+     *
+     * @param name               The name of the raw data to get.
+     * @param defaultValue       The default value.
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param <T>                The target type.
+     * @return The converted raw data.
+     */
+    default <T> T getRawWithoutBinding(
+      @NotNull final String name,
+      @Nullable final T defaultValue,
+      @NotNull final Object... params
+    )
+    {
+        return getComponentWithName(name)
+          .map(targetComponent -> {
+              final IUIElementDataComponentConverter<T> componentConverter = getFactoryInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>(){}));
+
+              if (!componentConverter.matchesInputTypes(targetComponent))
+                return defaultValue;
+
+              return componentConverter.readFromElement(targetComponent, this, params);
+          })
+          .orElse(defaultValue);
+    }
+
+    /**
      * Returns a component with the given name.
      * @param name The name of the component.
      * @return The optional containing the component if known.

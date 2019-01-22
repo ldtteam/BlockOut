@@ -11,7 +11,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import static com.ldtteam.blockout.util.Constants.Resources.CONST_IMAGE_RESOURCE_TYPE;
+import static com.ldtteam.blockout.util.Constants.ResourceTypes.CONST_IMAGE_RESOURCE_TYPE;
 
 public class ImageResource implements IDiskResource
 {

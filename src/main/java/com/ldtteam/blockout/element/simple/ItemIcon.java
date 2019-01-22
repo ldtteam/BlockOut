@@ -9,10 +9,14 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
@@ -20,12 +24,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.ItemIcon.CONST_ICON;
 import static com.ldtteam.blockout.util.Constants.Controls.ItemIcon.KEY_ITEM;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -43,9 +49,9 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
     }
 
     public ItemIcon(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -55,7 +61,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<ResourceLocation> iconResource)
     {
-        super(KEY_ITEM, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_ITEM, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
     }
 
@@ -136,55 +142,36 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
 
     }
 
-    public static class Factory implements IUIElementFactory<ItemIcon>
+    public static class Factory extends AbstractSimpleUIElementFactory<ItemIcon>
     {
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, MISSING);
+
+                final ItemIcon element = new ItemIcon(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  icon
+                );
+
+                return element;
+            }, (element, builder) -> builder.addComponent(CONST_ICON, element.getIconResource()));
+        }
+
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_ITEM;
-        }
-
-        @NotNull
-        @Override
-        public ItemIcon readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> icon = elementData.getBoundResourceLocationAttribute(CONST_ICON);
-
-            return new ItemIcon(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              dataContext,
-              visible,
-              enabled,
-              icon);
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final ItemIcon element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_ICON, element.getIconResource());
         }
     }
 }

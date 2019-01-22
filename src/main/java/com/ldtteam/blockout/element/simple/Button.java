@@ -6,12 +6,16 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
@@ -19,6 +23,7 @@ import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -26,6 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.function.Predicate;
@@ -33,6 +39,8 @@ import java.util.function.Supplier;
 
 import static com.ldtteam.blockout.util.Constants.Controls.Button.*;
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
+import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
@@ -63,14 +71,14 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     }
 
     public Button(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
-      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
@@ -79,7 +87,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
       @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
       @NotNull final IDependencyObject<Boolean> clicked)
     {
-        super(KEY_BUTTON, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_BUTTON, styleId, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.normalBackgroundImageResource = normalBackgroundImageResource;
         this.clickedBackgroundImageResource = clickedBackgroundImageResource;
@@ -316,81 +324,47 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
     }
 
-    public static class Factory implements IUIElementFactory<Button>
+    public static class Factory extends AbstractChildrenContainingUIElementFactory<Button>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CLICKED_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<Boolean> clicked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CLICKED, engine, false);
+
+                final Button element = new Button(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  padding,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  defaultBackgroundImage,
+                  clickedBackgroundImage,
+                  disabledBackgroundImage,
+                  clicked);
+
+                return element;
+            }, (element, builder) -> builder
+              .addComponent(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
+              .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
+              .addComponent(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
+              .addComponent(CONST_INITIALLY_CLICKED, element.isClicked()));
+        }
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_BUTTON;
-        }
-
-        @NotNull
-        @Override
-        public Button readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DEFAULT_BACKGROUND_IMAGE);
-            final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_CLICKED_BACKGROUND_IMAGE);
-            final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getBoundResourceLocationAttribute(CONST_DISABLED_BACKGROUND_IMAGE);
-            final IDependencyObject<Boolean> clicked = elementData.getBoundBooleanAttribute(CONST_INITIALLY_CLICKED, false);
-
-
-            final Button button = new Button(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              padding,
-              dataContext,
-              visible,
-              enabled,
-              defaultBackgroundImage,
-              clickedBackgroundImage,
-              disabledBackgroundImage,
-              clicked);
-
-            elementData.getChildren(button).forEach(childData -> {
-                IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                button.put(child.getId(), child);
-            });
-
-            return button;
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Button element, @NotNull final IUIElementDataBuilder builder)
-        {
-
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
-              .addResourceLocation(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
-              .addResourceLocation(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
-              .addBoolean(CONST_INITIALLY_CLICKED, element.isClicked());
-
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
         }
     }
 

@@ -20,7 +20,7 @@ public class TemplateResource implements IResource
         @Override
         public String getTypeId()
         {
-            return Constants.Resources.CONST_TEMPLATE_RESOURCE_TYPE;
+            return Constants.ResourceTypes.CONST_TEMPLATE_RESOURCE_TYPE;
         }
 
         @Override

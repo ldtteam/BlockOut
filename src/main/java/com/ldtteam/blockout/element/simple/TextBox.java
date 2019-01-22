@@ -1,13 +1,9 @@
 package com.ldtteam.blockout.element.simple;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.core.element.IUIElement;
-import com.ldtteam.blockout.core.element.IUIElementHost;
 import com.ldtteam.blockout.core.element.input.*;
-import com.ldtteam.blockout.core.element.values.Alignment;
-import com.ldtteam.blockout.core.element.values.AxisDistance;
-import com.ldtteam.blockout.core.element.values.Dock;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.element.input.IScrollAcceptingUIElement;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;

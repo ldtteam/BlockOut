@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public final class AxisDistance
 {
+    public static final AxisDistance DEFAULT = new AxisDistance();
+
     @NotNull
     private Optional<Double> left;
     @NotNull

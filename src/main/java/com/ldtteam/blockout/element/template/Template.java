@@ -45,7 +45,7 @@ public class Template extends AbstractChildrenContainingUIElement
         @Override
         public Template readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, IUIElementDataComponent::isString, engine, new ResourceLocation("missingno"));
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, new ResourceLocation("missingno"));
             final String templateId = elementData.getMetaData().getId();
 
             return new Template(style, templateId, elementData);
@@ -82,7 +82,6 @@ public class Template extends AbstractChildrenContainingUIElement
     public IUIElement generateInstance(@NotNull final IUIElementHost instanceParent, @NotNull final IDependencyObject<Object> boundContext, @NotNull final String controlId, @NotNull final  Function<IUIElementData, IUIElementData> dataOverrideCallback)
     {
         final IDependencyObject<List<IUIElementData<?>>> childrenData = ownData.getFromRawDataWithDefault(CONST_CHILDREN,
-          IUIElementDataComponent::isList,
           SimpleBindingEngine.getInstance(),
           Lists.newArrayList(),
           instanceParent
@@ -121,13 +120,18 @@ public class Template extends AbstractChildrenContainingUIElement
                     {
                         return Optional.ofNullable(instanceParent);
                     }
+
+                    @Override
+                    public boolean hasChildren()
+                    {
+                        return convertedChildData.getMetaData().hasChildren();
+                    }
                 };
             }
 
             @Override
             public IDependencyObject getFromRawDataWithProperty(
               @NotNull final String name,
-              @NotNull final Predicate typeMatcher,
               @NotNull final IBindingEngine engine,
               @NotNull final Property defaultProperty,
               @Nullable final Object defaultValue,
@@ -136,7 +140,7 @@ public class Template extends AbstractChildrenContainingUIElement
                 if (name.equals(CONST_DATACONTEXT))
                     return dataContext;
 
-                return convertedChildData.getFromRawDataWithProperty(name, typeMatcher, engine, defaultProperty, defaultValue, params);
+                return convertedChildData.getFromRawDataWithProperty(name, engine, defaultProperty, defaultValue, params);
             }
         };
 

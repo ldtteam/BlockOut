@@ -26,6 +26,11 @@ public class Constants
 
     public static class Resources
     {
+        public static final ResourceLocation MISSING = new ResourceLocation("minecraft:missingno");
+    }
+
+    public static class ResourceTypes
+    {
         public static final String CONST_IMAGE_RESOURCE_TYPE     = "image";
         public static final String CONST_ITEMSTACK_RESOURCE_TYPE = "itemstack";
         public static final String CONST_TEMPLATE_RESOURCE_TYPE  = "template";

@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.loader.core;
 
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Optional;
@@ -28,4 +29,10 @@ public interface IUIElementMetaData
      * @return The parent.
      */
     Optional<IUIElementHost> getParent();
+
+    /**
+     * Indicates if this control has children, that can be found under a compound with the id {@link Constants.Controls.General#CONST_CHILDREN}
+     * @return True when this control has children, false when not.
+     */
+    boolean hasChildren();
 }

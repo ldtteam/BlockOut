@@ -6,12 +6,17 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +28,7 @@ import java.util.function.Function;
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.CONST_TEMPLATE;
 import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.KEY_TEMPLATE_INSTANCE;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class TemplateInstance extends AbstractChildrenContainingUIElement
 {
@@ -51,8 +57,38 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
     }
 
-    public static final class Factory implements IUIElementFactory<TemplateInstance>
+    public static final class Factory extends AbstractChildrenContainingUIElementFactory<TemplateInstance>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);
+
+                final TemplateInstance element = new TemplateInstance(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  padding,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  templateResource
+                );
+
+                if (elementData.getMetaData().hasChildren())
+                {
+                    //Clear out the has changed on the clientside.
+                    templateResource.get(element);
+                }
+
+                return element;
+            }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource()));
+        }
 
         /**
          * Returns the type that this factory builds.
@@ -65,103 +101,25 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         {
             return KEY_TEMPLATE_INSTANCE;
         }
-
-        /**
-         * Creates a new {@link List} from the given {@link IUIElementData}.
-         *
-         * @param elementData The {@link IUIElementData} which contains the data that is to be constructed.
-         * @return The {@link List} that is stored in the {@link IUIElementData}.
-         */
-        @NotNull
-        @Override
-        public TemplateInstance readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<AxisDistance> padding = elementData.getBoundAxisDistanceAttribute(CONST_PADDING);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> templateResource = elementData.getBoundResourceLocationAttribute(CONST_TEMPLATE);
-
-            final TemplateInstance templateInstance = new TemplateInstance(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              padding,
-              dataContext,
-              visible,
-              enabled,
-              templateResource
-            );
-
-            //Client side additional check for loading incase we get send a instance that has already resolved.
-            if (elementData.hasChildren())
-            {
-                //nullify the hasChanged.
-                templateResource.get(templateInstance);
-
-                elementData.getChildren(templateInstance).forEach(childData -> {
-                    IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                    templateInstance.put(child.getId(), child);
-                });
-            }
-
-            return templateInstance;
-        }
-
-        /**
-         * Populates the given {@link IUIElementDataBuilder} with the data from {@link List} so that
-         * the given {@link List} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
-         * the given {@link IUIElementDataBuilder}.
-         *
-         * @param element The {@link List} to write into the {@link IUIElementDataBuilder}
-         * @param builder The {@link IUIElementDataBuilder} to write the {@link List} into.
-         */
-        @Override
-        public void writeToElementData(@NotNull final TemplateInstance element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addAxisDistance(CONST_PADDING, element.getPadding())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_TEMPLATE, element.getTemplateResource());
-
-            element.values().forEach(child -> {
-                builder.addChild(BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(child));
-            });
-        }
     }
 
     private IDependencyObject<ResourceLocation> templateResource;
 
     public TemplateInstance(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
-      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<ResourceLocation> templateResource)
     {
-        super(KEY_TEMPLATE_INSTANCE, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_TEMPLATE_INSTANCE, styleId, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.templateResource = templateResource;
     }

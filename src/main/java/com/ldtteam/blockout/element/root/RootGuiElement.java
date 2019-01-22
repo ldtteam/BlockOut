@@ -6,6 +6,8 @@ import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
@@ -35,17 +37,17 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
     private IUIManager manager;
 
     public RootGuiElement(
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
-      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<AxisDistance> padding,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(KEY_ROOT, style, KEY_ROOT.getPath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
+        super(KEY_ROOT, styleId, KEY_ROOT.getPath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.setParent(this);
     }
@@ -76,64 +78,29 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
         this.manager = manager;
     }
 
-    public static class Factory implements IUIElementFactory<RootGuiElement>
+    public static class Factory extends AbstractChildrenContainingUIElementFactory<RootGuiElement>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> new RootGuiElement(styleId,
+              alignments,
+              dock,
+              margin,
+              padding,
+              elementSize,
+              dataContext,
+              visible,
+              enabled), (element, builder) -> {
+                //No additional information is stored in here.
+            });
+        }
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_ROOT;
-        }
-
-        @NotNull
-        @Override
-        public RootGuiElement readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, Constants.Styles.CONST_DEFAULT);
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.RIGHT));
-            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, new AxisDistance());
-            final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, new Vector2d());
-            final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, new AxisDistance());
-            final IDependencyObject<Object> dataContext = elementData.getFromRawDataWithDefault(CONST_CONTEXT, engine, new Object());
-            final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true);
-            final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true);
-
-            RootGuiElement element = new RootGuiElement(
-              style,
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              padding,
-              dataContext,
-              visible,
-              enabled);
-
-            elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), element)
-              .get(element)
-              .forEach(childData -> {
-                  IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
-                  element.put(child.getId(), child);
-              });
-
-            return element;
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final RootGuiElement element, @NotNull final IUIElementDataBuilder<?> builder)
-        {
-            builder
-              .addComponent(CONST_ALIGNMENT, element.getAlignment())
-              .addComponent(CONST_DOCK, element.getDock())
-              .addComponent(CONST_MARGIN, element.getMargin())
-              .addComponent(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addComponent(CONST_PADDING, element.getPadding())
-              .addComponent(CONST_VISIBLE, element.isVisible())
-              .addComponent(CONST_ENABLED, element.isEnabled());
-
-            element.values().forEach(builder::addChild);
         }
     }
 

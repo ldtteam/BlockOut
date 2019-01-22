@@ -9,6 +9,10 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.util.math.BoundingBox;
@@ -19,6 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
+
+import static com.ldtteam.blockout.util.Constants.Controls.General.*;
+import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public abstract class AbstractSimpleUIElement implements IUIElement
 {
@@ -502,6 +509,90 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         public B withEnablement(@NotNull final Boolean enabled)
         {
             return withDependency("enabled", DependencyObjectHelper.createFromValue(enabled));
+        }
+    }
+
+
+    public static abstract class AbstractSimpleUIElementFactory<U extends IUIElement> implements IUIElementFactory<U>
+    {
+
+        private final ISimpleUIElementConstructor<U> constructor;
+        private final ISimpleUIElementWriter<U>      writer;
+
+        protected AbstractSimpleUIElementFactory(
+          final ISimpleUIElementConstructor<U> constructor,
+          final ISimpleUIElementWriter<U> writer) {
+            this.constructor = constructor;
+            this.writer = writer;
+        }
+
+        @NotNull
+        @Override
+        public final U readFromElementData(
+          @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
+        {
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, CONST_DEFAULT);
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP));
+            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE);
+            final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, AxisDistance.DEFAULT);
+            final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, Vector2d.DEFAULT);
+            final IDependencyObject<Object> dataContext = elementData.getFromRawDataWithDefault(CONST_CONTEXT, engine, new Object());
+            final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true);
+            final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true);
+
+            final U element = constructor.constructUsing(
+              elementData,
+              engine,
+              elementData.getMetaData().getId(),
+              elementData.getMetaData().getParent().orElse(null),
+              style,
+              alignments,
+              dock,
+              margin,
+              elementSize,
+              dataContext,
+              visible,
+              enabled
+            );
+
+            return element;
+        }
+
+        @Override
+        public final void writeToElementData(@NotNull final U element, @NotNull final IUIElementDataBuilder<?> builder)
+        {
+            builder
+              .addComponent(CONST_ALIGNMENT, element.getAlignment())
+              .addComponent(CONST_DOCK, element.getDock())
+              .addComponent(CONST_MARGIN, element.getMargin())
+              .addComponent(CONST_ELEMENT_SIZE, element.getElementSize())
+              .addComponent(CONST_VISIBLE, element.isVisible())
+              .addComponent(CONST_ENABLED, element.isEnabled());
+
+            writer.write(element, builder);
+        }
+
+        @FunctionalInterface
+        protected interface ISimpleUIElementConstructor<U extends IUIElement> {
+            U constructUsing(
+              @NotNull final IUIElementData<?> elementData,
+              @NotNull final IBindingEngine engine,
+              @NotNull final String id,
+              @Nullable final IUIElementHost parent,
+              @NotNull final IDependencyObject<ResourceLocation> styleId,
+              @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+              @NotNull final IDependencyObject<Dock> dock,
+              @NotNull final IDependencyObject<AxisDistance> margin,
+              @NotNull final IDependencyObject<Vector2d> elementSize,
+              @NotNull final IDependencyObject<Object> dataContext,
+              @NotNull final IDependencyObject<Boolean> visible,
+              @NotNull final IDependencyObject<Boolean> enabled);
+        }
+
+        @FunctionalInterface
+        protected interface ISimpleUIElementWriter<U extends IUIElement>
+        {
+            void write(@NotNull final U element, @NotNull final IUIElementDataBuilder<?> builder);
         }
     }
 }

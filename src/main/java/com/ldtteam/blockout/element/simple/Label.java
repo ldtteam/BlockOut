@@ -10,6 +10,9 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
@@ -20,6 +23,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.regex.Matcher;
@@ -47,18 +51,19 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     public Label(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
       @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
-      @NotNull final IDependencyObject<Boolean> enabled, final IDependencyObject<String> contents)
+      @NotNull final IDependencyObject<Boolean> enabled,
+      @NotNull final IDependencyObject<String> contents)
     {
-        super(KEY_LABEL, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_LABEL, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.contents = contents;
     }
 
@@ -150,57 +155,37 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         }
     }
 
-    public static class Factory implements IUIElementFactory<Label>
+    public static class Factory extends AbstractSimpleUIElementFactory<Label>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");
+
+                final Label element = new Label(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  contents
+                );
+
+                return element;
+            }, (element, builder) -> builder.addComponent(CONST_CONTENT, element.getContents()));
+        }
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_LABEL;
-        }
-
-        @NotNull
-        @Override
-        public Label readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<String> contents = elementData.getBoundStringAttribute(CONST_CONTENT);
-
-            return new Label(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              dataContext,
-              visible,
-              enabled,
-              contents
-            );
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Label element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addString(CONST_CONTENT, element.getContents());
         }
     }
 }

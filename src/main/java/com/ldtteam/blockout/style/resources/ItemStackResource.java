@@ -27,7 +27,7 @@ public class ItemStackResource implements IResource
         @Override
         public String getTypeId()
         {
-            return Constants.Resources.CONST_ITEMSTACK_RESOURCE_TYPE;
+            return Constants.ResourceTypes.CONST_ITEMSTACK_RESOURCE_TYPE;
         }
 
         /**

@@ -10,21 +10,27 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.ProgressBar.*;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -50,9 +56,9 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     }
 
     public ProgressBar(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -67,7 +73,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
       @NotNull final IDependencyObject<Double> max,
       @NotNull final IDependencyObject<Orientation> orientation)
     {
-        super(KEY_PROGRESS_BAR, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_PROGRESS_BAR, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
 
         this.backGroundResource = backGroundResource;
         this.foreGroundResource = foreGroundResource;
@@ -350,8 +356,47 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
     }
 
-    public static class Factory implements IUIElementFactory<ProgressBar>
+    public static class Factory extends AbstractSimpleUIElementFactory<ProgressBar>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> background = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<ResourceLocation> foreground = elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d);
+                final IDependencyObject<Double> max = elementData.getFromRawDataWithDefault(CONST_MAX, engine, 100d);
+                final IDependencyObject<Double> value = elementData.getFromRawDataWithDefault(CONST_VALUE, engine, 50d);
+                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.LEFT_RIGHT);
+
+                final ProgressBar element = new ProgressBar(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  background,
+                  foreground,
+                  min,
+                  max,
+                  value,
+                  orientation
+                );
+
+                return element;
+            }, (element, builder) -> builder
+              .addComponent(CONST_BACKGROUND_IMAGE, element.getBackGroundResource())
+              .addComponent(CONST_FOREGROUND_IMAGE, element.getForeGroundResource())
+              .addComponent(CONST_MIN, element.getMin())
+              .addComponent(CONST_MAX, element.getMax())
+              .addComponent(CONST_VALUE, element.getValue())
+              .addComponent(CONST_ORIENTATION, element.getOrientation()));
+        }
 
         /**
          * Returns the type that this factory builds.
@@ -363,77 +408,6 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         public ResourceLocation getType()
         {
             return KEY_PROGRESS_BAR;
-        }
-
-        /**
-         * Creates a new {@link ProgressBar} from the given {@link IUIElementData}.
-         *
-         * @param elementData The {@link IUIElementData} which contains the data that is to be constructed.
-         * @return The {@link ProgressBar} that is stored in the {@link IUIElementData}.
-         */
-        @NotNull
-        @Override
-        public ProgressBar readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> background = elementData.getBoundResourceLocationAttribute(CONST_BACKGROUND_IMAGE);
-            final IDependencyObject<ResourceLocation> foreground = elementData.getBoundResourceLocationAttribute(CONST_FOREGROUND_IMAGE);
-            final IDependencyObject<Double> min = elementData.getBoundDoubleAttribute(CONST_MIN);
-            final IDependencyObject<Double> max = elementData.getBoundDoubleAttribute(CONST_MAX);
-            final IDependencyObject<Double> value = elementData.getBoundDoubleAttribute(CONST_VALUE);
-            final IDependencyObject<Orientation> orientation = elementData.getBoundControlDirectionAttribute(CONST_ORIENTATION);
-
-            return new ProgressBar(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              dataContext,
-              visible,
-              enabled,
-              background,
-              foreground,
-              min,
-              max,
-              value,
-              orientation);
-        }
-
-        /**
-         * Populates the given {@link IUIElementDataBuilder} with the data from {@link ProgressBar} so that
-         * the given {@link ProgressBar} can be reconstructed with {@link #readFromElementData(IUIElementData)} created by
-         * the given {@link IUIElementDataBuilder}.
-         *
-         * @param element The {@link ProgressBar} to write into the {@link IUIElementDataBuilder}
-         * @param builder The {@link IUIElementDataBuilder} to write the {@link ProgressBar} into.
-         */
-        @Override
-        public void writeToElementData(@NotNull final ProgressBar element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_BACKGROUND_IMAGE, element.getBackGroundResource())
-              .addResourceLocation(CONST_FOREGROUND_IMAGE, element.getForeGroundResource())
-              .addDouble(CONST_MIN, element.getMin())
-              .addDouble(CONST_MAX, element.getMax())
-              .addDouble(CONST_VALUE, element.getValue())
-              .addControlDirection(CONST_ORIENTATION, element.getOrientation());
         }
     }
 }

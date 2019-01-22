@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class Vector2d
 {
+    public static final Vector2d DEFAULT = new Vector2d();
+
     private final double x;
     private final double y;
 

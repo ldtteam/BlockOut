@@ -60,6 +60,12 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
         return Optional.ofNullable(parent);
     }
 
+    @Override
+    public boolean hasChildren()
+    {
+        return object.containsKey(Constants.Controls.General.CONST_CHILDREN);
+    }
+
     /**
      * Merges its required data into the given component map.
      * Overrides if the required data is already contained.

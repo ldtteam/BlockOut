@@ -9,22 +9,28 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Image.CONST_ICON;
 import static com.ldtteam.blockout.util.Constants.Controls.Image.KEY_IMAGE;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -42,9 +48,9 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     public Image(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -54,7 +60,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<ResourceLocation> iconResource)
     {
-        super(KEY_IMAGE, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_IMAGE, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
     }
 
@@ -144,55 +150,35 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 
     }
 
-    public static class Factory implements IUIElementFactory<Image>
+    public static class Factory extends AbstractSimpleUIElementFactory<Image>
     {
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, MISSING);
+
+                final Image element = new Image(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  icon);
+
+                return element;
+            }, (element, builder) -> builder.addComponent(CONST_ICON, element.getIconResource()));
+        }
+
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_IMAGE;
-        }
-
-        @NotNull
-        @Override
-        public Image readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> icon = elementData.getBoundResourceLocationAttribute(CONST_ICON);
-
-            return new Image(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              dataContext,
-              visible,
-              enabled,
-              icon);
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Image element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_ICON, element.getIconResource());
         }
     }
 }

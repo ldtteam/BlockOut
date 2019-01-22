@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.element.core;
 
+import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
@@ -9,19 +10,29 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.Optional;
+
+import static com.ldtteam.blockout.util.Constants.Controls.General.*;
+import static com.ldtteam.blockout.util.Constants.Controls.General.CONST_ENABLED;
+import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<String, IUIElement> implements IUIElementHost
 {
@@ -586,6 +597,66 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         public B withEnablement(@NotNull final Boolean enabled)
         {
             return withDependency("enabled", DependencyObjectHelper.createFromValue(enabled));
+        }
+    }
+
+    public static abstract class AbstractChildrenContainingUIElementFactory<U extends IUIElementHost> extends AbstractSimpleUIElement.AbstractSimpleUIElementFactory<U>
+    {
+
+        protected AbstractChildrenContainingUIElementFactory(@NotNull final IChildrenContainingUIElementConstructor<U> constructor, @NotNull final ISimpleUIElementWriter<U> writer)
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) ->
+            {
+                final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, AxisDistance.DEFAULT);
+
+                final U element = constructor.constructUsing(
+                  elementData,
+                  engine,
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  padding,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled
+                );
+
+                elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), element)
+                  .get(element)
+                  .forEach(childData -> {
+                      IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                      element.put(child.getId(), child);
+                  });
+
+                return element;
+            }, (element, builder) -> {
+                builder
+                  .addComponent(CONST_PADDING, element.getPadding());
+
+                element.values().forEach(builder::addChild);
+            });
+        }
+
+        @FunctionalInterface
+        protected interface IChildrenContainingUIElementConstructor<U extends IUIElement> {
+            U constructUsing(
+              @NotNull final IUIElementData<?> elementData,
+              @NotNull final IBindingEngine engine,
+              @NotNull final String id,
+              @Nullable final IUIElementHost parent,
+              @NotNull final IDependencyObject<ResourceLocation> styleId,
+              @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
+              @NotNull final IDependencyObject<Dock> dock,
+              @NotNull final IDependencyObject<AxisDistance> margin,
+              @NotNull final IDependencyObject<AxisDistance> padding,
+              @NotNull final IDependencyObject<Vector2d> elementSize,
+              @NotNull final IDependencyObject<Object> dataContext,
+              @NotNull final IDependencyObject<Boolean> visible,
+              @NotNull final IDependencyObject<Boolean> enabled);
         }
     }
 }

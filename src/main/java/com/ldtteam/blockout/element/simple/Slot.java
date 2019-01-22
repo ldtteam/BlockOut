@@ -9,19 +9,25 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.factory.IUIElementFactory;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Slot.*;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -50,12 +56,13 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     public Slot(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
+      @NotNull final IDependencyObject<Vector2d> elementSize,
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
@@ -63,7 +70,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Integer> inventoryIndex,
       @NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
     {
-        super(KEY_SLOT, style, id, parent, alignments, dock, margin, DependencyObjectHelper.createFromValue(new Vector2d(18, 18)), dataContext, visible, enabled);
+        super(KEY_SLOT, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.inventoryId = inventoryId;
         this.inventoryIndex = inventoryIndex;
         this.backgroundImageResource = backgroundImageResource;
@@ -217,60 +224,43 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         }
     }
     
-    public static class Factory implements IUIElementFactory<Slot>
+    public static class Factory extends AbstractSimpleUIElementFactory<Slot>
     {
+
+        protected Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+                final IDependencyObject<ResourceLocation> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, MISSING);
+                final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1);
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
+
+                final Slot element = new Slot(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  inventoryId,
+                  inventoryIndex,
+                  icon);
+
+                return element;
+            }, (element, builder) -> builder
+              .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource())
+              .addComponent(CONST_INVENTORY_ID, element.getInventoryId())
+              .addComponent(CONST_INVENTORY_INDEX, element.getInventoryIndex()));
+        }
 
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_SLOT;
-        }
-
-        @NotNull
-        @Override
-        public Slot readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<ResourceLocation> inventoryId = elementData.getBoundResourceLocationAttribute(CONST_INVENTORY_ID);
-            final IDependencyObject<Integer> inventoryIndex = elementData.getBoundIntegerAttribute(CONST_INVENTORY_INDEX);
-            final IDependencyObject<ResourceLocation> icon = elementData.getBoundResourceLocationAttribute(CONST_BACKGROUND_IMAGE);
-
-            return new Slot(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              dataContext,
-              visible,
-              enabled,
-              inventoryId,
-              inventoryIndex,
-              icon);
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final Slot element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addResourceLocation(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource())
-              .addResourceLocation(CONST_INVENTORY_ID, element.getInventoryId())
-              .addInteger(CONST_INVENTORY_INDEX, element.getInventoryIndex());
         }
     }
 }
