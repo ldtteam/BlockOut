@@ -3,9 +3,7 @@ package com.ldtteam.blockout.network.message;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.TextBox;
 import com.ldtteam.blockout.element.simple.TextField;
-import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -13,17 +11,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextBoxUpdateContentsMessage implements IBlockOutClientToServerMessage
+public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMessage
 {
     private String controlId;
     private String newContent;
 
-    public TextBoxUpdateContentsMessage(final String controlId, final String newContent) {
+    public TextFieldUpdateContentsMessage(final String controlId, final String newContent)
+    {
         this.controlId = controlId;
         this.newContent = newContent;
     }
 
-    public TextBoxUpdateContentsMessage()
+    public TextFieldUpdateContentsMessage()
     {
     }
 
@@ -39,7 +38,7 @@ public class TextBoxUpdateContentsMessage implements IBlockOutClientToServerMess
         }
 
         final RootGuiElement rootGuiElement = (RootGuiElement) BlockOut.getBlockOut().getProxy().getGuiController().getRoot(guiKey);
-        final Optional<TextBox> optionalTextBox = rootGuiElement.searchExactElementById(controlId, TextBox.class);
+        final Optional<TextField> optionalTextBox = rootGuiElement.searchExactElementById(controlId, TextField.class);
         optionalTextBox.ifPresent(textBox -> {
             textBox.setContents(newContent);
         });

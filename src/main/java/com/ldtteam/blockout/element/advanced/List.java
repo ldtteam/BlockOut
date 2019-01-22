@@ -12,24 +12,18 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.input.IScrollAcceptingUIElement;
+import com.ldtteam.blockout.element.simple.Region;
 import com.ldtteam.blockout.element.values.*;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
+import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.element.simple.Region;
-import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Clamp;
@@ -40,12 +34,10 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.List.*;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
@@ -538,44 +530,89 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         this.templateConstructionData.set(this,  templateConstructionData);
     }
 
-    private void wrapNewElementAndRegister(@NotNull final IUIElement element)
+    public static final class Factory extends AbstractChildrenContainingUIElementFactory<List>
     {
-        final Region wrappingRegion = new Region(
-          DependencyObjectHelper.createFromValue(getStyleId()),
-          String.format("%s_wrapper", element.getId()),
-          this
-        );
 
-        DependencyObjectInjector.inject(wrappingRegion, new IDependencyDataProvider()
+        public Factory()
         {
-            @Override
-            public boolean hasDependencyData(@NotNull final String name)
-            {
-                return name.contains("elementSize");
-            }
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
 
-            @NotNull
-            @Override
-            public <T> IDependencyObject<T> get(@NotNull final String name)
-            {
-                return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
-                  PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
-                    getOrientation() == Orientation.TOP_BOTTOM ? getLocalInternalBoundingBox().getSize().getX() : element.getMinimalInternalSizeOfParent().getX(),
-                    getOrientation() == Orientation.LEFT_RIGHT ? getLocalInternalBoundingBox().getSize().getY() : element.getMinimalInternalSizeOfParent().getY()
-                  )), (context, value) -> {
-                      //Noop
-                  }), new Vector2d());
-            }
-        });
+                final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, MISSING);
+                final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, MISSING);
+                final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d);
+                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM);
+                final IDependencyObject<Boolean> showScrollBar = elementData.getFromRawDataWithDefault(CONST_SHOW_BAR, engine, true);
 
-        element.setParent(wrappingRegion);
+                if (elementData.getMetaData().hasChildren())
+                {
+                    final List list = new List(
+                      id,
+                      parent,
+                      styleId,
+                      alignments,
+                      dock,
+                      margin,
+                      padding,
+                      elementSize,
+                      dataContext,
+                      visible,
+                      enabled,
+                      false,
+                      DependencyObjectHelper.createFromValue(new ResourceLocation("")),
+                      scrollBarBackgroundResource,
+                      scrollBarForegroundResource,
+                      scrollOffset,
+                      orientation,
+                      showScrollBar,
+                      DependencyObjectHelper.createFromValue(Lists.newArrayList())
+                    );
 
-        wrappingRegion.put(element.getId(), element);
-        wrappingRegion.setParent(this);
+                    return list;
+                }
 
-        wrappingRegion.update(getUiManager().getUpdateManager());
-        element.update(getParent().getUiManager().getUpdateManager());
-        put(wrappingRegion.getId(), wrappingRegion);
+                final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);
+                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList());
+
+                return new List(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  padding,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  true,
+                  templateResource,
+                  scrollBarBackgroundResource,
+                  scrollBarForegroundResource,
+                  scrollOffset,
+                  orientation,
+                  showScrollBar,
+                  source
+                );
+            }, (element, builder) -> builder
+                                       .addComponent(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource())
+                                       .addComponent(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource())
+                                       .addComponent(CONST_SCROLLOFFSET, element.scrollOffset)
+                                       .addComponent(CONST_ORIENTATION, element.getOrientation())
+                                       .addComponent(CONST_SHOW_BAR, element.getShowScrollBar()));
+        }
+
+        /**
+         * Returns the type that this factory builds.
+         *
+         * @return The type.
+         */
+        @NotNull
+        @Override
+        public ResourceLocation getType()
+        {
+            return KEY_LIST;
+        }
     }
 
     public void setScrollBarBackgroundResource(@NotNull final ResourceLocation scrollBarBackground)
@@ -720,88 +757,43 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         }
     }
 
-    public static final class Factory extends AbstractChildrenContainingUIElementFactory<List>
+    private void wrapNewElementAndRegister(@NotNull final IUIElement element)
     {
+        final Region wrappingRegion = new Region(
+          DependencyObjectHelper.createFromValue(getStyleId()),
+          String.format("%s_wrapper", element.getId()),
+          this
+        );
 
-        protected Factory()
+        DependencyObjectInjector.inject(wrappingRegion, new IDependencyDataProvider()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+            @Override
+            public boolean hasDependencyData(@NotNull final String name)
+            {
+                return name.contains("elementSize");
+            }
 
-                final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, MISSING);
-                final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, MISSING);
-                final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d);
-                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM);
-                final IDependencyObject<Boolean> showScrollBar = elementData.getFromRawDataWithDefault(CONST_SHOW_BAR, engine, true);
+            @NotNull
+            @Override
+            public <T> IDependencyObject<T> get(@NotNull final String name)
+            {
+                return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
+                  PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
+                    getOrientation() == Orientation.TOP_BOTTOM ? getLocalInternalBoundingBox().getSize().getX() : element.getMinimalInternalSizeOfParent().getX(),
+                    getOrientation() == Orientation.LEFT_RIGHT ? getLocalInternalBoundingBox().getSize().getY() : element.getMinimalInternalSizeOfParent().getY()
+                  )), (context, value) -> {
+                      //Noop
+                  }, false), new Vector2d());
+            }
+        });
 
-                if (elementData.getMetaData().hasChildren())
-                {
-                    final List list = new List(
-                      id,
-                      parent,
-                      styleId,
-                      alignments,
-                      dock,
-                      margin,
-                      padding,
-                      elementSize,
-                      dataContext,
-                      visible,
-                      enabled,
-                      false,
-                      DependencyObjectHelper.createFromValue(new ResourceLocation("")),
-                      scrollBarBackgroundResource,
-                      scrollBarForegroundResource,
-                      scrollOffset,
-                      orientation,
-                      showScrollBar,
-                      DependencyObjectHelper.createFromValue(Lists.newArrayList())
-                    );
+        element.setParent(wrappingRegion);
 
-                    return list;
-                }
+        wrappingRegion.put(element.getId(), element);
+        wrappingRegion.setParent(this);
 
-                final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);
-                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList());
-
-                return new List(
-                  id,
-                  parent,
-                  styleId,
-                  alignments,
-                  dock,
-                  margin,
-                  padding,
-                  elementSize,
-                  dataContext,
-                  visible,
-                  enabled,
-                  true,
-                  templateResource,
-                  scrollBarBackgroundResource,
-                  scrollBarForegroundResource,
-                  scrollOffset,
-                  orientation,
-                  showScrollBar,
-                  source
-                );
-            }, (element, builder) -> builder
-              .addComponent(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource())
-              .addComponent(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource())
-              .addComponent(CONST_SCROLLOFFSET, element.scrollOffset)
-              .addComponent(CONST_ORIENTATION, element.getOrientation())
-              .addComponent(CONST_SHOW_BAR, element.getShowScrollBar()));
-        }
-
-        /**
-         * Returns the type that this factory builds.
-         *
-         * @return The type.
-         */
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_LIST;
-        }
+        wrappingRegion.update(getUiManager().getUpdateManager());
+        element.update(getParent().getUiManager().getUpdateManager());
+        put(wrappingRegion.getId(), wrappingRegion);
     }
 }

@@ -1,8 +1,6 @@
 package com.ldtteam.blockout.proxy;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.inject.Module;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
@@ -12,14 +10,17 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
 import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
+import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
+import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
+import com.ldtteam.blockout.loader.factory.modules.BaseFactoryInjectionModule;
+import com.ldtteam.blockout.loader.factory.modules.ElementDataFactoryInjectionModule;
+import com.ldtteam.blockout.loader.factory.modules.NBTFactoryInjectionModule;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
-import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.style.simple.SimpleFileBasedStyleManager;
@@ -41,7 +42,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
-import java.util.List;
 import java.util.Set;
 
 public class CommonProxy implements IProxy
@@ -62,6 +62,9 @@ public class CommonProxy implements IProxy
     public void onPreInit()
     {
         //TODO: Create split style loader.
+        factoryInjectionModules.add(new BaseFactoryInjectionModule());
+        factoryInjectionModules.add(new ElementDataFactoryInjectionModule());
+        factoryInjectionModules.add(new NBTFactoryInjectionModule());
     }
 
     @NotNull

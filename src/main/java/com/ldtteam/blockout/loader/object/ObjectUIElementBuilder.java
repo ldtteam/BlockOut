@@ -4,24 +4,23 @@ import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
+import com.google.inject.internal.MoreTypes;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.stream.CollectorHelper;
 import com.ldtteam.blockout.util.stream.FunctionHelper;
-import net.minecraft.util.ResourceLocation;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIElementData>
@@ -73,8 +72,9 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     @Override
     public <T> IUIElementDataBuilder<ObjectUIElementData> addComponent(final String componentName, final T value)
     {
-        final IUIElementDataComponentConverter<T> factory = injector.getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>() {}));
-        final ObjectUIElementDataComponent component = factory.writeToElement(value, c-> new ObjectUIElementDataComponent());
+        final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, value.getClass());
+        final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) injector.getInstance(Key.get(type));
+        final ObjectUIElementDataComponent component = componentConverter.writeToElement(value, c -> new ObjectUIElementDataComponent());
 
         attributes.put(componentName, component);
 

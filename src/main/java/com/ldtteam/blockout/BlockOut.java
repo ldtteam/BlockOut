@@ -53,6 +53,7 @@ public class BlockOut
     public void preInit(@NotNull final FMLPreInitializationEvent event)
     {
         ProxyHolder.getInstance().setProxy(proxy);
+        ProxyHolder.getInstance().onPreInit();
         NetworkManager.init();
 
         getProxy().getLoaderManager().registerLoader(new JsonLoader());

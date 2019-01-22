@@ -13,7 +13,6 @@ import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -319,8 +318,8 @@ public final class BaseValueComponentConverters
             return newInstance;
         }
     }
-    
-    public final class OrientationConverter implements IUIElementDataComponentConverter<Orientation>
+
+    public static final class OrientationConverter implements IUIElementDataComponentConverter<Orientation>
     {
 
         @Override
@@ -346,8 +345,8 @@ public final class BaseValueComponentConverters
             return newInstance;
         }
     }
-    
-    public final class Vector2dConverter implements IUIElementDataComponentConverter<Vector2d>
+
+    public static final class Vector2dConverter implements IUIElementDataComponentConverter<Vector2d>
     {
 
         @Override
@@ -374,7 +373,7 @@ public final class BaseValueComponentConverters
         }
     }
 
-    public final class BoundingBoxConverter implements IUIElementDataComponentConverter<BoundingBox>
+    public static final class BoundingBoxConverter implements IUIElementDataComponentConverter<BoundingBox>
     {
 
         @Override

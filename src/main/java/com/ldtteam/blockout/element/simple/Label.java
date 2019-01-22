@@ -5,16 +5,12 @@ import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
@@ -29,7 +25,6 @@ import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Label.CONST_CONTENT;
 import static com.ldtteam.blockout.util.Constants.Controls.Label.KEY_LABEL;
 
@@ -158,7 +153,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public static class Factory extends AbstractSimpleUIElementFactory<Label>
     {
 
-        protected Factory()
+        public Factory()
         {
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");

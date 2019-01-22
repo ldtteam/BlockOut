@@ -6,17 +6,11 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.function.Function;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.CONST_TEMPLATE;
 import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.KEY_TEMPLATE_INSTANCE;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
@@ -60,7 +53,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
     public static final class Factory extends AbstractChildrenContainingUIElementFactory<TemplateInstance>
     {
 
-        protected Factory()
+        public Factory()
         {
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);

@@ -3,7 +3,7 @@ package com.ldtteam.blockout.network.message;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.TextBox;
+import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -40,7 +40,7 @@ public class TextBoxUpdateScrollOrCursorPositionMessage implements IBlockOutClie
         }
 
         final RootGuiElement rootGuiElement = (RootGuiElement) BlockOut.getBlockOut().getProxy().getGuiController().getRoot(guiKey);
-        final Optional<TextBox> textBoxOptional = rootGuiElement.searchExactElementById(controlId, TextBox.class);
+        final Optional<TextField> textBoxOptional = rootGuiElement.searchExactElementById(controlId, TextField.class);
 
         textBoxOptional.ifPresent(textBox -> {
             textBox.setCursorPosition(cursorPosition);

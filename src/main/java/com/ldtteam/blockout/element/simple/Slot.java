@@ -4,19 +4,14 @@ import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Slot.*;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
@@ -227,7 +221,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     public static class Factory extends AbstractSimpleUIElementFactory<Slot>
     {
 
-        protected Factory()
+        public Factory()
         {
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, MISSING);

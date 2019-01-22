@@ -6,17 +6,16 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.compat.ClientTickManager;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
@@ -31,10 +30,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.TextField.*;
 
 public class TextField extends AbstractSimpleUIElement implements IDrawableUIElement, IClickAcceptingUIElement, IKeyAcceptingUIElement
@@ -87,7 +86,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Private constructor for internal use.
      *
-     * @param style          the style.
+     * @param styleId          the style.
      * @param id             the unique id.
      * @param parent         the parent.
      * @param alignments     the alginments.
@@ -103,9 +102,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      * @param selectionEnd   the selection end.
      */
     private TextField(
-      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementHost parent,
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -119,7 +118,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
       final int selectionEnd
     )
     {
-        super(KEY_TEXT_FIELD, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
+        super(KEY_TEXT_FIELD, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.contents = contents;
         this.cursorPosition = cursorPosition;
         this.scrollOffset = scrollOffset;
@@ -515,7 +514,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param pos the x pos.
      */
-    private void setCursorPosition(final int pos)
+    public void setCursorPosition(final int pos)
     {
         cursorPosition = MathHelper.clamp(pos, 0, getContents().length());
         setSelectionEnd(cursorPosition);
@@ -547,7 +546,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param pos the end pos.
      */
-    private void setSelectionEnd(final int pos)
+    public void setSelectionEnd(final int pos)
     {
         selectionEnd = pos;
 
@@ -750,66 +749,48 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Element factory to instantiate the text field.
      */
-    public static class Factory implements IUIElementFactory<TextField>
+    public static class Factory extends AbstractSimpleUIElementFactory<TextField>
     {
+        public Factory()
+        {
+            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+
+                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "");
+
+                final int cursorPosition = elementData.getRawWithoutBinding(CONST_CURSOR_POS, 0);
+                final int scrollOffset = elementData.getRawWithoutBinding(CONST_CURSOR_SCROLL_OFF, 0);
+                final int selectionEnd = elementData.getRawWithoutBinding(CONST_CURSOR_SEL_END, 0);
+
+                final TextField element = new TextField(
+                  id,
+                  parent,
+                  styleId,
+                  alignments,
+                  dock,
+                  margin,
+                  elementSize,
+                  dataContext,
+                  visible,
+                  enabled,
+                  contents,
+                  cursorPosition,
+                  scrollOffset,
+                  selectionEnd
+                );
+
+                return element;
+            }, (element, builder) -> builder
+                                       .addComponent(CONST_CONTENT, element.getContents())
+                                       .addComponent(CONST_CURSOR_POS, element.cursorPosition)
+                                       .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
+                                       .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd));
+        }
+
         @NotNull
         @Override
         public ResourceLocation getType()
         {
             return KEY_TEXT_FIELD;
-        }
-
-        @NotNull
-        @Override
-        public TextField readFromElementData(@NotNull final IUIElementData elementData)
-        {
-            final IDependencyObject<ResourceLocation> style = elementData.getBoundStyleId();
-            final String id = elementData.getElementId();
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getBoundAlignmentAttribute(CONST_ALIGNMENT);
-            final IDependencyObject<Dock> dock = elementData.getBoundEnumAttribute(CONST_DOCK, Dock.class, Dock.NONE);
-            final IDependencyObject<AxisDistance> margin = elementData.getBoundAxisDistanceAttribute(CONST_MARGIN);
-            final IDependencyObject<Vector2d> elementSize = elementData.getBoundVector2dAttribute(CONST_ELEMENT_SIZE);
-            final IDependencyObject<Object> dataContext = elementData.getBoundDataContext();
-            final IDependencyObject<Boolean> visible = elementData.getBoundBooleanAttribute(CONST_VISIBLE);
-            final IDependencyObject<Boolean> enabled = elementData.getBoundBooleanAttribute(CONST_ENABLED);
-            final IDependencyObject<String> contents = elementData.getBoundStringAttribute(CONST_CONTENT);
-
-            final int cursorPosition = elementData.getIntegerAttribute(CONST_CURSOR_POS);
-            final int scrollOffset = elementData.getIntegerAttribute(CONST_CURSOR_SCROLL_OFF);
-            final int selectionEnd = elementData.getIntegerAttribute(CONST_CURSOR_SEL_END);
-
-            return new TextField(
-              style,
-              id,
-              elementData.getParentView(),
-              alignments,
-              dock,
-              margin,
-              elementSize,
-              dataContext,
-              visible,
-              enabled,
-              contents,
-              cursorPosition,
-              scrollOffset,
-              selectionEnd
-            );
-        }
-
-        @Override
-        public void writeToElementData(@NotNull final TextField element, @NotNull final IUIElementDataBuilder builder)
-        {
-            builder
-              .addAlignment(CONST_ALIGNMENT, element.getAlignment())
-              .addEnum(CONST_DOCK, element.getDock())
-              .addAxisDistance(CONST_MARGIN, element.getMargin())
-              .addVector2d(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addBoolean(CONST_VISIBLE, element.isVisible())
-              .addBoolean(CONST_ENABLED, element.isEnabled())
-              .addString(CONST_CONTENT, element.getContents())
-              .addInteger(CONST_CURSOR_POS, element.cursorPosition)
-              .addInteger(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
-              .addInteger(CONST_CURSOR_SEL_END, element.selectionEnd);
         }
     }
 

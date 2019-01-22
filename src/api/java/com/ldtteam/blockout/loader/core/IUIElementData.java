@@ -2,36 +2,20 @@ package com.ldtteam.blockout.loader.core;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
+import com.google.inject.internal.MoreTypes;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.property.Property;
 import com.ldtteam.blockout.binding.property.PropertyCreationHelper;
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.element.values.Alignment;
-import com.ldtteam.blockout.element.values.AxisDistance;
-import com.ldtteam.blockout.element.values.AxisDistanceBuilder;
-import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
-import com.ldtteam.blockout.util.math.BoundingBox;
-import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.List;
+import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Represents the raw data of a {@link IUIElement}
@@ -65,7 +49,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     default <T> IDependencyObject<T> getFromRawDataWithDefault(
       @NotNull final String name,
       @NotNull final IBindingEngine engine,
-      @Nullable final T defaultValue,
+      @NotNull final T defaultValue,
       @NotNull final Object... params
     )
     {
@@ -92,13 +76,14 @@ public interface IUIElementData<C extends IUIElementDataComponent>
       @NotNull final String name,
       @NotNull final IBindingEngine engine,
       @NotNull final Property<T> defaultProperty,
-      @Nullable final T defaultValue,
+      @NotNull final T defaultValue,
       @NotNull final Object... params
     )
     {
         return getComponentWithName(name)
           .map(targetComponent -> engine.attemptBind(targetComponent, defaultValue).orElseGet(() -> {
-              final IUIElementDataComponentConverter<T> componentConverter = getFactoryInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>(){}));
+              final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, defaultValue.getClass());
+              final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
 
               if (!componentConverter.matchesInputTypes(targetComponent))
                   return DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue);
@@ -125,7 +110,8 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     {
         return getComponentWithName(name)
           .map(targetComponent -> {
-              final IUIElementDataComponentConverter<T> componentConverter = getFactoryInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<T>>(){}));
+              final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, defaultValue.getClass());
+              final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
 
               if (!componentConverter.matchesInputTypes(targetComponent))
                 return defaultValue;

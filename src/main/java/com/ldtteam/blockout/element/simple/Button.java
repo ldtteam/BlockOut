@@ -1,29 +1,22 @@
 package com.ldtteam.blockout.element.simple;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
-import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.element.core.AbstractFilteringChildrenContainingUIElement;
 import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,9 +31,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.ldtteam.blockout.util.Constants.Controls.Button.*;
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
-import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
@@ -327,7 +318,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     public static class Factory extends AbstractChildrenContainingUIElementFactory<Button>
     {
 
-        protected Factory()
+        public Factory()
         {
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, MISSING);
