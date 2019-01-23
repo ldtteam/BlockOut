@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.loader.factory;
 
+import com.google.common.collect.Lists;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
@@ -13,7 +14,9 @@ import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.function.Function;
@@ -186,7 +189,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             return new ResourceLocation(component.getAsString());
         }
@@ -301,7 +304,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             return component.isNumber()
                      ? Alignment.fromInt(component.getAsInteger())
@@ -330,7 +333,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             return Orientation.fromString(component.getAsString());
         }
@@ -357,7 +360,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             return Vector2d.fromString(component.getAsString());
         }
@@ -384,7 +387,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public BoundingBox readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public BoundingBox readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             return BoundingBox.fromString(component.getAsString());
         }
@@ -400,6 +403,29 @@ public final class BaseValueComponentConverters
         }
     }
 
+    public static final class DummyListContextConverter implements IUIElementDataComponentConverter<ArrayList>
+    {
 
-    
+        @Override
+        public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
+        {
+            return component.isList();
+        }
+
+        @NotNull
+        @Override
+        public ArrayList readFromElement(
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        {
+            //TODO: For now a dummy list this suffices:
+            return Lists.newArrayList();
+        }
+
+        @Override
+        public <C extends IUIElementDataComponent> C writeToElement(
+          @NotNull final ArrayList value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+        {
+            return newComponentInstanceProducer.apply(ComponentType.LIST);
+        }
+    }
 }

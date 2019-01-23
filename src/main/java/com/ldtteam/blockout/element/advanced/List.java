@@ -755,6 +755,20 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         {
             return withDependency("templateConstructionData", DependencyObjectHelper.createFromValue(iconConstructionData));
         }
+
+        @NotNull
+        public ListConstructionDataBuilder withDependentSource(@NotNull final IDependencyObject<Object> source)
+        {
+            return withDependency("source", source);
+        }
+
+        @NotNull
+        public ListConstructionDataBuilder withSource(@NotNull final Object source)
+        {
+            return withDependency("source", DependencyObjectHelper.createFromValue(source));
+        }
+        
+        
     }
 
     private void wrapNewElementAndRegister(@NotNull final IUIElement element)

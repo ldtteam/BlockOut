@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -30,7 +31,7 @@ public class NBTDependingConverters
         @NotNull
         @Override
         public ItemStack readFromElement(
-          @NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
             return new ItemStack(compound);
@@ -55,7 +56,7 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public IBlockState readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public IBlockState readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
             return NBTUtil.readBlockState(compound);
@@ -80,7 +81,7 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public Entity readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Entity readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
             return EntityList.createEntityFromNBT(compound, null);

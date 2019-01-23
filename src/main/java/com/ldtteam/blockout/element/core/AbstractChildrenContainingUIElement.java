@@ -10,29 +10,20 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
-import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.blockout.style.core.resources.core.IResource;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.Optional;
+import java.util.*;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
-import static com.ldtteam.blockout.util.Constants.Controls.General.CONST_ENABLED;
-import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
+import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_TYPE;
 
 public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<String, IUIElement> implements IUIElementHost
 {
@@ -625,7 +616,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
                   enabled
                 );
 
-                elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), element)
+                elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), CHILDREN_LIST_TYPE, element)
                   .get(element)
                   .forEach(childData -> {
                       IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
@@ -634,6 +625,8 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
                 return element;
             }, (element, builder) -> {
+                writer.write(element, builder);
+
                 builder
                   .addComponent(CONST_PADDING, element.getPadding());
 

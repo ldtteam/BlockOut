@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 /**
@@ -64,6 +65,38 @@ public interface IUIElementData<C extends IUIElementDataComponent>
 
     /**
      * Returns a dependency target from raw data with a default value.
+     * Uses the given target type to lookup component converters in the injector.
+     *
+     * Use this method if you are looking for something like {@code List<IUIElementData<?>>}, since those can not be resolved normally.
+     *
+     * @param name               The name of the raw data to get.
+     * @param defaultValue       The default value.
+     * @param engine             The binding engine.
+     * @param targetType         The type of the component converter to retrieve needs to produce an instance of T
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param <T>                The target type.
+     * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
+     */
+    default <T> IDependencyObject<T> getFromRawDataWithDefault(
+      @NotNull final String name,
+      @NotNull final IBindingEngine engine,
+      @NotNull final T defaultValue,
+      @NotNull final Type targetType,
+      @NotNull final Object... params
+    )
+    {
+        return getFromRawDataWithProperty(
+          name,
+          engine,
+          PropertyCreationHelper.createNoneSettableFromStaticValue(defaultValue),
+          defaultValue,
+          targetType,
+          params
+        );
+    }
+
+    /**
+     * Returns a dependency target from raw data with a default value.
      *
      * @param name               The name of the raw data to get.
      * @param defaultProperty    The default property.
@@ -80,17 +113,44 @@ public interface IUIElementData<C extends IUIElementDataComponent>
       @NotNull final Object... params
     )
     {
+        return getFromRawDataWithProperty(name, engine, defaultProperty, defaultValue, defaultValue.getClass(), params);
+    }
+
+    /**
+     * Returns a dependency target from raw data with a default property.
+     * Uses the given target type to lookup component converters in the injector.
+     *
+     * Use this method if you are looking for something like {@code List<IUIElementData<?>>}, since those can not be resolved normally.
+     *
+     * @param name               The name of the raw data to get.
+     * @param defaultProperty    The default property.
+     * @param engine             The binding engine.
+     * @param defaultValue       The default value to use when the property fails.
+     * @param targetType         The type of the component converter to retrieve needs to produce an instance of T
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param <T>                The target type.
+     * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
+     */
+    default <T> IDependencyObject<T> getFromRawDataWithProperty(
+      @NotNull final String name,
+      @NotNull final IBindingEngine engine,
+      @NotNull final Property<T> defaultProperty,
+      @NotNull final T defaultValue,
+      @NotNull final Type targetType,
+      @NotNull final Object... params
+    )
+    {
         return getComponentWithName(name)
-          .map(targetComponent -> engine.attemptBind(targetComponent, defaultValue).orElseGet(() -> {
-              final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, defaultValue.getClass());
-              final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
+                 .map(targetComponent -> engine.attemptBind(targetComponent, defaultValue).orElseGet(() -> {
+                     final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, targetType);
+                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
 
-              if (!componentConverter.matchesInputTypes(targetComponent))
-                  return DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue);
+                     if (!componentConverter.matchesInputTypes(targetComponent))
+                         return DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue);
 
-              return DependencyObjectHelper.createFromValue(componentConverter.readFromElement(targetComponent, this, params));
-          }))
-          .orElse(DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue));
+                     return DependencyObjectHelper.createFromValue(componentConverter.readFromElement(targetComponent, this, params));
+                 }))
+                 .orElse(DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue));
     }
 
     /**
@@ -104,21 +164,44 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      */
     default <T> T getRawWithoutBinding(
       @NotNull final String name,
+      @NotNull final T defaultValue,
+      @NotNull final Object... params
+    )
+    {
+        return getRawWithoutBinding(name, defaultValue, defaultValue.getClass(), params);
+    }
+
+    /**
+     * Returns raw data with a default value if not found
+     * Uses the given target type to lookup component converters in the injector.
+     *
+     * Use this method if you are looking for something like {@code List<IUIElementData<?>>}, since those can not be resolved normally.
+     *
+     * @param name               The name of the raw data to get.
+     * @param defaultValue       The default value.
+     * @param targetType         The type of the component converter to retrieve needs to produce an instance of T
+     * @param params             The parameters used during conversion from {@link IUIElementDataComponent} to T
+     * @param <T>                The target type.
+     * @return The converted raw data.
+     */
+    default <T> T getRawWithoutBinding(
+      @NotNull final String name,
       @Nullable final T defaultValue,
+      @NotNull final Type targetType,
       @NotNull final Object... params
     )
     {
         return getComponentWithName(name)
-          .map(targetComponent -> {
-              final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, defaultValue.getClass());
-              final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
+                 .map(targetComponent -> {
+                     final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, targetType);
+                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
 
-              if (!componentConverter.matchesInputTypes(targetComponent))
-                return defaultValue;
+                     if (!componentConverter.matchesInputTypes(targetComponent))
+                         return defaultValue;
 
-              return componentConverter.readFromElement(targetComponent, this, params);
-          })
-          .orElse(defaultValue);
+                     return componentConverter.readFromElement(targetComponent, this, params);
+                 })
+                 .orElse(defaultValue);
     }
 
     /**

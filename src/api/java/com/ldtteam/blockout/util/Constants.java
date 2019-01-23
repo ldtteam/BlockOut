@@ -1,6 +1,16 @@
 package com.ldtteam.blockout.util;
 
+import com.ldtteam.blockout.element.values.Alignment;
+import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
+import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.util.reflection.ReflectionUtil;
 import net.minecraft.util.ResourceLocation;
+
+import java.lang.reflect.Type;
+import java.util.EnumSet;
+import java.util.List;
 
 public class Constants
 {
@@ -34,6 +44,18 @@ public class Constants
         public static final String CONST_IMAGE_RESOURCE_TYPE     = "image";
         public static final String CONST_ITEMSTACK_RESOURCE_TYPE = "itemstack";
         public static final String CONST_TEMPLATE_RESOURCE_TYPE  = "template";
+    }
+
+    public static class ConverterTypes
+    {
+        public static final Type CHILDREN_LIST_TYPE = ReflectionUtil.createParameterizedType(null, List.class, IUIElementData.class);
+        public static final Type CHILDREN_LIST_FACTORY_TYPE = ReflectionUtil.createParameterizedType(null, IUIElementDataComponentConverter.class, CHILDREN_LIST_TYPE);
+        
+        public static final Type ALIGNMENT_ENUMSET_TYPE = ReflectionUtil.createParameterizedType(null, EnumSet.class, Alignment.class);
+        public static final Type ALIGNMENT_ENUMSET_FACTORY_TYPE = ReflectionUtil.createParameterizedType(null, IUIElementDataComponentConverter.class, ALIGNMENT_ENUMSET_TYPE);
+
+        public static final Type DOCK_ENUMSET_TYPE = ReflectionUtil.createParameterizedType(null, EnumSet.class, Dock.class);
+        public static final Type DOCK_ENUMSET_FACTORY_TYPE = ReflectionUtil.createParameterizedType(null, IUIElementDataComponentConverter.class, DOCK_ENUMSET_TYPE);
     }
 
     public static class Controls
@@ -143,10 +165,7 @@ public class Constants
             public static final ResourceLocation KEY_REGION = new ResourceLocation(MOD_ID, "region");
         }
 
-        public static class
-
-
-        List
+        public static class List
         {
             public static final ResourceLocation KEY_LIST = new ResourceLocation(MOD_ID, "list");
 

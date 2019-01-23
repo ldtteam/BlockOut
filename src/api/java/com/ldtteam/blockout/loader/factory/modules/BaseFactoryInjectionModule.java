@@ -7,10 +7,12 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.loader.factory.BaseValueComponentConverters;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 public class BaseFactoryInjectionModule extends AbstractModule
@@ -25,11 +27,12 @@ public class BaseFactoryInjectionModule extends AbstractModule
         bind(new TypeLiteral<IUIElementDataComponentConverter<Integer>>() {}).to(BaseValueComponentConverters.IntegerConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}).to(BaseValueComponentConverters.ResourceLocationConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<AxisDistance>>() {}).to(BaseValueComponentConverters.AxisDistanceConverter.class);
-        bind(new TypeLiteral<IUIElementDataComponentConverter<EnumSet<Alignment>>>() {}).to(BaseValueComponentConverters.AlignmentConverter.class);
+        bind((Key<IUIElementDataComponentConverter<EnumSet<Alignment>>>) Key.get(Constants.ConverterTypes.ALIGNMENT_ENUMSET_FACTORY_TYPE)).to(BaseValueComponentConverters.AlignmentConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Orientation>>() {}).to(BaseValueComponentConverters.OrientationConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Vector2d>>() {}).to(BaseValueComponentConverters.Vector2dConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<BoundingBox>>() {}).to(BaseValueComponentConverters.BoundingBoxConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Dock>>() {}).to(new TypeLiteral<BaseValueComponentConverters.EnumValueConverter<Dock>>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<EnumSet<Dock>>>() {}).to(new TypeLiteral<BaseValueComponentConverters.EnumSetValueConverter<Dock>>() {});
+        bind((Key<IUIElementDataComponentConverter<EnumSet<Dock>>>) Key.get(Constants.ConverterTypes.DOCK_ENUMSET_FACTORY_TYPE)).to(new TypeLiteral<BaseValueComponentConverters.EnumSetValueConverter<Dock>>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ArrayList>>() {}).to(BaseValueComponentConverters.DummyListContextConverter.class);
     }
 }

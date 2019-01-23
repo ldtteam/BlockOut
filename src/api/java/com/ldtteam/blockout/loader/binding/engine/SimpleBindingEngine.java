@@ -20,7 +20,7 @@ public class SimpleBindingEngine implements IBindingEngine
     private static final String COMMAND_SYNTAX_KEYWORD = "%COMMAND_SYNTAX%";
     private static final String COMMAND_DATA_KEYWORD   = "%COMMAND_DATA%";
     private static final String TRANSFORMER_NAME       = "transformers";
-    private static final String BINDINGCOMMAND_PATTERN = "\\{" + COMMAND_SYNTAX_KEYWORD + ":" + COMMAND_DATA_KEYWORD + "((:)(?<" + TRANSFORMER_NAME + ">.+))*}";
+    private static final String BINDINGCOMMAND_PATTERN = "\\{(" + COMMAND_SYNTAX_KEYWORD + "):(" + COMMAND_DATA_KEYWORD + ")((:)(?<" + TRANSFORMER_NAME + ">.+))*}";
 
     private static SimpleBindingEngine ourInstance = new SimpleBindingEngine();
 
@@ -99,7 +99,7 @@ public class SimpleBindingEngine implements IBindingEngine
     private <T> IDependencyObject<T> executeBindingAttempt(@NotNull final Matcher bindingCommandMatcher, @NotNull final IBindingCommand command, @Nullable T defaultValue)
     {
         final String transformerNames = bindingCommandMatcher.group(TRANSFORMER_NAME);
-        if (!transformerNames.isEmpty())
+        if (transformerNames != null && !transformerNames.isEmpty())
         {
             final LinkedHashSet<IBindingTransformer> transformers = Arrays.stream(transformerNames.split(":")).map(transformerMap::get).collect(Collectors.toCollection(LinkedHashSet::new));
 

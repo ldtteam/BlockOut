@@ -31,28 +31,14 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Override
     public T get(@Nullable final Object context)
     {
-        final T value;
-        if (context == null)
-        {
-            value = def;
-        }
-        else
-        {
-            value = property.apply(context).orElse(def);
-        }
-
-        lastResolvedHash = value.hashCode();
+        final T value = property.apply(context).orElse(def);
+        lastResolvedHash = value != null ? value.hashCode() : 0;
         return value;
     }
 
     @Override
     public void set(@Nullable final Object context, @Nullable final T value)
     {
-        if (context == null)
-        {
-            return;
-        }
-
         property.accept(context, Optional.ofNullable(value));
     }
 

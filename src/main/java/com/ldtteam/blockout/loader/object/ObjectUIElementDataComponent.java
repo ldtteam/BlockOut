@@ -7,6 +7,7 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class ObjectUIElementDataComponent implements IUIElementDataComponent, Serializable
 {
     private       Serializable serializable;
-    private final Injector     injector;
+    private transient Injector     injector;
 
     public ObjectUIElementDataComponent()
     {
@@ -122,7 +123,7 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
         final Map<String, ObjectUIElementDataComponent> map = new HashMap<>();
         getAsMap().forEach((key, value) -> map.put(key, (ObjectUIElementDataComponent) value));
 
-        return new ObjectUIElementData(map, new ObjectUIElementMetaData(map, parent), injector);
+        return new ObjectUIElementData(map, new ObjectUIElementMetaData(map, parent), getInjector());
     }
 
     @Override
@@ -144,5 +145,15 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
             return ComponentType.COMPLEX;
 
         return ComponentType.UNKNOWN;
+    }
+
+    public Injector getInjector()
+    {
+        if (injector == null)
+        {
+            injector = Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules());
+        }
+
+        return injector;
     }
 }

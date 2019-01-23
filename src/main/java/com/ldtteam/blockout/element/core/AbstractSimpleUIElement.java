@@ -2,6 +2,7 @@ package com.ldtteam.blockout.element.core;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
+import com.ldtteam.blockout.binding.property.PropertyCreationHelper;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutUIElementConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
@@ -15,6 +16,7 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +25,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
+import static com.ldtteam.blockout.util.Constants.ConverterTypes.ALIGNMENT_ENUMSET_TYPE;
+import static com.ldtteam.blockout.util.Constants.ConverterTypes.DOCK_ENUMSET_TYPE;
 import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public abstract class AbstractSimpleUIElement implements IUIElement
@@ -531,12 +536,19 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         public final U readFromElementData(
           @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, CONST_DEFAULT);
-            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP));
-            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE);
+            final IDependencyObject<ResourceLocation> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
+              PropertyCreationHelper.createFromNonOptional(
+                Optional.of((c) -> parent.getStyleId()),
+                Optional.empty(),
+                true
+            ), CONST_DEFAULT)).orElse(elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, CONST_DEFAULT));
+            final IDependencyObject<EnumSet<Alignment>> alignments = elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP), ALIGNMENT_ENUMSET_TYPE);
+            final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE, Dock.class, Dock.class); //We need it twice, sorry.
             final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, AxisDistance.DEFAULT);
             final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, Vector2d.DEFAULT);
-            final IDependencyObject<Object> dataContext = elementData.getFromRawDataWithDefault(CONST_CONTEXT, engine, new Object());
+            final IDependencyObject<Object> dataContext = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_CONTEXT, engine,
+              PropertyCreationHelper.createFromNonOptional((c) -> parent.getDataContext(), (c, o) -> parent.setDataContext(o), true), new Object()))
+                                                            .orElse(elementData.getFromRawDataWithDefault(CONST_DATACONTEXT, engine, new Object()));
             final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true);
             final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true);
 
@@ -562,7 +574,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         public final void writeToElementData(@NotNull final U element, @NotNull final IUIElementDataBuilder<?> builder)
         {
             builder
-              .addComponent(CONST_ALIGNMENT, element.getAlignment())
+              .addComponent(CONST_ALIGNMENT, element.getAlignment(), ALIGNMENT_ENUMSET_TYPE)
               .addComponent(CONST_DOCK, element.getDock())
               .addComponent(CONST_MARGIN, element.getMargin())
               .addComponent(CONST_ELEMENT_SIZE, element.getElementSize())

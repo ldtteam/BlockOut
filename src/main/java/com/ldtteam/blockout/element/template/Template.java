@@ -13,20 +13,19 @@ import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
-import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
-import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Template.KEY_TEMPLATE;
+import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_TYPE;
 
 public class Template extends AbstractChildrenContainingUIElement
 {
@@ -84,6 +83,7 @@ public class Template extends AbstractChildrenContainingUIElement
         final IDependencyObject<List<IUIElementData<?>>> childrenData = ownData.getFromRawDataWithDefault(CONST_CHILDREN,
           SimpleBindingEngine.getInstance(),
           Lists.newArrayList(),
+          CHILDREN_LIST_TYPE,
           instanceParent
           );
 
@@ -134,13 +134,24 @@ public class Template extends AbstractChildrenContainingUIElement
               @NotNull final String name,
               @NotNull final IBindingEngine engine,
               @NotNull final Property defaultProperty,
-              @Nullable final Object defaultValue,
+              @NotNull final Object defaultValue,
+              @NotNull final Type targetType,
               @NotNull final Object... params)
             {
                 if (name.equals(CONST_DATACONTEXT))
-                    return dataContext;
+                    return boundContext;
 
-                return convertedChildData.getFromRawDataWithProperty(name, engine, defaultProperty, defaultValue, params);
+                return convertedChildData.getFromRawDataWithProperty(name, engine, defaultProperty, defaultValue, targetType, params);
+            }
+
+            @Override
+            public Object getRawWithoutBinding(
+              @NotNull final String name, @Nullable final Object defaultValue, @NotNull final Type targetType, @NotNull final Object... params)
+            {
+                if (name.equals(CONST_DATACONTEXT))
+                    return boundContext;
+
+                return convertedChildData.getRawWithoutBinding(name, defaultValue, targetType, params);
             }
         };
 

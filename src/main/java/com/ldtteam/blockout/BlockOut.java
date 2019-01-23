@@ -6,6 +6,7 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.json.JsonLoader;
+import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.IProxy;
@@ -78,6 +79,8 @@ public class BlockOut
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
+
+        getProxy().getBindingEngine().registerBindingCommand(new DataContextBindingCommand());
     }
 
     @Mod.EventHandler

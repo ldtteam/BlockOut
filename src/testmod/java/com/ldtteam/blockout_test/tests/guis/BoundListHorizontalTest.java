@@ -28,7 +28,7 @@ public class BoundListHorizontalTest implements IBlockOutUITest
                                                                                                       .ofFile(new ResourceLocation("blockout_test:gui/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                       .withControl("list", List.ListConstructionDataBuilder.class, listConstructionDataBuilder -> listConstructionDataBuilder
-                                                                                                      .withDataContext(ImmutableList.of(
+                                                                                                      .withSource(ImmutableList.of(
                                                                                                         new BindingTestContext("Bound Entry 1"),
                                                                                                         new BindingTestContext("Bound Entry 2"),
                                                                                                         new BindingTestContext("Hello this is 3")

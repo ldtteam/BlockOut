@@ -1,5 +1,6 @@
 {
   "type": "blockout:root",
+  "id": "root",
   "style": "blockout:default",
   "size": "150,250",
   "children": [

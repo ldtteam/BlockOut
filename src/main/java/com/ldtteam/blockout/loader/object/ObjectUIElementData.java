@@ -18,11 +18,11 @@ import java.util.Optional;
 public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataComponent>, Serializable
 {
     @NotNull
-    private final Map<String, ObjectUIElementDataComponent>         object;
+    private final     Map<String, ObjectUIElementDataComponent> object;
     @NotNull
-    private final ObjectUIElementMetaData metaData;
-    @NotNull
-    private final transient Injector           injector;
+    private final     ObjectUIElementMetaData                   metaData;
+    @Nullable
+    private transient Injector                                  injector;
 
     public ObjectUIElementData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @NotNull final ObjectUIElementMetaData metaData) {
         this(object, metaData, Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules()));
@@ -37,6 +37,11 @@ public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataCo
     @Override
     public Injector getFactoryInjector()
     {
+        if (injector == null)
+        {
+            injector = Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules());
+        }
+
         return injector;
     }
 
@@ -52,7 +57,7 @@ public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataCo
     public Optional<ObjectUIElementDataComponent> getComponentWithName(@NotNull final String name)
     {
         if (object.containsKey(name))
-            return Optional.of(new ObjectUIElementDataComponent(object.get(name), injector));
+            return Optional.of(object.get(name));
 
         return Optional.empty();
     }

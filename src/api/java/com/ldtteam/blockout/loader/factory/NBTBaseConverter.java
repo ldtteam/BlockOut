@@ -9,6 +9,7 @@ import com.ldtteam.blockout.util.elementdata.IUIElementDataComponentStreamSuppor
 import com.ldtteam.blockout.util.nbt.NBTStreamSupport;
 import net.minecraft.nbt.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -89,7 +90,7 @@ public abstract class NBTBaseConverter<T extends NBTBase> implements IUIElementD
     @NotNull
     @Override
     public T readFromElement(
-      @NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+      @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
     {
         return (T) TYPE_CONVERSION_FUNCTIONS.get(getNBTType(component)).apply(component);
     }

@@ -45,7 +45,7 @@ public class ObjectUIElementMetaDataBuilder implements IUIElementMetaDataBuilder
         final IUIElementDataComponentConverter<ResourceLocation> factory = injector.getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
         final ObjectUIElementDataComponent component = factory.writeToElement(type, (c) -> new ObjectUIElementDataComponent(""));
 
-        componentMap.put(Constants.Controls.General.CONST_ID, component);
+        componentMap.put(Constants.Controls.General.CONST_TYPE, component);
 
         return this;
     }

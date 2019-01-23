@@ -25,7 +25,7 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
     @Nullable
     private final IUIElementHost parent;
     @NotNull
-    private transient final Injector injector;
+    private transient Injector injector;
 
     public ObjectUIElementMetaData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @Nullable final IUIElementHost parent)
     {
@@ -44,7 +44,7 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
     @Override
     public ResourceLocation getType()
     {
-        final IUIElementDataComponentConverter<ResourceLocation> factory = injector.getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
+        final IUIElementDataComponentConverter<ResourceLocation> factory = getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
         return factory.readFromElement(object.get(Constants.Controls.General.CONST_TYPE), null);
     }
 
@@ -65,7 +65,7 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
     {
         return object.containsKey(Constants.Controls.General.CONST_CHILDREN);
     }
-
+final
     /**
      * Merges its required data into the given component map.
      * Overrides if the required data is already contained.
@@ -79,5 +79,16 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
         dataComponentMap.put(Constants.Controls.General.CONST_ID, object.get(Constants.Controls.General.CONST_ID));
 
         return dataComponentMap;
+    }
+
+    @NotNull
+    public Injector getInjector()
+    {
+        if (injector == null)
+        {
+            injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
+        }
+
+        return injector;
     }
 }

@@ -3,8 +3,14 @@ package com.ldtteam.blockout.loader.factory.modules;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.ldtteam.blockout.loader.factory.NBTBaseConverter;
+import com.ldtteam.blockout.loader.factory.NBTDependingConverters;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
+import net.minecraft.util.math.BlockPos;
+
 
 public class NBTFactoryInjectionModule extends AbstractModule
 {
@@ -21,5 +27,8 @@ public class NBTFactoryInjectionModule extends AbstractModule
         bind(new TypeLiteral<IUIElementDataComponentConverter<NBTTagLong>>() {}).to(new TypeLiteral<NBTBaseConverter.LongConverter>() {});
         bind(new TypeLiteral<IUIElementDataComponentConverter<NBTTagShort>>() {}).to(new TypeLiteral<NBTBaseConverter.ShortConverter>() {});
         bind(new TypeLiteral<IUIElementDataComponentConverter<NBTTagString>>() {}).to(new TypeLiteral<NBTBaseConverter.StringConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ItemStack>>() {}).to(new TypeLiteral<NBTDependingConverters.ItemStackConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<Entity>>() {}).to(new TypeLiteral<NBTDependingConverters.EntityConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<IBlockState>>() {}).to(new TypeLiteral<NBTDependingConverters.BlockStateConverter>() {});
     }
 }

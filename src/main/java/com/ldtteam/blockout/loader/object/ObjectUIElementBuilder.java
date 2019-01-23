@@ -17,6 +17,7 @@ import com.ldtteam.blockout.util.stream.CollectorHelper;
 import com.ldtteam.blockout.util.stream.FunctionHelper;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     private ObjectUIElementMetaData metaData;
     private Map<String, ObjectUIElementDataComponent> attributes = new HashMap<>();
     private final List<ObjectUIElementData>                 children = Lists.newArrayList();
-    private final Injector                                  injector;
+    private transient final Injector                                  injector;
 
     public ObjectUIElementBuilder()
     {
@@ -62,7 +63,8 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     }
 
     @Override
-    public IUIElementDataBuilder<ObjectUIElementData> addChild(final IUIElement element)
+    public IUIElementDataBuilder<ObjectUIElementData>
+    addChild(final IUIElement element)
     {
         final ObjectUIElementData data = BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
         this.children.add(data);
@@ -70,9 +72,9 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     }
 
     @Override
-    public <T> IUIElementDataBuilder<ObjectUIElementData> addComponent(final String componentName, final T value)
+    public <T> IUIElementDataBuilder<ObjectUIElementData> addComponent(final String componentName, final T value, final Type typeToken)
     {
-        final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, value.getClass());
+        final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, typeToken);
         final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) injector.getInstance(Key.get(type));
         final ObjectUIElementDataComponent component = componentConverter.writeToElement(value, c -> new ObjectUIElementDataComponent());
 
@@ -93,6 +95,8 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
         childrenComponent.setList(childrenData);
         attributes.put(Constants.Controls.General.CONST_CHILDREN, childrenComponent);
 
-        return new ObjectUIElementData(attributes, metaData);
+        final Map<String, ObjectUIElementDataComponent> combinedAttributes = metaData.mergeData(attributes);
+
+        return new ObjectUIElementData(combinedAttributes, new ObjectUIElementMetaData(combinedAttributes, metaData.getParent().orElse(null), metaData.getInjector()));
     }
 }
