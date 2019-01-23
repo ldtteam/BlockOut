@@ -53,6 +53,12 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     }
 
     @Override
+    public Integer getAsInteger()
+    {
+        return element.getAsInt();
+    }
+
+    @Override
     public void setInteger(@NotNull final Integer integer) throws IllegalArgumentException
     {
         element = new JsonPrimitive(integer);
@@ -68,6 +74,12 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     public void setDouble(@NotNull final Double d) throws IllegalArgumentException
     {
         element = new JsonPrimitive(d);
+    }
+
+    @Override
+    public Float getAsFloat()
+    {
+        return element.getAsFloat();
     }
 
     @Override

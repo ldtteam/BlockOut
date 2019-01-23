@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 public class DataContextBindingCommand implements IBindingCommand
@@ -31,7 +32,15 @@ public class DataContextBindingCommand implements IBindingCommand
     {
         final String singleName = bindMatcher.group("singleName");
         if (singleName != null && !singleName.isEmpty())
+        {
+            if(singleName.trim().equalsIgnoreCase("this"))
+            {
+                return DependencyObjectHelper.createFromSetterAndGetter((Object c) -> (T) c, (c, o) -> {}, defaultValue);
+            }
+
             return DependencyObjectHelper.createFromProperty(PropertyCreationHelper.createFromName(Optional.of(singleName)), defaultValue);
+        }
+
 
         String getterName = bindMatcher.group("getterName");
         String setterName = bindMatcher.group("setterName");

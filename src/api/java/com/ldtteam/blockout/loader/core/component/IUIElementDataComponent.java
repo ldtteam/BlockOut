@@ -49,10 +49,7 @@ public interface IUIElementDataComponent
      *
      * @return The integer.
      */
-    default Integer getAsInteger()
-    {
-        return (int) (double) getAsDouble();
-    }
+    Integer getAsInteger();
 
     /**
      * Sets the integer on the current IUIElementData.
@@ -80,10 +77,7 @@ public interface IUIElementDataComponent
      *
      * @return The float
      */
-    default Float getAsFloat()
-    {
-        return (float) (double) getAsDouble();
-    }
+    Float getAsFloat();
 
     /**
      * Sets the float on the current IUIElementData.

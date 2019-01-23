@@ -46,37 +46,49 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
     @Override
     public Boolean getAsBoolean()
     {
-        return Boolean.parseBoolean(serializable.toString());
+        return (Boolean) serializable;
     }
 
     @Override
     public void setBoolean(@NotNull final Boolean bool) throws IllegalArgumentException
     {
-        serializable = bool.toString();
+        serializable = bool;
+    }
+
+    @Override
+    public Integer getAsInteger()
+    {
+        return (Integer) serializable;
     }
 
     @Override
     public void setInteger(@NotNull final Integer integer) throws IllegalArgumentException
     {
-        serializable = integer.toString();
+        serializable = integer;
     }
 
     @Override
     public Double getAsDouble()
     {
-        return Double.parseDouble(serializable.toString());
+        return (Double) serializable;
     }
 
     @Override
     public void setDouble(@NotNull final Double d) throws IllegalArgumentException
     {
-        serializable = d.toString();
+        serializable = d;
+    }
+
+    @Override
+    public Float getAsFloat()
+    {
+        return (Float) serializable;
     }
 
     @Override
     public void setFloat(@NotNull final Float f) throws IllegalArgumentException
     {
-        serializable = f.toString();
+        serializable = f;
     }
 
     @Override
