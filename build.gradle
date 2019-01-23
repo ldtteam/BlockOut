@@ -45,6 +45,9 @@ sourceSets {
         java {
             srcDir 'src/lang/json/java'
         }
+        resources {
+            srcDir 'src/lang/json/resources'
+        }
     }
     /*xml {
         compileClasspath += api.compileClasspath + api.output
