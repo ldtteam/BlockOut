@@ -21,28 +21,14 @@ import java.util.stream.Collectors;
 public class ObjectUIElementDataComponent implements IUIElementDataComponent, Serializable
 {
     private       Serializable serializable;
-    private transient Injector     injector;
 
     public ObjectUIElementDataComponent()
     {
-        this.injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
-    }
-
-    public ObjectUIElementDataComponent(final Injector injector)
-    {
-        this.injector = injector;
     }
 
     public ObjectUIElementDataComponent(final Serializable serializable)
     {
         this.serializable = serializable;
-        this.injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
-    }
-
-    public ObjectUIElementDataComponent(final Serializable serializable, final Injector injector)
-    {
-        this.serializable = serializable;
-        this.injector = injector;
     }
 
     @Override
@@ -123,7 +109,7 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
         final Map<String, ObjectUIElementDataComponent> map = new HashMap<>();
         getAsMap().forEach((key, value) -> map.put(key, (ObjectUIElementDataComponent) value));
 
-        return new ObjectUIElementData(map, new ObjectUIElementMetaData(map, parent), getInjector());
+        return new ObjectUIElementData(map, new ObjectUIElementMetaData(map, parent));
     }
 
     @Override
@@ -145,15 +131,5 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
             return ComponentType.COMPLEX;
 
         return ComponentType.UNKNOWN;
-    }
-
-    public Injector getInjector()
-    {
-        if (injector == null)
-        {
-            injector = Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules());
-        }
-
-        return injector;
     }
 }

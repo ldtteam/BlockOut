@@ -8,6 +8,7 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -24,27 +25,18 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
     private final Map<String, ObjectUIElementDataComponent> object;
     @Nullable
     private final IUIElementHost parent;
-    @NotNull
-    private transient Injector injector;
 
     public ObjectUIElementMetaData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @Nullable final IUIElementHost parent)
     {
         this.object = object;
         this.parent = parent;
-        this.injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
     }
 
-    public ObjectUIElementMetaData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @Nullable final IUIElementHost parent, @NotNull final Injector injector)
-    {
-        this.object = object;
-        this.parent = parent;
-        this.injector = injector;
-    }
 
     @Override
     public ResourceLocation getType()
     {
-        final IUIElementDataComponentConverter<ResourceLocation> factory = getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
+        final IUIElementDataComponentConverter<ResourceLocation> factory = ProxyHolder.getInstance().getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
         return factory.readFromElement(object.get(Constants.Controls.General.CONST_TYPE), null);
     }
 
@@ -79,16 +71,5 @@ final
         dataComponentMap.put(Constants.Controls.General.CONST_ID, object.get(Constants.Controls.General.CONST_ID));
 
         return dataComponentMap;
-    }
-
-    @NotNull
-    public Injector getInjector()
-    {
-        if (injector == null)
-        {
-            injector = Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules());
-        }
-
-        return injector;
     }
 }

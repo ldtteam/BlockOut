@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.loader.core;
 
-import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.internal.MoreTypes;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
@@ -11,6 +10,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,12 +23,6 @@ import java.util.Optional;
  */
 public interface IUIElementData<C extends IUIElementDataComponent>
 {
-    /**
-     * Returns the factory injector.
-     * @return the factory injector.
-     */
-    Injector getFactoryInjector();
-
     /**
      * Returns the metadata of a element.
      *
@@ -143,7 +137,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
         return getComponentWithName(name)
                  .map(targetComponent -> engine.attemptBind(targetComponent, defaultValue).orElseGet(() -> {
                      final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, targetType);
-                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
+                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) ProxyHolder.getInstance().getInjector().getInstance(Key.get(type));
 
                      if (!componentConverter.matchesInputTypes(targetComponent))
                          return DependencyObjectHelper.createFromProperty(defaultProperty, defaultValue);
@@ -194,7 +188,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
         return getComponentWithName(name)
                  .map(targetComponent -> {
                      final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, targetType);
-                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) getFactoryInjector().getInstance(Key.get(type));
+                     final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) ProxyHolder.getInstance().getInjector().getInstance(Key.get(type));
 
                      if (!componentConverter.matchesInputTypes(targetComponent))
                          return defaultValue;

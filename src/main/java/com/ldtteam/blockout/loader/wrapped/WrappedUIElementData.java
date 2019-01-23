@@ -16,12 +16,6 @@ public class WrappedUIElementData implements IUIElementData
 
     public WrappedUIElementData(final IUIElementData<?> wrapped) {this.wrapped = wrapped;}
 
-    @Override
-    public Injector getFactoryInjector()
-    {
-        return wrapped.getFactoryInjector();
-    }
-
     @NotNull
     @Override
     public IUIElementMetaData getMetaData()

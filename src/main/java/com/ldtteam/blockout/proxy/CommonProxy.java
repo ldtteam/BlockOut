@@ -2,6 +2,8 @@ package com.ldtteam.blockout.proxy;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
 import com.ldtteam.blockout.connector.common.CommonLoaderManager;
@@ -50,6 +52,8 @@ public class CommonProxy implements IProxy
     private final CommonLoaderManager     commonLoaderManager;
     private final CommonFactoryController commonFactoryController;
     private final Set<Module>             factoryInjectionModules = Sets.newHashSet();
+
+    private Injector injector;
 
     public CommonProxy()
     {
@@ -206,9 +210,12 @@ public class CommonProxy implements IProxy
 
     @NotNull
     @Override
-    public Set<Module> getFactoryInjectionModules()
+    public Injector getInjector()
     {
-        return ImmutableSet.copyOf(factoryInjectionModules);
+        if (injector == null)
+            injector = Guice.createInjector(factoryInjectionModules);
+
+        return injector;
     }
 
     @Override

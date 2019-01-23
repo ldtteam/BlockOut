@@ -79,7 +79,7 @@ public interface IProxy
     IBindingEngine getBindingEngine();
 
     @NotNull
-    Set<Module> getFactoryInjectionModules();
+    Injector getInjector();
 
     void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
 }

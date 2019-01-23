@@ -20,30 +20,13 @@ public class JsonUIElementData implements IUIElementData<JsonUIElementDataCompon
     private final JsonObject object;
     @NotNull
     private final IUIElementMetaData metaData;
-    @NotNull
-    private final Injector injector;
 
     public JsonUIElementData(
       @NotNull final JsonObject object,
       @Nullable IUIElementHost parent)
     {
-        this(object, parent, Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules()));
-    }
-
-    public JsonUIElementData(
-      @NotNull final JsonObject object,
-      @Nullable IUIElementHost parent,
-      @NotNull final Injector injector)
-    {
         this.object = object;
         this.metaData = new JsonUIElementMetaData(object, parent);
-        this.injector = injector;
-    }
-
-    @Override
-    public Injector getFactoryInjector()
-    {
-        return injector;
     }
 
     @NotNull
@@ -58,7 +41,7 @@ public class JsonUIElementData implements IUIElementData<JsonUIElementDataCompon
     public Optional<JsonUIElementDataComponent> getComponentWithName(@NotNull final String name)
     {
         if (object.has(name))
-            return Optional.of(new JsonUIElementDataComponent(object.get(name), injector));
+            return Optional.of(new JsonUIElementDataComponent(object.get(name)));
 
         return Optional.empty();
     }
@@ -74,6 +57,6 @@ public class JsonUIElementData implements IUIElementData<JsonUIElementDataCompon
 
     public JsonUIElementDataComponent toDataComponent()
     {
-        return new JsonUIElementDataComponent(object, injector);
+        return new JsonUIElementDataComponent(object);
     }
 }

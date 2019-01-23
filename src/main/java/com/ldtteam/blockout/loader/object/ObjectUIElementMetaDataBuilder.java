@@ -9,6 +9,7 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -19,30 +20,23 @@ public class ObjectUIElementMetaDataBuilder implements IUIElementMetaDataBuilder
 {
     @NotNull
     private final Map<String, ObjectUIElementDataComponent> componentMap = Maps.newHashMap();
-    @NotNull
-    private final Injector                                  injector;
 
     public ObjectUIElementMetaDataBuilder()
     {
-        this(Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules()));
-    }
 
-    public ObjectUIElementMetaDataBuilder(@NotNull final Injector injector)
-    {
-        this.injector = injector;
     }
 
     @Override
     public IUIElementMetaDataBuilder withId(@NotNull final String string)
     {
-        componentMap.put(Constants.Controls.General.CONST_ID, new ObjectUIElementDataComponent(string, injector));
+        componentMap.put(Constants.Controls.General.CONST_ID, new ObjectUIElementDataComponent(string));
         return this;
     }
 
     @Override
     public IUIElementMetaDataBuilder withType(@NotNull final ResourceLocation type)
     {
-        final IUIElementDataComponentConverter<ResourceLocation> factory = injector.getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
+        final IUIElementDataComponentConverter<ResourceLocation> factory = ProxyHolder.getInstance().getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
         final ObjectUIElementDataComponent component = factory.writeToElement(type, (c) -> new ObjectUIElementDataComponent(""));
 
         componentMap.put(Constants.Controls.General.CONST_TYPE, component);
@@ -53,6 +47,6 @@ public class ObjectUIElementMetaDataBuilder implements IUIElementMetaDataBuilder
     @Override
     public ObjectUIElementMetaData build()
     {
-        return new ObjectUIElementMetaData(componentMap, null, injector);
+        return new ObjectUIElementMetaData(componentMap, null);
     }
 }

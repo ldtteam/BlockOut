@@ -22,13 +22,10 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
 {
     @NotNull
     private JsonElement element;
-    @NotNull
-    private final Injector    injector;
 
-    JsonUIElementDataComponent(@NotNull final JsonElement element, @NotNull final Injector injector)
+    JsonUIElementDataComponent(@NotNull final JsonElement element)
     {
         this.element = element;
-        this.injector = injector;
     }
 
     @Override
@@ -82,7 +79,7 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     @Override
     public List<IUIElementDataComponent> getAsList()
     {
-        return JSONStreamSupport.streamChildData(element).map(element1 -> new JsonUIElementDataComponent(element1, injector)).collect(Collectors.toList());
+        return JSONStreamSupport.streamChildData(element).map(element1 -> new JsonUIElementDataComponent(element1)).collect(Collectors.toList());
     }
 
     @Override
@@ -98,7 +95,7 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
     public Map<String, IUIElementDataComponent> getAsMap()
     {
         return JSONStreamSupport.streamObject(element)
-          .collect(Collectors.toMap(Map.Entry::getKey, e -> new JsonUIElementDataComponent(e.getValue(), injector)));
+          .collect(Collectors.toMap(Map.Entry::getKey, e -> new JsonUIElementDataComponent(e.getValue())));
     }
 
     @Override
@@ -117,7 +114,7 @@ public class JsonUIElementDataComponent implements IUIElementDataComponent
         if (!isComplex())
             throw new IllegalStateException("Need complex Json Object for UIElementData.");
 
-        return new JsonUIElementData(element.getAsJsonObject(), parent, injector);
+        return new JsonUIElementData(element.getAsJsonObject(), parent);
     }
 
     @Override

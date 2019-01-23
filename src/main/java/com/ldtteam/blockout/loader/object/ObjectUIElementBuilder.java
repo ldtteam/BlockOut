@@ -12,6 +12,7 @@ import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.stream.CollectorHelper;
 import com.ldtteam.blockout.util.stream.FunctionHelper;
@@ -29,14 +30,10 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     private ObjectUIElementMetaData metaData;
     private Map<String, ObjectUIElementDataComponent> attributes = new HashMap<>();
     private final List<ObjectUIElementData>                 children = Lists.newArrayList();
-    private transient final Injector                                  injector;
 
     public ObjectUIElementBuilder()
     {
-        this(Guice.createInjector(BlockOut.getBlockOut().getProxy().getFactoryInjectionModules()));
     }
-
-    public ObjectUIElementBuilder(final Injector injector) {this.injector = injector;}
 
     @Override
     public IUIElementDataBuilder<ObjectUIElementData> copyFrom(final IUIElementData<?> elementData)
@@ -75,7 +72,7 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     public <T> IUIElementDataBuilder<ObjectUIElementData> addComponent(final String componentName, final T value, final Type typeToken)
     {
         final ParameterizedType type = new MoreTypes.ParameterizedTypeImpl(null, IUIElementDataComponentConverter.class, typeToken);
-        final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) injector.getInstance(Key.get(type));
+        final IUIElementDataComponentConverter<T> componentConverter = (IUIElementDataComponentConverter<T>) ProxyHolder.getInstance().getInjector().getInstance(Key.get(type));
         final ObjectUIElementDataComponent component = componentConverter.writeToElement(value, c -> new ObjectUIElementDataComponent());
 
         attributes.put(componentName, component);
@@ -97,6 +94,6 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
 
         final Map<String, ObjectUIElementDataComponent> combinedAttributes = metaData.mergeData(attributes);
 
-        return new ObjectUIElementData(combinedAttributes, new ObjectUIElementMetaData(combinedAttributes, metaData.getParent().orElse(null), metaData.getInjector()));
+        return new ObjectUIElementData(combinedAttributes, new ObjectUIElementMetaData(combinedAttributes, metaData.getParent().orElse(null)));
     }
 }

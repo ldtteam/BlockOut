@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.proxy;
 
+import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
@@ -157,9 +158,9 @@ public class ProxyHolder implements IProxy
 
     @NotNull
     @Override
-    public Set<Module> getFactoryInjectionModules()
+    public Injector getInjector()
     {
-        return proxy.getFactoryInjectionModules();
+        return proxy.getInjector();
     }
 
     @Override

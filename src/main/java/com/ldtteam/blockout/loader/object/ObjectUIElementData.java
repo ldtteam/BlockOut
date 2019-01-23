@@ -21,28 +21,10 @@ public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataCo
     private final     Map<String, ObjectUIElementDataComponent> object;
     @NotNull
     private final     ObjectUIElementMetaData                   metaData;
-    @Nullable
-    private transient Injector                                  injector;
 
     public ObjectUIElementData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @NotNull final ObjectUIElementMetaData metaData) {
-        this(object, metaData, Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules()));
-    }
-
-    public ObjectUIElementData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @NotNull final ObjectUIElementMetaData metaData, @NotNull final Injector injector) {
         this.object = object;
         this.metaData = metaData;
-        this.injector = injector;
-    }
-
-    @Override
-    public Injector getFactoryInjector()
-    {
-        if (injector == null)
-        {
-            injector = Guice.createInjector(ProxyHolder.getInstance().getFactoryInjectionModules());
-        }
-
-        return injector;
     }
 
     @NotNull
