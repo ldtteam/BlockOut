@@ -1,4 +1,5 @@
 [
   "blockout_test:styles/test/style.json",
-  "blockout_test:styles/minecolonies/style.json"
+  "blockout_test:styles/minecolonies/style.json",
+  "blockout_test:styles/guidebook/style.json"
 ]

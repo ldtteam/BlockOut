@@ -1,0 +1,41 @@
+{
+  "id": "image",
+  "resources": [
+    {
+      "id": "image:guidebook/background",
+      "data": "blockout_test:styles/guidebook/images/background.png"
+    },
+    {
+      "id": "image:guidebook/background_side",
+      "data": "blockout_test:styles/guidebook/images/background_side.png"
+    },
+    {
+      "id": "image:guidebook/ribbon_left",
+      "data": "blockout_test:styles/guidebook/images/index_ribbon_left.png"
+    },
+    {
+      "id": "image:guidebook/ribbon_right",
+      "data": "blockout_test:styles/guidebook/images/index_ribbon_right.png"
+    },
+    {
+      "id": "image:guidebook/button_wide",
+      "data": "blockout_test:styles/guidebook/images/index_button.png"
+    },
+    {
+      "id": "image:guidebook/button_small",
+      "data": "blockout_test:styles/guidebook/images/add_bookmark.png"
+    },
+    {
+      "id": "image:guidebook/button_delete_cross",
+      "data": "blockout_test:styles/guidebook/images/delete_small.png"
+    },
+    {
+      "id": "image:guidebook/arrow_left",
+      "data": "blockout_test:styles/guidebook/images/builder_sketch_arrow_left_c.png"
+    },
+    {
+      "id": "image:guidebook/arrow_right",
+      "data": "blockout_test:styles/guidebook/images/builder_sketch_arrow_right_c.png"
+    }
+  ]
+}

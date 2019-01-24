@@ -1,0 +1,13 @@
+{
+  "id": "template",
+  "resources": [
+    {
+      "id": "template:guidebook/index_button",
+      "data": "blockout_test:styles/test/controls/index_button.json"
+    },
+    {
+      "id": "template:guidebook/bookmarks_button",
+      "data": "blockout_test:styles/test/controls/bookmarks_button.json"
+    }
+  ]
+}

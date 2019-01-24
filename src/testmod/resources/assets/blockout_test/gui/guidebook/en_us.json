@@ -1,0 +1,42 @@
+{
+    "id": "root",
+    "type": "blockout:root",
+    "size": "576,243",
+    "children": [
+      {
+        "id": "bg_side_left",
+        "type": "blockout:image",
+        "alignment":"LEFT,TOP",
+        "margin":"0,30,0,0",
+        "icon": "image:guidebook/background"
+      },
+      {
+        "id": "bg_side_right",
+        "type": "blockout:image",
+        "alignment":"LEFT,TOP",
+        "margin":"433,30,0,0",
+        "icon": "image:guidebook/background"
+      },
+      {
+        "id": "bg",
+        "type": "blockout:image",
+        "alignment":"LEFT,TOP",
+        "margin":"101,0,0,0",
+        "icon": "image:guidebook/background"
+      },
+      {
+        "id": "bg_ribbon_index",
+        "type": "blockout:image",
+        "alignment":"LEFT,TOP",
+        "margin":"11,39,0,0",
+        "icon": "image:guidebook/ribbon_left"
+      },
+      {
+        "id": "bg_ribbon_bookmarks",
+        "type": "blockout:image",
+        "alignment":"LEFT,TOP",
+        "margin":"475,39,0,0",
+        "icon": "image:guidebook/ribbon_right"
+      }
+    ]
+  }
