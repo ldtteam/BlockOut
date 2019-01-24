@@ -109,12 +109,28 @@ configFile.withReader {
 
 configurations {
     testmodRuntime.extendsFrom(forgeGradleGradleStart)
+
+    apiContained {}
+    apiCompile.extendsFrom apiContained
+
+    jsonContained {
+        extendsFrom apiContained
+    }
+    jsonCompile.extendsFrom jsonContained
+
+    contained {
+        extendsFrom apiContained
+        extendsFrom jsonContained
+    }
+    compile.extendsFrom contained
 }
 
 dependencies {
-    apiCompile 'com.google.inject:guice:4.2.1'
-    apiCompile 'com.intellij:annotations:+@jar'
-    apiCompile ('com.esotericsoftware:kryo:4.+') {
+    apiContained ('com.google.inject:guice:4.2.1') {
+        exclude group: 'com.google.guava', module: 'guava'
+    }
+    apiContained 'com.intellij:annotations:+@jar'
+    apiContained ('com.esotericsoftware:kryo:4.+') {
         exclude group: 'org.ow2.asm', module: 'asm'
     }
 
@@ -180,8 +196,18 @@ jar {
 
     dependsOn javadocJar
 
+    from(configurations.contained.files) {
+        include '*'
+        into 'META-INF/libraries'
+    }
+
     manifest {
-        attributes 'FMLAT': "blockout_at.cfg"
+        attributes([
+                'ContainedDeps': configurations.contained.files.collect { it.name }.join(' '),
+                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:universal",
+                'Timestamp': System.currentTimeMillis(),
+                'FMLAT': "blockout_at.cfg"
+        ])
     }
 }
 
@@ -223,6 +249,19 @@ reobf {
     utilitiesJar {}
     testModJar {}
 }
+
+tasks.runClient.classpath utilitiesJar.getArchivePath()
+tasks.runClient.classpath testModJar.getArchivePath()
+
+tasks.runClient.dependsOn utilitiesJar
+tasks.runClient.dependsOn testModJar
+
+tasks.runServer.classpath utilitiesJar.getArchivePath()
+tasks.runServer.classpath testModJar.getArchivePath()
+
+tasks.runServer.dependsOn utilitiesJar
+tasks.runServer.dependsOn testModJar
+
 
 idea {
     module {
