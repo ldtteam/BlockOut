@@ -163,6 +163,13 @@ public class ProxyHolder implements IProxy
         return proxy.getInjector();
     }
 
+    @NotNull
+    @Override
+    public String convertToColorCode(@NotNull final String input)
+    {
+        return proxy.convertToColorCode(input);
+    }
+
     @Override
     public void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule)
     {

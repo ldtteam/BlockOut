@@ -218,6 +218,13 @@ public class CommonProxy implements IProxy
         return injector;
     }
 
+    @NotNull
+    @Override
+    public String convertToColorCode(@NotNull final String input)
+    {
+        return input;
+    }
+
     @Override
     public void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule)
     {

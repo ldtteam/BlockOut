@@ -11,7 +11,10 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
+import com.ldtteam.blockout.util.color.Color;
+import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -140,7 +143,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public String getFontColor()
     {
-        return fontColor.get(this);
+        return ProxyHolder.getInstance().convertToColorCode(fontColor.get(this));
     }
 
     public void setFontColor(String color)  {

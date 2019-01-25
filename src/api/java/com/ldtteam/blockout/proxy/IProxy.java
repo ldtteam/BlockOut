@@ -16,6 +16,7 @@ import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import com.ldtteam.blockout.util.math.Vector2d;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -80,6 +81,9 @@ public interface IProxy
 
     @NotNull
     Injector getInjector();
+
+    @NotNull
+    String convertToColorCode(@NotNull final String input);
 
     void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
 }

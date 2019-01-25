@@ -14,6 +14,7 @@ import com.ldtteam.blockout.management.client.update.NoOpUpdateManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.util.SideHelper;
+import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -117,6 +118,13 @@ public class ClientProxy extends CommonProxy
     public MultiColoredFontRenderer getFontRenderer()
     {
         return multiColoredFontRenderer;
+    }
+
+    @NotNull
+    @Override
+    public String convertToColorCode(@NotNull final String input)
+    {
+        return ColorUtils.convertToFontRendererColor(input);
     }
 
     @NotNull
