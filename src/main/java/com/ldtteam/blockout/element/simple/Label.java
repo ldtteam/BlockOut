@@ -17,6 +17,7 @@ import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -88,6 +89,8 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         controller.getScissoringController().focus(this);
 
         GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
+
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -121,7 +124,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
             final String keyGroupMatching = contentMatcher.group("keydata");
             if (keyGroupMatching == null)
             {
-                continue;
+                break;
             }
 
             rawContents = rawContents.replace("${" + keyGroupMatching + "}", I18n.translateToLocal(keyGroupMatching));

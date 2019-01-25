@@ -178,11 +178,11 @@ public final class ColorUtils
             return new Color(nameToColorMap.get(input.toLowerCase())).encodeColor();
 
         try {
-            return new Color(Integer.parseInt(input), true).encodeColor();
+            return new Color(Integer.decode(input), true).encodeColor();
         }
         catch (Exception e)
         {
-            return TextFormatting.RESET.toString();
+            return input;
         }
     }
 }
