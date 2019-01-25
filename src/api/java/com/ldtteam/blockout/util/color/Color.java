@@ -20,6 +20,7 @@ import java.awt.image.ColorModel;
  * <p>
  * Copyrighted according to Project specific license
  */
+@SideOnly(Side.CLIENT)
 public class Color extends java.awt.Color
 {
     /**

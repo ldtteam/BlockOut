@@ -15,6 +15,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,8 +26,7 @@ import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.ldtteam.blockout.util.Constants.Controls.Label.CONST_CONTENT;
-import static com.ldtteam.blockout.util.Constants.Controls.Label.KEY_LABEL;
+import static com.ldtteam.blockout.util.Constants.Controls.Label.*;
 
 public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 {
@@ -34,6 +34,8 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     @NotNull
     private IDependencyObject<String> contents;
+    @NotNull
+    private IDependencyObject<String> fontColor;
 
     public Label(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -43,6 +45,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         super(KEY_LABEL, style, id, parent);
 
         this.contents = DependencyObjectHelper.createFromValue("");
+        this.fontColor = DependencyObjectHelper.createFromValue(TextFormatting.RESET.toString());
     }
 
     public Label(
@@ -56,10 +59,12 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<String> contents)
+      @NotNull final IDependencyObject<String> contents,
+      @NotNull final IDependencyObject<String> fontColor)
     {
         super(KEY_LABEL, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.contents = contents;
+        this.fontColor = fontColor;
     }
 
     @Override
@@ -120,7 +125,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
             contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 
-        return rawContents;
+        return getFontColor() + rawContents + TextFormatting.RESET.toString();
     }
 
     public String getContents()
@@ -131,6 +136,15 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public void setContents(String contents)
     {
         this.contents.set(this, contents);
+    }
+
+    public String getFontColor()
+    {
+        return fontColor.get(this);
+    }
+
+    public void setFontColor(String color)  {
+        this.fontColor.set(this, color);
     }
 
     public static class LabelConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<LabelConstructionDataBuilder, Label>
@@ -157,6 +171,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         {
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");
+                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, TextFormatting.RESET.toString());
 
                 final Label element = new Label(
                   id,
@@ -169,7 +184,8 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                   dataContext,
                   visible,
                   enabled,
-                  contents
+                  contents,
+                  fontColor
                 );
 
                 return element;

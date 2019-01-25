@@ -136,6 +136,7 @@ public class Constants
             public static final ResourceLocation KEY_LABEL = new ResourceLocation(MOD_ID, "label");
 
             public static final String CONST_CONTENT = "content";
+            public static final String CONST_FONT_COLOR = "font-color";
         }
 
         public static class TextField
