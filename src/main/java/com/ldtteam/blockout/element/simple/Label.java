@@ -192,7 +192,10 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                 );
 
                 return element;
-            }, (element, builder) -> builder.addComponent(CONST_CONTENT, element.getContents()));
+            }, (element, builder) ->
+                 builder
+                   .addComponent(CONST_CONTENT, element.getContents())
+                   .addComponent(CONST_FONT_COLOR, element.getFontColor()));
         }
 
         @NotNull

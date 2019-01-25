@@ -166,6 +166,11 @@ public final class ColorUtils
     @SideOnly(Side.CLIENT)
     public static String convertToFontRendererColor(@NotNull final String input)
     {
+        if (input.startsWith(String.valueOf((char) MARKER)))
+        {
+            return input;
+        }
+
         if (input.isEmpty())
             return TextFormatting.RESET.toString();
 
