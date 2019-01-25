@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class ModCreativeTabs
 {
-    public static final CreativeTabs BOTEST = new CreativeTabs("botest")
+    public static final CreativeTabs BOTEST = new CreativeTabs("blockout_test")
     {
 
         @Override

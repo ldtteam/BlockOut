@@ -34,8 +34,7 @@ public class ItemGuidebook extends AbstractItemMinecolonies {
         final ItemStack stack = playerIn.getHeldItem(hand);
         final String clientLanguage;
 
-        // TODO: check if a book translation (LOCATION_OF_GUIDEBOOKS) exists and then
-        // use it
+        // TODO: check if a book translation (LOCATION_OF_GUIDEBOOKS) exists and then use it
         if (!worldIn.isRemote)
         {
             if (true)

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "botest:items/guidebook"
+    "layer0": "blockout_test:items/guidebook"
   }
 }
