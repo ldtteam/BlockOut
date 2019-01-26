@@ -3,11 +3,11 @@
   "resources": [
     {
       "id": "template:guidebook/index_button",
-      "data": "blockout_test:styles/guidebook/controls/index_button.json"
+      "data": "guidebook_test:styles/guidebook/controls/index_button.json"
     },
     {
       "id": "template:guidebook/bookmarks_button",
-      "data": "blockout_test:styles/guidebook/controls/bookmarks_button.json"
+      "data": "guidebook_test:styles/guidebook/controls/bookmarks_button.json"
     }
   ]
 }

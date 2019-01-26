@@ -1,4 +1,4 @@
-package com.ldtteam.blockout_test.items;
+package com.ldtteam.guidebook_test.items;
 
 import com.ldtteam.blockout.BlockOut;
 import net.minecraft.client.Minecraft;
@@ -48,7 +48,7 @@ public class ItemGuidebook extends AbstractItemMinecolonies
             {
                 clientLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
             }
-            // com.ldtteam.botest.BoTest.logger.info(worldIn.isRemote);
+            com.ldtteam.guidebook_test.Guidebook_Test.logger.info(worldIn.isRemote);
 
             if (!(playerIn instanceof EntityPlayerMP))
             {
@@ -59,10 +59,9 @@ public class ItemGuidebook extends AbstractItemMinecolonies
             //final WindowGuideBook window = new WindowGuideBook(stack, ((EntityPlayerMP) playerIn).getAdvancements(), clientLanguage);
 
             EntityPlayerMP playerMP = (EntityPlayerMP) playerIn;
-            BlockOut.getBlockOut().getProxy().getGuiController()
-              .openUI(playerMP, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                    .ofFile(new ResourceLocation("blockout_test" + LOCATION_OF_GUIDEBOOKS + clientLanguage + ".json"))
-                                                    .forEntity(playerMP));
+            BlockOut.getBlockOut().getProxy().getGuiController().openUI(playerMP, iGuiKeyBuilder -> iGuiKeyBuilder
+                .ofFile(new ResourceLocation("guidebook_test" + LOCATION_OF_GUIDEBOOKS + clientLanguage + ".json"))
+                .forEntity(playerMP));
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }

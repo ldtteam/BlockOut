@@ -1,0 +1,12 @@
+item.guidebook_test.guidebook.name=Guidebook
+itemGroup.guidebook_test=Blockout Test
+com.ldtteam.guidebook_test.coremod.gui.guidebook.errorPage=Something not nice happened. If the problem persists, please report it to our Github. Thank you in advance
+com.ldtteam.guidebook_test.coremod.gui.guidebook.pageShorcut=p.
+com.ldtteam.guidebook_test.coremod.gui.guidebook.index=Index
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks=Bookmarks
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.new=Add bookmark
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.title=Enter a name for bookmark:
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.confirm=Add
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.cancel=Cancel
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.alreadyExists=This name already exists!
+com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks.probablyRemoved=This bookmark was pointing to page which no longer exists. Bookmark got automatically removed, you can make a new one.

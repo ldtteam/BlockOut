@@ -1,4 +1,4 @@
-package com.ldtteam.blockout_test.items;
+package com.ldtteam.guidebook_test.items;
 
 import net.minecraft.item.Item;
 
@@ -21,8 +21,8 @@ public abstract class AbstractItemMinecolonies extends Item
     {
         super();
         this.name = name;
-        super.setTranslationKey("blockout_test" + "." + this.name);
-        setRegistryName("blockout_test", this.name);
+        super.setTranslationKey("guidebook_test" + "." + this.name);
+        setRegistryName("guidebook_test", this.name);
     }
 
     /**

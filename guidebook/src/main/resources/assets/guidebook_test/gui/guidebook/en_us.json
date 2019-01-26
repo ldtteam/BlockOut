@@ -48,7 +48,7 @@
           "size": "90,16",
           "margin": "0",
           "font-color": "0xd3d3d3",
-          "content": "${com.ldtteam.blockout_test.coremod.gui.guidebook.index}"
+          "content": "${com.ldtteam.guidebook_test.coremod.gui.guidebook.index}"
         },
         {
           "id": "index_list",
@@ -81,7 +81,7 @@
           "size": "90,16",
           "margin": "0",
           "font-color": "red",
-          "content": "${com.ldtteam.blockout_test.coremod.gui.guidebook.bookmarks}"
+          "content": "${com.ldtteam.guidebook_test.coremod.gui.guidebook.bookmarks}"
         },
         {
           "id": "bookmarks_list",

@@ -1,7 +1,0 @@
-{
-  "id": "blockout_test:guidebook",
-  "types": [
-    "blockout_test:styles/guidebook/images/images.json",
-    "blockout_test:styles/guidebook/controls/controls.json"
-  ]
-}

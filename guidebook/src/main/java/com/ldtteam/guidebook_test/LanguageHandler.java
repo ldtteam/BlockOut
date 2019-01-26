@@ -1,4 +1,4 @@
-package com.ldtteam.blockout_test;
+package com.ldtteam.guidebook_test;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;

@@ -1,6 +1,6 @@
-package com.ldtteam.blockout_test.items;
+package com.ldtteam.guidebook_test.items;
 
-import com.ldtteam.blockout_test.EventHandler;
+import com.ldtteam.guidebook_test.EventHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
  */
 public final class ModCreativeTabs
 {
-    public static final CreativeTabs BOTEST = new CreativeTabs("blockout_test")
+    public static final CreativeTabs BOTEST = new CreativeTabs("guidebook_test")
     {
 
         @Override
