@@ -57,9 +57,8 @@ sourceSets {
         }
     }*/
     main {
-        compileClasspath += api.compileClasspath + api.output
-        compileClasspath += json.compileClasspath + json.output
-//        compileClasspath += xml.compileClasspath + xml.output
+        compileClasspath += api.output
+        compileClasspath += json.output
 
         java {
             srcDir 'src/main/java'
@@ -108,7 +107,8 @@ configFile.withReader {
 }
 
 configurations {
-    testmodRuntime.extendsFrom(forgeGradleGradleStart)
+    testmodRuntime.extendsFrom forgeGradleGradleStart
+    utilitiesRuntime.extendsFrom forgeGradleGradleStart
 
     apiContained {}
     apiCompile.extendsFrom apiContained
@@ -123,6 +123,9 @@ configurations {
         extendsFrom jsonContained
     }
     compile.extendsFrom contained
+
+    utilitiesCompile.extendsFrom compile
+    testModCompile.extendsFrom utilitiesCompile
 }
 
 dependencies {
@@ -189,27 +192,6 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
     classifier "javadoc"
 }
 
-jar {
-    from sourceSets.main.output
-    from sourceSets.api.output
-    from sourceSets.json.output
-
-    dependsOn javadocJar
-
-    from(configurations.contained.files) {
-        include '*'
-        into 'META-INF/libraries'
-    }
-
-    manifest {
-        attributes([
-                'ContainedDeps': configurations.contained.files.collect { it.name }.join(' '),
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:universal",
-                'Timestamp': System.currentTimeMillis(),
-                'FMLAT': "blockout_at.cfg"
-        ])
-    }
-}
 
 task apiJar(type: Jar) {
     from sourceSets.api.output
@@ -223,12 +205,6 @@ task jsonJar(type: Jar) {
     classifier 'lang-json'
 }
 
-/*task xmlJar(type: Jar) {
-    from sourceSets.xml.output
-
-    classifier 'lang-xml'
-}*/
-
 task utilitiesJar(type: Jar) {
     from sourceSets.utilities.output
 
@@ -241,11 +217,32 @@ task testModJar(type: Jar) {
     classifier 'testmod'
 }
 
+jar {
+    from sourceSets.main.output
+    from sourceSets.api.output
+
+    dependsOn tasks.javadocJar
+    dependsOn tasks.jsonJar
+
+    from(configurations.contained.files) {
+        include '*'
+        into 'META-INF/libraries'
+    }
+
+    manifest {
+        attributes([
+                'ContainedDeps': (configurations.contained.files.collect { it.name }.join(' ')) + ' ' + tasks.jsonJar.name,
+                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:universal",
+                'Timestamp': System.currentTimeMillis(),
+                'FMLAT': "blockout_at.cfg"
+        ])
+    }
+}
+
 reobf {
     jar {}
     apiJar {}
     jsonJar {}
-//    xmlJar {}
     utilitiesJar {}
     testModJar {}
 }
