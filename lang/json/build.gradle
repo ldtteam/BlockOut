@@ -1,0 +1,10 @@
+jar {
+    manifest {
+        attributes([
+                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:json",
+                'Timestamp': System.currentTimeMillis()
+        ])
+    }
+
+    classifier 'json'
+}

@@ -1,0 +1,10 @@
+jar {
+    manifest {
+        attributes([
+                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:guidebook",
+                'Timestamp': System.currentTimeMillis()
+        ])
+    }
+
+    classifier 'guidebook'
+}

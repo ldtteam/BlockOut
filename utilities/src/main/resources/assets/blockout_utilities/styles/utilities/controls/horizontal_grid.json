@@ -1,0 +1,16 @@
+{
+  "id": "template_grid_horizontal",
+  "type": "blockout:template",
+  "children": [
+    {
+      "id": "list_with_indexed_id",
+      "type": "blockout:list",
+      "alignment": "LEFT,RIGHT",
+      "margin": "0,0,5,0",
+      "source": "{Binding:Entries}",
+      "template": "{Binding:Template}",
+      "orientation": "horizontal",
+      "showScrollBar": false
+    }
+  ]
+}

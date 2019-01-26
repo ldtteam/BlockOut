@@ -1,354 +1,235 @@
+/*
+    This is the primary blockout project gradle file.
+    BlockOut is build up out of several individual minecraft mods that are grouped together under the BlockOut umbrella in game.
+
+    This parent project configures all projects in a way that makes them work together and saves a lot of duplicate code.
+ */
+
+//We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 
-plugins {
-    id "com.matthewprenger.cursegradle" version "1.1.0"
-}
-
-repositories {
-    maven {
-        name 'LDTTeam - Modding'
-        url 'https://ldtteam.jfrog.io/ldtteam/modding/'
-    }
-}
-
-apply plugin: 'idea'
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'jacoco'
-apply plugin: 'maven'
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-}
-
-sourceSets {
-    api {
-        java {
-            srcDir 'src/api/java'
+//Now configure all subprojects.
+subprojects {
+    //Add the central repository so that we always have access to our cached dependencies.
+    repositories {
+        maven {
+            name 'LDTTeam - Modding'
+            url 'https://ldtteam.jfrog.io/ldtteam/modding/'
         }
     }
-    json {
-        compileClasspath += api.compileClasspath + api.output
 
-        java {
-            srcDir 'src/lang/json/java'
-        }
-        resources {
-            srcDir 'src/lang/json/resources'
-        }
+    //Setup the plugins that we need.
+    apply plugin: 'idea'
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'maven'
+
+    //All mods have the same test harness.
+    //JUNIT, MOCKITO, POWERMOCK and HAMCREST are being added here.
+    dependencies {
+        testCompile 'junit:junit:4.11'
+        testCompile "org.mockito:mockito-core:1.+"
+        testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.5'
+        testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.5'
+        testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
     }
-    /*xml {
-        compileClasspath += api.compileClasspath + api.output
 
-        java {
-            srcDir 'src/lang/xml/java'
-        }
-    }*/
-    main {
-        compileClasspath += api.output
-        compileClasspath += json.output
+    //Setup the same maven artifact information.
+    //Seperation of the jars is handled via their maven artifact type.
+    //The main subproject generates the fat universal jar.
+    group = "com.ldtteam"
+    version = minecraft_version.toString() + "-" + System.getenv().get("Version")
+    archivesBaseName = "blockout"
 
-        java {
-            srcDir 'src/main/java'
-        }
-        resources {
-            srcDir 'src/main/resources'
-        }
+    //Setup for which java version we are compiling
+    //Minecraft defaults to 1.8, anything higher does currently not work with Forge.
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
     }
-    test {
-        java {
-            srcDir 'src/test/java'
-        }
-        resources {
-            srcDir 'src/test/resources'
-        }
-    }
-    utilities {
-        compileClasspath += main.compileClasspath + main.output
 
-        java {
-            srcDir 'src/utilities/java'
-        }
-        resources {
-            srcDir 'src/utilities/resources'
-        }
-    }
-    testmod {
-        compileClasspath += utilities.compileClasspath + utilities.output
+    //Setup the global minecraft information.
+    //Every subproject runs against the same minecraft version.
+    minecraft {
 
-        java {
-            srcDir 'src/testmod/java'
-        }
-        resources {
-            srcDir 'src/testmod/resources'
+        version = minecraft_version + "-" + forge_version
+        runDir = "run"
+
+        mappings = "${blockout_mappings}"
+
+        replace "@VERSION@", project.version
+        replace "@MCVERSION@", minecraft_version
+        replace "@FORGEVERSION@", forge_version
+
+        // Set the jar signature in code prior to compilation, if it exists as a build property
+        if (project.hasProperty("signature")) {
+            replace "@FINGERPRINT@", project.signature
         }
     }
-}
 
-
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    ext.config = new ConfigSlurper().parse prop
-}
-
-configurations {
-    testmodRuntime.extendsFrom forgeGradleGradleStart
-    utilitiesRuntime.extendsFrom forgeGradleGradleStart
-
-    apiContained {}
-    apiCompile.extendsFrom apiContained
-
-    jsonContained {
-        extendsFrom apiContained
-    }
-    jsonCompile.extendsFrom jsonContained
-
-    contained {
-        extendsFrom apiContained
-        extendsFrom jsonContained
-    }
-    compile.extendsFrom contained
-
-    utilitiesCompile.extendsFrom compile
-    testModCompile.extendsFrom utilitiesCompile
-}
-
-dependencies {
-    apiContained ('com.google.inject:guice:4.2.1') {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
-    apiContained 'com.intellij:annotations:+@jar'
-    apiContained ('com.esotericsoftware:kryo:4.+') {
-        exclude group: 'org.ow2.asm', module: 'asm'
+    //Setup the compiler to output all information we need.
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << "-Xlint"
     }
 
-    testCompile 'junit:junit:4.11'
-    testCompile "org.mockito:mockito-core:1.+"
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.5'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.5'
-    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
-}
-
-group = "com.ldtteam"
-version = config.minecraft_version.toString() + "-" + System.getenv()["Version"]
-archivesBaseName = "blockout"
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
-minecraft {
-
-    version = config.minecraft_version + "-" + config.forge_version
-    runDir = "run"
-	
-	mappings = "${config.blockout_mappings}"
-
-    replace "@VERSION@", project.version
-    replace "@MCVERSION@", config.minecraft_version
-    replace "@FORGEVERSION@", config.forge_version
-
-    // Set the jar signature in code prior to compilation, if it exists as a build property
-    if (project.hasProperty("signature")) {
-        replace "@FINGERPRINT@", project.signature
-    }
-}
-
-processResources {
-
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+    //Create a javadoc jar
+    task javadocJar(type: Jar, dependsOn: 'javadoc') {
+        from "build/docs/javadoc"
+        classifier "javadoc"
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}
-
-compileJava {
-    options.encoding = 'UTF-8'
-    options.compilerArgs << "-Xlint"
-}
-
-task javadocJar(type: Jar, dependsOn: 'javadoc') {
-    from "build/docs/javadoc"
-    classifier "javadoc"
-}
-
-
-task apiJar(type: Jar) {
-    from sourceSets.api.output
-
-    classifier 'api'
-}
-
-task jsonJar(type: Jar) {
-    from sourceSets.json.output
-
-    classifier 'lang-json'
-}
-
-task utilitiesJar(type: Jar) {
-    from sourceSets.utilities.output
-
-    classifier 'utilities'
-}
-
-task testModJar(type: Jar) {
-    from sourceSets.testmod.output
-
-    classifier 'testmod'
-}
-
-jar {
-    from sourceSets.main.output
-    from sourceSets.api.output
-
-    dependsOn tasks.javadocJar
-    dependsOn tasks.jsonJar
-
-    from(configurations.contained.files) {
-        include '*'
-        into 'META-INF/libraries'
+    //The primary jar needs to have a javadoc jar build
+    //Ensures it is created and ready to upload.
+    jar {
+        dependsOn tasks.javadocJar
     }
 
-    manifest {
-        attributes([
-                'ContainedDeps': (configurations.contained.files.collect { it.name }.join(' ')) + ' ' + tasks.jsonJar.name,
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:universal",
-                'Timestamp': System.currentTimeMillis(),
-                'FMLAT': "blockout_at.cfg"
-        ])
-    }
-}
+    //All modules process the resources the same way.
+    processResources {
+        // this will ensure that this task is redone when the versions change.
+        inputs.property "version", project.version
+        inputs.property "mcversion", project.minecraft.version
 
-reobf {
-    jar {}
-    apiJar {}
-    jsonJar {}
-    utilitiesJar {}
-    testModJar {}
-}
+        // replace stuff in mcmod.info, nothing else
+        from(sourceSets.main.resources.srcDirs) {
+            include 'mcmod.info'
 
-tasks.runClient.classpath utilitiesJar.getArchivePath()
-tasks.runClient.classpath testModJar.getArchivePath()
-
-tasks.runClient.dependsOn utilitiesJar
-tasks.runClient.dependsOn testModJar
-
-tasks.runServer.classpath utilitiesJar.getArchivePath()
-tasks.runServer.classpath testModJar.getArchivePath()
-
-tasks.runServer.dependsOn utilitiesJar
-tasks.runServer.dependsOn testModJar
-
-
-idea {
-    module {
-        inheritOutputDirs = true
-    }
-    module.downloadJavadoc = true
-    module.downloadSources = true
-}
-
-artifacts {
-    archives jar
-    archives jsonJar
-    archives apiJar
-    archives javadocJar
-    archives utilitiesJar
-    archives testModJar
-    archives sourceJar
-//    archives xmlJar
-}
-
-
-
-task signJar(type: SignJar, dependsOn: reobfJar) {
-    onlyIf { // Skip the task if our secret data isn't available
-        project.hasProperty('keyStore')
-    }
-
-    if (project.hasProperty('keyStore')) {
-        keyStore = project.keyStore // This needs to be a path to the keystore file
-        alias = project.keyStoreAlias
-        storePass = project.keyStorePass
-        keyPass = project.keyStoreKeyPass
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-    }
-}
-
-build.dependsOn signJar
-
-curseforge {
-    if (System.getenv().CURSEAPIKEY != null && System.getenv().CURSERELEASETYPE != null)
-    {
-        apiKey = System.getenv().CURSEAPIKEY
-
-        project {
-            id = '275314'
-
-            changelog = file('build/changelog.md')
-            changelogType = 'markdown'
-            releaseType = System.getenv().CURSERELEASETYPE
-
-            addArtifact javadocJar
-            addArtifact testModJar
-            addArtifact sourceJar
-//            addArtifact xmlJar
-        }
-    }
-    else
-    {
-        logger.lifecycle("Cannot run the CurseUpload sequence. No API-Key or release type has been provided.")
-    }
-}
-
-task("createChangelog") {
-    group = 'upload'
-
-    doLast {
-        def teamCityURL = "https://teamcity.minecolonies.com/"
-        def file = new FileOutputStream("build/changelog.md")
-        def out = new BufferedOutputStream(file)
-        def changesXML = new XmlSlurper().parse(teamCityURL + "guestAuth/app/rest/changes?locator=build:(id:" + teamcity["teamcity.build.id"] + ")")
-
-        def changes = changesXML.change
-        println("createChangelog: Identified " + changes.size() + " changes to be written into the changelog.")
-
-        out << "# Blockout Changelog \n"
-        out << "## Version: _" + version + "_ \n"
-
-        if (changes.size() > 0) {
-            for (int i = 0; i < changes.size(); i++) {
-                def changeDetailsURL = teamCityURL + "guestAuth/app/rest/changes/id:" + changes[i].@id.text()
-                def changeDetailsXml = new XmlSlurper().parse(changeDetailsURL)
-                def changeComment = changeDetailsXml.comment.text().trim()
-
-                out << "* " + changeComment + "\n"
-            }
-        } else {
-            out << "No Changes detected!"
+            // replace version and mcversion
+            expand 'version':project.version, 'mcversion':project.minecraft.version
         }
 
-        out.close()
+        // copy everything else except the mcmod.info
+        from(sourceSets.main.resources.srcDirs) {
+            exclude 'mcmod.info'
+        }
     }
+
+    //All projects need to be able to sign their own jar.
+    task signJar(type: SignJar, dependsOn: reobfJar) {
+        onlyIf { // Skip the task if our secret data isn't available
+            project.hasProperty('keyStore')
+        }
+
+        if (project.hasProperty('keyStore')) {
+            keyStore = project.keyStore // This needs to be a path to the keystore file
+            alias = project.keyStoreAlias
+            storePass = project.keyStorePass
+            keyPass = project.keyStoreKeyPass
+            inputFile = jar.archivePath
+            outputFile = jar.archivePath
+        }
+    }
+
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = file('out')
+            testOutputDir = file('out_test')
+        }
+    }
+
+    build.dependsOn signJar
+}
+
+//Special configuration for the json api level
+project(':lang:json') {
+    dependencies {
+        compile project(':api')
+    }
+}
+
+//Special configuration for the main jar.
+project(':main') {
+    //Set up the shading of the jars into the primary project.
+    configurations {
+        shade{}
+
+        compile.extendsFrom shade
+    }
+
+    dependencies {
+        shade project(':api')
+        shade project(':lang:json')
+    }
+
+    jar {
+        from (configurations.shade.files){
+            include '*'
+            into 'META-INF/libraries'
+        }
+
+        manifest {
+            attributes([
+                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
+            ])
+        }
+    }
+
+}
+
+project(':utilities') {
+    dependencies {
+        compile project(':main')
+    }
+}
+
+task runTestModClient {
+    group 'runtime'
+    description 'Starts a new client with the testmod enabled'
+
+    dependsOn project(':testmod').tasks.runClient
+}
+
+task runTestModServer {
+    group 'runtime'
+    description 'Starts a new server with the testmod enabled'
+
+    dependsOn project(':testmod').tasks.runServer
+}
+
+task runGuidebookClient {
+    group 'runtime'
+    description 'Starts a new client with the guidebook enabled'
+
+    dependsOn project(':guidebook').tasks.runClient
+}
+
+task runGuidebookServer {
+    group 'runtime'
+    description 'Starts a new server with the guidebook enabled'
+
+    dependsOn project(':guidebook').tasks.runServer
+}
+
+project('testmod') {
+    dependencies {
+        compile project(':main')
+        compile project(':utilities')
+    }
+}
+
+project('guidebook') {
+    dependencies {
+        compile project(':main')
+        compile project(':utilities')
+    }
+}
+
+task setupDecompWorkspace {
+    group 'build setup'
+    description 'Sets up the build environment for IDEA'
+
+    subprojects.each {
+        dependsOn("${it.path}:setupDecompWorkspace" )
+    }
+
+    dependsOn (project(':main').tasks.genIntellijRuns)
 }

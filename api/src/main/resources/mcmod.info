@@ -1,0 +1,20 @@
+[
+  {
+    "modid": "blockout_api",
+    "name": "BlockOut - API",
+    "description": "The API for BlockOut",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "LDTTeam",
+      "OrionDevelopment"
+    ],
+    "credits": "Several people....",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": [],
+    "parent": "blockout"
+  }
+]
