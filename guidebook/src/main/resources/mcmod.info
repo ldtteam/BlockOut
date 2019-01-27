@@ -1,18 +1,19 @@
 [
   {
-    "modid": "examplemod",
-    "name": "Example Mod",
-    "description": "Example placeholder mod.",
+    "modid": "guidebook_test",
+    "name": "Guidebook - Test",
+    "description": "Guidebook test mod",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "",
     "updateUrl": "",
     "authorList": [
-      "ExampleDude"
+      "Nightenom"
     ],
     "credits": "The Forge and FML guys, for making this example",
     "logoFile": "",
     "screenshots": [],
-    "dependencies": []
+    "dependencies": [],
+    "parent": "blockout"
   }
 ]
