@@ -43,6 +43,12 @@ public class RenderingController implements IRenderingController
     public RenderingController(@NotNull final IRenderManager renderManager) {this.renderManager = renderManager;}
 
     @Override
+    public Vector2d getRenderingScalingFactor()
+    {
+        return renderManager.getRenderingScalingFactor();
+    }
+
+    @Override
     public IScissoringController getScissoringController()
     {
         return scissoringController;

@@ -46,7 +46,7 @@ public class ScissoringController implements IScissoringController
     @Override
     public void push(@NotNull final BoundingBox box)
     {
-        BoundingBox scissorBox = new BoundingBox(box);
+        BoundingBox scissorBox = box.scale(renderingController.getRenderingScalingFactor());
 
         if (!scissorsQueue.isEmpty())
         {

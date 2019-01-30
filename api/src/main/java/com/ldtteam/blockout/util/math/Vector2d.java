@@ -178,6 +178,9 @@ public final class Vector2d
     }
 
     @NotNull
+    public Vector2d div(final Vector2d fac) { return new Vector2d(getX() / fac.getX(), getY() / fac.getY()); }
+
+    @NotNull
     public Vector2d clamp(@NotNull final Vector2d min, @NotNull final Vector2d max)
     {
         return new Vector2d(

@@ -145,6 +145,12 @@ public final class BoundingBox
         return getLocalOrigin().move(getSize().getX(), getSize().getY());
     }
 
+    @NotNull
+    public BoundingBox scale(@NotNull final Vector2d scalingFactor)
+    {
+        return new BoundingBox(getLocalOrigin().div(scalingFactor), getSize().div(scalingFactor));
+    }
+
     @Override
     public int hashCode()
     {

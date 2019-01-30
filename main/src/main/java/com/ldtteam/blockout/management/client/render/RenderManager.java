@@ -8,6 +8,7 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
+import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,6 +22,9 @@ public class RenderManager implements IRenderManager
 
     @SideOnly(Side.CLIENT)
     private IBlockOutGui gui;
+
+    @SideOnly(Side.CLIENT)
+    private Vector2d scalingFactor;
 
     @SideOnly(Side.CLIENT)
     @Override
@@ -105,5 +109,19 @@ public class RenderManager implements IRenderManager
     public void setGui(@NotNull final IBlockOutGui gui)
     {
         this.gui = gui;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public Vector2d getRenderingScalingFactor()
+    {
+        return scalingFactor;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void setRenderingScalingFactor(@NotNull final Vector2d scalingFactor)
+    {
+        this.scalingFactor = scalingFactor;
     }
 }

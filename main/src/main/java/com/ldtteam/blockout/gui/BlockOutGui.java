@@ -7,9 +7,11 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
+import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
@@ -22,6 +24,9 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     private final IGuiKey        key;
     @NotNull
     private       IUIElementHost root;
+
+    @NotNull
+    private Vector2d scaleFactor = new Vector2d(1, 1);
 
     /**
      * Used to track if the current slot interactions happen because of drawing or interactions.
@@ -43,13 +48,15 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     @Override
     public void handleMouseInput() throws IOException
     {
-        int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int y = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int scaledMouseX = (int) ((Mouse.getEventX() * this.width / this.mc.displayWidth) * scaleFactor.getX());
+        int scaledMouseY = (int) ((this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1) * scaleFactor.getY());
 
         int delta = Mouse.getEventDWheel();
         if (delta != 0)
         {
-            getRoot().getUiManager().getNetworkManager().onMouseWheel(x - guiLeft, y - guiTop, delta);
+            getRoot().getUiManager()
+              .getNetworkManager()
+              .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta);
         }
         super.handleMouseInput();
     }
@@ -76,22 +83,64 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     {
         root.getUiManager().getUpdateManager().updateElement(root);
         this.xSize = (int) root.getLocalBoundingBox().getSize().getX();
-        this.ySize = (int) root.getLocalInternalBoundingBox().getSize().getY();
+        this.ySize = (int) root.getLocalBoundingBox().getSize().getY();
+
+        this.scaleFactor = new Vector2d(1, 1);
+
+        //Check if we need to scale the gui
+        if (this.xSize > this.width || this.ySize > this.height)
+        {
+            double xScalingFactor = Math.ceil(root.getLocalBoundingBox().getSize().getX() / this.width);
+            double yScalingFactor = Math.ceil(root.getLocalBoundingBox().getSize().getY() / this.height);
+
+            //Equalise the scaling.
+            xScalingFactor = Math.max(xScalingFactor, yScalingFactor);
+            yScalingFactor = xScalingFactor;
+
+            this.scaleFactor = new Vector2d(xScalingFactor, yScalingFactor);
+
+            this.xSize = (int) (root.getLocalBoundingBox().getSize().getX() / xScalingFactor);
+            this.ySize = (int) (root.getLocalBoundingBox().getSize().getY() / yScalingFactor);
+        }
+
+        root.getUiManager().getRenderManager().setRenderingScalingFactor(scaleFactor);
+
         super.initGui();
 
-        root.setMargin(new AxisDistance(guiLeft, guiTop, guiLeft, guiTop));
+        //Update the margins to be scaled now.
+        int scaledGuiLeft = (int) (guiLeft * this.scaleFactor.getX());
+        int scaledGuiTop = (int) (guiTop * this.scaleFactor.getY());
+
+        root.setMargin(new AxisDistance(scaledGuiLeft, scaledGuiTop, scaledGuiLeft, scaledGuiTop));
         root.getUiManager().getUpdateManager().updateElement(root);
     }
 
     @Override
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks)
     {
+        if (this.root.getUiManager().getRenderManager().getRenderingScalingFactor() == null)
+        {
+            this.initGui();
+        }
+
         this.isDrawing = true;
 
-        //Can be done here since both fore and background methods are called by the super
-        this.getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(mouseX, mouseY);
+        int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
+        int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        //Can be done here since both fore and background methods are called by the super
+        this.getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
+
+        GlStateManager.pushMatrix();
+
+        GlStateManager.scale(1 / this.scaleFactor.getX(), 1 / this.scaleFactor.getY(), 1f);
+
+        GlStateManager.pushMatrix();
+
+        super.drawScreen(scaledMouseX, scaledMouseY, partialTicks);
+
+        GlStateManager.popMatrix();
+        GlStateManager.popMatrix();
 
         this.isDrawing = false;
     }
@@ -125,22 +174,41 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     @Override
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException
     {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-        getRoot().getUiManager().getNetworkManager().onMouseClickBegin(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(mouseButton));
+        int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
+        int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
+
+        super.mouseClicked(scaledMouseX, scaledMouseY, mouseButton);
+        getRoot().getUiManager()
+          .getNetworkManager()
+          .onMouseClickBegin((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(mouseButton));
     }
 
     @Override
     protected void mouseClickMove(final int mouseX, final int mouseY, final int clickedMouseButton, final long timeSinceLastClick)
     {
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-        getRoot().getUiManager().getNetworkManager().onMouseClickMove(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(clickedMouseButton), timeSinceLastClick);
+        int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
+        int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
+
+        super.mouseClickMove(scaledMouseX, scaledMouseY, clickedMouseButton, timeSinceLastClick);
+        getRoot().getUiManager()
+          .getNetworkManager()
+          .onMouseClickMove((int) (scaledMouseX - (guiLeft * scaleFactor.getX())),
+            (int) (scaledMouseY - (guiTop * scaleFactor.getY())),
+            MouseButton.getForCode(clickedMouseButton),
+            timeSinceLastClick);
     }
 
     @Override
     protected void mouseReleased(final int mouseX, final int mouseY, final int state)
     {
-        super.mouseReleased(mouseX, mouseY, state);
-        getRoot().getUiManager().getNetworkManager().onMouseClickEnd(mouseX - guiLeft, mouseY - guiTop, MouseButton.getForCode(state));
+        int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
+        int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
+
+        super.mouseReleased(scaledMouseX, scaledMouseY, state);
+
+        getRoot().getUiManager()
+          .getNetworkManager()
+          .onMouseClickEnd((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(state));
     }
 
     /**
@@ -149,7 +217,10 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     @Override
     public boolean isMouseOverSlot(final Slot slotIn, final int mouseX, final int mouseY)
     {
-        return (!isDrawing || !(slotIn instanceof SlotBlockOut)) && super.isMouseOverSlot(slotIn, mouseX, mouseY);
+        int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
+        int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
+
+        return (!isDrawing || !(slotIn instanceof SlotBlockOut)) && super.isMouseOverSlot(slotIn, scaledMouseX, scaledMouseY);
     }
 
     @Override

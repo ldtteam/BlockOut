@@ -19,6 +19,10 @@ import org.jetbrains.annotations.Nullable;
 @SideOnly(Side.CLIENT)
 public interface IRenderingController
 {
+
+    @SideOnly(Side.CLIENT)
+    Vector2d getRenderingScalingFactor();
+
     /**
      * Get the scissoring controller.
      *

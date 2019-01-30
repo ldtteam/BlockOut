@@ -2,7 +2,8 @@ jar {
     manifest {
         attributes([
                 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:guidebook",
-                'Timestamp': System.currentTimeMillis()
+                'Timestamp': System.currentTimeMillis(),
+                'FML_AT': 'blockout_at.cfg'
         ])
     }
 
