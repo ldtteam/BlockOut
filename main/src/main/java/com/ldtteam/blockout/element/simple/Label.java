@@ -157,7 +157,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public static class LabelConstructionDataBuilder extends AbstractSimpleUIElement.SimpleControlConstructionDataBuilder<LabelConstructionDataBuilder, Label>
     {
 
-        protected LabelConstructionDataBuilder(
+        public LabelConstructionDataBuilder(
           final String controlId,
           final IBlockOutGuiConstructionDataBuilder data)
         {

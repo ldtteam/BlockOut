@@ -147,6 +147,8 @@ public class Constants
             public static final String CONST_CURSOR_POS        = "cursorCounter";
             public static final String CONST_CURSOR_SCROLL_OFF = "cursorScroll";
             public static final String CONST_CURSOR_SEL_END    = "cursor_SEL";
+            public static final String CONST_DO_BACK_DRAW      = "doBackgroundDraw";
+            public static final String CONST_MAX_LENGTH        = "maxLength";
         }
 
         public static class ProgressBar

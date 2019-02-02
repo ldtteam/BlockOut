@@ -533,7 +533,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
           @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
             final IDependencyObject<ResourceLocation> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
-              PropertyCreationHelper.createFromNonOptional(
+              PropertyCreationHelper.create(
                 Optional.of((c) -> parent.getStyleId()),
                 Optional.empty(),
                 true

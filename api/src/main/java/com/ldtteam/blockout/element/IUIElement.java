@@ -283,4 +283,15 @@ public interface IUIElement
      * @param parent The new parent.
      */
     void setParent(@NotNull final IUIElementHost parent);
+
+    /**
+     * Indicates if this control is focused.
+     *
+     * @return True when focused, false when not.
+     */
+    default boolean isFocused()
+    {
+        return getParent().getUiManager().getFocusManager().isFocusedElement(this);
+    }
+
 }

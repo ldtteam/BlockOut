@@ -1,0 +1,30 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "size": "150,150",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,150",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "input",
+      "type": "blockout:textfield",
+      "size": "140, 20",
+      "alignment": "LEFT,TOP,RIGHT",
+      "margin": "5,5,5,",
+      "content": "{Binding:Contents}"
+    },
+    {
+      "id": "output",
+      "type": "blockout:label",
+      "size": "140, 13",
+      "alignment": "LEFT, TOP, RIGHT",
+      "margin": "5,28,5,",
+      "content": "{Binding:Contents}"
+    }
+
+  ]
+}

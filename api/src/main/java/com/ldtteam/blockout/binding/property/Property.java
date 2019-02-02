@@ -6,18 +6,18 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-public class Property<T> implements BiConsumer<Object, Optional<T>>, Function<Object, Optional<T>>
+public class Property<T> implements BiConsumer<Object, T>, Function<Object, Optional<T>>
 {
     @NotNull
-    final boolean                                   requiresDataContext;
+    final boolean                         requiresDataContext;
     @NotNull
-    final Optional<Function<Object, Optional<T>>>   getter;
+    final Optional<Function<Object, T>>   getter;
     @NotNull
-    final Optional<BiConsumer<Object, Optional<T>>> setter;
+    final Optional<BiConsumer<Object, T>> setter;
 
     public Property(
-      @NotNull final Optional<Function<Object, Optional<T>>> getter,
-      @NotNull final Optional<BiConsumer<Object, Optional<T>>> setter,
+      @NotNull final Optional<Function<Object, T>> getter,
+      @NotNull final Optional<BiConsumer<Object, T>> setter,
       @NotNull final boolean requiresDataContext)
     {
         this.requiresDataContext = requiresDataContext;
@@ -31,7 +31,7 @@ public class Property<T> implements BiConsumer<Object, Optional<T>>, Function<Ob
     }
 
     @Override
-    public void accept(final Object s, final Optional<T> t)
+    public void accept(final Object s, final T t)
     {
         setter.ifPresent(sOptionalBiConsumer -> sOptionalBiConsumer.accept(s, t));
     }
@@ -39,6 +39,6 @@ public class Property<T> implements BiConsumer<Object, Optional<T>>, Function<Ob
     @Override
     public Optional<T> apply(final Object s)
     {
-        return getter.flatMap(sOptionalFunction -> sOptionalFunction.apply(s));
+        return getter.flatMap(f -> Optional.ofNullable(f.apply(s)));
     }
 }

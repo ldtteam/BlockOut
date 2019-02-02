@@ -794,10 +794,10 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             public <T> IDependencyObject<T> get(@NotNull final String name)
             {
                 return (IDependencyObject<T>) DependencyObjectHelper.createFromProperty(
-                  PropertyCreationHelper.create(context -> Optional.of(new Vector2d(
+                  PropertyCreationHelper.create(context -> new Vector2d(
                     getOrientation() == Orientation.TOP_BOTTOM ? getLocalInternalBoundingBox().getSize().getX() : element.getMinimalInternalSizeOfParent().getX(),
                     getOrientation() == Orientation.LEFT_RIGHT ? getLocalInternalBoundingBox().getSize().getY() : element.getMinimalInternalSizeOfParent().getY()
-                  )), (context, value) -> {
+                  ), (context, value) -> {
                       //Noop
                   }, false), new Vector2d());
             }

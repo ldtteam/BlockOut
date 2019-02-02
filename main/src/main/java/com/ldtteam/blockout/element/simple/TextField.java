@@ -23,15 +23,22 @@ import com.ldtteam.blockout.network.message.TextFieldOnEnterPressed;
 import com.ldtteam.blockout.network.message.TextFieldTabPressedMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateContentsMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorPositionMessage;
+import com.ldtteam.blockout.proxy.ClientProxy;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,6 +77,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     @NotNull
     private IDependencyObject<String> contents;
+
+    @NotNull
+    private IDependencyObject<Integer> maxStringLength;
+
+    @NotNull
+    private IDependencyObject<Boolean> doBackgroundDrawing;
 
     @NotNull
     private Event<TextField, TextFieldChangedEventArgs> onTyped = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
@@ -123,6 +136,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<String> contents,
+      @NotNull final IDependencyObject<Boolean> doBackgroundDrawing,
+      @NotNull final IDependencyObject<Integer> maxStringLength,
       final int cursorPosition,
       final int scrollOffset,
       final int selectionEnd
@@ -133,6 +148,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         this.cursorPosition = cursorPosition;
         this.scrollOffset = scrollOffset;
         this.selectionEnd = selectionEnd;
+        this.doBackgroundDrawing = doBackgroundDrawing;
+        this.maxStringLength = maxStringLength;
     }
 
     @Override
@@ -153,12 +170,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final int maxTextLength =
           (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
 
-        controller.getScissoringController().focus(this);
+        //controller.getScissoringController().focus(this);
 
         GlStateManager.pushMatrix();
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderHelper.disableStandardItemLighting();
         BoundingBox box = getLocalBoundingBox();
 
         final double width = box.getSize().getX();
@@ -167,10 +185,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         controller.drawRect(1, 1, width - 1, height - 1, new Color(Color.BLACK));
 
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
-        //fontRenderer.drawString(getContents(), 0,2, 0xffffff);
 
         final boolean shadow = false;
-        final int color = isEnabled() ? 0xffffff : 0xffffff;
+        final int color = Color.RED.getRGB(); //isEnabled() ? 0xffffff : 0xffffff;
         final double drawWidth = box.getSize().getX();
         final int drawX = 2;
         final int drawY = 2;
@@ -238,13 +255,125 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.popMatrix();
-        controller.getScissoringController().pop();
+        //controller.getScissoringController().pop();
+
+        //doDraw(controller);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void doDraw(@NotNull final IRenderingController controller)
+    {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        final int x = (int) this.getLocalBoundingBox().getLocalOrigin().getX();
+        final int y = (int) this.getLocalBoundingBox().getLocalOrigin().getY();
+        final int width = (int) this.getLocalBoundingBox().getSize().getX();
+        final int height = (int) this.getLocalBoundingBox().getSize().getY();
+        final String contents = getContents();
+
+        //TODO: Create bindings for colors.
+        final Color outerBackgroundColor = new Color(-6250336);
+        final Color innerBackgroundColor = new Color(-16777216);
+
+        final int enabledColor = 14737632;
+        final int disabledColor = 7368816;
+
+        final Color cursorColor = new Color(-3092272);
+        final Color selectionColor = new Color(Color.BLUE);
+
+        if (shouldDrawBackground())
+        {
+            //controller.drawRect(x - 1, y - 1, x + width + 1, y + height + 1, outerBackgroundColor);
+            //controller.drawRect(x, y, x + width, y + height, innerBackgroundColor);
+        }
+
+        int fontColor = this.isEnabled() ? enabledColor : disabledColor;
+        int cursorScrollOffset = this.cursorPosition - this.scrollOffset;
+        int selectScrollOffset = this.selectionEnd - this.scrollOffset;
+        String visibleString = getFontRenderer().trimStringToWidth(contents.substring(this.scrollOffset), width);
+        boolean cursorVisible = cursorScrollOffset >= 0 && cursorScrollOffset <= visibleString.length();
+        boolean doDrawCursor = isFocused() && getCursorCounter() / 6 % 2 == 0 && cursorVisible;
+        int l = shouldDrawBackground() ? x + 4 : x;
+        int i1 = shouldDrawBackground() ? y + (height - 8) / 2 : y;
+        int j1 = l;
+
+        if (selectScrollOffset > visibleString.length())
+        {
+            selectScrollOffset = visibleString.length();
+        }
+
+        if (!visibleString.isEmpty())
+        {
+            String s1 = cursorVisible ? visibleString.substring(0, cursorScrollOffset) : visibleString;
+            j1 = getFontRenderer().drawStringWithShadow(s1, (float) l, (float) i1, fontColor);
+        }
+
+        boolean flag2 = this.cursorPosition < contents.length() || contents.length() >= this.getMaxStringLength();
+        int k1 = j1;
+
+        if (!cursorVisible)
+        {
+            k1 = cursorScrollOffset > 0 ? l + width : l;
+        }
+        else if (flag2)
+        {
+            k1 = j1 - 1;
+            --j1;
+        }
+
+        if (!visibleString.isEmpty() && cursorVisible && cursorScrollOffset < visibleString.length())
+        {
+            j1 = getFontRenderer().drawStringWithShadow(visibleString.substring(cursorScrollOffset), (float) j1, (float) i1, fontColor);
+        }
+
+        if (doDrawCursor)
+        {
+            if (flag2)
+            {
+                controller.drawRect(k1, i1 - 1, k1 + 1, i1 + 1 + getFontRenderer().FONT_HEIGHT, cursorColor);
+            }
+            else
+            {
+                getFontRenderer().drawStringWithShadow("_", (float) k1, (float) i1, fontColor);
+            }
+        }
+
+        if (selectScrollOffset != cursorScrollOffset)
+        {
+            int l1 = l + getFontRenderer().getStringWidth(visibleString.substring(0, selectScrollOffset));
+            //this.drawSelectionBox(x, width, k1, i1 - 1, l1 - 1, i1 + 1 + getFontRenderer().FONT_HEIGHT, selectionColor);
+        }
+
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.popMatrix();
+    }
+
+    public boolean shouldDrawBackground()
+    {
+        return doBackgroundDrawing.get(this);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
+    }
+
+    @SideOnly(Side.CLIENT)
+    private FontRenderer getFontRenderer()
+    {
+        return BlockOut.getBlockOut().getProxy().getFontRenderer();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private long getCursorCounter()
+    {
+        return ClientTickManager.getInstance().getTickCount();
     }
 
     /**
@@ -288,6 +417,67 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         cursorPosition = MathHelper.clamp(pos, 0, getContents().length());
         setSelectionEnd(cursorPosition);
         getParent().getUiManager().getUpdateManager().markDirty();
+    }
+
+    public int getMaxStringLength()
+    {
+        return maxStringLength.get(this);
+    }
+
+    public void setMaxStringLength(int length)
+    {
+        maxStringLength.set(this, length);
+    }
+
+    /**
+     * Draws the blue selection box.
+     */
+    @SideOnly(Side.CLIENT)
+    private void drawSelectionBox(int x, int width, int startX, int startY, int endX, int endY, Color selectionColor)
+    {
+        if (startX < endX)
+        {
+            int i = startX;
+            startX = endX;
+            endX = i;
+        }
+
+        if (startY < endY)
+        {
+            int j = startY;
+            startY = endY;
+            endY = j;
+        }
+
+        if (endX > x + width)
+        {
+            endX = x + width;
+        }
+
+        if (startX > x + width)
+        {
+            startX = x + width;
+        }
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        selectionColor.performOpenGLColoring();
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableColorLogic();
+        GlStateManager.colorLogicOp(GlStateManager.LogicOp.OR_REVERSE);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos((double) startX, (double) endY, 0.0D).endVertex();
+        bufferbuilder.pos((double) endX, (double) endY, 0.0D).endVertex();
+        bufferbuilder.pos((double) endX, (double) startY, 0.0D).endVertex();
+        bufferbuilder.pos((double) startX, (double) startY, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.disableColorLogic();
+        GlStateManager.enableTexture2D();
+    }
+
+    public void setShouldDrawBackground(final boolean drawBackground)
+    {
+        doBackgroundDrawing.set(this, drawBackground);
     }
 
     /**
@@ -336,7 +526,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
 
         sendToServer(new TextFieldUpdateContentsMessage(getId(), resultBuffer.toString()));
-        sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), insertAt + insertedLength, selectionEnd));
+
+        int newCursorPos = selectionEnd + (insertAt - selectionEnd) + insertedLength;
+
+        sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), newCursorPos, newCursorPos));
     }
 
     /**
@@ -710,8 +903,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 handleKey((char) character, key);
         }
 
-        //TODO: Sync state
-
         return true;
     }
 
@@ -766,6 +957,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
 
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "");
+                final IDependencyObject<Boolean> doBackgroundDraw = elementData.getFromRawDataWithDefault(CONST_DO_BACK_DRAW, engine, true);
+                final IDependencyObject<Integer> maxContentLenght = elementData.getFromRawDataWithDefault(CONST_MAX_LENGTH, engine, Integer.MAX_VALUE);
 
                 final int cursorPosition = elementData.getRawWithoutBinding(CONST_CURSOR_POS, 0);
                 final int scrollOffset = elementData.getRawWithoutBinding(CONST_CURSOR_SCROLL_OFF, 0);
@@ -783,6 +976,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                   visible,
                   enabled,
                   contents,
+                  doBackgroundDraw,
+                  maxContentLenght,
                   cursorPosition,
                   scrollOffset,
                   selectionEnd
@@ -793,7 +988,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                                        .addComponent(CONST_CONTENT, element.getContents())
                                        .addComponent(CONST_CURSOR_POS, element.cursorPosition)
                                        .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
-                                       .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd));
+                                       .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd)
+                                       .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground())
+                                       .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength()));
         }
 
         @NotNull

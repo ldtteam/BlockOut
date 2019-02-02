@@ -80,8 +80,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
-     * boolean)}.
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Function, BiConsumer, boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented and only a getter is required (EG in cases where the {@link IDependencyObject} should only be read by the respective
      * consumer.
@@ -98,7 +97,7 @@ public final class DependencyObjectHelper
     )
     {
         return createFromProperty(
-          PropertyCreationHelper.createFromNonOptional(
+          PropertyCreationHelper.create(
             Optional.of(dependencyGetter),
             Optional.empty(),
             true
@@ -128,7 +127,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Optional, Optional,
      * boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented and only a getter is required (EG in cases where the {@link IDependencyObject} should only be read by the respective
@@ -146,7 +145,7 @@ public final class DependencyObjectHelper
     )
     {
         return createFromProperty(
-          PropertyCreationHelper.createFromNonOptional(
+          PropertyCreationHelper.create(
             Optional.of(c -> dependencyGetter.get()),
             Optional.empty(),
             false
@@ -156,7 +155,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Optional, Optional,
      * boolean)}.
      * <p>
      * Since this has a nasty side effect of always returning the given defaultValue i am not sure how much this method will be used.
@@ -177,7 +176,7 @@ public final class DependencyObjectHelper
     )
     {
         return createFromProperty(
-          PropertyCreationHelper.createFromNonOptional(
+          PropertyCreationHelper.create(
             Optional.empty(),
             Optional.of(dependencySetter),
             true
@@ -187,7 +186,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Optional, Optional,
      * boolean)}.
      * <p>
      * Since this has a nasty side effect of always returning the given defaultValue i am not sure how much this method will be used.
@@ -208,7 +207,7 @@ public final class DependencyObjectHelper
     )
     {
         return createFromProperty(
-          PropertyCreationHelper.createFromNonOptional(
+          PropertyCreationHelper.create(
             Optional.empty(),
             Optional.of((c, t) -> dependencySetter.accept(t)),
             false
@@ -218,7 +217,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Optional, Optional,
      * boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented.
@@ -248,7 +247,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromNonOptional(Optional, Optional,
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Optional, Optional,
      * boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented.

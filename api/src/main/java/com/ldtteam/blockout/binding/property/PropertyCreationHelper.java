@@ -26,20 +26,20 @@ public final class PropertyCreationHelper
 
     public static <T> Property<T> createNoneSettableFromStaticValue(@Nullable T value)
     {
-        return create(c -> Optional.ofNullable(value), null, false);
+        return create(c -> value, null, false);
     }
 
     public static <T> Property<T> create(
-      @Nullable final Function<Object, Optional<T>> getter,
-      @Nullable final BiConsumer<Object, Optional<T>> setter,
+      @Nullable final Function<Object, T> getter,
+      @Nullable final BiConsumer<Object, T> setter,
       @NotNull final boolean requiresDataContext)
     {
         return create(Optional.ofNullable(getter), Optional.ofNullable(setter), requiresDataContext);
     }
 
     public static <T> Property<T> create(
-      @NotNull final Optional<Function<Object, Optional<T>>> getter,
-      @NotNull final Optional<BiConsumer<Object, Optional<T>>> setter,
+      @NotNull final Optional<Function<Object, T>> getter,
+      @NotNull final Optional<BiConsumer<Object, T>> setter,
       @NotNull final boolean requiresDataContext)
     {
         return new Property<T>(getter, setter, requiresDataContext);
@@ -50,17 +50,7 @@ public final class PropertyCreationHelper
       @NotNull final BiConsumer<Object, T> setter,
       @NotNull final boolean requiresDataContext)
     {
-        return createFromNonOptional(Optional.of(getter), Optional.of(setter), requiresDataContext);
-    }
-
-    public static <T> Property<T> createFromNonOptional(
-      @NotNull final Optional<Function<Object, T>> getter,
-      @NotNull final Optional<BiConsumer<Object, T>> setter,
-      @NotNull final boolean requiresDataContext)
-    {
-        return create(getter.map(tSupplier -> s -> Optional.ofNullable(tSupplier.apply(s))),
-          setter.map(tConsumer -> (s, t) -> tConsumer.accept(s, t.orElse(null))),
-          requiresDataContext);
+        return create(Optional.of(getter), Optional.of(setter), requiresDataContext);
     }
 
     public static <T> Property<T> createFromName(@NotNull final Optional<String> getSetMethodName)
@@ -72,7 +62,7 @@ public final class PropertyCreationHelper
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)
     {
-        final Optional<Function<Object, Optional<T>>> getter = getMethodName.map((name) -> (Function<Object, Optional<T>>) o -> {
+        final Optional<Function<Object, T>> getter = getMethodName.map(name -> o -> {
             final Class<?> clazz = o.getClass();
             final Optional<Tuple<MethodAccess, Integer>> getterMethod = getGetter(clazz, name);
             return getterMethod.map(method -> {
@@ -85,13 +75,13 @@ public final class PropertyCreationHelper
                     Log.getLogger().error("Failed to reflectively access property getter.", e);
                     return null;
                 }
-            });
+            }).orElse(null);
         });
 
-        final Optional<BiConsumer<Object, Optional<T>>> setter = setMethodName.map((name) -> (BiConsumer<Object, Optional<T>>) (o, t) -> {
+        final Optional<BiConsumer<Object, T>> setter = setMethodName.map(name -> (o, t) -> {
             final Class<?> clazz = o.getClass();
-            final Optional<Tuple<MethodAccess, Integer>> settterMethod = getSetter(clazz, name);
-            settterMethod.ifPresent(method -> {
+            final Optional<Tuple<MethodAccess, Integer>> setterMethod = getSetter(clazz, name);
+            setterMethod.ifPresent(method -> {
                 try
                 {
                     method.getFirst().invoke(o, method.getSecond(), t);

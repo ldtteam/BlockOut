@@ -45,6 +45,8 @@ public class TextFieldUpdateSelectionEndOrCursorPositionMessage implements IBloc
         textBoxOptional.ifPresent(textBox -> {
             textBox.setCursorPosition(cursorPosition);
             textBox.setSelectionEnd(selectionEnd);
+            rootGuiElement.getUiManager().getFocusManager().setFocusedElement(textBox);
+            rootGuiElement.getUiManager().getUpdateManager().markDirty();
         });
     }
 }

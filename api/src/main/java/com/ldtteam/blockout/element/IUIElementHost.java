@@ -123,9 +123,9 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
 
         for (IUIElement element : values())
         {
+            final Vector2d elementLocalCoord = localPoint.move(this.getLocalBoundingBox().getLocalOrigin().invert());
             if (element instanceof IUIElementHost)
             {
-                final Vector2d elementLocalCoord = localPoint.move(this.getLocalBoundingBox().getLocalOrigin().invert());
                 final IUIElementHost elementHost = (IUIElementHost) element;
                 final Optional<IUIElement> elementResult = elementHost.searchDeepestElementByCoordAndPredicate(elementLocalCoord, predicate);
                 if (elementResult.isPresent())
@@ -135,7 +135,7 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
             }
             else
             {
-                if (element.getLocalBoundingBox().includes(localPoint) && predicate.test(element))
+                if (element.getLocalBoundingBox().includes(elementLocalCoord) && predicate.test(element))
                 {
                     return Optional.of(element);
                 }

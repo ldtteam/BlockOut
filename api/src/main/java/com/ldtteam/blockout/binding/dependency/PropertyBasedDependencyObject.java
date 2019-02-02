@@ -39,7 +39,7 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Override
     public void set(@Nullable final Object context, @Nullable final T value)
     {
-        property.accept(context, Optional.ofNullable(value));
+        property.accept(context, value);
     }
 
     @Override
