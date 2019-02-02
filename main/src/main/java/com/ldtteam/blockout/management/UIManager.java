@@ -2,10 +2,16 @@ package com.ldtteam.blockout.management;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
+import com.ldtteam.blockout.management.client.input.ClientSideClickManager;
+import com.ldtteam.blockout.management.client.input.ClientSideKeyManager;
+import com.ldtteam.blockout.management.client.input.ClientSideScrollManager;
 import com.ldtteam.blockout.management.focus.IFocusManager;
 import com.ldtteam.blockout.management.input.IClickManager;
 import com.ldtteam.blockout.management.input.IKeyManager;
 import com.ldtteam.blockout.management.input.IScrollManager;
+import com.ldtteam.blockout.management.input.client.IClientSideClickManager;
+import com.ldtteam.blockout.management.input.client.IClientSideKeyManager;
+import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
@@ -25,23 +31,29 @@ import java.util.LinkedHashMap;
 public class UIManager implements IUIManager
 {
     @NotNull
-    private final INetworkManager networkManager;
+    private final INetworkManager          networkManager;
     @NotNull
-    private final IFocusManager   focusManager  = new FocusManager(this);
+    private final IFocusManager            focusManager            = new FocusManager(this);
     @NotNull
-    private final IClickManager   clickManager  = new ClickManager(this);
+    private final IClickManager            clickManager            = new ClickManager(this);
     @NotNull
-    private final IKeyManager     keyManager    = new KeyManager(this);
+    private final IKeyManager              keyManager              = new KeyManager(this);
     @NotNull
-    private final IScrollManager  scrollManager = new ScrollManager(this);
+    private final IScrollManager           scrollManager           = new ScrollManager(this);
     @NotNull
-    private final IUpdateManager  updateManager;
+    private final IClientSideClickManager  clientSideClickManager  = new ClientSideClickManager(this);
     @NotNull
-    private final IRenderManager  renderManager;
+    private final IClientSideKeyManager    clientSideKeyManager    = new ClientSideKeyManager(this);
     @NotNull
-    private final Profiler        profiler;
+    private final IClientSideScrollManager clientSideScrollManager = new ClientSideScrollManager(this);
     @NotNull
-    private       RootGuiElement  rootGuiElement;
+    private final IUpdateManager           updateManager;
+    @NotNull
+    private final IRenderManager           renderManager;
+    @NotNull
+    private final Profiler                 profiler;
+    @NotNull
+    private       RootGuiElement           rootGuiElement;
 
     public UIManager(@NotNull final RootGuiElement rootGuiElement, @NotNull final IGuiKey key)
     {
@@ -94,6 +106,27 @@ public class UIManager implements IUIManager
     public IScrollManager getScrollManager()
     {
         return scrollManager;
+    }
+
+    @NotNull
+    @Override
+    public IClientSideClickManager getClientSideClickManager()
+    {
+        return clientSideClickManager;
+    }
+
+    @NotNull
+    @Override
+    public IClientSideKeyManager getClientSideKeyManager()
+    {
+        return clientSideKeyManager;
+    }
+
+    @NotNull
+    @Override
+    public IClientSideScrollManager getClientSideScrollManager()
+    {
+        return clientSideScrollManager;
     }
 
     @NotNull

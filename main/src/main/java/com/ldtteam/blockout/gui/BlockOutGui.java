@@ -54,10 +54,16 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
         int delta = Mouse.getEventDWheel();
         if (delta != 0)
         {
-            getRoot().getUiManager()
-              .getNetworkManager()
-              .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta);
+            if (!getRoot().getUiManager()
+                   .getClientSideScrollManager()
+                   .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta))
+            {
+                getRoot().getUiManager()
+                  .getNetworkManager()
+                  .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta);
+            }
         }
+
         super.handleMouseInput();
     }
 
@@ -118,11 +124,6 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
     @Override
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks)
     {
-        if (this.root.getUiManager().getRenderManager().getRenderingScalingFactor() == null)
-        {
-            this.initGui();
-        }
-
         this.isDrawing = true;
 
         int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
@@ -178,9 +179,14 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
         int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
 
         super.mouseClicked(scaledMouseX, scaledMouseY, mouseButton);
-        getRoot().getUiManager()
-          .getNetworkManager()
-          .onMouseClickBegin((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(mouseButton));
+        if (!getRoot().getUiManager()
+               .getClientSideClickManager()
+               .onMouseClickBegin((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(mouseButton)))
+        {
+            getRoot().getUiManager()
+              .getNetworkManager()
+              .onMouseClickBegin((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(mouseButton));
+        }
     }
 
     @Override
@@ -190,12 +196,20 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
         int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
 
         super.mouseClickMove(scaledMouseX, scaledMouseY, clickedMouseButton, timeSinceLastClick);
-        getRoot().getUiManager()
-          .getNetworkManager()
-          .onMouseClickMove((int) (scaledMouseX - (guiLeft * scaleFactor.getX())),
-            (int) (scaledMouseY - (guiTop * scaleFactor.getY())),
-            MouseButton.getForCode(clickedMouseButton),
-            timeSinceLastClick);
+        if (!getRoot().getUiManager()
+               .getClientSideClickManager()
+               .onMouseClickMove((int) (scaledMouseX - (guiLeft * scaleFactor.getX())),
+                 (int) (scaledMouseY - (guiTop * scaleFactor.getY())),
+                 MouseButton.getForCode(clickedMouseButton),
+                 timeSinceLastClick))
+        {
+            getRoot().getUiManager()
+              .getNetworkManager()
+              .onMouseClickMove((int) (scaledMouseX - (guiLeft * scaleFactor.getX())),
+                (int) (scaledMouseY - (guiTop * scaleFactor.getY())),
+                MouseButton.getForCode(clickedMouseButton),
+                timeSinceLastClick);
+        }
     }
 
     @Override
@@ -206,9 +220,14 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
 
         super.mouseReleased(scaledMouseX, scaledMouseY, state);
 
-        getRoot().getUiManager()
-          .getNetworkManager()
-          .onMouseClickEnd((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(state));
+        if (!getRoot().getUiManager()
+               .getClientSideClickManager()
+               .onMouseClickEnd((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(state)))
+        {
+            getRoot().getUiManager()
+              .getNetworkManager()
+              .onMouseClickEnd((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), MouseButton.getForCode(state));
+        }
     }
 
     /**
@@ -232,9 +251,11 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
             BlockOut.getBlockOut().getProxy().getGuiController().closeUI(Minecraft.getMinecraft().player);
             return;
         }
-        // Disabled to avoid any functionality like opening the player GUI on e. If we want this behavior we gotta write an if (shouldHandleKey()) which the fields should decide.
-        //super.keyTyped(typedChar, keyCode);
-        getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, key);
+
+        if (!getRoot().getUiManager().getClientSideKeyManager().onKeyPressed(typedChar, key))
+        {
+            getRoot().getUiManager().getNetworkManager().onKeyPressed(typedChar, key);
+        }
     }
 
     @Override

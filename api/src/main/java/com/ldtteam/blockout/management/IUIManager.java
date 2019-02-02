@@ -5,6 +5,9 @@ import com.ldtteam.blockout.management.focus.IFocusManager;
 import com.ldtteam.blockout.management.input.IClickManager;
 import com.ldtteam.blockout.management.input.IKeyManager;
 import com.ldtteam.blockout.management.input.IScrollManager;
+import com.ldtteam.blockout.management.input.client.IClientSideClickManager;
+import com.ldtteam.blockout.management.input.client.IClientSideKeyManager;
+import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
@@ -32,6 +35,15 @@ public interface IUIManager
 
     @NotNull
     IScrollManager getScrollManager();
+
+    @NotNull
+    IClientSideClickManager getClientSideClickManager();
+
+    @NotNull
+    IClientSideKeyManager getClientSideKeyManager();
+
+    @NotNull
+    IClientSideScrollManager getClientSideScrollManager();
 
     @NotNull
     IUpdateManager getUpdateManager();
