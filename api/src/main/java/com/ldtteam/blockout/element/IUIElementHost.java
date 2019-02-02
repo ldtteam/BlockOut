@@ -1,11 +1,13 @@
 package com.ldtteam.blockout.element;
 
+import com.google.common.collect.Lists;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -156,15 +158,81 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
      * @return A map containing all child elements
      */
     @NotNull
-    default Map<String, IUIElement> getAllCombinedChildElements()
+    default LinkedHashMap<String, IUIElement> getAllCombinedChildElements()
     {
-        final Map<String, IUIElement> combinedChildren = new LinkedHashMap<>(this);
+        final LinkedHashMap<String, IUIElement> combinedChildren = new LinkedHashMap<>(this);
         values().stream().filter(element -> element instanceof IUIElementHost)
           .map(element -> (IUIElementHost) element)
           .flatMap(iuiElementHost -> iuiElementHost.getAllCombinedChildElements().values().stream())
           .forEach(element -> combinedChildren.put(element.getId(), element));
 
         return combinedChildren;
+    }
+
+    /**
+     * Combines all the child elements of this element and its childs into one map.
+     *
+     * @param predicate The predicate to filter the child element.
+     * @return A map containing all child elements
+     */
+    @NotNull
+    default LinkedHashMap<String, IUIElement> getAllCombinedChildElements(@NotNull final Predicate<IUIElement> predicate)
+    {
+        final LinkedHashMap<String, IUIElement> combinedChildren = new LinkedHashMap<>(this);
+        values().stream().filter(element -> element instanceof IUIElementHost)
+          .map(element -> (IUIElementHost) element)
+          .flatMap(iuiElementHost -> iuiElementHost.getAllCombinedChildElements().values().stream())
+          .filter(predicate)
+          .forEach(element -> combinedChildren.put(element.getId(), element));
+
+        return combinedChildren;
+    }
+
+    /**
+     * Finds the next element that comes after the given element.
+     * If the given element is not a child of this {@link IUIElementHost} then this will be returned.
+     *
+     * @param element The element to get the next element after.
+     * @return An optional containing the next element if found.
+     */
+    default Optional<IUIElement> getNextElement(@Nullable final IUIElement element)
+    {
+        return getNextElement(element, iuiElement -> true);
+    }
+
+    /**
+     * Finds the next element that comes after the given element.
+     * If the given element is not a child of this {@link IUIElementHost} then this will be returned.
+     * <p>
+     * If the given element does not match the predicate then an empty optional is returned.
+     * If the element is the last element in the list, then the first one in the tree will be selected.
+     *
+     * @param element   The element to get the next element after.
+     * @param predicate The predicate to filter the elements.
+     * @return An optional containing the next element if found.
+     */
+    default Optional<IUIElement> getNextElement(@Nullable final IUIElement element, Predicate<IUIElement> predicate)
+    {
+        if (element == null)
+        {
+            return Optional.of(this);
+        }
+
+        final LinkedHashMap<String, IUIElement> combinedElements = getAllCombinedChildElements(predicate);
+        int keyIndex = Lists.newArrayList(combinedElements.keySet()).indexOf(element.getId());
+
+        if (keyIndex == -1)
+        {
+            return Optional.empty();
+        }
+
+        //If we are the last element we switch to the top.
+        if (keyIndex == combinedElements.size() - 1)
+        {
+            keyIndex = -1;
+        }
+
+        return Optional.of(Lists.newArrayList(combinedElements.values()).get(++keyIndex));
     }
 
     /**

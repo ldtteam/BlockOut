@@ -11,20 +11,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextBoxUpdateScrollOrCursorPositionMessage implements IBlockOutClientToServerMessage
+public class TextFieldUpdateSelectionEndOrCursorPositionMessage implements IBlockOutClientToServerMessage
 {
     private String  controlId;
     private Integer cursorPosition;
     private Integer selectionEnd;
 
-    public TextBoxUpdateScrollOrCursorPositionMessage(final String controlId, final Integer cursorPosition, final Integer selectionEnd)
+    public TextFieldUpdateSelectionEndOrCursorPositionMessage(final String controlId, final Integer cursorPosition, final Integer selectionEnd)
     {
         this.controlId = controlId;
         this.cursorPosition = cursorPosition;
         this.selectionEnd = selectionEnd;
     }
 
-    public TextBoxUpdateScrollOrCursorPositionMessage()
+    public TextFieldUpdateSelectionEndOrCursorPositionMessage()
     {
     }
 

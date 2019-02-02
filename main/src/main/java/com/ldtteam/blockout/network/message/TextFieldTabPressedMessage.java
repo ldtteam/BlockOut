@@ -2,6 +2,7 @@ package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
@@ -11,18 +12,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMessage
+public class TextFieldTabPressedMessage implements IBlockOutClientToServerMessage
 {
-    private String controlId;
-    private String newContent;
 
-    public TextFieldUpdateContentsMessage(final String controlId, final String newContent)
+    private String nextControlId = "";
+
+    public TextFieldTabPressedMessage(final String nextControlId)
     {
-        this.controlId = controlId;
-        this.newContent = newContent;
+        this.nextControlId = nextControlId;
     }
 
-    public TextFieldUpdateContentsMessage()
+    public TextFieldTabPressedMessage()
     {
     }
 
@@ -38,10 +38,7 @@ public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMe
         }
 
         final RootGuiElement rootGuiElement = (RootGuiElement) BlockOut.getBlockOut().getProxy().getGuiController().getRoot(guiKey);
-        final Optional<TextField> optionalTextBox = rootGuiElement.searchExactElementById(controlId, TextField.class);
-        optionalTextBox.ifPresent(textBox -> {
-            textBox.setContents(newContent);
-            textBox.raiseOnContentChanged();
-        });
+        final Optional<IUIElement> optionalNextElement = rootGuiElement.searchExactElementById(nextControlId, IUIElement.class);
+        optionalNextElement.ifPresent(rootGuiElement.getUiManager().getFocusManager()::setFocusedElement);
     }
 }

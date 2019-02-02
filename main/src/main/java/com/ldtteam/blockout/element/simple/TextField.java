@@ -5,17 +5,24 @@ import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.compat.ClientTickManager;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
-import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
+import com.ldtteam.blockout.element.input.client.IClientSideClickAcceptingUIElement;
+import com.ldtteam.blockout.element.input.client.IClientSideKeyAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.blockout.network.message.TextFieldOnEnterPressed;
+import com.ldtteam.blockout.network.message.TextFieldTabPressedMessage;
+import com.ldtteam.blockout.network.message.TextFieldUpdateContentsMessage;
+import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorPositionMessage;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
@@ -33,10 +40,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
+import static com.ldtteam.blockout.network.NetworkManager.sendTo;
+import static com.ldtteam.blockout.network.NetworkManager.sendToServer;
 import static com.ldtteam.blockout.util.Constants.Controls.TextField.*;
 
-public class TextField extends AbstractSimpleUIElement implements IDrawableUIElement, IClickAcceptingUIElement, IKeyAcceptingUIElement
+public class TextField extends AbstractSimpleUIElement implements IDrawableUIElement, IClientSideClickAcceptingUIElement, IClientSideKeyAcceptingUIElement
 {
     /**
      * Texture resource location.
@@ -258,31 +268,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         getParent().getUiManager().getUpdateManager().markDirty();
     }
 
-    @Override
-    public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
-    {
-        return true;
-    }
-
-    @Override
-    public void onMouseClickBegin(final int localX, final int localY, final MouseButton button)
-    {
-        if (localX < 0)
-        {
-            return;
-        }
-
-        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
-        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
-
-        // Cache and restore scrollOffset when we change focus via click,
-        // because onFocus() sets the cursor (and thus scroll offset) to the end.
-        final int oldScrollOffset = scrollOffset;
-        scrollOffset = oldScrollOffset;
-        setCursorPosition(trimmedString.length() + scrollOffset);
-        getParent().getUiManager().getUpdateManager().markDirty();
-    }
-
     /**
      * Get the internal width of the textField.
      *
@@ -305,59 +290,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         getParent().getUiManager().getUpdateManager().markDirty();
     }
 
-    @Override
-    public void onMouseClickEnd(final int localX, final int localY, final MouseButton button)
-    {
-
-    }
-
-    @Override
-    public void onMouseClickMove(final int localX, final int localY, final MouseButton button, final float timeElapsed)
-    {
-        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
-        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
-        final int oldScrollOffset = scrollOffset;
-        scrollOffset = oldScrollOffset;
-        setSelectionEnd(trimmedString.length() + scrollOffset);
-        getParent().getUiManager().getUpdateManager().markDirty();
-    }
-
-    @Override
-    public boolean canAcceptKeyInput(final int character, final KeyboardKey key)
-    {
-        return true;
-    }
-
-    @Override
-    public void onKeyPressed(final int character, final KeyboardKey key)
-    {
-        switch (character)
-        {
-            case 1:
-                setCursorPosition(getContents().length());
-                setSelectionEnd(0);
-                break;
-
-            case 3:
-                GuiScreen.setClipboardString(getSelectedText());
-                break;
-            case 22:
-                writeText(GuiScreen.getClipboardString());
-                break;
-            case 24:
-                GuiScreen.setClipboardString(getSelectedText());
-                writeText("");
-                break;
-            default:
-                handleKey((char) character, key);
-        }
-    }
-
     /**
      * Write text into the field.
      *
      * @param str the string to write.
      */
+    @SideOnly(Side.CLIENT)
     private void writeText(final String str)
     {
         final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
@@ -377,13 +315,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         @NotNull final StringBuilder resultBuffer = new StringBuilder();
         if (getContents().length() > 0 && insertAt > 0)
         {
-            resultBuffer.append(getContents().substring(0, insertAt));
+            resultBuffer.append(getContents(), 0, insertAt);
         }
 
         final int insertedLength;
         if (availableChars < str.length())
         {
-            resultBuffer.append(str.substring(0, availableChars));
+            resultBuffer.append(str, 0, availableChars);
             insertedLength = availableChars;
         }
         else
@@ -397,10 +335,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             resultBuffer.append(getContents().substring(insertEnd));
         }
 
-        setContents(resultBuffer.toString());
-        moveCursorBy((insertAt - selectionEnd) + insertedLength);
-
-        onTyped.raise(this, new TextFieldChangedEventArgs(getContents()));
+        sendToServer(new TextFieldUpdateContentsMessage(getId(), resultBuffer.toString()));
+        sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), insertAt + insertedLength, selectionEnd));
     }
 
     /**
@@ -456,11 +392,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 result = result + getContents().substring(end);
             }
 
-            setContents(result);
-
+            sendToServer(new TextFieldUpdateContentsMessage(getId(), result));
             if (backwards)
             {
-                this.moveCursorBy(count);
+                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), selectionEnd + count, selectionEnd));
             }
         }
     }
@@ -520,16 +455,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private int getNthWordFromCursor(final int count)
     {
         return getNthWordFromPos(count, cursorPosition);
-    }
-
-    /**
-     * Move the cursor by an offset.
-     *
-     * @param offset the offset.
-     */
-    private void moveCursorBy(final int offset)
-    {
-        setCursorPosition(selectionEnd + offset);
     }
 
     /**
@@ -600,6 +525,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      * @param c   the character.
      * @param key the key.
      */
+    @SideOnly(Side.CLIENT)
     private void handleKey(final char c, final KeyboardKey key)
     {
         switch (key)
@@ -625,7 +551,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 handleTab();
                 break;
             case KEY_RETURN:
-                onEnter.raise(this, new TextFieldEnterEventArgs(getContents()));
+                sendToServer(new TextFieldOnEnterPressed(getId()));
                 break;
             default:
                 writeText(Character.toString(c));
@@ -633,19 +559,19 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     }
 
     /**
-     * Handle tab to jump to next control (todo).
+     * Handle tab to jump to next control.
      */
+    @SideOnly(Side.CLIENT)
     private void handleTab()
     {
-        //if (tabNextPaneID != null)
-        {
-            /* todo get next child in parent
-            final Pane next = getWindow().findPaneByID(tabNextPaneID);
-            if (next != null)
-            {
-                next.setFocus();
-            }*/
-        }
+        final Optional<IUIElement> optionalNextElement =
+          getParent().getNextElement(this, iUiElement -> iUiElement instanceof IClientSideKeyAcceptingUIElement || iUiElement instanceof IKeyAcceptingUIElement);
+
+        optionalNextElement
+          .filter(element -> element != this)
+          .ifPresent(element -> {
+              sendToServer(new TextFieldTabPressedMessage(element.getId()));
+          });
     }
 
     /**
@@ -653,6 +579,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the clicked key.
      */
+    @SideOnly(Side.CLIENT)
     private void handleArrowKeys(final KeyboardKey key)
     {
         final int direction = (key == KeyboardKey.KEY_LEFT) ? -1 : 1;
@@ -661,20 +588,20 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             if (GuiScreen.isCtrlKeyDown())
             {
-                setSelectionEnd(getNthWordFromPos(direction, getSelectionEnd()));
+                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition, getNthWordFromPos(direction, getSelectionEnd())));
             }
             else
             {
-                setSelectionEnd(getSelectionEnd() + direction);
+                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition, getSelectionEnd() + direction));
             }
         }
         else if (GuiScreen.isCtrlKeyDown())
         {
-            setCursorPosition(getNthWordFromCursor(direction));
+            sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getNthWordFromCursor(direction), selectionEnd));
         }
         else
         {
-            moveCursorBy(direction);
+            sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), selectionEnd + direction, selectionEnd));
         }
     }
 
@@ -683,17 +610,18 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the key specifics.
      */
+    @SideOnly(Side.CLIENT)
     private void handleHomeEnd(final KeyboardKey key)
     {
         final int position = (key == KeyboardKey.KEY_HOME) ? 0 : getContents().length();
 
         if (GuiScreen.isShiftKeyDown())
         {
-            setSelectionEnd(position);
+            sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition, position));
         }
         else
         {
-            setCursorPosition(position);
+            sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), position, getSelectionEnd()));
         }
     }
 
@@ -702,6 +630,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the pressed key.
      */
+    @SideOnly(Side.CLIENT)
     private void handleDelete(final KeyboardKey key)
     {
         final int direction = (key == KeyboardKey.KEY_BACK) ? -1 : 1;
@@ -714,6 +643,86 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             deleteFromCursor(direction);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean canAcceptMouseInputClient(final int localX, final int localY, final MouseButton button)
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean onMouseClickBeginClient(final int localX, final int localY, final MouseButton button)
+    {
+        if (localX < 0)
+        {
+            return true;
+        }
+
+        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
+        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
+
+        sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), trimmedString.length() + scrollOffset, selectionEnd));
+
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean onMouseClickMoveClient(final int localX, final int localY, final MouseButton button, final float timeElapsed)
+    {
+        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
+        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
+
+        sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition, trimmedString.length() + scrollOffset));
+
+        return true;
+    }
+
+    @Override
+    public boolean canAcceptKeyInputClient(final int character, final KeyboardKey key)
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean onKeyPressedClient(final int character, final KeyboardKey key)
+    {
+        switch (character)
+        {
+            case 1:
+                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getContents().length(), 0));
+                break;
+            case 3:
+                GuiScreen.setClipboardString(getSelectedText());
+                break;
+            case 22:
+                writeText(GuiScreen.getClipboardString());
+                break;
+            case 24:
+                GuiScreen.setClipboardString(getSelectedText());
+                writeText("");
+                break;
+            default:
+                handleKey((char) character, key);
+        }
+
+        //TODO: Sync state
+
+        return true;
+    }
+
+    public void raiseOnContentChanged()
+    {
+        onTyped.raise(this, new TextFieldChangedEventArgs(getContents()));
+    }
+
+    public void raiseOnEnterPressed()
+    {
+        onEnter.raise(this, new TextFieldEnterEventArgs(getContents()));
     }
 
     /**
@@ -827,7 +836,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     }
 
     /**
-     * Event arguments on change.
+     * Event arguments on enter press.
      */
     public static class TextFieldEnterEventArgs
     {

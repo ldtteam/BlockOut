@@ -11,18 +11,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMessage
+public class TextFieldOnEnterPressed implements IBlockOutClientToServerMessage
 {
-    private String controlId;
-    private String newContent;
+    private String controlId = "";
 
-    public TextFieldUpdateContentsMessage(final String controlId, final String newContent)
+    public TextFieldOnEnterPressed(final String controlId)
     {
         this.controlId = controlId;
-        this.newContent = newContent;
     }
 
-    public TextFieldUpdateContentsMessage()
+    public TextFieldOnEnterPressed()
     {
     }
 
@@ -39,9 +37,6 @@ public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMe
 
         final RootGuiElement rootGuiElement = (RootGuiElement) BlockOut.getBlockOut().getProxy().getGuiController().getRoot(guiKey);
         final Optional<TextField> optionalTextBox = rootGuiElement.searchExactElementById(controlId, TextField.class);
-        optionalTextBox.ifPresent(textBox -> {
-            textBox.setContents(newContent);
-            textBox.raiseOnContentChanged();
-        });
+        optionalTextBox.ifPresent(TextField::raiseOnEnterPressed);
     }
 }
