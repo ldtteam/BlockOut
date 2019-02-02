@@ -1,11 +1,10 @@
-package com.ldtteam.blockout.core.element.input;
+package com.ldtteam.blockout.element.input.client;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public interface IClientSideKeyAcceptingUIElement extends IUIElement
 {
     @SideOnly(Side.CLIENT)
