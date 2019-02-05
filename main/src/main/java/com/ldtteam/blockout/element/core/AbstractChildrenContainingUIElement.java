@@ -28,6 +28,9 @@ import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_T
 public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<String, IUIElement> implements IUIElementHost
 {
     @NotNull
+    private final UUID uniqueIdentifier = UUID.randomUUID();
+
+    @NotNull
     protected final ResourceLocation                    type;
     @NotNull
     protected final String                              id;
@@ -103,6 +106,12 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         this.style = style;
         this.id = id;
         this.parent = parent;
+    }
+
+    @Override
+    public UUID getUniqueIdentifier()
+    {
+        return uniqueIdentifier;
     }
 
     @NotNull

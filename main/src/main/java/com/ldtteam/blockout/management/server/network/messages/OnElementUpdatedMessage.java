@@ -47,6 +47,12 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             final UIManager uiManager = (UIManager) blockOutGui.getRoot().getUiManager();
 
             uiManager.setRootGuiElement(rootGuiElement);
+            final IUIElement focusedElement = uiManager.getFocusManager().getFocusedElement();
+            if (focusedElement != null)
+            {
+                uiManager.getFocusManager().setFocusedElement(rootGuiElement.searchExactElementById(focusedElement.getId()).orElse(null));
+            }
+
             rootGuiElement.setUiManager(uiManager);
             blockOutGui.setRoot(rootGuiElement);
         }

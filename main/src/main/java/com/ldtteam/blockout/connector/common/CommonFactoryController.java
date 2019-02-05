@@ -66,6 +66,7 @@ public class CommonFactoryController implements IUIElementFactoryController
         final IUIElementFactory<T> factory = (IUIElementFactory<T>) factoryBiMap.get(type);
 
         builder.withMetaData(buildMetaDataBuilder(element));
+        builder.addComponent(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId());
         factory.writeToElementData(element, builder);
 
         return builder.build();

@@ -14,9 +14,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IUIElement
 {
+
+    /**
+     * Unique identifier for the control.
+     * Allows for the identification of during debugging.
+     *
+     * @return The unique identifier.
+     */
+    UUID getUniqueIdentifier();
 
     /**
      * Returns the type of this IUIElement.

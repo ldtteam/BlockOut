@@ -5,6 +5,7 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
+import com.ldtteam.blockout.util.Log;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;

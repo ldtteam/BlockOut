@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
@@ -34,6 +35,9 @@ import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public abstract class AbstractSimpleUIElement implements IUIElement
 {
+    @NotNull
+    private final UUID uniqueIdentifier = UUID.randomUUID();
+
     @NotNull
     private final ResourceLocation                    type;
     @NotNull
@@ -103,6 +107,12 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         this.enabled = enabled;
     }
 
+    @Override
+    public UUID getUniqueIdentifier()
+    {
+        return uniqueIdentifier;
+    }
+
     @NotNull
     @Override
     public ResourceLocation getType()
@@ -130,35 +140,35 @@ public abstract class AbstractSimpleUIElement implements IUIElement
             updateManager.markDirty();
         }
 
-        if (dataContext.hasChanged(parent.getDataContext()))
+        if (dataContext.hasChanged(parent))
         {
             updateManager.markDirty();
         }
-        if (alignments.hasChanged(getDataContext()))
+        if (alignments.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (style.hasChanged(getDataContext()))
+        if (style.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (dock.hasChanged(getDataContext()))
+        if (dock.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (margin.hasChanged(getDataContext()))
+        if (margin.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (enabled.hasChanged(getDataContext()))
+        if (enabled.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (visible.hasChanged(getDataContext()))
+        if (visible.hasChanged(this))
         {
             updateManager.markDirty();
         }
-        if (elementSize.hasChanged(getDataContext()))
+        if (elementSize.hasChanged(this))
         {
             updateManager.markDirty();
         }

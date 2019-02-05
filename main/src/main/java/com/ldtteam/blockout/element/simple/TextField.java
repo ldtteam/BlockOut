@@ -25,6 +25,7 @@ import com.ldtteam.blockout.network.message.TextFieldUpdateContentsMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorPositionMessage;
 import com.ldtteam.blockout.proxy.ClientProxy;
 import com.ldtteam.blockout.render.core.IRenderingController;
+import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.BoundingBox;
@@ -984,13 +985,15 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 );
 
                 return element;
-            }, (element, builder) -> builder
-                                       .addComponent(CONST_CONTENT, element.getContents())
-                                       .addComponent(CONST_CURSOR_POS, element.cursorPosition)
-                                       .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
-                                       .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd)
-                                       .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground())
-                                       .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength()));
+            }, (element, builder) -> {
+                builder
+                  .addComponent(CONST_CONTENT, element.getContents())
+                  .addComponent(CONST_CURSOR_POS, element.cursorPosition)
+                  .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
+                  .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd)
+                  .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground())
+                  .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength());
+            });
         }
 
         @NotNull
