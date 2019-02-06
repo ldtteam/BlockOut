@@ -1,0 +1,44 @@
+{
+  "id": "root",
+  "type": "blockout:root",
+  "size": "150,250",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "alignment": "LEFT,RIGHT,TOP,BOTTOM",
+      "margin": "0,0,0,0",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "add_button",
+      "type": "blockout:button",
+      "alignment": "LEFT, RIGHT, TOP",
+      "defaultBackgroundImage": "image:button_normal",
+      "disabledBackgroundImage": "image:button_disabled",
+      "clickedBackgroundImage": "image:button_clicked",
+      "size": "140,15",
+      "margin": "5,5,5,",
+      "children": [
+        {
+          "id": "add_label",
+          "type": "blockout:label",
+          "alignment": "LEFT,TOP,RIGHT,BOTTOM",
+          "size": "33,13",
+          "content": "add"
+        }
+      ]
+    },
+    {
+      "id": "content_list",
+      "type": "blockout:list",
+      "size": "140,240",
+      "alignment": "LEFT,RIGHT,TOP,BOTTOM",
+      "margin": "5,25,5,5",
+      "scrollBackground": "image:scrollbar_background#vertical",
+      "scrollForeground": "image:scrollbar_foreground#vertical",
+      "template": "template:label_with_remove_test",
+      "source": "{Binding:this}"
+    }
+  ]
+}

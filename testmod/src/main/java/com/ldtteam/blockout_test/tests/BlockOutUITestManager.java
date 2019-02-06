@@ -1,10 +1,7 @@
 package com.ldtteam.blockout_test.tests;
 
 import com.google.common.collect.Lists;
-import com.ldtteam.blockout_test.tests.guis.BoundListHorizontalTest;
-import com.ldtteam.blockout_test.tests.guis.ImageOnlyTest;
-import com.ldtteam.blockout_test.tests.guis.InventoryGridTest;
-import com.ldtteam.blockout_test.tests.guis.TextFieldInputTest;
+import com.ldtteam.blockout_test.tests.guis.*;
 
 import java.util.List;
 
@@ -19,7 +16,9 @@ public class BlockOutUITestManager
           new ImageOnlyTest(),
           new BoundListHorizontalTest(),
           new InventoryGridTest(),
-          new TextFieldInputTest()
+          new TextFieldInputTest(),
+          new CountdownTest(),
+          new GrowingListWithButtonTest()
         );
     }
 

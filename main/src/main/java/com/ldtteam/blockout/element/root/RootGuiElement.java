@@ -82,7 +82,9 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> new RootGuiElement(styleId,
+            super(RootGuiElement.class,
+              KEY_ROOT,
+              (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> new RootGuiElement(styleId,
               alignments,
               dock,
               margin,
@@ -93,13 +95,6 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
               enabled), (element, builder) -> {
                 //No additional information is stored in here.
             });
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_ROOT;
         }
     }
 }

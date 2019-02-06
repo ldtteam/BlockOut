@@ -4,6 +4,10 @@ import com.ldtteam.blockout.element.advanced.List;
 import com.ldtteam.blockout.element.advanced.TemplateInstance;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.*;
+import com.ldtteam.blockout.element.simple.Button;
+import com.ldtteam.blockout.element.simple.Image;
+import com.ldtteam.blockout.element.simple.Label;
+import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.json.JsonLoader;
 import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
@@ -11,16 +15,22 @@ import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
+import net.minecraftforge.fml.client.SplashProgress;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
+import java.util.Set;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION,
   dependencies = Constants.FORGE_VERSION, acceptedMinecraftVersions = Constants.MC_VERSION)
@@ -92,5 +102,13 @@ public class BlockOut
     public void onFMLPostInitialization(final FMLPostInitializationEvent event)
     {
         getProxy().getStyleManager().loadStyles();
+
+        final Set<Class<?>> clzs = ProxyHolder.getInstance().getFactoryController().getAllKnownTypes();
+        final ProgressManager.ProgressBar dependencyEventResolverBar = ProgressManager.push("Analyzing known elements. Determining dependency objects and events.", clzs.size());
+        clzs.forEach(clz -> {
+            dependencyEventResolverBar.step(clz.getName());
+            ReflectionManager.getInstance().getFieldsForClass(clz);
+        });
+        ProgressManager.pop(dependencyEventResolverBar);
     }
 }

@@ -35,7 +35,14 @@ public class Template extends AbstractChildrenContainingUIElement
 
         @NotNull
         @Override
-        public ResourceLocation getType()
+        public Class<Template> getProducedElementClass()
+        {
+            return Template.class;
+        }
+
+        @NotNull
+        @Override
+        public ResourceLocation getTypeName()
         {
             return KEY_TEMPLATE;
         }

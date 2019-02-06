@@ -1,0 +1,42 @@
+{
+  "id": "template_player_inventory_root",
+  "type": "blockout:template",
+  "children": [
+    {
+      "id": "wrapper",
+      "type": "blockout:region",
+      "alignment": "LEFT, TOP, RIGHT, BOTTOM",
+      "margin": "0,0,0,0",
+      "children": [
+        {
+          "id": "label",
+          "type": "blockout:label",
+          "alignment": "LEFT,TOP",
+          "size": "60,13",
+          "margin": "0,1,,",
+          "content": "{Binding:Desc}"
+        },
+        {
+          "id": "delete_button",
+          "type": "blockout:button",
+          "alignment": "RIGHT, TOP",
+          "defaultBackgroundImage": "image:button_normal",
+          "disabledBackgroundImage": "image:button_disabled",
+          "clickedBackgroundImage": "image:button_clicked",
+          "size": "35,15",
+          "margin": ",0,0,",
+          "children": [
+            {
+              "id": "delete_label",
+              "type": "blockout:label",
+              "alignment": "LEFT,TOP,RIGHT,BOTTOM",
+              "size": "33,13",
+              "margin": "1,1,1,1",
+              "content": "Delete"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -2,8 +2,8 @@ package com.ldtteam.blockout.binding.dependency.injection;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.reflection.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AnnotatedElement;
@@ -20,24 +20,28 @@ public final class DependencyObjectInjector
 
     public static void inject(@NotNull final IUIElement target, @NotNull final IDependencyDataProvider provider)
     {
-        ReflectionUtil.getFields(target.getClass())
+        ReflectionManager.getInstance().getFieldsForClass(target.getClass())
           .stream()
           .filter(field -> field.getType().equals(IDependencyObject.class))
           .forEach(field -> {
-              field.setAccessible(true);
-
               final IDependencyObject<?> current;
               try
               {
                   current = (IDependencyObject<?>) field.get(target);
               }
-              catch (IllegalAccessException e)
+              catch (IllegalAccessException ex)
               {
-                  Log.getLogger().error("Failed to get the current default dependency object. Is '" + field.getName() + "' not initialized?", e);
+                  Log.getLogger().error("Failed to get dependency object instance. Needs to be either protected, public, or package private. Private field is not supported.");
                   return;
               }
 
-              final Type fieldType = field.getGenericType();
+              if (current == null)
+              {
+                  Log.getLogger().error("Failed to get dependency object instance. It is not set!");
+                  return;
+              }
+
+              final Type fieldType = current.getClass().getGenericInterfaces()[0];
               if (fieldType instanceof ParameterizedType)
               {
                   final ParameterizedType parameterizedType = (ParameterizedType) fieldType;
@@ -80,7 +84,7 @@ public final class DependencyObjectInjector
                               }
                               catch (IllegalAccessException e)
                               {
-                                  Log.getLogger().error("Failed to bind the dependency object by using its controller.", e);
+                                  Log.getLogger().error("Failed to bind the dependency object using the provider: " + field.getName(), e);
                               }
                           }
                       }

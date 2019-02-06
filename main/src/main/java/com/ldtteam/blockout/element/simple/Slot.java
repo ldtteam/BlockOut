@@ -68,11 +68,11 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    private IDependencyObject<ResourceLocation> inventoryId;
+    public  IDependencyObject<ResourceLocation> inventoryId;
     @NotNull
-    private IDependencyObject<Integer>          inventoryIndex;
+    public  IDependencyObject<Integer>          inventoryIndex;
     @NotNull
-    private IDependencyObject<ResourceLocation> backgroundImageResource;
+    public  IDependencyObject<ResourceLocation> backgroundImageResource;
     @NotNull
     private int                                 slotIndex;
 
@@ -222,7 +222,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(Slot.class, KEY_SLOT, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, MISSING);
                 final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1);
                 final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
@@ -247,13 +247,6 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
                                        .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource())
                                        .addComponent(CONST_INVENTORY_ID, element.getInventoryId())
                                        .addComponent(CONST_INVENTORY_INDEX, element.getInventoryIndex()));
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_SLOT;
         }
     }
 }

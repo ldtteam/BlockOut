@@ -35,20 +35,20 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @NotNull
     protected final String                              id;
     @NotNull
-    protected       IDependencyObject<ResourceLocation> style;
+    public          IDependencyObject<ResourceLocation> style;
     @NotNull
     protected       IUIElementHost                      parent;
 
     @NotNull
-    protected IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
+    public IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    protected IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    public IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
-    protected IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
+    public IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
-    protected IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
+    public IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
     @NotNull
-    protected IDependencyObject<AxisDistance>       padding     = DependencyObjectHelper.createFromValue(new AxisDistance());
+    public IDependencyObject<AxisDistance>       padding     = DependencyObjectHelper.createFromValue(new AxisDistance());
 
     @NotNull
     protected BoundingBox localBoundingBox;
@@ -60,12 +60,12 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     protected BoundingBox absoluteInternalBoundingBox;
 
     @NotNull
-    protected IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
+    public IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
 
     @NotNull
-    protected IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    public IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
     @NotNull
-    protected IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
+    public IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractChildrenContainingUIElement(
       @NotNull final ResourceLocation type,
@@ -603,9 +603,13 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     public static abstract class AbstractChildrenContainingUIElementFactory<U extends IUIElementHost> extends AbstractSimpleUIElement.AbstractSimpleUIElementFactory<U>
     {
 
-        protected AbstractChildrenContainingUIElementFactory(@NotNull final IChildrenContainingUIElementConstructor<U> constructor, @NotNull final ISimpleUIElementWriter<U> writer)
+        protected AbstractChildrenContainingUIElementFactory(
+          final Class<U> clz,
+          final ResourceLocation type,
+          @NotNull final IChildrenContainingUIElementConstructor<U> constructor,
+          @NotNull final ISimpleUIElementWriter<U> writer)
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) ->
+            super(clz, type, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) ->
             {
                 final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, AxisDistance.DEFAULT);
 

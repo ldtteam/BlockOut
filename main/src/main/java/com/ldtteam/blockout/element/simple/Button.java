@@ -36,16 +36,16 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
-    private IDependencyObject<Boolean>          clicked;
+    public IDependencyObject<Boolean>          clicked;
 
     @NotNull
-    private Event<Button, ButtonClickedEventArgs> onClicked = new Event<>(Button.class, Button.ButtonClickedEventArgs.class);
+    public Event<Button, ButtonClickedEventArgs> onClicked = new Event<>(Button.class, Button.ButtonClickedEventArgs.class);
 
     public Button(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -320,7 +320,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+            super(Button.class, KEY_BUTTON, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<ResourceLocation> clickedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CLICKED_BACKGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, MISSING);
@@ -349,13 +349,6 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
                                        .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
                                        .addComponent(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
                                        .addComponent(CONST_INITIALLY_CLICKED, element.isClicked()));
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_BUTTON;
         }
     }
 

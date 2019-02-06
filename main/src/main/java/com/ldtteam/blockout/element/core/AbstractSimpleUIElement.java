@@ -16,7 +16,6 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -26,11 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.ConverterTypes.ALIGNMENT_ENUMSET_TYPE;
-import static com.ldtteam.blockout.util.Constants.ConverterTypes.DOCK_ENUMSET_TYPE;
 import static com.ldtteam.blockout.util.Constants.Styles.CONST_DEFAULT;
 
 public abstract class AbstractSimpleUIElement implements IUIElement
@@ -48,13 +45,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private       IUIElementHost                      parent;
 
     @NotNull
-    private IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
+    public IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
     @NotNull
-    private IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    public IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
     @NotNull
-    private IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
+    public IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
     @NotNull
-    private IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
+    public IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
 
     @NotNull
     private BoundingBox localBoundingBox;
@@ -62,12 +59,12 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private BoundingBox absoluteBoundingBox;
 
     @NotNull
-    private IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
+    public IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
 
     @NotNull
-    private IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    public IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
     @NotNull
-    private IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
+    public IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractSimpleUIElement(
       @NotNull final ResourceLocation type,
@@ -526,15 +523,35 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     public static abstract class AbstractSimpleUIElementFactory<U extends IUIElement> implements IUIElementFactory<U>
     {
 
+        private final Class<U>                       clz;
+        private final ResourceLocation               type;
         private final ISimpleUIElementConstructor<U> constructor;
         private final ISimpleUIElementWriter<U>      writer;
 
         protected AbstractSimpleUIElementFactory(
+          final Class<U> clz,
+          final ResourceLocation type,
           final ISimpleUIElementConstructor<U> constructor,
           final ISimpleUIElementWriter<U> writer)
         {
+            this.clz = clz;
+            this.type = type;
             this.constructor = constructor;
             this.writer = writer;
+        }
+
+        @NotNull
+        @Override
+        public final Class<U> getProducedElementClass()
+        {
+            return clz;
+        }
+
+        @NotNull
+        @Override
+        public final ResourceLocation getTypeName()
+        {
+            return type;
         }
 
         @NotNull
@@ -552,6 +569,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
               elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP), ALIGNMENT_ENUMSET_TYPE);
             final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE, Dock.class, Dock.class); //We need it twice, sorry.
             final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, AxisDistance.DEFAULT);
+            //TODO: Make dynamic sizing possible. Requires custom element control size type that can be dynamically resolved!
             final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, Vector2d.DEFAULT);
             final IDependencyObject<Object> dataContext = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_CONTEXT, engine,
               PropertyCreationHelper.createFromNonOptional((c) -> parent.getDataContext(), (c, o) -> parent.setDataContext(o), true), new Object()))

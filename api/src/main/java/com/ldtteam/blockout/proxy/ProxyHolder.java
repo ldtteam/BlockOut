@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.util.Set;
@@ -116,7 +117,7 @@ public class ProxyHolder implements IProxy
     }
 
     @Override
-    @NotNull
+    @Nullable
     public MultiColoredFontRenderer getFontRenderer()
     {
         return proxy.getFontRenderer();

@@ -35,6 +35,8 @@ public class CommonLoaderManager implements ILoaderManager
                          }
                          catch (Exception e)
                          {
+                             //TODO: Improve exception logging. Handle format errors somehow gracefully!
+                             Log.getLogger().debug(String.format("Failed to load definition using loader: %s", l.getClass().getName()), e);
                              return null;
                          }
                      })

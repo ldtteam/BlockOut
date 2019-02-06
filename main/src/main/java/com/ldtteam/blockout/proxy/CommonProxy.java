@@ -165,7 +165,7 @@ public class CommonProxy implements IProxy
         //NOOP
     }
 
-    @NotNull
+    @Nullable
     @Override
     public MultiColoredFontRenderer getFontRenderer()
     {

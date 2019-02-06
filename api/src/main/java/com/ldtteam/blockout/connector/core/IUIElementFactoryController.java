@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.connector.core;
 
+import com.google.common.collect.ImmutableSet;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.core.IUIElementData;
@@ -44,9 +45,16 @@ public interface IUIElementFactoryController
      * @param builder The {@link IUIElementDataBuilder} to use.
      * @return A {@link java.io.Serializable} {@link IUIElementData} created from the {@link IUIElement}.
      */
-
     @NotNull
     <T extends IUIElement, C extends IUIElementDataComponent, D extends IUIElementData<C>, B extends IUIElementDataBuilder<D>> D getDataFromElementWithBuilder(
       @NotNull final T element,
       @NotNull final B builder);
+
+    /**
+     * Returns a list of all known element types.
+     *
+     * @return All known element types.
+     */
+    @NotNull
+    ImmutableSet<Class<?>> getAllKnownTypes();
 }

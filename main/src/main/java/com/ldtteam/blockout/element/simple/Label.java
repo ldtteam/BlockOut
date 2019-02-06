@@ -13,8 +13,6 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
-import com.ldtteam.blockout.util.color.Color;
-import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -37,9 +35,9 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     private final Pattern TRANSLATION_RAW_PATTERN = Pattern.compile("(?<key>(\\$\\{(?<keydata>.*?)\\}))|(?<value>(.*?))");
 
     @NotNull
-    private IDependencyObject<String> contents;
+    public IDependencyObject<String> contents;
     @NotNull
-    private IDependencyObject<String> fontColor;
+    public IDependencyObject<String> fontColor;
 
     public Label(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -176,7 +174,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(Label.class, KEY_LABEL, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");
                 final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, TextFormatting.RESET.toString());
 
@@ -200,13 +198,6 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                  builder
                    .addComponent(CONST_CONTENT, element.getContents())
                    .addComponent(CONST_FONT_COLOR, element.getFontColor()));
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_LABEL;
         }
     }
 }

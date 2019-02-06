@@ -1,0 +1,31 @@
+{
+  "type": "blockout:root",
+  "id": "root",
+  "style": "blockout:default",
+  "size": "200,200",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "200,200",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "logo",
+      "type": "blockout:image",
+      "size": "128,128",
+      "icon": "image:ldtteam_logo",
+      "alignment": "LEFT, TOP, RIGHT",
+      "margin": "36,10,36,"
+    },
+    {
+      "id": "countdown",
+      "type": "blockout:label",
+      "alignment": "LEFT, BOTTOM, RIGHT",
+      "margin": "36,,36,10",
+      "size": "128,13",
+      "content": "{Binding:Countdown}",
+      "font-color": "Blue"
+    }
+  ]
+}

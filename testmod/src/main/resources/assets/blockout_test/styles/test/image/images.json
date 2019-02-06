@@ -4,6 +4,10 @@
     {
       "id": "image:chatchain_150",
       "data": "blockout_test:styles/test/image/chatchain_150.png"
+    },
+    {
+      "id": "image:ldtteam_logo",
+      "data": "blockout_test:styles/test/image/ldtteam-logo.png"
     }
   ]
 }

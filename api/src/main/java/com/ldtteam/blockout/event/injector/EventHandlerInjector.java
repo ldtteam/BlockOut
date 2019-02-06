@@ -2,8 +2,8 @@ package com.ldtteam.blockout.event.injector;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.event.Event;
+import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.reflection.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandlerInjector
@@ -16,23 +16,20 @@ public class EventHandlerInjector
 
     public static void inject(@NotNull final IUIElement target, @NotNull final IEventHandlerProvider provider)
     {
-        ReflectionUtil.getFields(target.getClass())
+        ReflectionManager.getInstance().getFieldsForClass(target.getClass())
           .stream()
           .filter(field -> field.getType().equals(Event.class))
           .forEach(eventField -> {
-              eventField.setAccessible(true);
-
               final Event<?, ?> event;
               try
               {
                   event = (Event<?, ?>) eventField.get(target);
               }
-              catch (Exception e)
+              catch (IllegalAccessException e)
               {
-                  Log.getLogger().warn("Failed to get event for handler binding: " + eventField.getName() + " from: " + target.getId() + ". Is it populated?");
+                  Log.getLogger().error("Failed to get event instance. Needs to be either protected, public, or package private. Private field is not supported.");
                   return;
               }
-
               provider.getEventHandlers(String.format("%s#%s", target.getId(), eventField.getName()), event.getSourceClass(), event.getArgumentClass())
                 .forEach(event::registerHandler);
           });

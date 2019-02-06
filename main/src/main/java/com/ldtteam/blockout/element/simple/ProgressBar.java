@@ -9,15 +9,10 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.factory.IUIElementFactory;
-import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,24 +23,23 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.ProgressBar.*;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> backGroundResource;
+    public IDependencyObject<ResourceLocation> backGroundResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> foreGroundResource;
+    public IDependencyObject<ResourceLocation> foreGroundResource;
     @NotNull
-    private IDependencyObject<Double>           value;
+    public IDependencyObject<Double>           value;
     @NotNull
-    private IDependencyObject<Double>           min;
+    public IDependencyObject<Double>           min;
     @NotNull
-    private IDependencyObject<Double>           max;
+    public IDependencyObject<Double>           max;
     @Nonnull
-    private IDependencyObject<Orientation>      orientation;
+    public IDependencyObject<Orientation>      orientation;
 
     public ProgressBar(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -361,7 +355,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
         protected Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(ProgressBar.class, KEY_PROGRESS_BAR, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> background = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<ResourceLocation> foreground = elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d);
@@ -396,18 +390,6 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
                                        .addComponent(CONST_MAX, element.getMax())
                                        .addComponent(CONST_VALUE, element.getValue())
                                        .addComponent(CONST_ORIENTATION, element.getOrientation()));
-        }
-
-        /**
-         * Returns the type that this factory builds.
-         *
-         * @return The type.
-         */
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_PROGRESS_BAR;
         }
     }
 }

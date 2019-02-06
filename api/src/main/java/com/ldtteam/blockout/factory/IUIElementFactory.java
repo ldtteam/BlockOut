@@ -16,12 +16,20 @@ public interface IUIElementFactory<U extends IUIElement>
 {
 
     /**
+     * The class of the element produced. Used during setup to detect dependency objects as well as events.
+     *
+     * @return The class of the element produced.
+     */
+    @NotNull
+    Class<U> getProducedElementClass();
+
+    /**
      * Returns the type that this factory builds.
      *
      * @return The type.
      */
     @NotNull
-    ResourceLocation getType();
+    ResourceLocation getTypeName();
 
     /**
      * Creates a new {@link U} from the given {@link IUIElementData}.

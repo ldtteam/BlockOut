@@ -58,7 +58,7 @@ public class Region extends AbstractChildrenContainingUIElement
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+            super(Region.class, KEY_REGION, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final Region element = new Region(
                   id,
                   parent,
@@ -77,13 +77,6 @@ public class Region extends AbstractChildrenContainingUIElement
             }, (element, builder) -> {
                 //Noop this is an invisible element that is just here to group other elements. It has no other properties.
             });
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_REGION;
         }
     }
 }

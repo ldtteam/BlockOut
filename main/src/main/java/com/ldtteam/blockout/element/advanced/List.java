@@ -50,7 +50,7 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+            super(List.class, KEY_LIST, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
 
                 final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, MISSING);
                 final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, MISSING);
@@ -116,18 +116,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
                                        .addComponent(CONST_ORIENTATION, element.getOrientation())
                                        .addComponent(CONST_SHOW_BAR, element.getShowScrollBar()));
         }
-
-        /**
-         * Returns the type that this factory builds.
-         *
-         * @return The type.
-         */
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_LIST;
-        }
     }
 
     public static final class ListConstructionDataBuilder extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<ListConstructionDataBuilder, List>
@@ -181,14 +169,14 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     //The current scroll state is not bindable. It is exclusively controlled by the control it self.
     private double                                          scrollOffset;
     //Bindable resource binding.
-    private IDependencyObject<ResourceLocation>             templateResource;
-    private IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
-    private IDependencyObject<Object>                       source;
-    private IDependencyObject<ResourceLocation>             scrollBarBackgroundResource;
-    private IDependencyObject<ResourceLocation>             scrollBarForegroundResource;
+    public  IDependencyObject<ResourceLocation>             templateResource;
+    public  IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
+    public  IDependencyObject<Object>                       source;
+    public  IDependencyObject<ResourceLocation>             scrollBarBackgroundResource;
+    public  IDependencyObject<ResourceLocation>             scrollBarForegroundResource;
     private boolean                                         dataBoundMode;
-    private IDependencyObject<Boolean>                      showScrollbar;
-    private IDependencyObject<Orientation>                  orientation;
+    public  IDependencyObject<Boolean>                      showScrollbar;
+    public  IDependencyObject<Orientation>                  orientation;
 
     public List(
       @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)

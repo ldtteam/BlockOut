@@ -12,6 +12,10 @@
     {
       "id": "template:global_test_ui_button",
       "data": "blockout_test:styles/test/controls/global_test_ui_button.json"
+    },
+    {
+      "id": "template:label_with_remove_test",
+      "data": "blockout_test:styles/test/controls/label_with_remove_test.json"
     }
   ]
 }

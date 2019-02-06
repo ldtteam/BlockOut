@@ -55,7 +55,9 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
+            super(TemplateInstance.class,
+              KEY_TEMPLATE_INSTANCE,
+              (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);
 
                 final TemplateInstance element = new TemplateInstance(
@@ -82,21 +84,9 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
                 return element;
             }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource()));
         }
-
-        /**
-         * Returns the type that this factory builds.
-         *
-         * @return The type.
-         */
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_TEMPLATE_INSTANCE;
-        }
     }
 
-    private IDependencyObject<ResourceLocation> templateResource;
+    public IDependencyObject<ResourceLocation> templateResource;
 
     public TemplateInstance(
       @NotNull final String id,

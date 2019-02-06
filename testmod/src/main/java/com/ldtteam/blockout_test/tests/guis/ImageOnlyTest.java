@@ -6,6 +6,7 @@ import com.ldtteam.blockout_test.tests.IBlockOutUITest;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class ImageOnlyTest implements IBlockOutUITest

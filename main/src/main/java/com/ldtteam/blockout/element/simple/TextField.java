@@ -18,22 +18,18 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.TextFieldOnEnterPressed;
 import com.ldtteam.blockout.network.message.TextFieldTabPressedMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateContentsMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorPositionMessage;
-import com.ldtteam.blockout.proxy.ClientProxy;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
-import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import jdk.nashorn.internal.ir.Block;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -66,30 +62,25 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private int cursorPosition = 0;
 
-    /**
-     * The scroll offset.
-     */
-    private int scrollOffset = 0;
+    @NotNull
+    public IDependencyObject<String> contents;
 
     /**
      * The selection end.
      */
-    private int selectionEnd = 0;
-
+    private int                                         selectionEnd = 0;
     @NotNull
-    private IDependencyObject<String> contents;
-
+    public  IDependencyObject<Integer>                  maxStringLength;
     @NotNull
-    private IDependencyObject<Integer> maxStringLength;
-
+    public  IDependencyObject<Boolean>                  doBackgroundDrawing;
     @NotNull
-    private IDependencyObject<Boolean> doBackgroundDrawing;
-
+    public  Event<TextField, TextFieldChangedEventArgs> onTyped      = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
     @NotNull
-    private Event<TextField, TextFieldChangedEventArgs> onTyped = new Event<>(TextField.class, TextFieldChangedEventArgs.class);
-
-    @NotNull
-    private Event<TextField, TextFieldEnterEventArgs> onEnter = new Event<>(TextField.class, TextFieldEnterEventArgs.class);
+    public  Event<TextField, TextFieldEnterEventArgs>   onEnter      = new Event<>(TextField.class, TextFieldEnterEventArgs.class);
+    /**
+     * The scroll offset.
+     */
+    private int                                         scrollOffset = -1;
 
     /**
      * Public constructor to build textField.
@@ -161,6 +152,47 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         if (contents.hasChanged(getDataContext()))
         {
             updateManager.markDirty();
+        }
+
+        if (scrollOffset == -1)
+        {
+            calcScrollOffset();
+        }
+    }
+
+    private void calcScrollOffset()
+    {
+        if (ProxyHolder.getInstance().getFontRenderer() == null)
+        {
+            return;
+        }
+
+        final int internalWidth = getInternalWidth();
+        if (internalWidth > 0)
+        {
+            if (scrollOffset > getContents().length())
+            {
+                scrollOffset = getContents().length();
+            }
+
+            final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), internalWidth);
+            final int rightmostVisibleChar = visibleString.length() + scrollOffset;
+
+            if (selectionEnd == scrollOffset)
+            {
+                scrollOffset -= BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents(), internalWidth, true).length();
+            }
+
+            if (selectionEnd > rightmostVisibleChar)
+            {
+                scrollOffset += selectionEnd - rightmostVisibleChar;
+            }
+            else if (selectionEnd <= scrollOffset)
+            {
+                scrollOffset -= scrollOffset - selectionEnd;
+            }
+
+            scrollOffset = MathHelper.clamp(scrollOffset, 0, getContents().length());
         }
     }
 
@@ -670,34 +702,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         selectionEnd = pos;
 
-        final int internalWidth = getInternalWidth();
-        if (internalWidth > 0)
-        {
-            if (scrollOffset > getContents().length())
-            {
-                scrollOffset = getContents().length();
-            }
 
-            final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), internalWidth);
-            final int rightmostVisibleChar = visibleString.length() + scrollOffset;
-
-            if (selectionEnd == scrollOffset)
-            {
-                scrollOffset -= BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents(), internalWidth, true).length();
-            }
-
-            if (selectionEnd > rightmostVisibleChar)
-            {
-                scrollOffset += selectionEnd - rightmostVisibleChar;
-            }
-            else if (selectionEnd <= scrollOffset)
-            {
-                scrollOffset -= scrollOffset - selectionEnd;
-            }
-
-            scrollOffset = MathHelper.clamp(scrollOffset, 0, getContents().length());
-            getParent().getUiManager().getUpdateManager().markDirty();
-        }
     }
 
     /**
@@ -955,7 +960,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(TextField.class, KEY_TEXT_FIELD, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
 
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "");
                 final IDependencyObject<Boolean> doBackgroundDraw = elementData.getFromRawDataWithDefault(CONST_DO_BACK_DRAW, engine, true);
@@ -994,13 +999,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                   .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground())
                   .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength());
             });
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_TEXT_FIELD;
         }
     }
 

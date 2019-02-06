@@ -2,6 +2,7 @@ package com.ldtteam.blockout.connector.common;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableSet;
 import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
@@ -11,12 +12,12 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
-import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class CommonFactoryController implements IUIElementFactoryController
 {
@@ -25,7 +26,7 @@ public class CommonFactoryController implements IUIElementFactoryController
     @Override
     public IUIElementFactoryController registerFactory(@NotNull final IUIElementFactory<?> factory)
     {
-        factoryBiMap.forcePut(factory.getType(), factory);
+        factoryBiMap.forcePut(factory.getTypeName(), factory);
         return this;
     }
 
@@ -70,6 +71,13 @@ public class CommonFactoryController implements IUIElementFactoryController
         factory.writeToElementData(element, builder);
 
         return builder.build();
+    }
+
+    @NotNull
+    @Override
+    public ImmutableSet<Class<?>> getAllKnownTypes()
+    {
+        return ImmutableSet.copyOf(factoryBiMap.values().stream().map(IUIElementFactory::getProducedElementClass).collect(Collectors.toSet()));
     }
 
     private <T extends IUIElement> Consumer<IUIElementMetaDataBuilder<?>> buildMetaDataBuilder(@NotNull final T element)

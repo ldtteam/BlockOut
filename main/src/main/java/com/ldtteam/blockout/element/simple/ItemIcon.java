@@ -30,7 +30,7 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> iconResource;
+    public IDependencyObject<ResourceLocation> iconResource;
 
     public ItemIcon(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -139,7 +139,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
     {
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(ItemIcon.class, KEY_ITEM, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, MISSING);
 
                 final ItemIcon element = new ItemIcon(
@@ -158,13 +158,6 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
 
                 return element;
             }, (element, builder) -> builder.addComponent(CONST_ICON, element.getIconResource()));
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_ITEM;
         }
     }
 }

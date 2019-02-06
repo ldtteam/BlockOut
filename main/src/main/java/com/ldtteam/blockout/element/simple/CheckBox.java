@@ -33,16 +33,16 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
-    private IDependencyObject<ResourceLocation> normalBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> checkedBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> checkedBackgroundImageResource;
     @NotNull
-    private IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
-    private IDependencyObject<Boolean>          checked;
+    public IDependencyObject<Boolean>          checked;
 
     @NotNull
-    private Event<CheckBox, CheckBoxCheckChangedEventArgs> onCheckedChanged = new Event<>(CheckBox.class, CheckBoxCheckChangedEventArgs.class);
+    public Event<CheckBox, CheckBoxCheckChangedEventArgs> onCheckedChanged = new Event<>(CheckBox.class, CheckBoxCheckChangedEventArgs.class);
 
     public CheckBox(
       @NotNull final IDependencyObject<ResourceLocation> style,
@@ -296,7 +296,7 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
 
         public Factory()
         {
-            super((elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
+            super(CheckBox.class, KEY_CHECKBOX, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<ResourceLocation> checkedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CHECKED_BACKGROUND_IMAGE, engine, MISSING);
                 final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, MISSING);
@@ -324,13 +324,6 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
                                        .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
                                        .addComponent(CONST_CHECKED_BACKGROUND_IMAGE, element.getCheckedBackgroundImageResource())
                                        .addComponent(CONST_INITIALLY_CHECKED, element.isChecked()));
-        }
-
-        @NotNull
-        @Override
-        public ResourceLocation getType()
-        {
-            return KEY_CHECKBOX;
         }
     }
 
