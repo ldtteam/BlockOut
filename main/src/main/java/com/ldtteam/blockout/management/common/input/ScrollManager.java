@@ -24,7 +24,7 @@ public class ScrollManager extends AbstractInputManager implements IScrollManage
         attemptInputInteraction(
           localX,
           localY,
-          (u, x, y) -> u.isEnabled() && u.canAcceptMouseInput(x, y, deltaWheel),
+          (u, x, y) -> u.isEnabled() && u.canAcceptScrollInput(x, y, deltaWheel),
           (u, x, y) -> u.onMouseScroll(x, y, deltaWheel));
     }
 

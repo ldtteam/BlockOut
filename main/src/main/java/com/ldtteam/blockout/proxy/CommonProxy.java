@@ -65,7 +65,6 @@ public class CommonProxy implements IProxy
     @Override
     public void onPreInit()
     {
-        //TODO: Create split style loader.
         factoryInjectionModules.add(new BaseFactoryInjectionModule());
         factoryInjectionModules.add(new ElementDataFactoryInjectionModule());
         factoryInjectionModules.add(new NBTFactoryInjectionModule());

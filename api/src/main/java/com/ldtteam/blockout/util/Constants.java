@@ -143,12 +143,18 @@ public class Constants
         {
             public static final ResourceLocation KEY_TEXT_FIELD = new ResourceLocation(MOD_ID, "textfield");
 
-            public static final String CONST_CONTENT           = "content";
-            public static final String CONST_CURSOR_POS        = "cursorCounter";
-            public static final String CONST_CURSOR_SCROLL_OFF = "cursorScroll";
-            public static final String CONST_CURSOR_SEL_END    = "cursor_SEL";
-            public static final String CONST_DO_BACK_DRAW      = "doBackgroundDraw";
-            public static final String CONST_MAX_LENGTH        = "maxLength";
+            public static final String CONST_CONTENT                = "content";
+            public static final String CONST_CURSOR_POS             = "cursorCounter";
+            public static final String CONST_CURSOR_SCROLL_OFF      = "cursorScroll";
+            public static final String CONST_CURSOR_SEL_END         = "cursor_SEL";
+            public static final String CONST_DO_BACK_DRAW           = "doBackgroundDraw";
+            public static final String CONST_MAX_LENGTH             = "maxLength";
+            public static final String CONST_OUTER_BACKGROUND_COLOR = "outerColor";
+            public static final String CONST_INNER_BACKGROUND_COLOR = "innerColor";
+            public static final String CONST_ENABLED_FONT_COLOR     = "enabledFontColor";
+            public static final String CONST_DISABLED_FONT_COLOR    = "disabledFontColor";
+            public static final String CONST_CURSOR_COLOR           = "cursorColor";
+            public static final String CONST_SELECTION_COLOR        = "selectionColor";
         }
 
         public static class ProgressBar

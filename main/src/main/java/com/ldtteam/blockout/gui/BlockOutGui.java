@@ -238,7 +238,8 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
         int scaledMouseX = (int) (mouseX * this.scaleFactor.getX());
         int scaledMouseY = (int) (mouseY * this.scaleFactor.getY());
 
-        return (!isDrawing || !(slotIn instanceof SlotBlockOut)) && super.isMouseOverSlot(slotIn, scaledMouseX, scaledMouseY);
+        return ((!isDrawing && (!(slotIn instanceof SlotBlockOut) || ((SlotBlockOut) slotIn).getUiSlotInstance().isEnabled())) || !(slotIn instanceof SlotBlockOut))
+                 && super.isMouseOverSlot(slotIn, scaledMouseX, scaledMouseY);
     }
 
     @Override

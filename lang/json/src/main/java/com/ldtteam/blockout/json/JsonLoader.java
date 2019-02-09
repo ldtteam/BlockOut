@@ -12,7 +12,7 @@ public class JsonLoader implements ILoader
 
     @NotNull
     @Override
-    public IUIElementData createFromDataAndBindingEngine(@NotNull final String data) throws Exception
+    public IUIElementData loadDataFromDefinition(@NotNull final String data) throws Exception
     {
         try
         {

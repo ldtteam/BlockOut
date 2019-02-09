@@ -20,7 +20,7 @@
     {
       "id": "chest_inventory",
       "type": "blockout:instance",
-      "size": "167,54",
+      "size": "170,54",
       "margin": "7,17",
       "template": "template:grid"
     },

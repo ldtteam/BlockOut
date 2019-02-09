@@ -10,6 +10,7 @@ import com.ldtteam.blockout.binding.property.PropertyCreationHelper;
 import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
+import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
@@ -20,11 +21,13 @@ import com.ldtteam.blockout.element.input.IScrollAcceptingUIElement;
 import com.ldtteam.blockout.element.simple.Region;
 import com.ldtteam.blockout.element.values.*;
 import com.ldtteam.blockout.event.injector.EventHandlerInjector;
+import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Clamp;
 import com.ldtteam.blockout.util.math.Vector2d;
@@ -34,16 +37,19 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static com.ldtteam.blockout.util.Constants.Controls.List.*;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class List extends AbstractChildrenContainingUIElement implements IScrollAcceptingUIElement, IClickAcceptingUIElement, IDrawableUIElement, IChildDrawableUIElement
 {
-    private static final int CONST_SCROLLBAR_SIZE = 5;
+    private static final int CONST_SCROLLBAR_SIZE    = 5;
+    private static final int CONST_SCROLLBAR_PADDING = 8;
 
     public static final class Factory extends AbstractChildrenContainingUIElementFactory<List>
     {
@@ -154,6 +160,16 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
         }
 
         @NotNull
+        public ListConstructionDataBuilder withTemplateConstructionData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder>... callbacks)
+        {
+            final BlockOutGuiConstructionDataBuilder builder = new BlockOutGuiConstructionDataBuilder();
+
+            Arrays.stream(callbacks).forEach(c -> c.accept(builder));
+
+            return withTemplateConstructionData(builder.build());
+        }
+
+        @NotNull
         public ListConstructionDataBuilder withDependentSource(@NotNull final IDependencyObject<Object> source)
         {
             return withDependency("source", source);
@@ -242,11 +258,6 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public boolean canAcceptMouseInput(final int localX, final int localY, final MouseButton button)
     {
         final BoundingBox localBox = getLocalBoundingBox();
-        if (!localBox.includes(new Vector2d(localX, localY)))
-        {
-            return false;
-        }
-
         if (getOrientation() == Orientation.TOP_BOTTOM)
         {
             final double offset = localBox.getSize().getX() - localX;
@@ -363,12 +374,12 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
                 return;
             }
 
-            final Vector2d scrollBoxOrigin = getLocalBoundingBox().getLowerRightCoordinate().move(-CONST_SCROLLBAR_SIZE, 0).nullifyNegatives();
+            final Vector2d scrollBoxOrigin = new Vector2d(getLocalBoundingBox().getSize().getX() - CONST_SCROLLBAR_SIZE, 0).nullifyNegatives();
             final Vector2d scrollBoxSize = new Vector2d(CONST_SCROLLBAR_SIZE, getLocalBoundingBox().getSize().getY());
 
             final BoundingBox scrollBox = new BoundingBox(scrollBoxOrigin, scrollBoxSize);
 
-            final Vector2d scrollBarOrigin = getLocalBoundingBox().getLowerRightCoordinate().move(-CONST_SCROLLBAR_SIZE, scrollOffset * maxOffset).nullifyNegatives();
+            final Vector2d scrollBarOrigin = new Vector2d(getLocalBoundingBox().getSize().getX() - CONST_SCROLLBAR_SIZE, scrollOffset * maxOffset).nullifyNegatives();
             final Vector2d scrollBarSize = new Vector2d(CONST_SCROLLBAR_SIZE, barLength);
 
             final BoundingBox scrollBarBox = new BoundingBox(scrollBarOrigin, scrollBarSize);
@@ -382,21 +393,18 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
             final double barLength = getScrollBarLength();
             final double maxOffset = localWidth - barLength;
 
-
             if (maxOffset < 1)
             {
                 GlStateManager.popMatrix();
                 return;
             }
 
-            final Vector2d scrollBoxOrigin =
-              getLocalBoundingBox().getLowerLeftCoordinate().move(0, getLocalBoundingBox().getSize().getY() - CONST_SCROLLBAR_SIZE).nullifyNegatives();
+            final Vector2d scrollBoxOrigin = new Vector2d(0, getLocalBoundingBox().getSize().getY() - CONST_SCROLLBAR_SIZE).nullifyNegatives();
             final Vector2d scrollBoxSize = new Vector2d(getLocalBoundingBox().getSize().getX(), CONST_SCROLLBAR_SIZE);
 
             final BoundingBox scrollBox = new BoundingBox(scrollBoxOrigin, scrollBoxSize);
 
-            final Vector2d scrollBarOrigin =
-              getLocalBoundingBox().getLowerLeftCoordinate().move(scrollOffset * maxOffset, getLocalBoundingBox().getSize().getY() - CONST_SCROLLBAR_SIZE).nullifyNegatives();
+            final Vector2d scrollBarOrigin = new Vector2d(scrollOffset * maxOffset, getLocalBoundingBox().getSize().getY() - CONST_SCROLLBAR_SIZE).nullifyNegatives();
             final Vector2d scrollBarSize = new Vector2d(barLength, CONST_SCROLLBAR_SIZE);
 
             final BoundingBox scrollBarBox = new BoundingBox(scrollBarOrigin, scrollBarSize);
@@ -412,6 +420,54 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     public void drawForeground(@NotNull final IRenderingController controller)
     {
 
+    }
+
+    @Override
+    public AxisDistance getPadding()
+    {
+        final AxisDistance parentDistance = super.getPadding();
+
+        if (getLocalBoundingBox() == null || values().stream().anyMatch(u -> u.getLocalBoundingBox() == null))
+        {
+            return parentDistance;
+        }
+
+
+        if (getOrientation() == Orientation.TOP_BOTTOM)
+        {
+            final double localHeight = getLocalBoundingBox().getSize().getY();
+            final double barLength = getScrollBarLength();
+            final double maxOffset = localHeight - barLength;
+
+            if (maxOffset < 1)
+            {
+                return parentDistance;
+            }
+
+            if (parentDistance.getRight().orElse(0d) < CONST_SCROLLBAR_PADDING)
+            {
+                return new AxisDistance(parentDistance.getLeft(), parentDistance.getTop(), Optional.of((double) CONST_SCROLLBAR_PADDING), parentDistance.getBottom());
+            }
+
+            return parentDistance;
+        }
+
+
+        final double localWidth = getLocalBoundingBox().getSize().getX();
+        final double barLength = getScrollBarLength();
+        final double maxOffset = localWidth - barLength;
+
+        if (maxOffset < 1)
+        {
+            return parentDistance;
+        }
+
+        if (parentDistance.getBottom().orElse(0d) < CONST_SCROLLBAR_PADDING)
+        {
+            return new AxisDistance(parentDistance.getLeft(), parentDistance.getTop(), parentDistance.getRight(), Optional.of((double) CONST_SCROLLBAR_PADDING));
+        }
+
+        return parentDistance;
     }
 
     public IBlockOutGuiConstructionData getTemplateConstructionData()
@@ -661,10 +717,29 @@ public class List extends AbstractChildrenContainingUIElement implements IScroll
     }
 
     @Override
-    public boolean canAcceptMouseInput(final int localX, final int localY, final int deltaWheel)
+    public boolean canAcceptScrollInput(final int localX, final int localY, final int deltaWheel)
     {
-        //We accept all mouse input that is in our box.
-        return true;
+        if (getLocalBoundingBox() == null || values().stream().anyMatch(u -> u.getLocalBoundingBox() == null))
+        {
+            return false;
+        }
+
+
+        if (getOrientation() == Orientation.TOP_BOTTOM)
+        {
+            final double localHeight = getLocalBoundingBox().getSize().getY();
+            final double barLength = getScrollBarLength();
+            final double maxOffset = localHeight - barLength;
+
+            return !(maxOffset < 1);
+        }
+
+
+        final double localWidth = getLocalBoundingBox().getSize().getX();
+        final double barLength = getScrollBarLength();
+        final double maxOffset = localWidth - barLength;
+
+        return !(maxOffset < 1);
     }
 
     @Override

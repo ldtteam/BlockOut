@@ -247,7 +247,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @Override
     public boolean isEnabled()
     {
-        return isVisible() && enabled.get(this) && (this == getParent() || getParent().isEnabled());
+        return enabled.get(this) && isVisible() && (this == getParent() || getParent().isEnabled());
     }
 
     @Override

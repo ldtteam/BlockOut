@@ -19,7 +19,7 @@ public class CountdownTest implements IBlockOutUITest
     @Override
     public String getTestName()
     {
-        return TextFormatting.WHITE + "Image Only" + TextFormatting.RESET;
+        return TextFormatting.WHITE + "Countdown binding test" + TextFormatting.RESET;
     }
 
     @Override

@@ -10,7 +10,7 @@ public class ObjectUIElementLoader implements ILoader
     @SuppressWarnings("unchecked")
     @NotNull
     @Override
-    public IUIElementData createFromDataAndBindingEngine(@NotNull final String data)
+    public IUIElementData loadDataFromDefinition(@NotNull final String data)
     {
         if (!data.endsWith(".class"))
         {

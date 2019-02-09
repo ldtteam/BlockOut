@@ -29,8 +29,6 @@ public class GrowingListWithButtonTest implements IBlockOutUITest
     {
         final ArrayList<BindingTestContext> list = Lists.newArrayList();
 
-        //TODO: Fix list builder not taking consumer!.
-
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                               .ofFile(new ResourceLocation("blockout_test:gui/dynamic_list.json"))
                                                                                               .usingData(b -> b
@@ -49,14 +47,20 @@ public class GrowingListWithButtonTest implements IBlockOutUITest
                                                                                                                 .withControl("content_list",
                                                                                                                   List.ListConstructionDataBuilder.class,
                                                                                                                   ll -> ll.withDataContext(list)
-                                                                                                                          .withTemplateConstructionData(new BlockOutGuiConstructionDataBuilder()
-                                                                                                                                                          .withControl(
-                                                                                                                                                            "delete_button",
-                                                                                                                                                            Button.ButtonConstructionDataBuilder.class,
-                                                                                                                                                            bb -> bb.withClickedEventHandler(
-                                                                                                                                                              (bu, e) -> list.remove(
-                                                                                                                                                                bu.getDataContext())))
-                                                                                                                                                          .build()))
+                                                                                                                          .withTemplateConstructionData(tcb -> tcb
+                                                                                                                                                                 .withControl(
+                                                                                                                                                                   "delete_button",
+                                                                                                                                                                   Button.ButtonConstructionDataBuilder.class,
+                                                                                                                                                                   bb -> bb.withClickedEventHandler(
+                                                                                                                                                                     (bu, e) -> {
+                                                                                                                                                                         if (!e.isStart())
+                                                                                                                                                                         {
+                                                                                                                                                                             return;
+                                                                                                                                                                         }
+
+                                                                                                                                                                         list.remove(
+                                                                                                                                                                           bu.getDataContext());
+                                                                                                                                                                     }))))
                                                                                               )
                                                                                               .withDefaultItemHandlerManager()
                                                                                               .forEntity(entityPlayer));

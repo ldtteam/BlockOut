@@ -9,9 +9,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
@@ -121,7 +119,10 @@ public interface IUIElementHost extends Map<String, IUIElement>, IUIElement
             return Optional.empty();
         }
 
-        for (IUIElement element : values())
+        final List<IUIElement> elements = new ArrayList<>(values());
+        Collections.reverse(elements);
+
+        for (IUIElement element : elements)
         {
             final Vector2d elementLocalCoord = localPoint.move(this.getLocalBoundingBox().getLocalOrigin().invert());
             if (element instanceof IUIElementHost)

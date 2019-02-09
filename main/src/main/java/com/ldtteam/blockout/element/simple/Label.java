@@ -129,7 +129,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
             contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 
-        return getFontColor() + rawContents + TextFormatting.RESET.toString();
+        return ProxyHolder.getInstance().convertToColorCode(getFontColor()) + rawContents + TextFormatting.RESET.toString();
     }
 
     public String getContents()
@@ -144,7 +144,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
     public String getFontColor()
     {
-        return ProxyHolder.getInstance().convertToColorCode(fontColor.get(this));
+        return fontColor.get(this);
     }
 
     public void setFontColor(String color)

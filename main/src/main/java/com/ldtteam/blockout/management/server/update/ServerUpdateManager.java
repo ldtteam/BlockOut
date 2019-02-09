@@ -38,6 +38,12 @@ public class ServerUpdateManager implements IUpdateManager
             {
                 ProfilerExporter.exportProfiler(element);
             }
+
+            final IUIElement focusedElement = rootGuiElement.getUiManager().getFocusManager().getFocusedElement();
+            if (!rootGuiElement.getAllCombinedChildElements().values().contains(focusedElement))
+            {
+                rootGuiElement.getUiManager().getFocusManager().setFocusedElement(null);
+            }
         }
         else
         {

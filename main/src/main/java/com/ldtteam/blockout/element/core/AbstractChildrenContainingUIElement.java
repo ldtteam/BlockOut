@@ -233,7 +233,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         this.dock.set(this, dock);
     }
 
-    @NotNull
+    @Nullable
     @Override
     public BoundingBox getLocalBoundingBox()
     {
@@ -262,7 +262,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @Override
     public boolean isEnabled()
     {
-        return isVisible() && enabled.get(this) && (getParent() == this || getParent().isEnabled());
+        return enabled.get(this) && isVisible() && (getParent() == this || getParent().isEnabled());
     }
 
     @Override

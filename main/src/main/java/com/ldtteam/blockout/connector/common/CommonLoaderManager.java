@@ -6,10 +6,12 @@ import com.ldtteam.blockout.loader.ILoader;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CommonLoaderManager implements ILoaderManager
 {
@@ -27,22 +29,30 @@ public class CommonLoaderManager implements ILoaderManager
     {
         try
         {
-            return loaders.stream()
-                     .map(l -> {
-                         try
-                         {
-                             return l.createFromDataAndBindingEngine(dataLoader.getGuiDefinition());
-                         }
-                         catch (Exception e)
-                         {
-                             //TODO: Improve exception logging. Handle format errors somehow gracefully!
-                             Log.getLogger().debug(String.format("Failed to load definition using loader: %s", l.getClass().getName()), e);
-                             return null;
-                         }
-                     })
-                     .filter(Objects::nonNull)
+            final List<LoadingResult> resultList = loaders.stream()
+                                                     .map(l -> {
+                                                         try
+                                                         {
+                                                             return new LoadingResult(l.loadDataFromDefinition(dataLoader.getGuiDefinition()), null, "");
+                                                         }
+                                                         catch (Exception e)
+                                                         {
+                                                             return new LoadingResult(null, e, l.getClass().getName());
+                                                         }
+                                                     })
+                                                     .collect(Collectors.toList());
+
+            if (resultList.stream().noneMatch(LoadingResult::wasSuccessful))
+            {
+                resultList.forEach(LoadingResult::LogError);
+                return null;
+            }
+
+            return resultList.stream()
+                     .filter(LoadingResult::wasSuccessful)
                      .findFirst()
-                     .orElseThrow(() -> new Exception("No loader can load the given data into params."));
+                     .map(LoadingResult::getElementData)
+                     .orElseThrow(() -> new IllegalStateException("Failed to find successful result!"));
         }
         catch (Exception e)
         {
@@ -50,5 +60,52 @@ public class CommonLoaderManager implements ILoaderManager
         }
 
         return null;
+    }
+
+    private final class LoadingResult
+    {
+        @Nullable
+        private final IUIElementData<?> elementData;
+
+        @Nullable
+        private final Exception exception;
+
+        @Nullable
+        private final String loaderName;
+
+        public LoadingResult(@Nullable final IUIElementData<?> elementData, @Nullable final Exception exception, @Nullable final String loaderName)
+        {
+            this.elementData = elementData;
+            this.exception = exception;
+            this.loaderName = loaderName;
+        }
+
+        public boolean wasSuccessful()
+        {
+            return exception == null && elementData != null;
+        }
+
+        @Nullable
+        public IUIElementData<?> getElementData()
+        {
+            return elementData;
+        }
+
+        @Nullable
+        public Exception getException()
+        {
+            return exception;
+        }
+
+        private void LogError()
+        {
+            Log.getLogger().warn(String.format("Failed to parse UI data into element using loader: %s", getLoaderName()), exception);
+        }
+
+        @Nullable
+        public String getLoaderName()
+        {
+            return loaderName;
+        }
     }
 }

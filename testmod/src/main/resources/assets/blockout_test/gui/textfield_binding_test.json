@@ -15,7 +15,10 @@
       "size": "140, 20",
       "alignment": "LEFT,TOP,RIGHT",
       "margin": "5,5,5,",
-      "content": "{Binding:Contents}"
+      "content": "{Binding:Contents}",
+      "outerColor": "red",
+      "cursorColor": "yellow",
+      "selectionColor": "green"
     },
     {
       "id": "output",

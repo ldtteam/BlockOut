@@ -170,23 +170,30 @@ public final class ColorUtils
             return input;
         }
 
+        return convertToColor(input).encodeColor();
+    }
+
+    @NotNull
+    @SideOnly(Side.CLIENT)
+    public static Color convertToColor(@NotNull final String input)
+    {
         if (input.isEmpty())
         {
-            return TextFormatting.RESET.toString();
+            return new Color(Color.WHITE);
         }
 
         if (nameToColorMap.containsKey(input.toLowerCase()))
         {
-            return new Color(nameToColorMap.get(input.toLowerCase())).encodeColor();
+            return new Color(nameToColorMap.get(input.toLowerCase()));
         }
 
         try
         {
-            return new Color(Integer.decode(input), true).encodeColor();
+            return new Color(Integer.decode(input), true);
         }
         catch (Exception e)
         {
-            return input;
+            return new Color(Color.WHITE);
         }
     }
 }

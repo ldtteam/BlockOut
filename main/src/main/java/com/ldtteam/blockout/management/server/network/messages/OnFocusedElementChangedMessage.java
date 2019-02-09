@@ -19,7 +19,7 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
 
         if (focusedElement != null)
         {
-            focusedElementId = focusedElement.getId().toString();
+            focusedElementId = focusedElement.getId();
         }
     }
 
@@ -37,7 +37,7 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
         {
             final BlockOutGui blockOutGui = (BlockOutGui) openGuiScreen;
 
-            if (focusedElementId != null)
+            if (focusedElementId != null && !focusedElementId.isEmpty())
             {
                 blockOutGui.getRoot()
                   .getUiManager()

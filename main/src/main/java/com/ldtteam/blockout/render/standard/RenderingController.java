@@ -407,7 +407,9 @@ public class RenderingController implements IRenderingController
 
         int x = 1;
         int y = 1;
-        ItemStack itemstack = gui.getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId()).getStackInSlot(slot.getInventoryIndex());
+        final ResourceLocation inventoryId = slot.getInventoryId();
+        final int inventoryIndex = slot.getInventoryIndex();
+        ItemStack itemstack = gui.getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
         net.minecraft.inventory.Slot slotIn = gui.inventorySlots.getSlot(slot.getSlotIndex());
 
         boolean flag = false;
