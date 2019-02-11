@@ -18,7 +18,8 @@ public class BlockOutUITestManager
           new InventoryGridTest(),
           new TextFieldInputTest(),
           new CountdownTest(),
-          new GrowingListWithButtonTest()
+          new GrowingListWithButtonTest(),
+          new RangeSelectorTest()
         );
     }
 

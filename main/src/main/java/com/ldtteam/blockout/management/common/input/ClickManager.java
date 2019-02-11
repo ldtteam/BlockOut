@@ -66,6 +66,10 @@ public class ClickManager extends AbstractInputManager implements IClickManager
             {
                 return;
             }
+            else
+            {
+                ((IClickAcceptingUIElement) currentFocus).onMouseLeave();
+            }
         }
 
         onAcceptanceFailure();

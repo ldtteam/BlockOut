@@ -2,7 +2,7 @@ package com.ldtteam.blockout_test.tests.guis;
 
 import com.google.common.collect.ImmutableList;
 import com.ldtteam.blockout.BlockOut;
-import com.ldtteam.blockout.element.advanced.List;
+import com.ldtteam.blockout.element.advanced.list.constructiondatabuilder.ListConstructionDataBuilder;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout_test.context.BindingTestContext;
 import com.ldtteam.blockout_test.tests.IBlockOutUITest;
@@ -29,7 +29,7 @@ public class BoundListHorizontalTest implements IBlockOutUITest
                                                                                                         "blockout_test:gui/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("list",
-                                                                                                                                                            List.ListConstructionDataBuilder.class,
+                                                                                                                                                            ListConstructionDataBuilder.class,
                                                                                                                                                             listConstructionDataBuilder -> listConstructionDataBuilder
                                                                                                                                                                                              .withSource(
                                                                                                                                                                                                ImmutableList

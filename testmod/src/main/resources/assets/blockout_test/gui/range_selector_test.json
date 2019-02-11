@@ -1,0 +1,27 @@
+{
+  "type": "blockout:root",
+  "id": "root",
+  "style": "blockout:default",
+  "size": "150,250",
+  "children": [
+    {
+      "id": "background",
+      "type": "blockout:image",
+      "size": "150,250",
+      "icon": "image:background_default"
+    },
+    {
+      "id": "selector",
+      "type": "blockout:rangeSelector",
+      "size": "120, 20",
+      "margin": "LEFT,RIGHT,TOP,BOTTOM",
+      "leftValue": 0.33,
+      "rightValue": 0.66,
+      "leftBackground": "image:checkbox_disabled",
+      "rightBackground": "image:checkbox_disabled",
+      "selectedBackground": "image:button_normal",
+      "leftSelectorBackground": "image:button_clicked",
+      "rightSelectorBackground": "image:button_clicked"
+    }
+  ]
+}

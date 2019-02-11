@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.element;
 
+import com.ldtteam.blockout.binding.dependency.IDependencyReceiver;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
@@ -16,7 +17,7 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface IUIElement
+public interface IUIElement extends IDependencyReceiver
 {
 
     /**
@@ -67,15 +68,6 @@ public interface IUIElement
      * @param manager The update inventory that is updating this Element. Usefull to mark the UI as changed and sync data between client and server.
      */
     void update(@NotNull final IUpdateManager manager);
-
-    /**
-     * Method to get the data context of this {@link IUIElement}.
-     * This object is used during data binding.
-     *
-     * @return The current data context.
-     */
-    @Nullable
-    Object getDataContext();
 
     /**
      * Method to set the new data context of this {@link IUIElement}

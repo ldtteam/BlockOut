@@ -12,6 +12,10 @@
     {
       "id": "template:slot",
       "data": "blockout_utilities:styles/utilities/controls/slot.json"
+    },
+    {
+      "id": "template:blockstate_selector",
+      "data": "blockout_utilities:styles/utilities/controls/blockstate_selector.json"
     }
   ]
 }

@@ -11,6 +11,7 @@ import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
@@ -170,6 +171,13 @@ public class ProxyHolder implements IProxy
     public String convertToColorCode(@NotNull final String input)
     {
         return proxy.convertToColorCode(input);
+    }
+
+    @NotNull
+    @Override
+    public IReflectionManager getReflectionManager()
+    {
+        return proxy.getReflectionManager();
     }
 
     @Override

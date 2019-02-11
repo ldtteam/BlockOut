@@ -11,16 +11,23 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
-public class ReflectionManager
+/**
+ * Manager that handles cached reflection.
+ */
+public class ReflectionManager implements IReflectionManager
 {
-
-    private static ReflectionManager                          ourInstance = new ReflectionManager();
-    private final  Cache<Class<?>, Set<FieldReflectionEntry>> FIELD_CACHE = CacheBuilder.newBuilder().maximumSize(1000000000).build();
+    private static ReflectionManager                           ourInstance = new ReflectionManager();
+    private final  Cache<Class<?>, Set<IFieldReflectionEntry>> FIELD_CACHE = CacheBuilder.newBuilder().maximumSize(1000000000).build();
 
     private ReflectionManager()
     {
     }
 
+    /**
+     * The instance of the manager.
+     *
+     * @return The instance.
+     */
     public static ReflectionManager getInstance()
     {
         return ourInstance;
@@ -32,7 +39,8 @@ public class ReflectionManager
      * @param clz The class.
      * @return Its accessible fields.
      */
-    public Set<FieldReflectionEntry> getFieldsForClass(final Class<?> clz)
+    @Override
+    public Set<IFieldReflectionEntry> getFieldsForClass(final Class<?> clz)
     {
         try
         {
@@ -45,13 +53,13 @@ public class ReflectionManager
         }
     }
 
-    private Set<FieldReflectionEntry> buildFieldCacheForClass(final Class<?> clz)
+    private Set<IFieldReflectionEntry> buildFieldCacheForClass(final Class<?> clz)
     {
         final FieldAccess access = FieldAccess.get(clz);
         final String[] fieldNames = access.getFieldNames();
         final Class[] fieldTypes = access.getFieldTypes();
 
-        final Set<FieldReflectionEntry> entries = Sets.newHashSet();
+        final Set<IFieldReflectionEntry> entries = Sets.newHashSet();
 
         for (int i = 0; i < access.getFieldCount(); i++)
         {

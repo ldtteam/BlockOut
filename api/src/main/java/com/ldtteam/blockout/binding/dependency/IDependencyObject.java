@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public interface IDependencyObject<T>
 {
 
-    default T get(@NotNull final IUIElement element)
+    default T get(@NotNull final IDependencyReceiver element)
     {
         final Object dataContext;
         if (requiresDataContext())
@@ -67,7 +67,7 @@ public interface IDependencyObject<T>
      */
     void set(@Nullable final Object context, @Nullable final T value);
 
-    default boolean hasChanged(@NotNull final IUIElement element)
+    default boolean hasChanged(@NotNull final IDependencyReceiver element)
     {
         final Object dataContext;
         if (requiresDataContext())

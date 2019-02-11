@@ -1,6 +1,12 @@
 package com.ldtteam.blockout.utilities.template;
 
+import com.google.common.collect.Lists;
+import com.ldtteam.blockout.util.Log;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,9 +18,54 @@ import java.util.stream.IntStream;
 public class DefaultTemplateUtils
 {
 
+    private static final List<IBlockState> states = Lists.newArrayList();
+    static
+    {
+        for (Block block : ForgeRegistries.BLOCKS)
+        {
+            for (IBlockState state : block.getBlockState().getValidStates())
+            {
+                try
+                {
+                    if (state != block.getStateFromMeta(block.getMetaFromState(state)))
+                    {
+                        continue;
+                    }
+
+                    states.add(state);
+                }
+                catch (Throwable t)
+                {
+                    // those are important so rethrow
+                    if (t instanceof VirtualMachineError)
+                    {
+                        throw (VirtualMachineError) t;
+                    }
+                    // everything else - -assume mods are stupid and just log it
+                    // this is awful but some mods just need their exceptions to be caught here
+                    Log.getLogger().warn(t);
+                }
+            }
+        }
+    }
+
     private DefaultTemplateUtils()
     {
         throw new IllegalArgumentException("Utility");
+    }
+
+    public static List<GridUtilityWrapper<BlockStateUtilityWrapper>> generateBlockStateGrid(
+      @NotNull final ResourceLocation templateId,
+      @NotNull final int width
+    )
+    {
+        final List<BlockStateUtilityWrapper> wrappers = states.parallelStream().map(BlockStateUtilityWrapper::new).collect(Collectors.toList());
+
+        return generateGrid(
+          wrappers,
+          width,
+          templateId
+        );
     }
 
     public static List<GridUtilityWrapper<SlotUtilityWrapper>> generateSlotGrid(

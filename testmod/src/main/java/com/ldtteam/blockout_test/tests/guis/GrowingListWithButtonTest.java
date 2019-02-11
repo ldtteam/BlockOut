@@ -1,8 +1,7 @@
 package com.ldtteam.blockout_test.tests.guis;
 
 import com.google.common.collect.Lists;
-import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
-import com.ldtteam.blockout.element.advanced.List;
+import com.ldtteam.blockout.element.advanced.list.constructiondatabuilder.ListConstructionDataBuilder;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout_test.context.BindingTestContext;
@@ -45,7 +44,7 @@ public class GrowingListWithButtonTest implements IBlockOutUITest
                                                                                                                                 "Entry: " + (list.size() + 1)));
                                                                                                                           }))
                                                                                                                 .withControl("content_list",
-                                                                                                                  List.ListConstructionDataBuilder.class,
+                                                                                                                  ListConstructionDataBuilder.class,
                                                                                                                   ll -> ll.withDataContext(list)
                                                                                                                           .withTemplateConstructionData(tcb -> tcb
                                                                                                                                                                  .withControl(

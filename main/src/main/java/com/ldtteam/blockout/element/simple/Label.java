@@ -40,17 +40,6 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public IDependencyObject<String> fontColor;
 
     public Label(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent)
-    {
-        super(KEY_LABEL, style, id, parent);
-
-        this.contents = DependencyObjectHelper.createFromValue("");
-        this.fontColor = DependencyObjectHelper.createFromValue(TextFormatting.RESET.toString());
-    }
-
-    public Label(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<ResourceLocation> styleId,

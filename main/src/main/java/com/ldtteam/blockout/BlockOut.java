@@ -1,7 +1,7 @@
 package com.ldtteam.blockout;
 
-import com.ldtteam.blockout.element.advanced.List;
 import com.ldtteam.blockout.element.advanced.TemplateInstance;
+import com.ldtteam.blockout.element.advanced.list.factory.ListFactory;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.simple.Button;
@@ -20,7 +20,6 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraftforge.fml.client.SplashProgress;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -29,7 +28,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.Set;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION,
@@ -72,13 +70,15 @@ public class BlockOut
         getProxy().getFactoryController().registerFactory(new CheckBox.Factory());
         getProxy().getFactoryController().registerFactory(new Label.Factory());
         getProxy().getFactoryController().registerFactory(new TextField.Factory());
+        getProxy().getFactoryController().registerFactory(new BlockStateIcon.Factory());
         getProxy().getFactoryController().registerFactory(new TemplateInstance.Factory());
+        getProxy().getFactoryController().registerFactory(new RangeSelector.Factory());
 
         getProxy().getFactoryController().registerFactory(new Region.Factory());
         getProxy().getFactoryController().registerFactory(new Template.Factory());
         getProxy().getFactoryController().registerFactory(new ItemIcon.Factory());
 
-        getProxy().getFactoryController().registerFactory(new List.Factory());
+        getProxy().getFactoryController().registerFactory(new ListFactory());
 
         getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
         getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());

@@ -9,21 +9,35 @@ import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Biomes;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
 
 @SideOnly(Side.CLIENT)
 public class RenderingController implements IRenderingController
@@ -386,6 +400,117 @@ public class RenderingController implements IRenderingController
         RenderHelper.disableStandardItemLighting();
         GlStateManager.enableDepth();
         GlStateManager.disableLighting();
+    }
+
+    @Override
+    public void drawBlockState(@NotNull final IBlockState state, final int x, final int y)
+    {
+        RenderHelper.disableStandardItemLighting();
+
+        final IBlockAccess blockAccess = new IBlockAccess()
+        {
+            @javax.annotation.Nullable
+            @Override
+            public TileEntity getTileEntity(final BlockPos pos)
+            {
+                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
+                {
+                    return null;
+                }
+
+                //TODO: Pull in structurize compatible dummy world. Or make dummy world library.
+                return state.getBlock().createTileEntity(null, state);
+            }
+
+            @Override
+            public int getCombinedLight(final BlockPos pos, final int lightValue)
+            {
+                int i = 15;
+                int j = 15;
+                if (j < lightValue)
+                {
+                    j = lightValue;
+                }
+                return i << 20 | j << 4;
+            }
+
+            @Override
+            public IBlockState getBlockState(final BlockPos pos)
+            {
+                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
+                {
+                    return Blocks.AIR.getDefaultState();
+                }
+
+                return state;
+            }
+
+            @Override
+            public boolean isAirBlock(final BlockPos pos)
+            {
+                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
+                {
+                    return true;
+                }
+
+                return state.getBlock() instanceof BlockAir;
+            }
+
+            @Override
+            public Biome getBiome(final BlockPos pos)
+            {
+                return Biomes.PLAINS;
+            }
+
+            @Override
+            public int getStrongPower(final BlockPos pos, final EnumFacing direction)
+            {
+                return 15;
+            }
+
+            @Override
+            public WorldType getWorldType()
+            {
+                return WorldType.DEFAULT;
+            }
+
+            @Override
+            public boolean isSideSolid(final BlockPos pos, final EnumFacing side, final boolean _default)
+            {
+                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
+                {
+                    return Blocks.AIR.getDefaultState().isSideSolid(this, pos, side);
+                }
+
+                return state.isSideSolid(this, pos, side);
+            }
+        };
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0f, 0f, 0f);
+        GlStateManager.scale(14.0F, 14.0F, -14.0F);
+        GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+
+        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+
+        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
+        try
+        {
+            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(state, BlockPos.ORIGIN, blockAccess, buf);
+        }
+        catch (Throwable t)
+        {
+            if (t instanceof VirtualMachineError || t instanceof LinkageError)
+            {
+                throw (Error) t;
+            }
+            // TODO: draw something to indicate it's broken
+        }
+        Tessellator.getInstance().draw();
+
+        GlStateManager.popMatrix();
     }
 
     @Override

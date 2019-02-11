@@ -92,6 +92,13 @@ public class Constants
             public static final String CONST_ICON = "icon";
         }
 
+        public static class BlockStateIcon
+        {
+            public static final ResourceLocation KEY_BLOCKSTATE = new ResourceLocation(MOD_ID, "blockStateIcon");
+
+            public static final String CONST_BLOCK_STATE = "blockState";
+        }
+
         public static class Root
         {
             public static final ResourceLocation KEY_ROOT = new ResourceLocation(MOD_ID, "root");
@@ -192,6 +199,19 @@ public class Constants
             public static final ResourceLocation KEY_TEMPLATE_INSTANCE = new ResourceLocation(MOD_ID, "instance");
 
             public static final String CONST_TEMPLATE = "template";
+        }
+
+        public static class RangeSelector
+        {
+            public static final ResourceLocation KEY_RANGE_SELECTOR = new ResourceLocation(MOD_ID, "rangeSelector");
+
+            public static final String CONST_LEFT_VALUE                = "leftValue";
+            public static final String CONST_RIGHT_VALUE               = "rightValue";
+            public static final String CONST_LEFT_BACKGROUND           = "leftBackground";
+            public static final String CONST_RIGHT_BACKGROUND          = "rightBackground";
+            public static final String CONST_SELECTED_BACKGROUND       = "selectedBackground";
+            public static final String CONST_LEFT_SELECTOR_BACKGROUND  = "leftSelectorBackground";
+            public static final String CONST_RIGHT_SELECTOR_BACKGROUND = "rightSelectorBackground";
         }
     }
 }

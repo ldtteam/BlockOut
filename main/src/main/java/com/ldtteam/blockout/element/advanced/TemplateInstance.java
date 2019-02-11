@@ -3,13 +3,17 @@ package com.ldtteam.blockout.element.advanced;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
+import com.ldtteam.blockout.binding.dependency.injection.DependencyObjectInjector;
+import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
+import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
@@ -86,7 +90,8 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
     }
 
-    public IDependencyObject<ResourceLocation> templateResource;
+    public IDependencyObject<ResourceLocation>             templateResource;
+    public IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
     public TemplateInstance(
       @NotNull final String id,
@@ -105,16 +110,19 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         super(KEY_TEMPLATE_INSTANCE, styleId, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.templateResource = templateResource;
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
     }
 
     public TemplateInstance(
       @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @Nullable final IUIElementHost parent)
+      @Nullable final IUIElementHost parent,
+      @NotNull final IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData)
     {
         super(KEY_TEMPLATE_INSTANCE, style, id, parent);
 
         this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
+        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
     }
 
     @Override
@@ -156,10 +164,36 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
               resolvedTemplateResource,
               getId() + "_instance");
 
+            if (getTemplateConstructionData() != null)
+            {
+                @NotNull final IBlockOutGuiConstructionData data = getTemplateConstructionData();
+                DependencyObjectInjector.inject(element, data);
+                EventHandlerInjector.inject(element, data);
+
+                if (element instanceof IUIElementHost)
+                {
+                    IUIElementHost iuiElementHost = (IUIElementHost) element;
+                    iuiElementHost.getAllCombinedChildElements().values().forEach(c -> {
+                        DependencyObjectInjector.inject(c, data);
+                        EventHandlerInjector.inject(c, data);
+                    });
+                }
+            }
+
             put(element.getId(), element);
             getParent().getUiManager().getProfiler().endSection();
         }
         getParent().getUiManager().getProfiler().endSection();
+    }
+
+    public IBlockOutGuiConstructionData getTemplateConstructionData()
+    {
+        return templateConstructionData.get(this);
+    }
+
+    public void setTemplateConstructionData(final @NotNull IBlockOutGuiConstructionData templateConstructionData)
+    {
+        this.templateConstructionData.set(this, templateConstructionData);
     }
 
     public ResourceLocation getTemplateResource()

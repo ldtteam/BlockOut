@@ -66,6 +66,10 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     public IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
+    /**
+     * @deprecated Use larger constructor.
+     */
+    @Deprecated
     public AbstractSimpleUIElement(
       @NotNull final ResourceLocation type,
       @NotNull final IDependencyObject<ResourceLocation> style,

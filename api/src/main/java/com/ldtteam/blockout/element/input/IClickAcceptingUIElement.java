@@ -21,4 +21,9 @@ public interface IClickAcceptingUIElement extends IUIElement
     {
         //Noop
     }
+
+    default void onMouseLeave()
+    {
+        //Noop
+    }
 }

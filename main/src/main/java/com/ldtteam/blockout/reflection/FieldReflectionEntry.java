@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 /**
  * Special reflection helper class to access a field in a given class accessor.
  */
-public class FieldReflectionEntry
+public class FieldReflectionEntry implements IFieldReflectionEntry
 {
 
     private final FieldAccess access;
@@ -23,21 +23,25 @@ public class FieldReflectionEntry
         this.type = type;
     }
 
+    @Override
     public Object get(final Object from) throws IllegalAccessException
     {
         return access.get(from, index);
     }
 
+    @Override
     public void set(final Object to, final Object value) throws IllegalAccessException
     {
         access.set(to, index, value);
     }
 
+    @Override
     public String getName()
     {
         return name;
     }
 
+    @Override
     public Type getType()
     {
         return type;

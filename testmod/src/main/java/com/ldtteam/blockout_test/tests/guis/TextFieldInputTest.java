@@ -1,13 +1,10 @@
 package com.ldtteam.blockout_test.tests.guis;
 
-import com.google.common.collect.ImmutableList;
 import com.ldtteam.blockout.BlockOut;
-import com.ldtteam.blockout.element.advanced.List;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.element.simple.Label;
 import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout_test.context.BindingTestContext;
 import com.ldtteam.blockout_test.tests.IBlockOutUITest;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;

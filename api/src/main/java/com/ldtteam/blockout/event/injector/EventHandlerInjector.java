@@ -2,7 +2,7 @@ package com.ldtteam.blockout.event.injector;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.event.Event;
-import com.ldtteam.blockout.reflection.ReflectionManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public class EventHandlerInjector
 
     public static void inject(@NotNull final IUIElement target, @NotNull final IEventHandlerProvider provider)
     {
-        ReflectionManager.getInstance().getFieldsForClass(target.getClass())
+        ProxyHolder.getInstance().getReflectionManager().getFieldsForClass(target.getClass())
           .stream()
           .filter(field -> field.getType().equals(Event.class))
           .forEach(eventField -> {

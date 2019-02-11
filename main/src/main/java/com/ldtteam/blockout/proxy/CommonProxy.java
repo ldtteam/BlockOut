@@ -23,6 +23,8 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.reflection.IReflectionManager;
+import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.style.simple.SimpleFileBasedStyleManager;
@@ -224,6 +226,13 @@ public class CommonProxy implements IProxy
     public String convertToColorCode(@NotNull final String input)
     {
         return input;
+    }
+
+    @NotNull
+    @Override
+    public IReflectionManager getReflectionManager()
+    {
+        return ReflectionManager.getInstance();
     }
 
     @Override

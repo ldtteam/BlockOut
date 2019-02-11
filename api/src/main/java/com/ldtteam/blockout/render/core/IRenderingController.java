@@ -4,6 +4,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -145,6 +146,15 @@ public interface IRenderingController
      * @param altText the alt text.
      */
     void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText);
+
+    /**
+     * Draw an BlockState in a given position
+     *
+     * @param state The blockstate
+     * @param x     The x pos
+     * @param y     The y pos
+     */
+    void drawBlockState(@NotNull IBlockState state, int x, int y);
 
     /**
      * Draws the slot contents.
