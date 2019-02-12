@@ -6,8 +6,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+/**
+ * A property based implementation of the {@link IDependencyObject}.
+ * Uses {@link Property} to store the value.
+ *
+ * @param <T> The type stored in this {@link IDependencyObject} and in the underlying {@link Property}
+ */
 public final class PropertyBasedDependencyObject<T> implements IDependencyObject<T>
 {
+
     @NotNull
     private final Property<T> property;
     @Nullable
@@ -45,7 +52,7 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Override
     public boolean hasChanged(@Nullable final Object context)
     {
-        final T resolved = context == null ? def : property.apply(context).orElse(def);
+        final T resolved = property.apply(context).orElse(def);
         final int currentHash = resolved == null ? 0 : resolved.hashCode();
 
         return lastResolvedHash != currentHash;

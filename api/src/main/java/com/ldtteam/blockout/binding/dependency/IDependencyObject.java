@@ -12,12 +12,18 @@ import org.jetbrains.annotations.Nullable;
 public interface IDependencyObject<T>
 {
 
-    default T get(@NotNull final IDependencyReceiver element)
+    /**
+     * Returns the value stored in the dependency object using the data context of the element, if needed.
+     *
+     * @param receiver The receiver with the datacontext.
+     * @return The value stored in the object.
+     */
+    default T get(@NotNull final IDependencyReceiver receiver)
     {
         final Object dataContext;
         if (requiresDataContext())
         {
-            dataContext = element.getDataContext();
+            dataContext = receiver.getDataContext();
         }
         else
         {
@@ -45,12 +51,19 @@ public interface IDependencyObject<T>
     @Nullable
     T get(@Nullable final Object context);
 
-    default void set(@NotNull final IUIElement element, T value)
+    /**
+     * Sets the value of this object using the receiver.
+     * Querying the context from {@link IDependencyReceiver#getDataContext()} if needed.
+     *
+     * @param receiver The receiver that holds the context.
+     * @param value    The value that this object should be set to.
+     */
+    default void set(@NotNull final IDependencyReceiver receiver, T value)
     {
         final Object dataContext;
         if (requiresDataContext())
         {
-            dataContext = element.getDataContext();
+            dataContext = receiver.getDataContext();
         }
         else
         {
@@ -67,12 +80,18 @@ public interface IDependencyObject<T>
      */
     void set(@Nullable final Object context, @Nullable final T value);
 
-    default boolean hasChanged(@NotNull final IDependencyReceiver element)
+    /**
+     * Checks if the value stored by this object has changed.
+     *
+     * @param receiver The receiver in question.
+     * @return {@code True} if changed, {@code false} otherwise.
+     */
+    default boolean hasChanged(@NotNull final IDependencyReceiver receiver)
     {
         final Object dataContext;
         if (requiresDataContext())
         {
-            dataContext = element.getDataContext();
+            dataContext = receiver.getDataContext();
         }
         else
         {
