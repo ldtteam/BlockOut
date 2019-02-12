@@ -1,15 +1,14 @@
 package com.ldtteam.blockout.binding.dependency;
 
 import com.google.common.base.Functions;
+import com.ldtteam.blockout.AbstractBlockOutApiTest;
 import com.ldtteam.blockout.binding.property.Property;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-
-public class TransformingDependencyObjectTest
+public class TransformingDependencyObjectTest extends AbstractBlockOutApiTest
 {
 
     @Test

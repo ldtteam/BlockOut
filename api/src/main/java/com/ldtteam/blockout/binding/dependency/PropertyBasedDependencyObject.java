@@ -4,8 +4,6 @@ import com.ldtteam.blockout.binding.property.Property;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
  * A property based implementation of the {@link IDependencyObject}.
  * Uses {@link Property} to store the value.
@@ -31,7 +29,7 @@ public final class PropertyBasedDependencyObject<T> implements IDependencyObject
     @Override
     public boolean requiresDataContext()
     {
-        return this.property.isRequiresDataContext();
+        return this.property.requiresDataContext();
     }
 
     @Nullable

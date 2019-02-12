@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.binding.dependency.injection;
 
+import com.ldtteam.blockout.AbstractBlockOutApiTest;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.DummyInjectionTarget;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
@@ -13,7 +14,7 @@ import org.junit.Test;
  * Unit tests for the {@link DependencyObjectInjector}.
  * Validates the behaviour of injection.
  */
-public class DependencyObjectInjectorTest
+public class DependencyObjectInjectorTest extends AbstractBlockOutApiTest
 {
 
     /**

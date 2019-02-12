@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.binding.dependency;
 
+import com.ldtteam.blockout.AbstractBlockOutApiTest;
 import com.ldtteam.blockout.binding.property.Property;
 import com.ldtteam.blockout.binding.property.PropertyCreationHelper;
 import org.jetbrains.annotations.Nullable;
@@ -7,12 +8,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
-import static org.junit.Assert.*;
-
-public class DependencyObjectHelperTest
+public class DependencyObjectHelperTest extends AbstractBlockOutApiTest
 {
 
     @Test

@@ -1,15 +1,10 @@
 package com.ldtteam.blockout.binding.dependency;
 
-import com.ldtteam.blockout.binding.property.Property;
-import com.ldtteam.blockout.binding.property.StaticValueProperty;
+import com.ldtteam.blockout.AbstractBlockOutApiTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Optional;
-
-import static org.junit.Assert.*;
-
-public class StaticDependencyObjectTest
+public class StaticDependencyObjectTest extends AbstractBlockOutApiTest
 {
 
     @Test

@@ -6,14 +6,22 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * Represents access to a field in a class, or a lonely variable.
+ * Combines the setter and getter into one class.
+ * <p>
+ * Also keeps track if the data context is required for this property to function.
+ *
+ * @param <T> The type stored in the property.
+ */
 public class Property<T> implements BiConsumer<Object, T>, Function<Object, Optional<T>>
 {
     @NotNull
-    final boolean                         requiresDataContext;
+    private final boolean                         requiresDataContext;
     @NotNull
-    final Optional<Function<Object, T>>   getter;
+    private final Optional<Function<Object, T>>   getter;
     @NotNull
-    final Optional<BiConsumer<Object, T>> setter;
+    private final Optional<BiConsumer<Object, T>> setter;
 
     public Property(
       @NotNull final Optional<Function<Object, T>> getter,
@@ -25,7 +33,12 @@ public class Property<T> implements BiConsumer<Object, T>, Function<Object, Opti
         this.setter = setter;
     }
 
-    public boolean isRequiresDataContext()
+    /**
+     * Indicates if this property requires a data context or not.
+     *
+     * @return {@code true} when a data context is required.
+     */
+    public boolean requiresDataContext()
     {
         return requiresDataContext;
     }
