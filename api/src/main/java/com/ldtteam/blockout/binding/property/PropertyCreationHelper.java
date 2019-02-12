@@ -24,9 +24,9 @@ public final class PropertyCreationHelper
         throw new IllegalArgumentException("Utility Class");
     }
 
-    public static <T> Property<T> createNoneSettableFromStaticValue(@Nullable T value)
+    public static <T> Property<T> createFromStaticValue(@Nullable T value)
     {
-        return create(c -> value, null, false);
+        return new StaticValueProperty<>(value);
     }
 
     public static <T> Property<T> create(

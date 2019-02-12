@@ -51,7 +51,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
         return getFromRawDataWithProperty(
           name,
           engine,
-          PropertyCreationHelper.createNoneSettableFromStaticValue(defaultValue),
+          PropertyCreationHelper.createFromStaticValue(defaultValue),
           defaultValue,
           params
         );
@@ -152,7 +152,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
         return getFromRawDataWithProperty(
           name,
           engine,
-          PropertyCreationHelper.createNoneSettableFromStaticValue(defaultValue),
+          PropertyCreationHelper.createFromStaticValue(defaultValue),
           defaultValue,
           targetType,
           params
