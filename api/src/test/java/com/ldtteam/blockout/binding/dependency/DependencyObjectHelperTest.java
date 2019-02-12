@@ -39,15 +39,6 @@ public class DependencyObjectHelperTest
     }
 
     @Test
-    public void wrapForChangeTracking()
-    {
-        final TestInputDependencyObject input = new TestInputDependencyObject();
-        final IDependencyObject<String> wrapped = DependencyObjectHelper.wrapForChangeTracking(() -> input);
-
-        Assert.assertTrue(wrapped instanceof WrappedForChangeTrackingDependencyObject);
-    }
-
-    @Test
     public void createFromGetterOnly()
     {
         final DummyInjectionTarget target = new DummyInjectionTarget();

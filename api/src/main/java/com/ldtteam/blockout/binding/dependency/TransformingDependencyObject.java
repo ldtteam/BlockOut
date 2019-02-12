@@ -4,6 +4,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+/**
+ * Dependency object that enables transformation between different types by chaining the dependency outputs with conversion callbacks.
+ *
+ * @param <T> The output type.
+ * @param <I> The input type.
+ */
 public final class TransformingDependencyObject<T, I> implements IDependencyObject<T>
 {
     private final Function<I, T> getTransformer;

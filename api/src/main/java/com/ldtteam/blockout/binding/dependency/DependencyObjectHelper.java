@@ -60,26 +60,6 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * Creates a special {@link IDependencyObject} that can be used by controls or other elements to change track values.
-     * <p>
-     * To achieve this a {@link Supplier} needs to be provided that supplies the created {@link IDependencyObject} with a
-     * {@link IDependencyObject} that is to be watched. The supplied {@link IDependencyObject} does not need to be the same
-     * {@link IDependencyObject} every time, as such this {@link IDependencyObject} can also track changes between two instances
-     * of {@link IDependencyObject} as longs as the {@link Supplier} returns the correct {@link IDependencyObject}.
-     *
-     * @param dependencyToChangeTrackSupplier The {@link Supplier} that supplies the {@link IDependencyObject} that needs to be tracked. {@link Supplier#get()} is called when ever
-     *                                        a request for change tracking is made.
-     * @param <T>                             The type of {@link IDependencyObject} that needs to be tracked.
-     * @return A {@link IDependencyObject} that can be used for change tracking.
-     */
-    public static <T> IDependencyObject<T> wrapForChangeTracking(
-      final Supplier<IDependencyObject<T>> dependencyToChangeTrackSupplier
-    )
-    {
-        return new WrappedForChangeTrackingDependencyObject<>(dependencyToChangeTrackSupplier);
-    }
-
-    /**
      * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Function, BiConsumer, boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented and only a getter is required (EG in cases where the {@link IDependencyObject} should only be read by the respective
