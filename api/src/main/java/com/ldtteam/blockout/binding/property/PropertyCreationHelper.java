@@ -5,6 +5,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.util.Tuple;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,9 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * Helper class that allows the easy creation of properties using several different methods.
+ */
 public final class PropertyCreationHelper
 {
     //Caches used to minimize heavy reflective look ups, but keep memory footprint relatively low.
@@ -24,12 +28,29 @@ public final class PropertyCreationHelper
         throw new IllegalArgumentException("Utility Class");
     }
 
+    /**
+     * Creates a property from a static value.
+     *
+     * @param value The value in question.
+     * @param <T>   The type of the property and the value.
+     * @return A property that references a static value.
+     */
     public static <T> Property<T> createFromStaticValue(@Nullable T value)
     {
         return new StaticValueProperty<>(value);
     }
 
-    public static <T> Property<T> create(
+    /**
+     * Creates a property from a getter and a setter directly.
+     * This method allows either the getter or the setter to be null, or both.
+     *
+     * @param getter              The getter.
+     * @param setter              The setter.
+     * @param requiresDataContext {@code true} when either the getter and/or the setter require the datacontext, {@code false} when not.
+     * @param <T>                 The type of the property, the returned object by the getter and the consumed object by the setter.
+     * @return A property with a possible getter and setter.
+     */
+    public static <T> Property<T> createFromOptional(
       @Nullable final Function<Object, T> getter,
       @Nullable final BiConsumer<Object, T> setter,
       @NotNull final boolean requiresDataContext)
@@ -37,6 +58,16 @@ public final class PropertyCreationHelper
         return create(Optional.ofNullable(getter), Optional.ofNullable(setter), requiresDataContext);
     }
 
+    /**
+     * Creates a property from an optional getter and an optional setter.
+     * Allows the creator to leave out either the getter or the setter.
+     *
+     * @param getter The optional getter.
+     * @param setter The optional setter.
+     * @param requiresDataContext {@code true} when either the getter and/or the setter require the datacontext, {@code false} when not.
+     * @param <T> The type of the property, the returned object by the optional getter and the consumed object by the optional setter.
+     * @return A property that possibly contains a getter and/or a setter.
+     */
     public static <T> Property<T> create(
       @NotNull final Optional<Function<Object, T>> getter,
       @NotNull final Optional<BiConsumer<Object, T>> setter,
@@ -45,19 +76,59 @@ public final class PropertyCreationHelper
         return new Property<T>(getter, setter, requiresDataContext);
     }
 
+    /**
+     * Creates a property from an a getter and a setter.
+     * As opposed to the {@link #createFromNonOptional(Function, BiConsumer, boolean)} method, this method enforces the existence of both the getter and the setter.
+     *
+     * @param getter The getter
+     * @param setter The setter
+     * @param requiresDataContext {@code true} when either the getter and/or the setter require the datacontext, {@code false} when not.
+     * @param <T> The type of the property, the returned object by the getter and the consumed object by the setter.
+     * @return A property with a fixed getter and setter.
+     */
     public static <T> Property<T> createFromNonOptional(
       @NotNull final Function<Object, T> getter,
       @NotNull final BiConsumer<Object, T> setter,
       @NotNull final boolean requiresDataContext)
     {
+        Validate.notNull(getter);
+        Validate.notNull(setter);
+
         return create(Optional.of(getter), Optional.of(setter), requiresDataContext);
     }
 
+    /**
+     * Creates a property from a method name.
+     * This property has lazy create and lookup behaviour depending on the passed in data context.
+     *
+     * This property will try to call the methods: {@code T get<getSetMethodName>()} and {@code void set<getSetMethodName>(T value)} using reflective ASM to generate the accessors.
+     * This method needs to be public on the data context.
+     *
+     * Using this method, the property will always require a data context.
+     *
+     * @param getSetMethodName The common name of the getter and the setter.
+     * @param <T> The type of the property, the returned object by the getter and the consumed object by the setter.
+     * @return A property that lazily resolves the method name into a property during runtime.
+     */
     public static <T> Property<T> createFromName(@NotNull final Optional<String> getSetMethodName)
     {
         return createFromName(getSetMethodName.map(name -> "get" + name), getSetMethodName.map(name -> "set" + name));
     }
 
+    /**
+     * Creates a property from a getter and setter method name
+     * This property has lazy create and lookup behaviour depending on the passed in data context.
+     *
+     * This property will try to call the methods: {@code T <getMethodName>()} and {@code void <setMethodName>(T value)} using reflective ASM to generate the accessors.
+     * This method needs to be public on the data context.
+     *
+     * Using this method, the property will always require a data context.
+     *
+     * @param getMethodName The name of the getter
+     * @param setMethodName The name of the setter
+     * @param <T> The type of the property, the returned object by the getter and the consumed object by the setter.
+     * @return A property that lazily resolves the getter and setter method name into a property during runtime.
+     */
     public static <T> Property<T> createFromName(
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)

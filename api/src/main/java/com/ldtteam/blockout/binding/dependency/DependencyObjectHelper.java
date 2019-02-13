@@ -60,7 +60,7 @@ public final class DependencyObjectHelper
     }
 
     /**
-     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#create(Function, BiConsumer, boolean)}.
+     * This helper function wraps {@link DependencyObjectHelper#createFromProperty(Property, Object)} and {@link PropertyCreationHelper#createFromOptional(Function, BiConsumer, boolean)}.
      * <p>
      * Useful for when code clutter wants to be prevented and only a getter is required (EG in cases where the {@link IDependencyObject} should only be read by the respective
      * consumer.
