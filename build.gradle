@@ -28,8 +28,7 @@ subprojects {
 
     //Setup the plugins that we need.
     apply plugin: 'idea'
-    apply plugin: 'net.minecraftforge.gradle.forge'
-    apply plugin: 'maven'
+    apply plugin: 'java'
 
     //All mods have the same test harness.
     //JUNIT, MOCKITO, POWERMOCK and HAMCREST are being added here.
@@ -42,9 +41,6 @@ subprojects {
         testCompile group: 'pl.pragmatists', name:'JUnitParams', version: '1.1.1'
     }
 
-    //Setup the same maven artifact information.
-    //Seperation of the jars is handled via their maven artifact type.
-    //The main subproject generates the fat universal jar.
     group = "com.ldtteam"
     version = minecraft_version.toString() + "-" + System.getenv().get("Version")
     archivesBaseName = "blockout"
@@ -54,25 +50,6 @@ subprojects {
     sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
     compileJava {
         sourceCompatibility = targetCompatibility = '1.8'
-    }
-
-    //Setup the global minecraft information.
-    //Every subproject runs against the same minecraft version.
-    minecraft {
-
-        version = minecraft_version + "-" + forge_version
-        runDir = "run"
-
-        mappings = "${blockout_mappings}"
-
-        replace "@VERSION@", project.version
-        replace "@MCVERSION@", minecraft_version
-        replace "@FORGEVERSION@", forge_version
-
-        // Set the jar signature in code prior to compilation, if it exists as a build property
-        if (project.hasProperty("signature")) {
-            replace "@FINGERPRINT@", project.signature
-        }
     }
 
     //Setup the compiler to output all information we need.
@@ -92,8 +69,89 @@ subprojects {
     jar {
         dependsOn tasks.javadocJar
     }
+}
 
-    //All modules process the resources the same way.
+project(':api') {
+    //Set up the shading of the jars into the primary project.
+    configurations {
+        shade{}
+
+        compile.extendsFrom shade
+    }
+
+    dependencies {
+        shade project(':launcher:MineLaunch')
+    }
+
+    jar {
+        from (configurations.shade.files){
+            include '*'
+            into 'META-INF/libraries'
+        }
+
+        manifest {
+            attributes([
+                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
+            ])
+        }
+    }
+}
+
+//Special configuration for the main jar.
+project(':main') {
+    //Set up the shading of the jars into the primary project.
+    configurations {
+        shade{}
+
+        compile.extendsFrom shade
+    }
+
+    dependencies {
+        shade project(':api')
+    }
+
+    jar {
+        from (configurations.shade.files){
+            include '*'
+            into 'META-INF/libraries'
+        }
+
+        manifest {
+            attributes([
+                    'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
+            ])
+        }
+    }
+}
+
+project(':launcher:forge:1.12')
+{
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'maven'
+
+    archivesBaseName = "blockout_forge_1_12"
+
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
+    }
+
+    minecraft {
+        version = minecraft_version + "-" + forge_version
+        runDir = "run"
+
+        mappings = "${blockout_mappings}"
+
+        replace "@VERSION@", project.version
+        replace "@MCVERSION@", minecraft_version
+        replace "@FORGEVERSION@", forge_version
+
+        // Set the jar signature in code prior to compilation, if it exists as a build property
+        if (project.hasProperty("signature")) {
+            replace "@FINGERPRINT@", project.signature
+        }
+    }
+
     processResources {
         // this will ensure that this task is redone when the versions change.
         inputs.property "version", project.version
@@ -113,7 +171,6 @@ subprojects {
         }
     }
 
-    //All projects need to be able to sign their own jar.
     task signJar(type: SignJar, dependsOn: reobfJar) {
         onlyIf { // Skip the task if our secret data isn't available
             project.hasProperty('keyStore')
@@ -138,44 +195,21 @@ subprojects {
     }
 
     build.dependsOn signJar
-}
-
-//Special configuration for the json api level
-project(':lang:json') {
-    dependencies {
-        compile project(':api')
-    }
-}
-
-//Special configuration for the main jar.
-project(':main') {
-    //Set up the shading of the jars into the primary project.
-    configurations {
-        shade{}
-
-        compile.extendsFrom shade
-    }
-
-    dependencies {
-        shade project(':api')
-        shade project(':lang:json')
-    }
 
     jar {
-        from (configurations.shade.files){
-            include '*'
-            into 'META-INF/libraries'
-        }
 
         manifest {
             attributes([
-                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
+                    'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:api",
+                    'Timestamp': System.currentTimeMillis(),
+                    'FMLAT': "blockout_at.cfg"
             ])
         }
+
+        classifier 'universal'
     }
-
 }
-
+/*
 project(':utilities') {
     dependencies {
         compile project(':main')
@@ -222,7 +256,7 @@ project('guidebook') {
         compile project(':main')
         compile project(':utilities')
     }
-}
+}*/
 
 task setupDecompWorkspace {
     group 'build setup'
@@ -232,5 +266,5 @@ task setupDecompWorkspace {
         dependsOn("${it.path}:setupDecompWorkspace" )
     }
 
-    dependsOn (project(':main').tasks.genIntellijRuns)
+    dependsOn (project(':launcher:forge:1.12').tasks.genIntellijRuns)
 }

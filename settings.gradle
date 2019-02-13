@@ -10,8 +10,6 @@
 rootProject.name = 'BlockOut'
 
 include 'api'
-include 'lang:json'
 include 'main'
-include 'utilities'
-include 'testmod'
-include 'guidebook'
+include 'launcher:MineLaunch'
+include 'launcher:forge:1.12'
