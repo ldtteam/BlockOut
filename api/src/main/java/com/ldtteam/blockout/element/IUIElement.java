@@ -9,7 +9,7 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ public interface IUIElement extends IDependencyReceiver
      * @return The type of the element.
      */
     @NotNull
-    ResourceLocation getType();
+    IIdentifier getType();
 
     /**
      * Gets a resource form the style manager.
@@ -45,10 +45,10 @@ public interface IUIElement extends IDependencyReceiver
      * @return The resource requested.
      *
      * @throws IllegalArgumentException when no resource can be found in ANY style that matches the given id.
-     * @see com.ldtteam.blockout.style.core.IStyleManager#getResource(ResourceLocation, ResourceLocation)
+     * @see com.ldtteam.blockout.style.core.IStyleManager#getResource(IIdentifier, IIdentifier)
      */
     @NotNull
-    default <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
+    default <T extends IResource> T getResource(final IIdentifier resourceId) throws IllegalArgumentException
     {
         return ProxyHolder.getInstance().getStyleManager().getResource(getStyleId(), resourceId);
     }
@@ -59,7 +59,7 @@ public interface IUIElement extends IDependencyReceiver
      * @return The style of the element.
      */
     @NotNull
-    ResourceLocation getStyleId();
+    IIdentifier getStyleId();
 
     /**
      * Called before the drawing of the UI.

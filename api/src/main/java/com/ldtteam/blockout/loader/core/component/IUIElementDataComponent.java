@@ -3,7 +3,6 @@ package com.ldtteam.blockout.loader.core.component;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
-import net.minecraft.nbt.NBTBase;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

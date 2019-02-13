@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.connector.core.inventory;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.IItemHandler;
+import com.ldtteam.minelaunch.item.IItemHandler;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ public interface IItemHandlerProvider extends Serializable
      * @return The id.
      */
     @NotNull
-    ResourceLocation getId();
+    IIdentifier getId();
 
     /**
      *

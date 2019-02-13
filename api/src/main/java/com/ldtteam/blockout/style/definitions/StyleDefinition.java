@@ -1,27 +1,27 @@
 package com.ldtteam.blockout.style.definitions;
 
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 
 import java.util.Collection;
 
 public class StyleDefinition
 {
 
-    private final ResourceLocation             styleId;
-    private final Collection<ResourceLocation> resourceTypeDefinitionLocations;
+    private final IIdentifier             styleId;
+    private final Collection<IIdentifier> resourceTypeDefinitionLocations;
 
-    public StyleDefinition(final ResourceLocation styleId, final Collection<ResourceLocation> resourceTypeDefinitions)
+    public StyleDefinition(final IIdentifier styleId, final Collection<IIdentifier> resourceTypeDefinitions)
     {
         this.styleId = styleId;
         this.resourceTypeDefinitionLocations = resourceTypeDefinitions;
     }
 
-    public ResourceLocation getStyleId()
+    public IIdentifier getStyleId()
     {
         return styleId;
     }
 
-    public Collection<ResourceLocation> getResourceTypeDefinitionLocations()
+    public Collection<IIdentifier> getResourceTypeDefinitionLocations()
     {
         return resourceTypeDefinitionLocations;
     }

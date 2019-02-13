@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.style.core.resources.core;
 
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,5 +15,5 @@ public interface IResource
      * @return The ID of the {@link IResource}.
      */
     @NotNull
-    ResourceLocation getId();
+    IIdentifier getId();
 }

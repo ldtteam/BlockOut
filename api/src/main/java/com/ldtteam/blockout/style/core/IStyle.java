@@ -2,7 +2,7 @@ package com.ldtteam.blockout.style.core;
 
 import com.google.common.collect.ImmutableMap;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public interface IStyle
      * @return the id of the {@link IStyle}.
      */
     @NotNull
-    ResourceLocation getId();
+    IIdentifier getId();
 
     /**
      * Returns a {@link IResource} in an {@link Optional}, if the resource is not known to this style, then {@link Optional#empty()} is returned.
@@ -31,7 +31,7 @@ public interface IStyle
      * @return The {@link IResource} in an {@link Optional} if it is known and of the right type, else {@link Optional#empty()}.
      */
     @NotNull
-    default <T extends IResource> Optional<T> getResource(@NotNull final ResourceLocation id)
+    default <T extends IResource> Optional<T> getResource(@NotNull final IIdentifier id)
     {
         final IResource resource = getResources().get(id);
         if (resource == null)
@@ -56,5 +56,5 @@ public interface IStyle
      * @return all known {@link IResource}.
      */
     @NotNull
-    ImmutableMap<ResourceLocation, IResource> getResources();
+    ImmutableMap<IIdentifier, IResource> getResources();
 }

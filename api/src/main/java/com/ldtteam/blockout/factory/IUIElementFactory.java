@@ -4,7 +4,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -29,7 +29,7 @@ public interface IUIElementFactory<U extends IUIElement>
      * @return The type.
      */
     @NotNull
-    ResourceLocation getTypeName();
+    IIdentifier getTypeName();
 
     /**
      * Creates a new {@link U} from the given {@link IUIElementData}.

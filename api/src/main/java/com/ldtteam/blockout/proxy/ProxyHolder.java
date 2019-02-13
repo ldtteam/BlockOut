@@ -15,7 +15,6 @@ import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
-import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -25,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
-import java.util.Set;
 
 public class ProxyHolder implements IProxy
 {

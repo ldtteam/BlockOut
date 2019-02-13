@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.proxy;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -32,7 +31,6 @@ import com.ldtteam.blockout.style.simple.SimpleResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.template.SimpleTemplateEngine;
 import com.ldtteam.blockout.util.SideHelper;
-import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;

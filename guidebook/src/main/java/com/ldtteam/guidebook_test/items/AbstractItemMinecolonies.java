@@ -3,7 +3,7 @@ package com.ldtteam.guidebook_test.items;
 import net.minecraft.item.Item;
 
 /**
- * Handles simple things that all items need.
+ * Handles simple things that all item need.
  */
 public abstract class AbstractItemMinecolonies extends Item
 {

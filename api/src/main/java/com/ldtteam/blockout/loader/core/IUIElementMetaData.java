@@ -2,7 +2,7 @@ package com.ldtteam.blockout.loader.core;
 
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public interface IUIElementMetaData
      *
      * @return The type of control that the {@link IUIElementData} contains.
      */
-    ResourceLocation getType();
+    IIdentifier getType();
 
     /**
      * Returns the id of control that the corresponding {@link IUIElementData} contains.

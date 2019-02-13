@@ -10,15 +10,15 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
-import com.ldtteam.blockout.util.color.Color;
-import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -186,7 +186,7 @@ public final class BaseValueComponentConverters
         }
     }
 
-    public static final class ResourceLocationConverter implements IUIElementDataComponentConverter<ResourceLocation>
+    public static final class IdentifierConverter implements IUIElementDataComponentConverter<IIdentifier>
     {
 
         @Override
@@ -197,14 +197,16 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public IIdentifier readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            return new ResourceLocation(component.getAsString());
+            //TODO: Add constructor for identifier
+            //return new ResourceLocation(component.getAsString());
+            return null;
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
-          @NotNull final ResourceLocation value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+          @NotNull final IIdentifier value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());

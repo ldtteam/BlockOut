@@ -1,27 +1,22 @@
 package com.ldtteam.blockout.render.core;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.minelaunch.block.state.IBlockState;
+import com.ldtteam.minelaunch.client.renderer.texture.ISprite;
+import com.ldtteam.minelaunch.fluid.IFluidStack;
+import com.ldtteam.minelaunch.item.IItemStack;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface describing our rendering controller which is responsible for rendering content in the GUIs.
  */
-@SideOnly(Side.CLIENT)
 public interface IRenderingController
 {
 
-    @SideOnly(Side.CLIENT)
     Vector2d getRenderingScalingFactor();
 
     /**
@@ -43,7 +38,7 @@ public interface IRenderingController
      *
      * @param textureLocation the resource location of it.
      */
-    void bindTexture(@NotNull ResourceLocation textureLocation);
+    void bindTexture(@NotNull IIdentifier textureLocation);
 
     /**
      * Draw a modal texture.
@@ -71,7 +66,7 @@ public interface IRenderingController
      * @param w     the width.
      * @param h     the height.
      */
-    void drawFluid(@Nullable FluidStack fluid, int x, int y, int z, int w, int h);
+    void drawFluid(@Nullable IFluidStack fluid, int x, int y, int z, int w, int h);
 
     /**
      * Draw an icon.
@@ -84,7 +79,7 @@ public interface IRenderingController
      * @param pHeight         the height.
      * @param pCutOffVertical the vertical cutOff.
      */
-    void drawCutIcon(@NotNull TextureAtlasSprite pIcon, int pX, int pY, int pZ, int pWidth, int pHeight, int pCutOffVertical);
+    void drawCutIcon(@NotNull ISprite pIcon, int pX, int pY, int pZ, int pWidth, int pHeight, int pCutOffVertical);
 
     /**
      * Draw a texture from an icon.
@@ -96,7 +91,7 @@ public interface IRenderingController
      * @param w    the width.
      * @param h    the height.
      */
-    void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull TextureAtlasSprite icon, int w, int h);
+    void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull ISprite icon, int w, int h);
 
     /**
      * Draw a colored rect.
@@ -135,7 +130,7 @@ public interface IRenderingController
      * @param x     the x pos.
      * @param y     the y pos.
      */
-    void drawItemStack(@NotNull ItemStack stack, int x, int y);
+    void drawItemStack(@NotNull IItemStack stack, int x, int y);
 
     /**
      * Draw an itemStack with alt text.
@@ -145,7 +140,7 @@ public interface IRenderingController
      * @param y       the y pos.
      * @param altText the alt text.
      */
-    void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText);
+    void drawItemStack(@NotNull IItemStack stack, int x, int y, String altText);
 
     /**
      * Draw an BlockState in a given position

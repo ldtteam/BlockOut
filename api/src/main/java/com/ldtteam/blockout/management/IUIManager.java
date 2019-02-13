@@ -11,9 +11,7 @@ import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import net.minecraft.profiler.Profiler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.minelaunch.profiler.IProfiler;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIManager
@@ -48,9 +46,9 @@ public interface IUIManager
     @NotNull
     IUpdateManager getUpdateManager();
 
-    @SideOnly(Side.CLIENT)
     @NotNull
     IRenderManager getRenderManager();
 
-    Profiler getProfiler();
+    @NotNull
+    IProfiler getProfiler();
 }

@@ -2,7 +2,7 @@ package com.ldtteam.blockout.style.core;
 
 import com.google.common.collect.ImmutableMap;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -22,7 +22,7 @@ public interface IStyleManager
      * @throws IllegalArgumentException when no {@link IStyle} holds a {@link IResource} with the given id.
      */
     @NotNull
-    default <T extends IResource> T getResource(@NotNull final ResourceLocation styleId, @NotNull final ResourceLocation resourceId) throws IllegalArgumentException
+    default <T extends IResource> T getResource(@NotNull final IIdentifier styleId, @NotNull final IIdentifier resourceId) throws IllegalArgumentException
     {
         final IStyle primaryStyle = getStyles().get(styleId);
 
@@ -52,7 +52,7 @@ public interface IStyleManager
      * @return All known {@link IStyle}.
      */
     @NotNull
-    ImmutableMap<ResourceLocation, IStyle> getStyles();
+    ImmutableMap<IIdentifier, IStyle> getStyles();
 
     /**
      * Loads the styles during post init.

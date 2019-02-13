@@ -2,12 +2,12 @@ package com.ldtteam.blockout.connector.core.inventory.builder;
 
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.ldtteam.minelaunch.entity.IEntity;
+import com.ldtteam.minelaunch.tileentity.IBlockEntity;
+import com.ldtteam.minelaunch.util.IEnumFacing;
+import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.minelaunch.util.math.IInWorldCoordinate;
+import com.ldtteam.minelaunch.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,15 +21,15 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final TileEntity tileEntity, @Nullable EnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final IBlockEntity tileEntity, @Nullable IEnumFacing facing
     )
     {
-        return this.withTileBasedProvider(id, tileEntity.getWorld().provider.getDimension(), tileEntity.getPos(), facing);
+        return this.withTileBasedProvider(id, tileEntity.getDimension().getId(), tileEntity.getPosition(), facing);
     }
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final BlockPos blockPos, @Nullable EnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final IInWorldCoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
         return this.withTileBasedProvider(id, dimId, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
@@ -37,33 +37,33 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
-    EnumFacing facing);
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
+    IEnumFacing facing);
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final World world, @NotNull final BlockPos blockPos, @Nullable EnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final IInWorldCoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
-        return this.withTileBasedProvider(id, world.provider.getDimension(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
+        return this.withTileBasedProvider(id, world.getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
     }
 
     @NotNull
     default IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final EnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final IEntity entity, @Nullable final IEnumFacing facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.world.provider.getDimension(), entity.getPersistentID(), facing);
+        return this.withEntityBasedProvider(id, entity.getDimension().getId(), entity.getId(), facing);
     }
 
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final IEnumFacing facing
     );
 
     @NotNull
     IItemHandlerManagerBuilder withWrapped(
-      @NotNull final ResourceLocation id, @NotNull final ResourceLocation wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding
+      @NotNull final IIdentifier id, @NotNull final IIdentifier wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding
     );
 
     @NotNull

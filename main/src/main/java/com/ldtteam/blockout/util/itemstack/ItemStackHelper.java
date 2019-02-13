@@ -139,7 +139,7 @@ public final class ItemStackHelper
      *                    modified
      * @param mergeTarget - The target merge, this stack is modified if doMerge is set
      * @param doMerge     - To actually do the merge
-     * @return The number of items that was successfully merged.
+     * @return The number of item that was successfully merged.
      */
     public static int mergeStacks(@NotNull ItemStack mergeSource, @NotNull ItemStack mergeTarget, boolean doMerge)
     {
@@ -210,9 +210,9 @@ public final class ItemStackHelper
      *
      * @param a           ItemStack
      * @param b           ItemStack
-     * @param matchDamage Whether to check the damage value of the items
-     * @param matchNBT    Whether to check the NBT tags on the items
-     * @return Whether the items match
+     * @param matchDamage Whether to check the damage value of the item
+     * @param matchNBT    Whether to check the NBT tags on the item
+     * @return Whether the item match
      */
     public static boolean isMatchingItem(@NotNull final ItemStack a, @NotNull final ItemStack b, final boolean matchDamage, final boolean matchNBT)
     {

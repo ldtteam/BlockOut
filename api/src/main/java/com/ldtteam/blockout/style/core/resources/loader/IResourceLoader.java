@@ -2,7 +2,7 @@ package com.ldtteam.blockout.style.core.resources.loader;
 
 import com.google.gson.JsonElement;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public interface IResourceLoader<T extends IResource>
@@ -22,5 +22,5 @@ public interface IResourceLoader<T extends IResource>
      * @param id   THe id to load for.
      * @param data The data to load from.
      */
-    T load(@NotNull final ResourceLocation id, @NotNull final JsonElement data);
+    T load(@NotNull final IIdentifier id, @NotNull final JsonElement data);
 }

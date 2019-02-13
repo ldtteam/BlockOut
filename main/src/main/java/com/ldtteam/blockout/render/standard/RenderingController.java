@@ -6,7 +6,6 @@ import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.core.IScissoringController;
-import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.block.BlockAir;
@@ -36,8 +35,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import java.nio.ByteBuffer;
 
 @SideOnly(Side.CLIENT)
 public class RenderingController implements IRenderingController

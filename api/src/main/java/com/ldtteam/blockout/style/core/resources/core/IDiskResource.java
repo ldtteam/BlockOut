@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.style.core.resources.core;
 
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,5 +15,5 @@ public interface IDiskResource extends IResource
      * @return The location of the {@link IDiskResource} on disk.
      */
     @NotNull
-    ResourceLocation getDiskLocation();
+    IIdentifier getDiskLocation();
 }

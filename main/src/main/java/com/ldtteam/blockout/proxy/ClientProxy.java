@@ -15,7 +15,6 @@ import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.color.ColorUtils;
-import com.ldtteam.blockout.util.color.MultiColoredFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;

@@ -3,7 +3,6 @@ package com.ldtteam.blockout.render.standard;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;

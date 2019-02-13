@@ -1,10 +1,6 @@
 package com.ldtteam.blockout.util.color;
 
 import com.google.common.collect.Maps;
-import com.ldtteam.blockout.proxy.ProxyHolder;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -162,7 +158,6 @@ public final class ColorUtils
     }
 
     @NotNull
-    @SideOnly(Side.CLIENT)
     public static String convertToFontRendererColor(@NotNull final String input)
     {
         if (input.startsWith(String.valueOf((char) MARKER)))
@@ -174,26 +169,32 @@ public final class ColorUtils
     }
 
     @NotNull
-    @SideOnly(Side.CLIENT)
-    public static Color convertToColor(@NotNull final String input)
+    public static IColor convertToColor(@NotNull final String input)
     {
         if (input.isEmpty())
         {
-            return new Color(Color.WHITE);
+            //TODO: Introduce constructor for IColor
+            //return new Color(Color.WHITE);
         }
 
         if (nameToColorMap.containsKey(input.toLowerCase()))
         {
-            return new Color(nameToColorMap.get(input.toLowerCase()));
+            //TODO: Introduce constructor for IColor
+            //return new Color(nameToColorMap.get(input.toLowerCase()));
         }
 
         try
         {
-            return new Color(Integer.decode(input), true);
+            //TODO: Introduce constructor for IColor
+            //return new Color(Integer.decode(input), true);
         }
         catch (Exception e)
         {
-            return new Color(Color.WHITE);
+            //TODO: Introduce constructor for IColor
+            //return new Color(Color.WHITE);
         }
+
+        //TODO: Remove when color constructor has been introduced.
+        return null;
     }
 }

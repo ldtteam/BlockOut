@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.connector.core.inventory;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.IItemHandler;
+import com.ldtteam.minelaunch.item.IItemHandler;
+import com.ldtteam.minelaunch.util.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +18,7 @@ public interface IItemHandlerManager extends Serializable
      * @return The {@link IItemHandler} for the given Id;
      */
     @Nullable
-    IItemHandler getItemHandlerFromId(@NotNull final ResourceLocation id);
+    IItemHandler getItemHandlerFromId(@NotNull final IIdentifier id);
 
     /**
      * Method used to get a list of ids for {@link IItemHandler}.
@@ -26,7 +26,7 @@ public interface IItemHandlerManager extends Serializable
      * @return The ids of all registered {@link IItemHandler}.
      */
     @NotNull
-    List<ResourceLocation> getAllItemHandlerIds();
+    List<IIdentifier> getAllItemHandlerIds();
 
     /**
      * Getter for the underlying list of Providers.
