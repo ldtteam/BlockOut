@@ -3,10 +3,8 @@ package com.ldtteam.blockout.util;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.util.reflection.ReflectionUtil;
-import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Type;
 import java.util.EnumSet;
@@ -31,12 +29,12 @@ public class Constants
 
     public static class Styles
     {
-        public static final ResourceLocation CONST_DEFAULT = new ResourceLocation(MOD_ID, "default");
+        public static final String CONST_DEFAULT = String.format("%s:default", MOD_ID);
     }
 
     public static class Resources
     {
-        public static final ResourceLocation MISSING = new ResourceLocation("minecraft:missingno");
+        public static final String MISSING = "minecraft:missingno";
     }
 
     public static class ResourceTypes
@@ -80,33 +78,33 @@ public class Constants
 
         public static class Image
         {
-            public static final ResourceLocation KEY_IMAGE = new ResourceLocation(MOD_ID, "image");
+            public static final String KEY_IMAGE = String.format("%s:image", MOD_ID);
 
             public static final String CONST_ICON = "icon";
         }
 
         public static class ItemIcon
         {
-            public static final ResourceLocation KEY_ITEM = new ResourceLocation(MOD_ID, "itemIcon");
+            public static final String KEY_ITEM = String.format("%s:itemIcon", MOD_ID);
 
             public static final String CONST_ICON = "icon";
         }
 
         public static class BlockStateIcon
         {
-            public static final ResourceLocation KEY_BLOCKSTATE = new ResourceLocation(MOD_ID, "blockStateIcon");
+            public static final String KEY_BLOCKSTATE = String.format("%s:blockStateIcon", MOD_ID);
 
             public static final String CONST_BLOCK_STATE = "blockState";
         }
 
         public static class Root
         {
-            public static final ResourceLocation KEY_ROOT = new ResourceLocation(MOD_ID, "root");
+            public static final String KEY_ROOT = String.format("%s:root", MOD_ID);
         }
 
         public static class Slot
         {
-            public static final ResourceLocation KEY_SLOT = new ResourceLocation(MOD_ID, "slot");
+            public static final String KEY_SLOT = String.format("%s:slot", MOD_ID);
 
             public static final String CONST_BACKGROUND_IMAGE = "background";
             public static final String CONST_INVENTORY_ID     = "inventory";
@@ -115,7 +113,7 @@ public class Constants
 
         public static class Button
         {
-            public static final ResourceLocation KEY_BUTTON = new ResourceLocation(MOD_ID, "button");
+            public static final String KEY_BUTTON = String.format("%s:button", MOD_ID);
 
             public static final String CONST_DEFAULT_BACKGROUND_IMAGE  = "defaultBackgroundImage";
             public static final String CONST_DISABLED_BACKGROUND_IMAGE = "disabledBackgroundImage";
@@ -125,7 +123,7 @@ public class Constants
 
         public static class CheckBox
         {
-            public static final ResourceLocation KEY_CHECKBOX = new ResourceLocation(MOD_ID, "checkbox");
+            public static final String KEY_CHECKBOX = String.format("%s:checkbox", MOD_ID);
 
             public static final String CONST_DEFAULT_BACKGROUND_IMAGE  = "defaultBackgroundImage";
             public static final String CONST_DISABLED_BACKGROUND_IMAGE = "disabledBackgroundImage";
@@ -135,12 +133,12 @@ public class Constants
 
         public static class Template
         {
-            public static final ResourceLocation KEY_TEMPLATE = new ResourceLocation(MOD_ID, "template");
+            public static final String KEY_TEMPLATE = String.format("%s:template", MOD_ID);
         }
 
         public static class Label
         {
-            public static final ResourceLocation KEY_LABEL = new ResourceLocation(MOD_ID, "label");
+            public static final String KEY_LABEL = String.format("%s:label", MOD_ID);
 
             public static final String CONST_CONTENT    = "content";
             public static final String CONST_FONT_COLOR = "font-color";
@@ -148,7 +146,7 @@ public class Constants
 
         public static class TextField
         {
-            public static final ResourceLocation KEY_TEXT_FIELD = new ResourceLocation(MOD_ID, "textfield");
+            public static final String KEY_TEXT_FIELD = String.format("%s:textfield", MOD_ID);
 
             public static final String CONST_CONTENT                = "content";
             public static final String CONST_CURSOR_POS             = "cursorCounter";
@@ -166,7 +164,7 @@ public class Constants
 
         public static class ProgressBar
         {
-            public static final ResourceLocation KEY_PROGRESS_BAR = new ResourceLocation(MOD_ID, "progressbar");
+            public static final String KEY_PROGRESS_BAR = String.format("%s:progressbar", MOD_ID);
 
             public static final String CONST_BACKGROUND_IMAGE = "backgroundImage";
             public static final String CONST_FOREGROUND_IMAGE = "foregroundImage";
@@ -178,12 +176,12 @@ public class Constants
 
         public static class Region
         {
-            public static final ResourceLocation KEY_REGION = new ResourceLocation(MOD_ID, "region");
+            public static final String KEY_REGION = String.format("%s:region", MOD_ID);
         }
 
         public static class List
         {
-            public static final ResourceLocation KEY_LIST = new ResourceLocation(MOD_ID, "list");
+            public static final String KEY_LIST = String.format("%s:list", MOD_ID);
 
             public static final String CONST_SCROLL_BACKGROUND = "scrollBackground";
             public static final String CONST_SCROLL_FOREGROUND = "scrollForeground";
@@ -196,14 +194,14 @@ public class Constants
 
         public static class TemplateInstance
         {
-            public static final ResourceLocation KEY_TEMPLATE_INSTANCE = new ResourceLocation(MOD_ID, "instance");
+            public static final String KEY_TEMPLATE_INSTANCE = String.format("%s:instance", MOD_ID);
 
             public static final String CONST_TEMPLATE = "template";
         }
 
         public static class RangeSelector
         {
-            public static final ResourceLocation KEY_RANGE_SELECTOR = new ResourceLocation(MOD_ID, "rangeSelector");
+            public static final String KEY_RANGE_SELECTOR = String.format("%s:rangeSelector", MOD_ID);
 
             public static final String CONST_LEFT_VALUE                = "leftValue";
             public static final String CONST_RIGHT_VALUE               = "rightValue";

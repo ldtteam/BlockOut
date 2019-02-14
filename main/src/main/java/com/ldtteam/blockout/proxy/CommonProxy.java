@@ -144,7 +144,7 @@ public class CommonProxy implements IProxy
 
     @NotNull
     @Override
-    public World getWorldFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final int dimId)
     {
         return FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimId);
     }

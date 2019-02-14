@@ -82,11 +82,11 @@ public class ClientProxy extends CommonProxy
 
     @NotNull
     @Override
-    public World getWorldFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final int dimId)
     {
         return SideHelper.on(
           () -> Minecraft.getMinecraft().world,
-          () -> super.getWorldFromDimensionId(dimId)
+          () -> super.getDimensionFromDimensionId(dimId)
         );
     }
 

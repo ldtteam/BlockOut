@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.render.core;
 
 import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.minelaunch.block.state.IBlockState;
@@ -100,7 +101,7 @@ public interface IRenderingController
      * @param z   the z.
      * @param c   the color.
      */
-    void drawColoredRect(@NotNull BoundingBox box, int z, @NotNull Color c);
+    void drawColoredRect(@NotNull BoundingBox box, int z, @NotNull IColor c);
 
     /**
      * Draw a gradient rect.
@@ -110,7 +111,7 @@ public interface IRenderingController
      * @param colorStart the start color.
      * @param colorEnd   the end color.
      */
-    void drawGradiendColoredRect(@NotNull BoundingBox box, int z, @NotNull Color colorStart, @NotNull Color colorEnd);
+    void drawGradiendColoredRect(@NotNull BoundingBox box, int z, @NotNull IColor colorStart, @NotNull IColor colorEnd);
 
     /**
      * Draw a rect.
@@ -121,7 +122,7 @@ public interface IRenderingController
      * @param bottom the bottom pos.
      * @param color  the color.
      */
-    void drawRect(double left, double top, double right, double bottom, @NotNull Color color);
+    void drawRect(double left, double top, double right, double bottom, @NotNull IColor color);
 
     /**
      * Draw an itemStack.

@@ -107,7 +107,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final World blockAccess = BlockOut.getBlockOut().getProxy().getWorldFromDimensionId(dimId);
+        final World blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
         final TileEntity tileEntity = blockAccess.getTileEntity(new BlockPos(x, y, z));
 
         if (tileEntity == null)

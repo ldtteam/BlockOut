@@ -2,11 +2,8 @@ package com.ldtteam.blockout.render.core;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.math.BoundingBox;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-@SideOnly(Side.CLIENT)
 public interface IScissoringController
 {
     /**

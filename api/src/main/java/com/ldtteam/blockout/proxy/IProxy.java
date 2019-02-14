@@ -16,6 +16,7 @@ import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.minelaunch.client.renderer.font.IFontRenderer;
 import com.ldtteam.minelaunch.util.IIdentifier;
 import com.ldtteam.minelaunch.world.IDimension;
 import org.jetbrains.annotations.NotNull;
@@ -48,15 +49,13 @@ public interface IProxy
     IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager);
 
     @NotNull
-    IDimension getWorldFromDimensionId(@NotNull final int dimId);
+    IDimension getDimensionFromDimensionId(@NotNull final int dimId);
 
     @NotNull
     IRenderManager generateNewRenderManager();
 
-    void initializeFontRenderer();
-
     @NotNull
-    MultiColoredFontRenderer getFontRenderer();
+    IFontRenderer getFontRenderer();
 
     @NotNull
     IResourceLoaderManager getResourceLoaderManager();

@@ -16,10 +16,9 @@ import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.minelaunch.client.renderer.font.IFontRenderer;
+import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.minelaunch.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,14 +67,14 @@ public class ProxyHolder implements IProxy
 
     @Override
     @NotNull
-    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
+    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
     {
         return proxy.getResourceStream(location);
     }
 
     @Override
     @NotNull
-    public Vector2d getImageSize(@NotNull final ResourceLocation location)
+    public Vector2d getImageSize(@NotNull final IIdentifier location)
     {
         return proxy.getImageSize(location);
     }
@@ -96,28 +95,21 @@ public class ProxyHolder implements IProxy
 
     @Override
     @NotNull
-    public World getWorldFromDimensionId(@NotNull final int dimId)
+    public IDimension getDimensionFromDimensionId(@NotNull final int dimId)
     {
-        return proxy.getWorldFromDimensionId(dimId);
+        return proxy.getDimensionFromDimensionId(dimId);
     }
 
     @Override
     @NotNull
-    @SideOnly(Side.CLIENT)
     public IRenderManager generateNewRenderManager()
     {
         return proxy.generateNewRenderManager();
     }
 
     @Override
-    public void initializeFontRenderer()
-    {
-        proxy.initializeFontRenderer();
-    }
-
-    @Override
     @Nullable
-    public MultiColoredFontRenderer getFontRenderer()
+    public IFontRenderer getFontRenderer()
     {
         return proxy.getFontRenderer();
     }

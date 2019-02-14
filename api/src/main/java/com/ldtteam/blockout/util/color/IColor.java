@@ -7,10 +7,9 @@ public interface IColor
      */
     static void resetOpenGLColoring()
     {
-        GlStateManager.color(1F, 1F, 1F, 1F);
+        //TODO: Link open gl code.
     }
 
-    @SideOnly(Side.CLIENT)
     String encodeColor();
 
     /**
