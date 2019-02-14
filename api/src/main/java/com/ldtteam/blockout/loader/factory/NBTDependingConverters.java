@@ -4,12 +4,11 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
+import com.ldtteam.minelaunch.ProviderHolder;
+import com.ldtteam.minelaunch.block.state.IBlockState;
+import com.ldtteam.minelaunch.entity.IEntity;
+import com.ldtteam.minelaunch.item.IItemStack;
+import com.ldtteam.minelaunch.util.nbt.INBTCompound;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +16,9 @@ import java.util.function.Function;
 
 public class NBTDependingConverters
 {
-    private static final NBTBaseConverter<NBTTagCompound> COMPOUND_NBT_BASE_CONVERTER = new NBTBaseConverter.CompoundConverter();
+    private static final NBTBaseConverter<INBTCompound> COMPOUND_NBT_BASE_CONVERTER = new NBTBaseConverter.CompoundConverter();
 
-    public static final class ItemStackConverter implements IUIElementDataComponentConverter<ItemStack>
+    public static final class ItemStackConverter implements IUIElementDataComponentConverter<IItemStack>
     {
 
         @Override
@@ -30,18 +29,22 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public ItemStack readFromElement(
+        public IItemStack readFromElement(
           @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
-            return new ItemStack(compound);
+            final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
+            final IItemStack stack = ProviderHolder.getInstance().getiItemStackProvider().provide();
+
+            stack.read(compound);
+
+            return stack;
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
-          @NotNull final ItemStack value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+          @NotNull final IItemStack value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final NBTTagCompound compound = value.writeToNBT(new NBTTagCompound());
+            final INBTCompound compound = value.write();
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);
         }
     }
@@ -58,20 +61,24 @@ public class NBTDependingConverters
         @Override
         public IBlockState readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
-            return NBTUtil.readBlockState(compound);
+            final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
+            final IBlockState state = ProviderHolder.getInstance().getiBlockStateProvider().provide();
+
+            state.read(compound);
+
+            return state;
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
           @NotNull final IBlockState value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final NBTTagCompound compound = NBTUtil.writeBlockState(new NBTTagCompound(), value);
+            final INBTCompound compound = value.write();
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);
         }
     }
 
-    public static final class EntityConverter implements IUIElementDataComponentConverter<Entity>
+    public static final class EntityConverter implements IUIElementDataComponentConverter<IEntity>
     {
         @Override
         public boolean matchesInputTypes(@NotNull final IUIElementDataComponent component)
@@ -81,17 +88,22 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public Entity readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public IEntity readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            final NBTTagCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
-            return EntityList.createEntityFromNBT(compound, null);
+            final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
+
+            final IEntity entity = ProviderHolder.getInstance().getiEntityProvider().provide();
+
+            entity.read(compound);
+
+            return entity;
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
-          @NotNull final Entity value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+          @NotNull final IEntity value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
-            final NBTTagCompound compound = value.writeToNBT(new NBTTagCompound());
+            final INBTCompound compound = value.write();
             return COMPOUND_NBT_BASE_CONVERTER.writeToElement(compound, newComponentInstanceProducer);
         }
     }

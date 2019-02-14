@@ -6,7 +6,7 @@ import com.ldtteam.minelaunch.entity.IEntity;
 import com.ldtteam.minelaunch.tileentity.IBlockEntity;
 import com.ldtteam.minelaunch.util.IEnumFacing;
 import com.ldtteam.minelaunch.util.IIdentifier;
-import com.ldtteam.minelaunch.util.math.IInWorldCoordinate;
+import com.ldtteam.minelaunch.util.math.ICoordinate;
 import com.ldtteam.minelaunch.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final IInWorldCoordinate blockPos, @Nullable IEnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final ICoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
         return this.withTileBasedProvider(id, dimId, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
@@ -42,7 +42,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final IInWorldCoordinate blockPos, @Nullable IEnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final ICoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
         return this.withTileBasedProvider(id, world.getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);

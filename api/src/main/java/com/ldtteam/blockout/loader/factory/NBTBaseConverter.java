@@ -7,8 +7,9 @@ import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter
 import com.ldtteam.blockout.util.NBTType;
 import com.ldtteam.blockout.util.elementdata.IUIElementDataComponentStreamSupport;
 import com.ldtteam.blockout.util.nbt.NBTStreamSupport;
+import com.ldtteam.minelaunch.ProviderHolder;
 import com.ldtteam.minelaunch.util.nbt.*;
-import net.minecraft.nbt.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,20 +49,21 @@ public abstract class NBTBaseConverter<T extends INBTBase> implements IUIElement
     static
     {
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE,
-          (component) -> convertToValue(component, (byteString) -> new NBTTagByte(Byte.parseByte(byteString.replace("b", "")))));
+          (component) -> convertToValue(component, (byteString) -> ProviderHolder.getInstance().getInbtProvider().provide(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, NBTBaseConverter::convertToByteArray);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, NBTBaseConverter::convertToNBTTagCompound);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE,
-          (component) -> convertToValue(component, (doubleString) -> new NBTTagDouble(Double.parseDouble(doubleString.replace("d", "")))));
+          (component) -> convertToValue(component, (doubleString) -> ProviderHolder.getInstance().getInbtProvider().provide(Double.parseDouble(doubleString.replace("d", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT,
-          (component) -> convertToValue(component, (floatString) -> new NBTTagFloat(Float.parseFloat(floatString.replace("f", "")))));
+          (component) -> convertToValue(component, (floatString) -> ProviderHolder.getInstance().getInbtProvider().provide(Float.parseFloat(floatString.replace("f", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT,
-          (component) -> convertToValue(component, (shortString) -> new NBTTagShort(Short.parseShort(shortString.replace("s", "")))));
+          (component) -> convertToValue(component, (shortString) -> ProviderHolder.getInstance().getInbtProvider().provide(Short.parseShort(shortString.replace("s", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG,
-          (component) -> convertToValue(component, (longString) -> new NBTTagLong(Long.parseLong(longString.replace("l", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (component) -> convertToValue(component, (intString) -> new NBTTagInt(Integer.parseInt(intString))));
+          (component) -> convertToValue(component, (longString) -> ProviderHolder.getInstance().getInbtProvider().provide(Long.parseLong(longString.replace("l", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT,
+          (component) -> convertToValue(component, (intString) -> ProviderHolder.getInstance().getInbtProvider().provide(Integer.parseInt(intString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, NBTBaseConverter::convertToList);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (component) -> convertToValue(component, NBTTagString::new));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (component) -> convertToValue(component, ProviderHolder.getInstance().getInbtProvider()::provide));
     }
 
     static
@@ -212,41 +214,43 @@ public abstract class NBTBaseConverter<T extends INBTBase> implements IUIElement
 
     private static INBTBase convertToByteArray(@NotNull final IUIElementDataComponent component)
     {
-        return new NBTTagByteArray(
-          IUIElementDataComponentStreamSupport.streamList(component)
-            .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
-            .map(nbtBase -> (NBTTagByte) nbtBase)
-            .map(NBTTagByte::getByte)
-            .collect(Collectors.toList())
-        );
+        final List<Byte> bytes = IUIElementDataComponentStreamSupport.streamList(component)
+                                   .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
+                                   .map(nbtBase -> (INBTByte) nbtBase)
+                                   .map(INBTByte::getValue)
+                                   .collect(Collectors.toList());
+
+        final byte[] byteArray = ArrayUtils.toPrimitive(bytes.toArray(new Byte[] {}));
+
+        final INBTByteArray list = ProviderHolder.getInstance().getInbtProvider().provide(byteArray);
+
+        return list;
     }
 
     private static INBTBase convertToList(@NotNull final IUIElementDataComponent component)
     {
-        final NBTTagList list = new NBTTagList();
-
-        IUIElementDataComponentStreamSupport.streamList(component)
-          .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
-          .forEach(list::appendTag);
+        final INBTList list = ProviderHolder.getInstance().getInbtProvider().provide(IUIElementDataComponentStreamSupport.streamList(component)
+                                                                                       .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
+                                                                                       .collect(Collectors.toList()));
 
         return list;
     }
 
     private static final INBTBase convertToNBTTagCompound(@NotNull final IUIElementDataComponent component)
     {
-        final NBTTagCompound compound = new NBTTagCompound();
+        final INBTCompound compound = ProviderHolder.getInstance().getInbtProvider().provide();
 
         IUIElementDataComponentStreamSupport.streamMap(component)
           .forEach(child -> {
-              final NBTBase nbtBase = TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child.getValue())).apply(child.getValue());
+              final INBTBase nbtBase = TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child.getValue())).apply(child.getValue());
               final String name = child.getKey();
 
-              if (compound.hasKey(name))
+              if (compound.containsKey(name))
               {
                   throw new IllegalArgumentException(String.format("Given jsonElement contains multiple entries with the same key: %s", name));
               }
 
-              compound.setTag(name, nbtBase);
+              compound.put(name, nbtBase);
           });
 
         return compound;
@@ -262,11 +266,11 @@ public abstract class NBTBaseConverter<T extends INBTBase> implements IUIElement
 
     private static <C extends IUIElementDataComponent> C convertFromByteArray(INBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
-        final NBTTagByteArray byteArray = (NBTTagByteArray) base;
+        final INBTByteArray byteArray = (INBTByteArray) base;
         final C newInstance = newInstanceCreator.apply(ComponentType.LIST);
 
         newInstance.setList(NBTStreamSupport.streamByteArray(byteArray)
-                              .map(NBTTagByte::new)
+                              .map(ProviderHolder.getInstance().getInbtProvider()::provide)
                               .map(tag -> NBT_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE).apply(tag, newInstanceCreator))
                               .collect(Collectors.toList()));
 
@@ -275,7 +279,7 @@ public abstract class NBTBaseConverter<T extends INBTBase> implements IUIElement
 
     private static <C extends IUIElementDataComponent> C convertFromList(INBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
-        final NBTTagList listTag = (NBTTagList) base;
+        final INBTList listTag = (INBTList) base;
         final C newInstance = newInstanceCreator.apply(ComponentType.LIST);
 
         newInstance.setList(NBTStreamSupport.streamList(listTag)
@@ -287,7 +291,7 @@ public abstract class NBTBaseConverter<T extends INBTBase> implements IUIElement
 
     private static <C extends IUIElementDataComponent> C convertFromCompound(INBTBase base, Function<ComponentType, C> newInstanceCreator)
     {
-        final NBTTagCompound compoundTag = (NBTTagCompound) base;
+        final INBTCompound compoundTag = (INBTCompound) base;
         final C newInstance = newInstanceCreator.apply(ComponentType.COMPLEX);
 
         newInstance.setMap(NBTStreamSupport.streamCompound(compoundTag)

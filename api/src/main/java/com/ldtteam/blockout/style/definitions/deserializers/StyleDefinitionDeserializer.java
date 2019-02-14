@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ldtteam.blockout.style.definitions.StyleDefinition;
 import com.ldtteam.blockout.util.json.IdentifierDeserializer;
 import com.ldtteam.blockout.util.stream.StreamHelper;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.minelaunch.util.IIdentifier;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -44,16 +44,16 @@ public class StyleDefinitionDeserializer implements JsonDeserializer<StyleDefini
             throw new JsonParseException("Style Definition needs an id.");
         }
 
-        final ResourceLocation id = CONST_GSON.fromJson(object.get("id"), IdentifierDeserializer.CONST_IDENTIFIER_TYPE);
+        final IIdentifier id = CONST_GSON.fromJson(object.get("id"), IdentifierDeserializer.CONST_IDENTIFIER_TYPE);
 
         if (!object.has("types") || !object.get("types").isJsonArray())
         {
             throw new JsonParseException("Style Definition needs a types array.");
         }
 
-        final Collection<ResourceLocation> resourceTypeLocations =
+        final Collection<IIdentifier> resourceTypeLocations =
           StreamHelper.getJsonArrayAsStream(object.get("types").getAsJsonArray())
-            .map(e -> (ResourceLocation) CONST_GSON.fromJson(e, IdentifierDeserializer.CONST_IDENTIFIER_TYPE))
+            .map(e -> (IIdentifier) CONST_GSON.fromJson(e, IdentifierDeserializer.CONST_IDENTIFIER_TYPE))
             .collect(Collectors.toList());
 
         return new StyleDefinition(id, resourceTypeLocations);

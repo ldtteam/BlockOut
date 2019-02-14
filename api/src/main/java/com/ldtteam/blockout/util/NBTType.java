@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.util;
 
+import com.ldtteam.minelaunch.util.nbt.INBTBase;
 import com.ldtteam.minelaunch.util.nbt.INBTByte;
 
 public enum NBTType
@@ -15,7 +16,7 @@ public enum NBTType
     TAG_LIST,
     TAG_COMPOUND;
 
-    public static NBTType fromNBTBase(INBTByte base)
+    public static NBTType fromNBTBase(INBTBase base)
     {
         switch (base.getType())
         {
@@ -40,7 +41,7 @@ public enum NBTType
             case 10:
                 return TAG_COMPOUND;
             default:
-                throw new IllegalArgumentException("Unknown NBTBase type with Id: " + base.getValue());
+                throw new IllegalArgumentException("Unknown NBTBase type with Id: " + base.getType());
         }
     }
 }

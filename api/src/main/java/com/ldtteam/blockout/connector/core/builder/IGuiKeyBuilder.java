@@ -9,7 +9,7 @@ import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManager
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.minelaunch.entity.IEntity;
 import com.ldtteam.minelaunch.util.IIdentifier;
-import com.ldtteam.minelaunch.util.math.IInWorldCoordinate;
+import com.ldtteam.minelaunch.util.math.ICoordinate;
 import com.ldtteam.minelaunch.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,7 +67,7 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder forPosition(@NotNull final int dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z);
 
     @NotNull
-    IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final IInWorldCoordinate blockPos);
+    IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final ICoordinate blockPos);
 
     @NotNull
     IGuiKeyBuilder forClientSideOnly();
