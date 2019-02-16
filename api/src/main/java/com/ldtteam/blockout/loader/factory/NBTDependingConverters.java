@@ -4,11 +4,10 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
-import com.ldtteam.minelaunch.ProviderHolder;
-import com.ldtteam.minelaunch.block.state.IBlockState;
-import com.ldtteam.minelaunch.entity.IEntity;
-import com.ldtteam.minelaunch.item.IItemStack;
-import com.ldtteam.minelaunch.util.nbt.INBTCompound;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +32,7 @@ public class NBTDependingConverters
           @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
-            final IItemStack stack = ProviderHolder.getInstance().getiItemStackProvider().provide();
+            final IItemStack stack = IItemStack.create();
 
             stack.read(compound);
 
@@ -62,7 +61,7 @@ public class NBTDependingConverters
         public IBlockState readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
             final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
-            final IBlockState state = ProviderHolder.getInstance().getiBlockStateProvider().provide();
+            final IBlockState state = IBlockState.create();
 
             state.read(compound);
 
@@ -92,7 +91,7 @@ public class NBTDependingConverters
         {
             final INBTCompound compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
 
-            final IEntity entity = ProviderHolder.getInstance().getiEntityProvider().provide();
+            final IEntity entity = IEntity.create();
 
             entity.read(compound);
 

@@ -20,7 +20,6 @@ import com.ldtteam.blockout.management.common.focus.FocusManager;
 import com.ldtteam.blockout.management.common.input.ClickManager;
 import com.ldtteam.blockout.management.common.input.KeyManager;
 import com.ldtteam.blockout.management.common.input.ScrollManager;
-import com.ldtteam.blockout.util.SideHelper;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

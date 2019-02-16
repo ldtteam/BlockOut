@@ -12,7 +12,7 @@ import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

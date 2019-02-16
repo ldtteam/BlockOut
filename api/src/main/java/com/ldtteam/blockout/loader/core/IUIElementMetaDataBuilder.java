@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.loader.core;
 
-import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIElementMetaDataBuilder<T extends IUIElementMetaData>

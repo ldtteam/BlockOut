@@ -13,7 +13,6 @@ import com.ldtteam.blockout.management.client.render.RenderManager;
 import com.ldtteam.blockout.management.client.update.NoOpUpdateManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
-import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.color.ColorUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;

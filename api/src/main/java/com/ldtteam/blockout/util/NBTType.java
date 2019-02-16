@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.minelaunch.util.nbt.INBTBase;
-import com.ldtteam.minelaunch.util.nbt.INBTByte;
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTByte;
 
 public enum NBTType
 {

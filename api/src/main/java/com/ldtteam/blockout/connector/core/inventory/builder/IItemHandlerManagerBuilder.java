@@ -2,12 +2,12 @@ package com.ldtteam.blockout.connector.core.inventory.builder;
 
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import com.ldtteam.minelaunch.entity.IEntity;
-import com.ldtteam.minelaunch.tileentity.IBlockEntity;
-import com.ldtteam.minelaunch.util.IEnumFacing;
-import com.ldtteam.minelaunch.util.IIdentifier;
-import com.ldtteam.minelaunch.util.math.ICoordinate;
-import com.ldtteam.minelaunch.world.IDimension;
+import com.ldtteam.jvoxelizer.block.entity.IBlockEntity;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.util.IEnumFacing;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import com.ldtteam.jvoxelizer.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +29,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final ICoordinate blockPos, @Nullable IEnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final IBlockCoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
         return this.withTileBasedProvider(id, dimId, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
@@ -42,7 +42,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final ICoordinate blockPos, @Nullable IEnumFacing facing
+      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos, @Nullable IEnumFacing facing
     )
     {
         return this.withTileBasedProvider(id, world.getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);

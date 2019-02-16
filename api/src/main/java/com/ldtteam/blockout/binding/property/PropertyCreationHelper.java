@@ -4,7 +4,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.minelaunch.util.ITuple;
+import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

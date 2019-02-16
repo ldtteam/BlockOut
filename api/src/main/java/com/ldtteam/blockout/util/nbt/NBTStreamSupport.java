@@ -1,9 +1,9 @@
 package com.ldtteam.blockout.util.nbt;
 
-import com.ldtteam.minelaunch.util.nbt.INBTBase;
-import com.ldtteam.minelaunch.util.nbt.INBTByteArray;
-import com.ldtteam.minelaunch.util.nbt.INBTCompound;
-import com.ldtteam.minelaunch.util.nbt.INBTList;
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTByteArray;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
+import com.ldtteam.jvoxelizer.util.nbt.INBTList;
 
 import java.util.HashMap;
 import java.util.Map;

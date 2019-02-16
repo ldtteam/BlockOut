@@ -4,11 +4,11 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.minelaunch.block.state.IBlockState;
-import com.ldtteam.minelaunch.client.renderer.texture.ISprite;
-import com.ldtteam.minelaunch.fluid.IFluidStack;
-import com.ldtteam.minelaunch.item.IItemStack;
-import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISprite;
+import com.ldtteam.jvoxelizer.fluid.IFluidStack;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

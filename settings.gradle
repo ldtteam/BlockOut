@@ -11,5 +11,9 @@ rootProject.name = 'BlockOut'
 
 include 'api'
 include 'main'
-include 'launcher:MineLaunch'
 include 'launcher:forge:1.12'
+
+project(':api').name = "BlockOut - Api"
+project(':main').name = "BlockOut - Main"
+project(':launcher:forge:1.12').name = "BlockOut - Launchers - Forge - 1.12"
+

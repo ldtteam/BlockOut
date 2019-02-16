@@ -1,4 +1,0 @@
-[submodule "MineLaunch"]
-	path = launcher/MineLaunch
-	url = https://github.com/ldtteam/MineLaunch.git
-	branch = master

@@ -37,7 +37,7 @@ public class ClientTickManager
     }
 
     /**
-     * Called by the {@link ForgeFMLEventHandler} to increment the tick count on client tick.
+     * Called by the {@link UpdateHandler} to increment the tick count on client tick.
      */
     public void onClientTick()
     {

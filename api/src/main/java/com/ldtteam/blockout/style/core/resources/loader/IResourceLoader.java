@@ -2,7 +2,7 @@ package com.ldtteam.blockout.style.core.resources.loader;
 
 import com.google.gson.JsonElement;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public interface IResourceLoader<T extends IResource>

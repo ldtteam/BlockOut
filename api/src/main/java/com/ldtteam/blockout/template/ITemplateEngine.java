@@ -4,7 +4,7 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.minelaunch.util.IIdentifier;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;

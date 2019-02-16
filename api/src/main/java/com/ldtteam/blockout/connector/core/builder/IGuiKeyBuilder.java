@@ -7,10 +7,10 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.minelaunch.entity.IEntity;
-import com.ldtteam.minelaunch.util.IIdentifier;
-import com.ldtteam.minelaunch.util.math.ICoordinate;
-import com.ldtteam.minelaunch.world.IDimension;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import com.ldtteam.jvoxelizer.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -67,7 +67,7 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder forPosition(@NotNull final int dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z);
 
     @NotNull
-    IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final ICoordinate blockPos);
+    IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos);
 
     @NotNull
     IGuiKeyBuilder forClientSideOnly();

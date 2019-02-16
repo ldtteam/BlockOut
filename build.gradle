@@ -18,6 +18,8 @@ buildscript {
 
 //Now configure all subprojects.
 subprojects {
+    System.out.println(name)
+    
     //Add the central repository so that we always have access to our cached dependencies.
     repositories {
         maven {
@@ -71,7 +73,7 @@ subprojects {
     }
 }
 
-project(':api') {
+project(':BlockOut - Api') {
     //Set up the shading of the jars into the primary project.
     configurations {
         shade{}
@@ -79,8 +81,8 @@ project(':api') {
         compile.extendsFrom shade
     }
 
+    //TODO: Shade JVoxelizer api into the api.
     dependencies {
-        shade project(':launcher:MineLaunch')
     }
 
     jar {
@@ -98,7 +100,7 @@ project(':api') {
 }
 
 //Special configuration for the main jar.
-project(':main') {
+project(':BlockOut - Main') {
     //Set up the shading of the jars into the primary project.
     configurations {
         shade{}
@@ -107,7 +109,7 @@ project(':main') {
     }
 
     dependencies {
-        shade project(':api')
+        shade project(':BlockOut - Api')
     }
 
     jar {
@@ -124,7 +126,7 @@ project(':main') {
     }
 }
 
-project(':launcher:forge:1.12')
+project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
 {
     apply plugin: 'net.minecraftforge.gradle.forge'
     apply plugin: 'maven'
@@ -196,6 +198,17 @@ project(':launcher:forge:1.12')
 
     build.dependsOn signJar
 
+    configurations {
+        shade{}
+
+        compile.extendsFrom shade
+    }
+
+    dependencies {
+        shade project(':BlockOut - Api')
+        shade project(':BlockOut - Main')
+    }
+    
     jar {
 
         manifest {
@@ -266,5 +279,5 @@ task setupDecompWorkspace {
         dependsOn("${it.path}:setupDecompWorkspace" )
     }
 
-    dependsOn (project(':launcher:forge:1.12').tasks.genIntellijRuns)
+    dependsOn (project(':launcher:forge:BlockOut - Launchers - Forge - 1.12').tasks.genIntellijRuns)
 }
