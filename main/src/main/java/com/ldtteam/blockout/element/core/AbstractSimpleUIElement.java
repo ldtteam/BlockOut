@@ -10,21 +10,22 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.ConverterTypes.ALIGNMENT_ENUMSET_TYPE;
@@ -36,22 +37,22 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private final UUID uniqueIdentifier = UUID.randomUUID();
 
     @NotNull
-    private final ResourceLocation                    type;
+    private final String                         type;
     @NotNull
-    private final String                              id;
+    private final String                         id;
     @NotNull
-    private       IDependencyObject<ResourceLocation> style;
+    private       IDependencyObject<IIdentifier> style;
     @NotNull
-    private       IUIElementHost                      parent;
+    private       IUIElementHost                 parent;
 
     @NotNull
-    public IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
+    public IDependencyObject<EnumSet<Alignment>> alignments;
     @NotNull
-    public IDependencyObject<Dock>               dock        = DependencyObjectHelper.createFromValue(Dock.NONE);
+    public IDependencyObject<Dock>               dock;
     @NotNull
-    public IDependencyObject<AxisDistance>       margin      = DependencyObjectHelper.createFromValue(new AxisDistance());
+    public IDependencyObject<AxisDistance>       margin;
     @NotNull
-    public IDependencyObject<Vector2d>           elementSize = DependencyObjectHelper.createFromValue(new Vector2d());
+    public IDependencyObject<Vector2d>           elementSize;
 
     @NotNull
     private BoundingBox localBoundingBox;
@@ -59,32 +60,16 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     private BoundingBox absoluteBoundingBox;
 
     @NotNull
-    public IDependencyObject<Object> dataContext = DependencyObjectHelper.createFromValue(new Object());
+    public IDependencyObject<Object> dataContext;
 
     @NotNull
-    public IDependencyObject<Boolean> visible = DependencyObjectHelper.createFromValue(true);
+    public IDependencyObject<Boolean> visible;
     @NotNull
-    public IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
-
-    /**
-     * @deprecated Use larger constructor.
-     */
-    @Deprecated
-    public AbstractSimpleUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @Nullable final IUIElementHost parent)
-    {
-        this.type = type;
-        this.style = style;
-        this.id = id;
-        this.parent = parent;
-    }
+    public IDependencyObject<Boolean> enabled;
 
     public AbstractSimpleUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String type,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -116,7 +101,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
     @NotNull
     @Override
-    public ResourceLocation getType()
+    public String getType()
     {
         return type;
     }
@@ -128,7 +113,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
      */
     @NotNull
     @Override
-    public ResourceLocation getStyleId()
+    public IIdentifier getStyleId()
     {
         return style.get(this);
     }
@@ -528,13 +513,13 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     {
 
         private final Class<U>                       clz;
-        private final ResourceLocation               type;
+        private final String               type;
         private final ISimpleUIElementConstructor<U> constructor;
         private final ISimpleUIElementWriter<U>      writer;
 
         protected AbstractSimpleUIElementFactory(
           final Class<U> clz,
-          final ResourceLocation type,
+          final String type,
           final ISimpleUIElementConstructor<U> constructor,
           final ISimpleUIElementWriter<U> writer)
         {
@@ -553,7 +538,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
         @NotNull
         @Override
-        public final ResourceLocation getTypeName()
+        public final String getTypeName()
         {
             return type;
         }
@@ -563,10 +548,8 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         public final U readFromElementData(
           @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
-              PropertyCreationHelper.create(
-                Optional.of((c) -> parent.getStyleId()),
-                Optional.empty(),
+            final IDependencyObject<IIdentifier> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
+              PropertyCreationHelper.createFromOptional((Function) o -> parent.getStyleId(), null ,
                 true
               ), CONST_DEFAULT)).orElse(elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, CONST_DEFAULT));
             final IDependencyObject<EnumSet<Alignment>> alignments =
@@ -621,7 +604,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
               @NotNull final IBindingEngine engine,
               @NotNull final String id,
               @Nullable final IUIElementHost parent,
-              @NotNull final IDependencyObject<ResourceLocation> styleId,
+              @NotNull final IDependencyObject<IIdentifier> styleId,
               @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
               @NotNull final IDependencyObject<Dock> dock,
               @NotNull final IDependencyObject<AxisDistance> margin,

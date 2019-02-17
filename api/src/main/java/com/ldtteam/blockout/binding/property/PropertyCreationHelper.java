@@ -72,7 +72,7 @@ public final class PropertyCreationHelper
       @NotNull final Optional<BiConsumer<Object, T>> setter,
       @NotNull final boolean requiresDataContext)
     {
-        return new Property<T>(getter, setter, requiresDataContext);
+        return new Property<>(getter, setter, requiresDataContext);
     }
 
     /**

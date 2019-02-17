@@ -11,7 +11,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
@@ -132,16 +132,16 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
         //Can be done here since both fore and background methods are called by the super
         this.getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
-        GlStateManager.scale(1 / this.scaleFactor.getX(), 1 / this.scaleFactor.getY(), 1f);
+        IOpenGl.scale(1 / this.scaleFactor.getX(), 1 / this.scaleFactor.getY(), 1f);
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         super.drawScreen(scaledMouseX, scaledMouseY, partialTicks);
 
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
+        IOpenGl.popMatrix();
 
         this.isDrawing = false;
     }

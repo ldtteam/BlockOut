@@ -9,10 +9,8 @@ import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiRequestMessage;
 import com.ldtteam.blockout.network.message.OpenGuiRequestMessage;
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.entity.player.IPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,12 +18,11 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@SideOnly(Side.CLIENT)
 public class ClientGuiController implements IGuiController
 {
     @Override
     public void openUI(
-      @NotNull final EntityPlayer player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
+      @NotNull final IPlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {
         final CommonGuiKeyBuilder builder = new CommonGuiKeyBuilder();
         Arrays.stream(guiKeyBuilderConsumer).forEach(iGuiKeyBuilderConsumer -> iGuiKeyBuilderConsumer.accept(builder));
@@ -34,9 +31,9 @@ public class ClientGuiController implements IGuiController
     }
 
     @Override
-    public void openUI(@NotNull final EntityPlayer player, @NotNull final IGuiKey key)
+    public void openUI(@NotNull final IPlayerEntity player, @NotNull final IGuiKey key)
     {
-        openUI(player.getUniqueID(), key);
+        openUI(player.getId(), key);
     }
 
     @Override
@@ -51,7 +48,7 @@ public class ClientGuiController implements IGuiController
     @Override
     public void openUI(@NotNull final UUID playerId, @NotNull final IGuiKey key)
     {
-        if (!playerId.equals(Minecraft.getMinecraft().player.getUniqueID()))
+        if (!playerId.equals(IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId()))
         {
             Log.getLogger().warn("Cannot open UI of other player.");
             return;
@@ -61,15 +58,15 @@ public class ClientGuiController implements IGuiController
     }
 
     @Override
-    public void closeUI(@NotNull final EntityPlayer player)
+    public void closeUI(@NotNull final IPlayerEntity player)
     {
-        closeUI(player.getUniqueID());
+        closeUI(player.getId());
     }
 
     @Override
     public void closeUI(@NotNull final UUID playerId)
     {
-        if (!playerId.equals(Minecraft.getMinecraft().player.getUniqueID()))
+        if (!playerId.equals(IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId()))
         {
             Log.getLogger().warn("Cannot close UI of other player.");
             return;
@@ -80,7 +77,7 @@ public class ClientGuiController implements IGuiController
 
     @Nullable
     @Override
-    public IGuiKey getOpenUI(@NotNull final EntityPlayer player)
+    public IGuiKey getOpenUI(@NotNull final IPlayerEntity player)
     {
         return null;
     }

@@ -95,12 +95,12 @@ public class RenderingController implements IRenderingController
       @NotNull final Vector2d inTextureSize,
       @NotNull final Vector2d textureSize)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableLighting();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(1, 1, 1, 1);
+        IOpenGl.pushMatrix();
+        IOpenGl.enableBlend();
+        IOpenGl.disableAlpha();
+        IOpenGl.disableLighting();
+        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.color(1, 1, 1, 1);
 
         double x = origin.getX();
         double y = origin.getY();
@@ -132,10 +132,10 @@ public class RenderingController implements IRenderingController
           .endVertex();
         tessellator.draw();
 
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
+        IOpenGl.disableBlend();
+        IOpenGl.enableAlpha();
+        IOpenGl.enableLighting();
+        IOpenGl.popMatrix();
     }
 
     /**
@@ -268,11 +268,11 @@ public class RenderingController implements IRenderingController
         float f5 = colorEnd.getBlueFloat();
         float f6 = colorEnd.getGreenFloat();
         float f7 = colorEnd.getRedFloat();
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.shadeModel(7425);
+        IOpenGl.disableTexture2D();
+        IOpenGl.enableBlend();
+        IOpenGl.disableAlpha();
+        IOpenGl.tryBlendFuncSeparate(770, 771, 1, 0);
+        IOpenGl.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -281,10 +281,10 @@ public class RenderingController implements IRenderingController
         worldrenderer.pos(box.getUpperLeftCoordinate().getX(), box.getLowerRightCoordinate().getY(), (double) z).color(f7, f6, f5, f4).endVertex();
         worldrenderer.pos(box.getLowerRightCoordinate().getX(), box.getLowerRightCoordinate().getY(), (double) z).color(f7, f6, f5, f4).endVertex();
         tessellator.draw();
-        GlStateManager.shadeModel(7424);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
+        IOpenGl.shadeModel(7424);
+        IOpenGl.disableBlend();
+        IOpenGl.enableAlpha();
+        IOpenGl.enableTexture2D();
     }
 
     @Override
@@ -315,21 +315,21 @@ public class RenderingController implements IRenderingController
         float f3 = color.getAlphaFloat();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-          GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-          GlStateManager.SourceFactor.ONE,
-          GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(f, f1, f2, f3);
+        IOpenGl.enableBlend();
+        IOpenGl.disableTexture2D();
+        IOpenGl.tryBlendFuncSeparate(IOpenGl.SourceFactor.SRC_ALPHA,
+          IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA,
+          IOpenGl.SourceFactor.ONE,
+          IOpenGl.DestFactor.ZERO);
+        IOpenGl.color(f, f1, f2, f3);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos(relativeLeft, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeTop, 0.0D).endVertex();
         bufferbuilder.pos(relativeLeft, relativeTop, 0.0D).endVertex();
         tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
+        IOpenGl.enableTexture2D();
+        IOpenGl.disableBlend();
     }
 
     /**
@@ -342,8 +342,8 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawItemStack(@NotNull ItemStack stack, int x, int y)
     {
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
+        IOpenGl.enableLighting();
+        IOpenGl.enableDepth();
         RenderHelper.enableGUIStandardItemLighting();
 
         FontRenderer font = null;
@@ -361,8 +361,8 @@ public class RenderingController implements IRenderingController
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, "");
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.disableLighting();
+        IOpenGl.enableDepth();
+        IOpenGl.disableLighting();
     }
 
     /**
@@ -376,8 +376,8 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText)
     {
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
+        IOpenGl.enableLighting();
+        IOpenGl.enableDepth();
         RenderHelper.enableGUIStandardItemLighting();
 
         FontRenderer font = null;
@@ -395,8 +395,8 @@ public class RenderingController implements IRenderingController
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, altText);
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.disableLighting();
+        IOpenGl.enableDepth();
+        IOpenGl.disableLighting();
     }
 
     @Override
@@ -483,11 +483,11 @@ public class RenderingController implements IRenderingController
             }
         };
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0f, 0f, 0f);
-        GlStateManager.scale(14.0F, 14.0F, -14.0F);
-        GlStateManager.rotate(210.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
+        IOpenGl.pushMatrix();
+        IOpenGl.translate(0f, 0f, 0f);
+        IOpenGl.scale(14.0F, 14.0F, -14.0F);
+        IOpenGl.rotate(210.0F, 1.0F, 0.0F, 0.0F);
+        IOpenGl.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
@@ -507,7 +507,7 @@ public class RenderingController implements IRenderingController
         }
         Tessellator.getInstance().draw();
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     @Override
@@ -582,10 +582,10 @@ public class RenderingController implements IRenderingController
 
             if (textureatlassprite != null)
             {
-                GlStateManager.disableLighting();
+                IOpenGl.disableLighting();
                 gui.mc.getTextureManager().bindTexture(slotIn.getBackgroundLocation());
                 gui.drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
-                GlStateManager.enableLighting();
+                IOpenGl.enableLighting();
                 isDraggingStartSlot = true;
             }
         }
@@ -597,7 +597,7 @@ public class RenderingController implements IRenderingController
                 drawRect(x, y, x + 16, y + 16, new Color(-2130706433));
             }
 
-            GlStateManager.enableDepth();
+            IOpenGl.enableDepth();
             drawItemStack(itemstack, x, y, s);
         }
 
@@ -632,15 +632,15 @@ public class RenderingController implements IRenderingController
         }
 
         gui.hoveredSlot = gui.inventorySlots.getSlot(slot.getSlotIndex());
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
+        IOpenGl.disableLighting();
+        IOpenGl.disableDepth();
         int x = 1;
         int y = 1;
-        GlStateManager.colorMask(true, true, true, false);
+        IOpenGl.colorMask(true, true, true, false);
         gui.drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
-        GlStateManager.colorMask(true, true, true, true);
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
+        IOpenGl.colorMask(true, true, true, true);
+        IOpenGl.enableLighting();
+        IOpenGl.enableDepth();
     }
 
     /**

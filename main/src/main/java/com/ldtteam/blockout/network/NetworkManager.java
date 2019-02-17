@@ -3,24 +3,26 @@ package com.ldtteam.blockout.network;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.entity.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.networking.endpoint.INetworkEndpoint;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import com.ldtteam.jvoxelizer.networking.utils.target.INetworkTargetPoint;
+import com.ldtteam.jvoxelizer.threading.IExecutor;
+import com.ldtteam.jvoxelizer.util.distribution.IDistribution;
 
 import java.util.UUID;
 
 public class NetworkManager
 {
-    private static SimpleNetworkWrapper network;
+    private static INetworkEndpoint network;
 
     public static void init()
     {
-        network = new SimpleNetworkWrapper(Constants.NETWORK_NAME);
+        network = INetworkEndpoint.create(Constants.NETWORK_NAME);
 
-        network.registerMessage(BlockOutNetworkMessageWrapper.class, BlockOutNetworkMessageWrapper.class, 0, Side.SERVER);
-        network.registerMessage(BlockOutNetworkMessageWrapper.class, BlockOutNetworkMessageWrapper.class, 1, Side.CLIENT);
+        network.registerMessage(BlockOutNetworkMessageWrapper.class, BlockOutNetworkMessageWrapper.class, 0, IDistribution.client());
+        network.registerMessage(BlockOutNetworkMessageWrapper.class, BlockOutNetworkMessageWrapper.class, 1, IDistribution.server());
     }
 
     /**
@@ -46,7 +48,7 @@ public class NetworkManager
      */
     public static void sendTo(IBlockOutServerToClientMessage message, UUID uuid)
     {
-        sendTo(message, FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid));
+        sendTo(message, IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid));
     }
 
     /**
@@ -55,7 +57,7 @@ public class NetworkManager
      * @param message The message to send
      * @param player  The player to send it to
      */
-    public static void sendTo(IBlockOutServerToClientMessage message, EntityPlayerMP player)
+    public static void sendTo(IBlockOutServerToClientMessage message, IMultiplayerPlayerEntity player)
     {
         if (network == null)
         {
@@ -72,7 +74,7 @@ public class NetworkManager
      * @param point   The {
      *                if (network == null) return;@link NetworkRegistry.TargetPoint} around which to send
      */
-    public static void sendToAllAround(IBlockOutServerToClientMessage message, NetworkRegistry.TargetPoint point)
+    public static void sendToAllAround(IBlockOutServerToClientMessage message, INetworkTargetPoint point)
     {
         if (network == null)
         {
@@ -111,5 +113,15 @@ public class NetworkManager
         }
 
         network.sendToServer(new BlockOutNetworkMessageWrapper(message));
+    }
+
+    public static IExecutor getExecutor(final IMessageContext context)
+    {
+        if (network == null)
+        {
+            return null;
+        }
+
+        return network.getExecutorFromContext(context);
     }
 }

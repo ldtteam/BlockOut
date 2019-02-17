@@ -6,13 +6,8 @@ import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.itemstack.ItemStackHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import com.ldtteam.jvoxelizer.inventory.IInventoryContainer;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -20,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockOutContainer extends Container
+public class BlockOutContainer implements IInventoryContainer
 {
     @NotNull
     private final IGuiKey        key;
@@ -31,7 +26,7 @@ public class BlockOutContainer extends Container
     {
         this.key = key;
         this.root = root;
-        this.windowId = windowId;
+        this.setWindowId(windowId);
 
         initializeSlots();
     }

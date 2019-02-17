@@ -17,7 +17,7 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -195,7 +195,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
             return;
         }
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         if (getOrientation() == Orientation.TOP_BOTTOM)
         {
@@ -205,7 +205,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
             if (maxOffset < 1)
             {
-                GlStateManager.popMatrix();
+                IOpenGl.popMatrix();
                 return;
             }
 
@@ -230,7 +230,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
             if (maxOffset < 1)
             {
-                GlStateManager.popMatrix();
+                IOpenGl.popMatrix();
                 return;
             }
 
@@ -248,7 +248,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
             drawSrollbarForeground(controller, scrollBarBox);
         }
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     @Override
@@ -267,13 +267,13 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     {
         final ImageResource resource = getScrollBarBackground();
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.color(1, 1, 1);
+        IOpenGl.color(1, 1, 1);
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(scrollBox.getLocalOrigin(),
@@ -282,23 +282,23 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
+        IOpenGl.disableBlend();
+        IOpenGl.disableAlpha();
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     private void drawSrollbarForeground(@NotNull final IRenderingController controller, @NotNull final BoundingBox scrollBarBox)
     {
         final ImageResource resource = getScrollBarForeground();
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.color(1, 1, 1);
+        IOpenGl.color(1, 1, 1);
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(scrollBarBox.getLocalOrigin(),
@@ -307,10 +307,10 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
+        IOpenGl.disableBlend();
+        IOpenGl.disableAlpha();
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     @NotNull

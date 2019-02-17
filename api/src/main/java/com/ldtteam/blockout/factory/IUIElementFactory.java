@@ -29,7 +29,7 @@ public interface IUIElementFactory<U extends IUIElement>
      * @return The type.
      */
     @NotNull
-    IIdentifier getTypeName();
+    String getTypeName();
 
     /**
      * Creates a new {@link U} from the given {@link IUIElementData}.

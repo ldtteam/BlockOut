@@ -9,7 +9,7 @@ import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +35,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        IOpenGl.pushMatrix();
+        IOpenGl.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -44,7 +44,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawBackground(renderingController);
         }
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {
@@ -67,8 +67,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        IOpenGl.pushMatrix();
+        IOpenGl.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -76,7 +76,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawForeground(renderingController);
         }
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {

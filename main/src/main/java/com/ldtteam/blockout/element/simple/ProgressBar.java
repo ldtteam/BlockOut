@@ -15,7 +15,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,7 +112,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         controller.getScissoringController().focus(this);
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         final ImageResource backGround = getBackGround();
         final ImageResource foreGround = getForeGround();
@@ -124,7 +124,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
         final Vector2d backgroundScalingFactor = backGround.getScalingFactor(absoluteBox.getSize());
 
-        GlStateManager.scale(backgroundScalingFactor.getX(), backgroundScalingFactor.getY(), 1f);
+        IOpenGl.scale(backgroundScalingFactor.getX(), backgroundScalingFactor.getY(), 1f);
 
         controller.bindTexture(backGround.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -133,14 +133,14 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
           backGround.getSize(),
           backGround.getFileSize());
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
         controller.getScissoringController().pop();
 
         controller.getScissoringController().push(scissoredForeground);
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         final Vector2d foregroundScalingFactor = foreGround.getScalingFactor(scissoredForeground.getSize());
-        GlStateManager.scale(foregroundScalingFactor.getX(), foregroundScalingFactor.getY(), 1f);
+        IOpenGl.scale(foregroundScalingFactor.getX(), foregroundScalingFactor.getY(), 1f);
 
         controller.bindTexture(foreGround.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -149,7 +149,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
           foreGround.getSize(),
           foreGround.getFileSize());
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
         controller.getScissoringController().pop();
     }
 

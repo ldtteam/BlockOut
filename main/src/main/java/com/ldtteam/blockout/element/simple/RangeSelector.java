@@ -15,7 +15,7 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -236,11 +236,11 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(IOpenGl.SourceFactor.ONE_MINUS_SRC_ALPHA, IOpenGl.DestFactor.DST_ALPHA);
 
         final ImageResource leftBackgroundResource = getLeftBackgroundTextureResource();
         final ImageResource selectorRegionBackgroundResource = getSelectedRegionBackgroundTextureResource();
@@ -270,7 +270,7 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         final Vector2d rightBackgroundSize = new Vector2d(getLocalBoundingBox().getSize().getX() - rightBackgroundOffset.getX(), height).nullifyNegatives();
         drawImageResource(controller, rightBackgroundResource, rightBackgroundOffset, rightBackgroundSize);
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     public ImageResource getLeftBackgroundTextureResource()

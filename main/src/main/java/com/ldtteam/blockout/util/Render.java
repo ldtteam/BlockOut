@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.util;
 
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -63,9 +63,9 @@ public final class Render
         final BufferBuilder vertexBuffer = tessellator.getBuffer();
 
         vertexBuffer.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
-        GlStateManager.disableTexture2D();
+        IOpenGl.disableTexture2D();
         GL11.glLineWidth(lineWidth);
-        GlStateManager.color(r, g, b, a);
+        IOpenGl.color(r, g, b, a);
 
         //Since our points do not have any u,v this seems to be the correct code
         vertexBuffer.pos(x1, y2, 0.0D).endVertex();
@@ -74,6 +74,6 @@ public final class Render
         vertexBuffer.pos(x1, y1, 0.0D).endVertex();
 
         tessellator.draw();
-        GlStateManager.enableTexture2D();
+        IOpenGl.enableTexture2D();
     }
 }

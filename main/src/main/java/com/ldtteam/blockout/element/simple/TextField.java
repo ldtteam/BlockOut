@@ -31,7 +31,7 @@ import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -239,11 +239,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     @SideOnly(Side.CLIENT)
     public void doDraw(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         final int x = (int) this.getLocalBoundingBox().getLocalOrigin().getX();
         final int y = (int) this.getLocalBoundingBox().getLocalOrigin().getY();
@@ -323,9 +323,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             this.drawSelectionBox(x, width, cursorDrawX, drawStartY - 1, selectionDrawEnd - 1, drawStartY + 1 + getFontRenderer().FONT_HEIGHT, selectionColor);
         }
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.popMatrix();
+        IOpenGl.disableBlend();
+        IOpenGl.disableAlpha();
+        IOpenGl.popMatrix();
     }
 
     public boolean shouldDrawBackground()
@@ -496,17 +496,17 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         selectionColor.performOpenGLColoring();
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableColorLogic();
-        GlStateManager.colorLogicOp(GlStateManager.LogicOp.OR_REVERSE);
+        IOpenGl.disableTexture2D();
+        IOpenGl.enableColorLogic();
+        IOpenGl.colorLogicOp(IOpenGl.LogicOp.OR_REVERSE);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos((double) startX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) startY, 0.0D).endVertex();
         bufferbuilder.pos((double) startX, (double) startY, 0.0D).endVertex();
         tessellator.draw();
-        GlStateManager.disableColorLogic();
-        GlStateManager.enableTexture2D();
+        IOpenGl.disableColorLogic();
+        IOpenGl.enableTexture2D();
     }
 
     public void setShouldDrawBackground(final boolean drawBackground)

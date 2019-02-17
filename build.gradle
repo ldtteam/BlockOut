@@ -110,6 +110,7 @@ project(':BlockOut - Main') {
 
     dependencies {
         shade project(':BlockOut - Api')
+        compile 'io.netty:netty-all:4.1.9.Final'
     }
 
     jar {

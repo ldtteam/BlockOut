@@ -34,7 +34,7 @@ public interface IUIElement extends IDependencyReceiver
      * @return The type of the element.
      */
     @NotNull
-    IIdentifier getType();
+    String getType();
 
     /**
      * Gets a resource form the style manager.

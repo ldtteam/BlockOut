@@ -13,8 +13,8 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,12 +36,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             super(controlId, data, controlClass);
         }
 
-        public SlotConstructionDataBuilder withDependentInventoryId(@NotNull final IDependencyObject<ResourceLocation> inventoryId)
+        public SlotConstructionDataBuilder withDependentInventoryId(@NotNull final IDependencyObject<IIdentifier> inventoryId)
         {
             return withDependency("inventoryId", inventoryId);
         }
 
-        public SlotConstructionDataBuilder withInventoryId(@NotNull final ResourceLocation inventoryId)
+        public SlotConstructionDataBuilder withInventoryId(@NotNull final IIdentifier inventoryId)
         {
             return withDependency("inventoryId", DependencyObjectHelper.createFromValue(inventoryId));
         }
@@ -56,44 +56,30 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             return withDependency("inventoryIndex", DependencyObjectHelper.createFromValue(inventoryIndex));
         }
 
-        public SlotConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
+        public SlotConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> backgroundImageResource)
         {
             return withDependency("backgroundImageResource", backgroundImageResource);
         }
 
-        public SlotConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
+        public SlotConstructionDataBuilder withBackgroundImageResource(@NotNull final IIdentifier backgroundImageResource)
         {
             return withDependency("backgroundImageResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
         }
     }
 
     @NotNull
-    public  IDependencyObject<ResourceLocation> inventoryId;
+    public  IDependencyObject<IIdentifier> inventoryId;
     @NotNull
     public  IDependencyObject<Integer>          inventoryIndex;
     @NotNull
-    public  IDependencyObject<ResourceLocation> backgroundImageResource;
+    public  IDependencyObject<IIdentifier> backgroundImageResource;
     @NotNull
     private int                                 slotIndex;
 
     public Slot(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> inventoryId,
-      @NotNull final IDependencyObject<Integer> inventoryIndex,
-      @NotNull final IDependencyObject<ResourceLocation> backgroundImage)
-    {
-        super(KEY_SLOT, style, id, parent);
-        this.inventoryId = inventoryId;
-        this.inventoryIndex = inventoryIndex;
-        this.backgroundImageResource = backgroundImage;
-    }
-
-    public Slot(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -101,9 +87,9 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> inventoryId,
+      @NotNull final IDependencyObject<IIdentifier> inventoryId,
       @NotNull final IDependencyObject<Integer> inventoryIndex,
-      @NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
+      @NotNull final IDependencyObject<IIdentifier> backgroundImageResource)
     {
         super(KEY_SLOT, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.inventoryId = inventoryId;
@@ -137,12 +123,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         final ImageResource resource = getBackgroundImage();
         final Vector2d scalingFactor = resource.getScalingFactor(size);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableAlpha();
-        GlStateManager.enableBlend();
+        IOpenGl.pushMatrix();
+        IOpenGl.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
+        IOpenGl.disableLighting();
+        IOpenGl.disableDepth();
+        IOpenGl.disableAlpha();
+        IOpenGl.enableBlend();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -151,11 +137,11 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.popMatrix();
+        IOpenGl.disableBlend();
+        IOpenGl.enableAlpha();
+        IOpenGl.enableLighting();
+        IOpenGl.enableDepth();
+        IOpenGl.popMatrix();
 
         controller.drawSlotContent(this);
         controller.drawSlotMouseOverlay(this);
@@ -174,23 +160,23 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    public ResourceLocation getBackgroundImageResource()
+    public IIdentifier getBackgroundImageResource()
     {
         return backgroundImageResource.get(this);
     }
 
-    void setBackgroundImageResource(@NotNull final ResourceLocation location)
+    void setBackgroundImageResource(@NotNull final IIdentifier location)
     {
         backgroundImageResource.set(this, location);
     }
 
     @NotNull
-    public ResourceLocation getInventoryId()
+    public IIdentifier getInventoryId()
     {
         return inventoryId.get(this);
     }
 
-    void setInventoryId(@NotNull final ResourceLocation inventoryId)
+    void setInventoryId(@NotNull final IIdentifier inventoryId)
     {
         this.inventoryId.set(this, inventoryId);
     }
@@ -223,9 +209,9 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Slot.class, KEY_SLOT, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<ResourceLocation> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, MISSING);
+                final IDependencyObject<IIdentifier> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, IIdentifier.create(MISSING));
                 final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1);
-                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
 
                 final Slot element = new Slot(
                   id,

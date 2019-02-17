@@ -7,7 +7,7 @@ import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IOpenGl;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -59,19 +59,19 @@ public class ScissoringController implements IScissoringController
 
         if (_debugEnabled)
         {
-            GlStateManager.pushMatrix();
-            GlStateManager.enableAlpha();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            IOpenGl.pushMatrix();
+            IOpenGl.enableAlpha();
+            IOpenGl.enableBlend();
+            IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
             renderingController.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             renderingController.drawTexturedModalRect(new Vector2d(-10, -10),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
-            GlStateManager.disableBlend();
-            GlStateManager.disableAlpha();
-            GlStateManager.popMatrix();
+            IOpenGl.disableBlend();
+            IOpenGl.disableAlpha();
+            IOpenGl.popMatrix();
         }
     }
 
