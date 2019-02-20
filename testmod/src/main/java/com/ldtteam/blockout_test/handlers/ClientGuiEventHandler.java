@@ -47,7 +47,7 @@ public class ClientGuiEventHandler
     {
         BlockOut.getBlockOut().getProxy().getClientSideOnlyGuiController().openUI(
           Minecraft.getMinecraft().player,
-          iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(new ResourceLocation("blockout_test:gui/button_click_test.json"))
+          iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(new ResourceLocation("blockout_test:guitemp/button_click_test.json"))
                               .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                   .withControl(
                                                                                     "test_click",

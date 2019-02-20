@@ -1,7 +1,9 @@
 package com.ldtteam.blockout.util.xml;
 
 import com.ldtteam.blockout.util.NBTType;
+import com.ldtteam.jvoxelizer.util.nbt.*;
 import net.minecraft.nbt.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Node;
 
@@ -22,8 +24,8 @@ public final class XMLToNBT
     private static final Pattern SHORT_PATTERN           = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)s", 2);
     private static final Pattern INT_PATTERN             = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)");
 
-    private static final Map<Pattern, NBTType>                 TYPE_MATCHING_PATTERNS    = new LinkedHashMap<>();
-    private static final Map<NBTType, Function<Node, NBTBase>> TYPE_CONVERSION_FUNCTIONS = new HashMap<>();
+    private static final Map<Pattern, NBTType>                  TYPE_MATCHING_PATTERNS    = new LinkedHashMap<>();
+    private static final Map<NBTType, Function<Node, INBTBase>> TYPE_CONVERSION_FUNCTIONS = new HashMap<>();
     static
     {
         TYPE_MATCHING_PATTERNS.put(DOUBLE_PATTERN_NOSUFFIX, NBTType.TAG_DOUBLE);
@@ -37,16 +39,16 @@ public final class XMLToNBT
 
     static
     {
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> new NBTTagByte(Byte.parseByte(byteString.replace("b", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> INBTBase.create(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, XMLToNBT::convertToByteArray);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, XMLToNBT::convertToNBTTagCompound);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> new NBTTagDouble(Double.parseDouble(doubleString.replace("d", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> new NBTTagFloat(Float.parseFloat(floatString.replace("f", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> new NBTTagShort(Short.parseShort(shortString.replace("s", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> new NBTTagLong(Long.parseLong(longString.replace("l", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> new NBTTagInt(Integer.parseInt(intString))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> INBTBase.create(Double.parseDouble(doubleString.replace("d", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> INBTBase.create(Float.parseFloat(floatString.replace("f", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> INBTBase.create(Short.parseShort(shortString.replace("s", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> INBTBase.create(Long.parseLong(longString.replace("l", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> INBTBase.create(Integer.parseInt(intString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, XMLToNBT::convertToList);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (node) -> convertFromValue(node, NBTTagString::new));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (node) -> convertFromValue(node, INBTBase::create));
     }
     private XMLToNBT()
     {
@@ -61,25 +63,26 @@ public final class XMLToNBT
      *
      * @throws IllegalArgumentException when the XML syntax does not match.
      */
-    public static final NBTBase fromXML(@NotNull final Node node) throws IllegalArgumentException
+    public static final INBTBase fromXML(@NotNull final Node node) throws IllegalArgumentException
     {
         return TYPE_CONVERSION_FUNCTIONS.get(getNBTType(node)).apply(node);
     }
 
-    private static NBTBase convertToByteArray(@NotNull final Node node)
+    private static INBTBase convertToByteArray(@NotNull final Node node)
     {
-        return new NBTTagByteArray(
-          XMLStreamSupport.streamChildren(node)
-            .filter(child -> child.getNodeType() != 8)
-            .filter(child -> child.getNodeType() != 3)
-            .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
-            .map(nbtBase -> (NBTTagByte) nbtBase)
-            .map(NBTTagByte::getByte)
-            .collect(Collectors.toList())
-        );
+        final byte[] bytes = ArrayUtils.toPrimitive(XMLStreamSupport.streamChildren(node)
+                               .filter(child -> child.getNodeType() != 8)
+                               .filter(child -> child.getNodeType() != 3)
+                               .map(TYPE_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE)::apply)
+                               .map(nbtBase -> (INBTByte) nbtBase)
+                               .map(INBTByte::getValue)
+                               .collect(Collectors.toList())
+                               .toArray(new Byte[0]));
+
+        return INBTBase.create(bytes);
     }
 
-    private static <T extends NBTBase> NBTBase convertFromValue(@NotNull final Node node, @NotNull final Function<String, T> converter)
+    private static <T extends INBTBase> INBTBase convertFromValue(@NotNull final Node node, @NotNull final Function<String, T> converter)
     {
         if (node.getAttributes().getLength() != 1)
         {
@@ -91,15 +94,13 @@ public final class XMLToNBT
         return converter.apply(valueNode.getNodeValue());
     }
 
-    private static NBTBase convertToList(@NotNull final Node node)
+    private static INBTBase convertToList(@NotNull final Node node)
     {
-        final NBTTagList list = new NBTTagList();
-
-        XMLStreamSupport.streamChildren(node)
-          .filter(child -> child.getNodeType() != 8)
-          .filter(child -> child.getNodeType() != 3)
-          .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
-          .forEach(list::appendTag);
+        final INBTList list = INBTBase.create(XMLStreamSupport.streamChildren(node)
+                                                .filter(child -> child.getNodeType() != 8)
+                                                .filter(child -> child.getNodeType() != 3)
+                                                .map(child -> TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child))
+                                                .collect(Collectors.toList()));
 
         return list;
     }
@@ -178,23 +179,23 @@ public final class XMLToNBT
                  .orElse(NBTType.TAG_STRING);
     }
 
-    private static final NBTBase convertToNBTTagCompound(@NotNull final Node node)
+    private static final INBTBase convertToNBTTagCompound(@NotNull final Node node)
     {
-        final NBTTagCompound compound = new NBTTagCompound();
+        final INBTCompound compound = INBTBase.create();
 
         XMLStreamSupport.streamChildren(node)
           .filter(child -> child.getNodeType() != 8)
           .filter(child -> child.getNodeType() != 3)
           .forEach(child -> {
-              final NBTBase nbtBase = TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child);
+              final INBTBase nbtBase = TYPE_CONVERSION_FUNCTIONS.get(getNBTType(child)).apply(child);
               final String name = child.getNodeName();
 
-              if (compound.hasKey(name))
+              if (compound.containsKey(name))
               {
                   throw new IllegalArgumentException(String.format("Given node contains multiple entries with the same key: %s", name));
               }
 
-              compound.setTag(name, nbtBase);
+              compound.put(name, nbtBase);
           });
 
         return compound;

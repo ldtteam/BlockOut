@@ -29,7 +29,7 @@ public class GrowingListWithButtonTest implements IBlockOutUITest
         final ArrayList<BindingTestContext> list = Lists.newArrayList();
 
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                              .ofFile(new ResourceLocation("blockout_test:gui/dynamic_list.json"))
+                                                                                              .ofFile(new ResourceLocation("blockout_test:guitemp/dynamic_list.json"))
                                                                                               .usingData(b -> b
                                                                                                                 .withControl("add_button",
                                                                                                                   Button.ButtonConstructionDataBuilder.class,

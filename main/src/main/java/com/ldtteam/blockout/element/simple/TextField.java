@@ -25,37 +25,32 @@ import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorP
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.color.ColorUtils;
+import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.guitemp.IGuiScreen;
+import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.LogicOp;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
+import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
 
-import static com.ldtteam.blockout.network.NetworkManager.sendTo;
 import static com.ldtteam.blockout.network.NetworkManager.sendToServer;
 import static com.ldtteam.blockout.util.Constants.Controls.TextField.*;
 
 public class TextField extends AbstractSimpleUIElement implements IDrawableUIElement, IClientSideClickAcceptingUIElement, IClientSideKeyAcceptingUIElement
 {
-    /**
-     * Texture resource location.
-     */
-    private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/widgets.png");
-
     /**
      * The current cursor position.
      */
@@ -97,22 +92,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private int                                         scrollOffset = -1;
 
     /**
-     * Public constructor to build textField.
-     *
-     * @param style  the used style.
-     * @param id     the unique id.
-     * @param parent the parent.
-     */
-    public TextField(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent)
-    {
-        super(KEY_TEXT_FIELD, style, id, parent);
-        this.contents = DependencyObjectHelper.createFromValue("");
-    }
-
-    /**
      * Private constructor for internal use.
      *
      * @param styleId        the style.
@@ -133,7 +112,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     private TextField(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -222,12 +201,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final int maxTextLength =
-          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
+          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().getFontHeight()));
 
         controller.getScissoringController().focus(this);
 
@@ -236,14 +214,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         controller.getScissoringController().pop();
     }
 
-    @SideOnly(Side.CLIENT)
     public void doDraw(@NotNull final IRenderingController controller)
     {
         IOpenGl.pushMatrix();
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.disableStandardItemLighting();
         IOpenGl.enableAlpha();
         IOpenGl.enableBlend();
-        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
         final int x = (int) this.getLocalBoundingBox().getLocalOrigin().getX();
         final int y = (int) this.getLocalBoundingBox().getLocalOrigin().getY();
@@ -251,14 +228,14 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         final int height = (int) this.getLocalBoundingBox().getSize().getY();
         final String contents = getContents();
 
-        final Color outerBackgroundColor = ColorUtils.convertToColor(getOuterBackgroundColor());
-        final Color innerBackgroundColor = ColorUtils.convertToColor(getInnerBackgroundColor());
+        final IColor outerBackgroundColor = ColorUtils.convertToColor(getOuterBackgroundColor());
+        final IColor innerBackgroundColor = ColorUtils.convertToColor(getInnerBackgroundColor());
 
-        final Color enabledColor = ColorUtils.convertToColor(getEnabledColor());
-        final Color disabledColor = ColorUtils.convertToColor(getDisabledColor());
+        final IColor enabledColor = ColorUtils.convertToColor(getEnabledColor());
+        final IColor disabledColor = ColorUtils.convertToColor(getDisabledColor());
 
-        final Color cursorColor = ColorUtils.convertToColor(getCursorColor());
-        final Color selectionColor = ColorUtils.convertToColor(getSelectionColor());
+        final IColor cursorColor = ColorUtils.convertToColor(getCursorColor());
+        final IColor selectionColor = ColorUtils.convertToColor(getSelectionColor());
 
         if (shouldDrawBackground())
         {
@@ -266,7 +243,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             controller.drawRect(x, y, x + width, y + height, innerBackgroundColor);
         }
 
-        Color fontColor = this.isEnabled() ? enabledColor : disabledColor;
+        IColor fontColor = this.isEnabled() ? enabledColor : disabledColor;
         int cursorScrollOffset = this.cursorPosition - this.scrollOffset;
         int selectScrollOffset = this.selectionEnd - this.scrollOffset;
         String visibleString = getFontRenderer().trimStringToWidth(contents.substring(this.scrollOffset), width);
@@ -309,7 +286,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             if (drawFullCursor)
             {
-                controller.drawRect(cursorDrawX, drawStartY - 1, cursorDrawX + 1, drawStartY + 1 + getFontRenderer().FONT_HEIGHT, cursorColor);
+                controller.drawRect(cursorDrawX, drawStartY - 1, cursorDrawX + 1, drawStartY + 1 + getFontRenderer().getFontHeight(), cursorColor);
             }
             else
             {
@@ -320,7 +297,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         if (selectScrollOffset != cursorScrollOffset)
         {
             int selectionDrawEnd = drawStartX + getFontRenderer().getStringWidth(visibleString.substring(0, selectScrollOffset));
-            this.drawSelectionBox(x, width, cursorDrawX, drawStartY - 1, selectionDrawEnd - 1, drawStartY + 1 + getFontRenderer().FONT_HEIGHT, selectionColor);
+            this.drawSelectionBox(x, width, cursorDrawX, drawStartY - 1, selectionDrawEnd - 1, drawStartY + 1 + getFontRenderer().getFontHeight(), selectionColor);
         }
 
         IOpenGl.disableBlend();
@@ -333,19 +310,16 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         return doBackgroundDrawing.get(this);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
     }
 
-    @SideOnly(Side.CLIENT)
-    private FontRenderer getFontRenderer()
+    private IFontRenderer getFontRenderer()
     {
         return BlockOut.getBlockOut().getProxy().getFontRenderer();
     }
 
-    @SideOnly(Side.CLIENT)
     private long getCursorCounter()
     {
         return ClientTickManager.getInstance().getTickCount();
@@ -466,8 +440,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Draws the blue selection box.
      */
-    @SideOnly(Side.CLIENT)
-    private void drawSelectionBox(int x, int width, int startX, int startY, int endX, int endY, Color selectionColor)
+    private void drawSelectionBox(int x, int width, int startX, int startY, int endX, int endY, IColor selectionColor)
     {
         if (startX < endX)
         {
@@ -493,13 +466,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             startX = x + width;
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder bufferbuilder = tessellator.getBuffer();
         selectionColor.performOpenGLColoring();
         IOpenGl.disableTexture2D();
         IOpenGl.enableColorLogic();
-        IOpenGl.colorLogicOp(IOpenGl.LogicOp.OR_REVERSE);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        IOpenGl.colorLogicOp(LogicOp.OR_REVERSE);
+        bufferbuilder.begin(7, IVertexFormat.position());
         bufferbuilder.pos((double) startX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) startY, 0.0D).endVertex();
@@ -519,12 +492,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param str the string to write.
      */
-    @SideOnly(Side.CLIENT)
     private void writeText(final String str)
     {
-        final FontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
+        final IFontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
         final int maxTextLength =
-          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().FONT_HEIGHT));
+          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().getFontHeight()));
 
 
         final int insertAt = Math.min(cursorPosition, selectionEnd);
@@ -725,7 +697,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      * @param c   the character.
      * @param key the key.
      */
-    @SideOnly(Side.CLIENT)
     private void handleKey(final char c, final KeyboardKey key)
     {
         switch (key)
@@ -761,7 +732,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Handle tab to jump to next control.
      */
-    @SideOnly(Side.CLIENT)
     private void handleTab()
     {
         final Optional<IUIElement> optionalNextElement =
@@ -779,14 +749,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the clicked key.
      */
-    @SideOnly(Side.CLIENT)
     private void handleArrowKeys(final KeyboardKey key)
     {
         final int direction = (key == KeyboardKey.KEY_LEFT) ? -1 : 1;
 
-        if (GuiScreen.isShiftKeyDown())
+        if (IGuiScreen.isShiftKeyDown())
         {
-            if (GuiScreen.isCtrlKeyDown())
+            if (IGuiScreen.isCtrlKeyDown())
             {
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getNthWordFromCursor(direction), getSelectionEnd()));
             }
@@ -795,7 +764,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition + direction, getSelectionEnd()));
             }
         }
-        else if (GuiScreen.isCtrlKeyDown())
+        else if (IGuiScreen.isCtrlKeyDown())
         {
             sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getNthWordFromCursor(direction), getNthWordFromCursor(direction)));
         }
@@ -810,12 +779,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the key specifics.
      */
-    @SideOnly(Side.CLIENT)
     private void handleHomeEnd(final KeyboardKey key)
     {
         final int position = (key == KeyboardKey.KEY_HOME) ? 0 : getContents().length();
 
-        if (GuiScreen.isShiftKeyDown())
+        if (IGuiScreen.isShiftKeyDown())
         {
             sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), position, getSelectionEnd()));
         }
@@ -830,12 +798,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      *
      * @param key the pressed key.
      */
-    @SideOnly(Side.CLIENT)
     private void handleDelete(final KeyboardKey key)
     {
         final int direction = (key == KeyboardKey.KEY_BACK) ? -1 : 1;
 
-        if (GuiScreen.isCtrlKeyDown())
+        if (IGuiScreen.isCtrlKeyDown())
         {
             deleteWords(direction);
         }
@@ -845,14 +812,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public boolean canAcceptMouseInputClient(final int localX, final int localY, final MouseButton button)
     {
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public boolean onMouseClickBeginClient(final int localX, final int localY, final MouseButton button)
     {
@@ -869,7 +834,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public boolean onMouseClickMoveClient(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
@@ -887,7 +851,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public boolean onKeyPressedClient(final int character, final KeyboardKey key)
     {
@@ -897,13 +860,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getContents().length(), 0));
                 break;
             case 3:
-                GuiScreen.setClipboardString(getSelectedText());
+                IGuiScreen.setClipboardString(getSelectedText());
                 break;
             case 22:
-                writeText(GuiScreen.getClipboardString());
+                writeText(IGuiScreen.getClipboardString());
                 break;
             case 24:
-                GuiScreen.setClipboardString(getSelectedText());
+                IGuiScreen.setClipboardString(getSelectedText());
                 writeText("");
                 break;
             default:

@@ -41,12 +41,12 @@ public class CommonWebFileBasedGuiDefinitionLoader implements IGuiDefinitionLoad
         }
         catch (IOException e)
         {
-            Log.getLogger().error("Failed to download the gui definition from: " + url.toString(), e);
+            Log.getLogger().error("Failed to download the guitemp definition from: " + url.toString(), e);
             return "";
         }
         catch (URISyntaxException e)
         {
-            Log.getLogger().error("Failed to parse the url for the gui definition from: " + url.toString(), e);
+            Log.getLogger().error("Failed to parse the url for the guitemp definition from: " + url.toString(), e);
             return "";
         }
     }

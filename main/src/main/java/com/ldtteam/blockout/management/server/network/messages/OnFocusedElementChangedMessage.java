@@ -4,7 +4,6 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.gui.BlockOutGui;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +56,7 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
         }
         else
         {
-            throw new IllegalStateException("Server thinks a BlockOut gui was open.");
+            throw new IllegalStateException("Server thinks a BlockOut guitemp was open.");
         }
     }
 }

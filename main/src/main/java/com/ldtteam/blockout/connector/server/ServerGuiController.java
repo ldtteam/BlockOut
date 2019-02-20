@@ -14,12 +14,12 @@ import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEvent;
+import com.ldtteam.jvoxelizer.entity.player.IFakePlayer;
+import com.ldtteam.jvoxelizer.entity.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.entity.player.IPlayerEntity;
+import com.ldtteam.jvoxelizer.event.manager.IEventManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class ServerGuiController implements IGuiController
 
     @Override
     public void openUI(
-      @NotNull final EntityPlayer player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
+      @NotNull final IPlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {
         final CommonGuiKeyBuilder builder = new CommonGuiKeyBuilder();
         Arrays.stream(guiKeyBuilderConsumer).forEach(iGuiKeyBuilderConsumer -> iGuiKeyBuilderConsumer.accept(builder));
@@ -44,9 +44,9 @@ public class ServerGuiController implements IGuiController
     }
 
     @Override
-    public void openUI(@NotNull final EntityPlayer player, @NotNull final IGuiKey key)
+    public void openUI(@NotNull final IPlayerEntity player, @NotNull final IGuiKey key)
     {
-        openUI(player.getUniqueID(), key);
+        openUI(player.getId(), key);
     }
 
     @Override
@@ -63,14 +63,14 @@ public class ServerGuiController implements IGuiController
     {
         closeUI(playerId);
 
-        final EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
+        final IMultiplayerPlayerEntity player = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(playerId);
         if (player == null)
         {
             Log.getLogger().warn("Failed to open UI for: " + playerId.toString() + ". Could not Identify player.");
             return;
         }
 
-        if (player instanceof FakePlayer)
+        if (player instanceof IFakePlayer)
         {
             //NOOP Return.
             return;
@@ -86,7 +86,7 @@ public class ServerGuiController implements IGuiController
             }
             catch (IllegalArgumentException ex)
             {
-                Log.getLogger().error("Failed to build gui for: " + playerId, ex);
+                Log.getLogger().error("Failed to build guitemp for: " + playerId, ex);
                 return;
             }
 
@@ -105,22 +105,22 @@ public class ServerGuiController implements IGuiController
     }
 
     @Override
-    public void closeUI(@NotNull final EntityPlayer player)
+    public void closeUI(@NotNull final IPlayerEntity player)
     {
-        closeUI(player.getUniqueID());
+        closeUI(player.getId());
     }
 
     @Override
     public void closeUI(@NotNull final UUID playerId)
     {
-        final EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(playerId);
+        final IMultiplayerPlayerEntity player = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(playerId);
         if (player == null)
         {
             Log.getLogger().warn("Failed to close UI for: " + playerId.toString() + ". Could not Identify player.");
             return;
         }
 
-        if (player instanceof FakePlayer)
+        if (player instanceof IFakePlayer)
         {
             //NOOP Return.
             return;
@@ -151,9 +151,9 @@ public class ServerGuiController implements IGuiController
 
     @Nullable
     @Override
-    public IGuiKey getOpenUI(@NotNull final EntityPlayer player)
+    public IGuiKey getOpenUI(@NotNull final IPlayerEntity player)
     {
-        return getOpenUI(player.getUniqueID());
+        return getOpenUI(player.getId());
     }
 
     @Nullable
@@ -170,24 +170,24 @@ public class ServerGuiController implements IGuiController
         return openUis.get(guiKey);
     }
 
-    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final EntityPlayerMP playerMP)
+    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final IMultiplayerPlayerEntity playerMP)
     {
-        playerMP.getNextWindowId();
-        playerMP.closeContainer();
+        playerMP.incrementWindowId();
+        playerMP.closeOpenContainer();
 
-        NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement), playerMP.currentWindowId),
+        NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement), playerMP.getCurrentWindowId()),
           playerMP);
 
-        playerMP.openContainer = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
-        playerMP.openContainer.addListener(playerMP);
+        playerMP.setOpenContainer(new BlockOutContainer(key, openUis.get(key), playerMP.getCurrentWindowId()));
+        playerMP.getOpenContainer().addListener(playerMP);
 
-        MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(playerMP, playerMP.openContainer));
+        IEventManager.post(IPlayerEvent.IPlayerContainerEvent.IOpen.create(playerMP, playerMP.getOpenContainer()));
     }
 
     /**
      * Returns a list of all UUIDs that are watching this UI.
      *
-     * @param key The key for the gui.
+     * @param key The key for the guitemp.
      * @return The watching players.
      */
     public ImmutableList<UUID> getUUIDsOfPlayersWatching(@NotNull final IGuiKey key)

@@ -212,7 +212,7 @@ public class RenderingController implements IRenderingController
     }
 
     /**
-     * Helper function copied from the gui class to make it possible to use it outside of a gui class.
+     * Helper function copied from the guitemp class to make it possible to use it outside of a guitemp class.
      * <p>
      * TRhe function comes with regards to the Minecraft Team
      *
@@ -252,7 +252,7 @@ public class RenderingController implements IRenderingController
     /**
      * Draws a vertical gradient rectangle in the given position.
      *
-     * @param box        The plane to fill on the gui
+     * @param box        The plane to fill on the guitemp
      * @param z          The Z-Level to render on.
      * @param colorStart The left color
      * @param colorEnd   The right color.
@@ -522,7 +522,7 @@ public class RenderingController implements IRenderingController
 
         if (!(renderManager.getGui() instanceof BlockOutGui))
         {
-            throw new IllegalArgumentException("Can not draw slot contents on ClientSide Only gui.");
+            throw new IllegalArgumentException("Can not draw slot contents on ClientSide Only guitemp.");
         }
 
         final BlockOutGui gui = (BlockOutGui) renderManager.getGui();
@@ -621,7 +621,7 @@ public class RenderingController implements IRenderingController
 
         if (!(renderManager.getGui() instanceof BlockOutGui))
         {
-            throw new IllegalArgumentException("Can not draw slot overlay on ClientSide Only gui.");
+            throw new IllegalArgumentException("Can not draw slot overlay on ClientSide Only guitemp.");
         }
 
         final BlockOutGui gui = (BlockOutGui) renderManager.getGui();

@@ -9,6 +9,7 @@ import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.client.guitemp.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.IOpenGl;
@@ -18,7 +19,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class BlockOutGui extends GuiContainer implements IBlockOutGui
+public class BlockOutGui extends GuiContainer implements IBlockOutGui, IGui
 {
     @NotNull
     private final IGuiKey        key;
@@ -93,7 +94,7 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui
 
         this.scaleFactor = new Vector2d(1, 1);
 
-        //Check if we need to scale the gui
+        //Check if we need to scale the guitemp
         if (this.xSize > this.width || this.ySize > this.height)
         {
             double xScalingFactor = Math.ceil(root.getLocalBoundingBox().getSize().getX() / this.width);

@@ -16,7 +16,7 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,13 +31,13 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     private final UUID uniqueIdentifier = UUID.randomUUID();
 
     @NotNull
-    protected final ResourceLocation                    type;
+    protected final String                    type;
     @NotNull
-    protected final String                              id;
+    protected final String                         id;
     @NotNull
-    public          IDependencyObject<ResourceLocation> style;
+    public          IDependencyObject<IIdentifier> style;
     @NotNull
-    protected       IUIElementHost                      parent;
+    protected       IUIElementHost                 parent;
 
     @NotNull
     public IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
@@ -68,8 +68,8 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     public IDependencyObject<Boolean> enabled = DependencyObjectHelper.createFromValue(true);
 
     public AbstractChildrenContainingUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String type,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -97,8 +97,8 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     }
 
     public AbstractChildrenContainingUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String type,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent)
     {
@@ -116,7 +116,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
     @NotNull
     @Override
-    public ResourceLocation getType()
+    public String getType()
     {
         return type;
     }
@@ -128,7 +128,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
      */
     @NotNull
     @Override
-    public ResourceLocation getStyleId()
+    public IIdentifier getStyleId()
     {
         return style.get(this);
     }
@@ -605,7 +605,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
         protected AbstractChildrenContainingUIElementFactory(
           final Class<U> clz,
-          final ResourceLocation type,
+          final String type,
           @NotNull final IChildrenContainingUIElementConstructor<U> constructor,
           @NotNull final ISimpleUIElementWriter<U> writer)
         {
@@ -655,7 +655,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
               @NotNull final IBindingEngine engine,
               @NotNull final String id,
               @Nullable final IUIElementHost parent,
-              @NotNull final IDependencyObject<ResourceLocation> styleId,
+              @NotNull final IDependencyObject<IIdentifier> styleId,
               @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
               @NotNull final IDependencyObject<Dock> dock,
               @NotNull final IDependencyObject<AxisDistance> margin,

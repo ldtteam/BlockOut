@@ -12,12 +12,9 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,19 +29,9 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
     public IDependencyObject<IBlockState> blockState;
 
     public BlockStateIcon(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<IBlockState> blockState)
-    {
-        super(KEY_BLOCKSTATE, style, id, parent);
-        this.blockState = blockState;
-    }
-
-    public BlockStateIcon(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -69,15 +56,14 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         controller.drawBlockState(getBlockState(), 0, 0);
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     @NotNull
@@ -91,7 +77,6 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         this.blockState.set(this, icon);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
@@ -126,7 +111,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         public Factory()
         {
             super(BlockStateIcon.class, KEY_BLOCKSTATE, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IBlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, Blocks.AIR.getDefaultState());
+                final IDependencyObject<IBlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, IBlockState.defaultState());
 
                 final BlockStateIcon element = new BlockStateIcon(
                   id,

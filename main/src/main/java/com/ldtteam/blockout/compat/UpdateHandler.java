@@ -5,52 +5,42 @@ import com.ldtteam.blockout.connector.server.ServerGuiController;
 import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.SideHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.Container;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEvent;
+import com.ldtteam.jvoxelizer.common.gameevent.event.ITickEvent;
+import com.ldtteam.jvoxelizer.entity.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.inventory.IInventoryContainer;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.concurrent.TimeUnit;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID)
-public class ForgeFMLEventHandler
+public class UpdateHandler
 {
     private static Thread updateThread = null;
 
-    @SubscribeEvent
-    public static void onPlayerLoggedOut(final PlayerEvent.PlayerLoggedOutEvent event)
+    public static void onPlayerLoggedOut(final IPlayerEvent.IPlayerLoggedOutEvent event)
     {
-        if (event.player instanceof EntityPlayerMP)
+        if (event.getPlayer() instanceof IMultiplayerPlayerEntity)
         {
-            EntityPlayerMP playerMP = (EntityPlayerMP) event.player;
+            IMultiplayerPlayerEntity playerMP = (IMultiplayerPlayerEntity) event.getPlayer();
 
             BlockOut.getBlockOut().getProxy().getGuiController().closeUI(playerMP);
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public static void onTickClientTick(final TickEvent.ClientTickEvent event)
+    public static void onTickClientTick(final ITickEvent.IClientTickEvent event)
     {
-        if (event.phase != TickEvent.Phase.END)
+        if (event.getPhase() != ITickEvent.Phase.END)
         {
             return;
         }
 
-        SideHelper.onClient(() -> {
-            if (Minecraft.getMinecraft().currentScreen instanceof IBlockOutGui)
+        IDistributionExecutor.onClient(() -> {
+            if (IGameEngine.getInstance().getCurrentGui() instanceof IBlockOutGui)
             {
-                IBlockOutGui currentScreen = (IBlockOutGui) Minecraft.getMinecraft().currentScreen;
+                IBlockOutGui currentScreen = (IBlockOutGui) IGameEngine.getInstance().getCurrentGui();
                 currentScreen.getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getRoot());
 
                 ClientTickManager.getInstance().onClientTick();
@@ -58,10 +48,9 @@ public class ForgeFMLEventHandler
         });
     }
 
-    @SubscribeEvent
-    public static void onTickServerTick(final TickEvent.ServerTickEvent event)
+    public static void onTickServerTick(final ITickEvent.IServerTickEvent event)
     {
-        SideHelper.onServer(() -> {
+        IDistributionExecutor.onServer(() -> {
             ServerGuiController guiController = (ServerGuiController) BlockOut.getBlockOut().getProxy().getGuiController();
 
             guiController.getOpenUis().entrySet().forEach(e -> {
@@ -84,7 +73,7 @@ public class ForgeFMLEventHandler
                     {
                         updateManager.onNetworkTick();
                         guiController.getUUIDsOfPlayersWatching(e.getKey()).forEach(uuid -> {
-                            final Container blockOutCandidate = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(uuid).openContainer;
+                            final IInventoryContainer blockOutCandidate = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid).getOpenContainer();
                             if (blockOutCandidate instanceof BlockOutContainer)
                             {
                                 final BlockOutContainer blockOutContainer = (BlockOutContainer) blockOutCandidate;

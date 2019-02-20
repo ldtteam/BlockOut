@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.element.root;
 
-import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
@@ -8,9 +7,8 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.IUIManager;
-import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +34,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
     private IUIManager manager;
 
     public RootGuiElement(
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -46,14 +44,7 @@ public class RootGuiElement extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled)
     {
-        super(KEY_ROOT, styleId, KEY_ROOT.getPath(), null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
-
-        this.setParent(this);
-    }
-
-    public RootGuiElement()
-    {
-        super(KEY_ROOT, DependencyObjectHelper.createFromValue(Constants.Styles.CONST_DEFAULT), KEY_ROOT.getPath(), null);
+        super(KEY_ROOT, styleId, KEY_ROOT.split(":")[1], null, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
         this.setParent(this);
     }

@@ -7,13 +7,12 @@ import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
-import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class CommonFactoryController implements IUIElementFactoryController
 {
-    private final BiMap<ResourceLocation, IUIElementFactory<?>> factoryBiMap = HashBiMap.create();
+    private final BiMap<String, IUIElementFactory<?>> factoryBiMap = HashBiMap.create();
 
     @Override
     public IUIElementFactoryController registerFactory(@NotNull final IUIElementFactory<?> factory)
@@ -34,7 +33,7 @@ public class CommonFactoryController implements IUIElementFactoryController
     @Override
     public IUIElement getElementFromData(@NotNull final IUIElementData data)
     {
-        final ResourceLocation type = data.getMetaData().getType();
+        final String type = data.getMetaData().getType();
 
         if (!factoryBiMap.containsKey(type))
         {
@@ -57,7 +56,7 @@ public class CommonFactoryController implements IUIElementFactoryController
     public <T extends IUIElement, C extends IUIElementDataComponent, D extends IUIElementData<C>, B extends IUIElementDataBuilder<D>> D getDataFromElementWithBuilder(
       @NotNull final T element, @NotNull final B builder)
     {
-        final ResourceLocation type = element.getType();
+        final String type = element.getType();
 
         if (!factoryBiMap.containsKey(type))
         {

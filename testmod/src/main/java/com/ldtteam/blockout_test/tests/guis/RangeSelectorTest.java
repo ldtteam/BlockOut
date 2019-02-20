@@ -22,7 +22,7 @@ public class RangeSelectorTest implements IBlockOutUITest
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                      .ofFile(new ResourceLocation("blockout_test:gui/range_selector_test.json"))
+                                                                                                      .ofFile(new ResourceLocation("blockout_test:guitemp/range_selector_test.json"))
                                                                                                       .usingDefaultData()
                                                                                                       .withDefaultItemHandlerManager()
                                                                                                       .forEntity(entityPlayer));

@@ -24,7 +24,7 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Clamp;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +42,7 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement extends AbstractChildrenContainingUIElement implements IChildDrawableUIElement
 {
     //Bindable resource binding.
-    public IDependencyObject<ResourceLocation>             templateResource;
+    public IDependencyObject<IIdentifier>                  templateResource;
     public IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
     public IDependencyObject<Object>                       source;
     public IDependencyObject<Orientation>                  orientation;
@@ -52,8 +52,8 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
     protected boolean dataBoundMode;
 
     public AbstractChildInstantiatingAndLayoutControllableUIElement(
-      final ResourceLocation type,
-      final IDependencyObject<ResourceLocation> style,
+      final String type,
+      final IDependencyObject<IIdentifier> style,
       final String id,
       final IUIElementHost parent,
       final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -65,7 +65,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
       final IDependencyObject<Boolean> visible,
       final IDependencyObject<Boolean> enabled,
       @NotNull final double scrollOffset,
-      @NotNull final IDependencyObject<ResourceLocation> templateResource,
+      @NotNull final IDependencyObject<IIdentifier> templateResource,
       @NotNull final IDependencyObject<Object> source,
       @NotNull final boolean dataBoundMode,
       @NotNull final IDependencyObject<Orientation> orientation)
@@ -77,17 +77,6 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
         this.source = source;
         this.dataBoundMode = dataBoundMode;
         this.orientation = orientation;
-    }
-
-    public AbstractChildInstantiatingAndLayoutControllableUIElement(
-      final ResourceLocation type, final IDependencyObject<ResourceLocation> style, final String id, final IUIElementHost parent)
-    {
-        super(type, style, id, parent);
-        this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
-        this.source = DependencyObjectHelper.createFromValue(Lists.newArrayList());
-        this.dataBoundMode = false;
-        this.orientation = DependencyObjectHelper.createFromValue(Orientation.TOP_BOTTOM);
     }
 
     @Override
@@ -229,7 +218,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
      *
      * @return The template resource.
      */
-    public ResourceLocation getTemplateResource()
+    public IIdentifier getTemplateResource()
     {
         return templateResource.get(this);
     }
@@ -239,7 +228,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
      *
      * @param templateResource The new template resource.
      */
-    public void setTemplateResource(@NotNull final ResourceLocation templateResource)
+    public void setTemplateResource(@NotNull final IIdentifier templateResource)
     {
         this.templateResource.set(this, templateResource);
         this.dataBoundMode = true;
@@ -440,12 +429,12 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
 
         public AbstractChildInstantiatingAndLayoutControllableUIElementFactory(
           @NotNull final Class<U> clz,
-          @NotNull final ResourceLocation type,
+          @NotNull final String type,
           @NotNull final IChildInstantiatingAndLayoutControllableUIElementConstructor<U> constructor,
           @NotNull final ISimpleUIElementWriter<U> writer)
         {
             super(clz, type, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<ResourceLocation> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, MISSING);
+                final IDependencyObject<IIdentifier> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING));
                 final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList());
                 final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d);
                 final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM);
@@ -472,9 +461,13 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
                 );
 
                 return instance;
-            }, (element, builder) -> builder
-                                       .addComponent(CONST_SCROLLOFFSET, element.scrollOffset)
-                                       .addComponent(CONST_ORIENTATION, element.getOrientation()));
+            }, (element, builder) ->  {
+                builder
+                  .addComponent(CONST_SCROLLOFFSET, element.scrollOffset)
+                  .addComponent(CONST_ORIENTATION, element.getOrientation());
+
+                writer.write(element, builder);
+            });
 
             this.constructor = constructor;
             this.writer = writer;
@@ -488,7 +481,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
               @NotNull final IBindingEngine engine,
               @NotNull final String id,
               @Nullable final IUIElementHost parent,
-              @NotNull final IDependencyObject<ResourceLocation> styleId,
+              @NotNull final IDependencyObject<IIdentifier> styleId,
               @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
               @NotNull final IDependencyObject<Dock> dock,
               @NotNull final IDependencyObject<AxisDistance> margin,
@@ -497,7 +490,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
               @NotNull final IDependencyObject<Object> dataContext,
               @NotNull final IDependencyObject<Boolean> visible,
               @NotNull final IDependencyObject<Boolean> enabled,
-              @NotNull final IDependencyObject<ResourceLocation> templateResource,
+              @NotNull final IDependencyObject<IIdentifier> templateResource,
               @NotNull final IDependencyObject<Object> source,
               @NotNull final IDependencyObject<Orientation> orientation,
               @NotNull final boolean dataBoundMode,

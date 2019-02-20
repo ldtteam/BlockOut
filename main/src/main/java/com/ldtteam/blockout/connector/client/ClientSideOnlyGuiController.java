@@ -9,11 +9,9 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.gui.BlockOutGuiClientSideOnly;
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.entity.player.IPlayerEntity;
+import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,17 +19,16 @@ import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@SideOnly(Side.CLIENT)
 public class ClientSideOnlyGuiController implements IGuiController
 {
     private static final UUID DUMMY_ID = new UUID(0, 0);
 
     @Nullable
-    private Tuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
+    private ITuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
 
     @Override
     public void openUI(
-      @Nullable final EntityPlayer player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
+      @Nullable final IPlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {
         final CommonGuiKeyBuilder builder = new CommonGuiKeyBuilder();
         Arrays.stream(guiKeyBuilderConsumer).forEach(iGuiKeyBuilderConsumer -> iGuiKeyBuilderConsumer.accept(builder));
@@ -40,7 +37,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     }
 
     @Override
-    public void openUI(@Nullable final EntityPlayer player, @NotNull final IGuiKey key)
+    public void openUI(@Nullable final IPlayerEntity player, @NotNull final IGuiKey key)
     {
         openUI(DUMMY_ID, key);
     }
@@ -61,7 +58,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
         if (!key.getItemHandlerManager().getAllItemHandlerIds().isEmpty())
         {
-            throw new IllegalArgumentException("Can not build a ClientSide only gui with inventory support.");
+            throw new IllegalArgumentException("Can not build a ClientSide only guitemp with inventory support.");
         }
 
         RootGuiElement host;
@@ -72,22 +69,22 @@ public class ClientSideOnlyGuiController implements IGuiController
 
             if (host.getAllCombinedChildElements().entrySet().stream().anyMatch(e -> e instanceof Slot))
             {
-                throw new IllegalArgumentException("Can not open UI that holds Slots. Inventories are not supported in ClientSide only gui's.");
+                throw new IllegalArgumentException("Can not open UI that holds Slots. Inventories are not supported in ClientSide only guitemp's.");
             }
         }
         catch (IllegalArgumentException ex)
         {
-            Log.getLogger().error("Failed to build client side only gui.", ex);
+            Log.getLogger().error("Failed to build client side only guitemp.", ex);
             return;
         }
 
-        openClientSideOnlyGui = new Tuple<>(key, host);
+        openClientSideOnlyGui = ITuple.create(key, host);
 
         openGui(key, host);
     }
 
     @Override
-    public void closeUI(@Nullable final EntityPlayer player)
+    public void closeUI(@Nullable final IPlayerEntity player)
     {
         closeUI(DUMMY_ID);
     }
@@ -95,16 +92,16 @@ public class ClientSideOnlyGuiController implements IGuiController
     @Override
     public void closeUI(@Nullable final UUID playerId)
     {
-        Minecraft.getMinecraft().displayGuiScreen(null);
+        IGameEngine.getInstance().displayGuiScreen(null);
     }
 
     @Nullable
     @Override
-    public IGuiKey getOpenUI(@Nullable final EntityPlayer player)
+    public IGuiKey getOpenUI(@Nullable final IPlayerEntity player)
     {
-        if (!(Minecraft.getMinecraft().player == player))
+        if (!(IGameEngine.getInstance().getSinglePlayerPlayerEntity() == player))
         {
-            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
+            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide guitemp's");
         }
 
         if (openClientSideOnlyGui == null)
@@ -119,10 +116,10 @@ public class ClientSideOnlyGuiController implements IGuiController
     @Override
     public IGuiKey getOpenUI(@Nullable final UUID player)
     {
-        if ((Minecraft.getMinecraft().player == null && player != null) || (Minecraft.getMinecraft().player != null && player == null) || (
-          Minecraft.getMinecraft().player.getPersistentID() != player))
+        if ((IGameEngine.getInstance().getSinglePlayerPlayerEntity() == null && player != null) || (IGameEngine.getInstance().getSinglePlayerPlayerEntity() != null && player == null) || (
+          IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId() != player))
         {
-            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
+            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide guitemp's");
         }
 
 
@@ -147,7 +144,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         {
             if (openClientSideOnlyGui.getFirst() != guiKey)
             {
-                throw new IllegalArgumentException("Can not get root from unknown gui key.");
+                throw new IllegalArgumentException("Can not get root from unknown guitemp key.");
             }
 
             return openClientSideOnlyGui.getSecond();
@@ -158,6 +155,6 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement)
     {
-        Minecraft.getMinecraft().displayGuiScreen(new BlockOutGuiClientSideOnly(key, rootGuiElement));
+        IGameEngine.getInstance().displayGuiScreen(new BlockOutGuiClientSideOnly(key, rootGuiElement));
     }
 }

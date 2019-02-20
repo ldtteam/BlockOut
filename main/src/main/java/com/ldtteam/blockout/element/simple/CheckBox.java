@@ -17,10 +17,8 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,35 +31,21 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
-    public IDependencyObject<ResourceLocation> normalBackgroundImageResource;
+    public IDependencyObject<IIdentifier> normalBackgroundImageResource;
     @NotNull
-    public IDependencyObject<ResourceLocation> checkedBackgroundImageResource;
+    public IDependencyObject<IIdentifier> checkedBackgroundImageResource;
     @NotNull
-    public IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
+    public IDependencyObject<IIdentifier> disabledBackgroundImageResource;
     @NotNull
-    public IDependencyObject<Boolean>          checked;
+    public IDependencyObject<Boolean>     checked;
 
     @NotNull
     public Event<CheckBox, CheckBoxCheckChangedEventArgs> onCheckedChanged = new Event<>(CheckBox.class, CheckBoxCheckChangedEventArgs.class);
 
     public CheckBox(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent)
-    {
-        super(KEY_CHECKBOX, style, id, parent);
-
-        this.normalBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.checkedBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-        this.disabledBackgroundImageResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
-
-        this.checked = DependencyObjectHelper.createFromValue(false);
-    }
-
-    public CheckBox(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -69,9 +53,9 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource,
-      @NotNull final IDependencyObject<ResourceLocation> checkedBackgroundImageResource,
-      @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
+      @NotNull final IDependencyObject<IIdentifier> normalBackgroundImageResource,
+      @NotNull final IDependencyObject<IIdentifier> checkedBackgroundImageResource,
+      @NotNull final IDependencyObject<IIdentifier> disabledBackgroundImageResource,
       @NotNull final IDependencyObject<Boolean> checked)
     {
         super(KEY_CHECKBOX, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
@@ -106,7 +90,6 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
@@ -139,7 +122,7 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         final ImageResource resource = resourceSupplier.get();
         final Vector2d size = getLocalBoundingBox().getSize();
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -148,7 +131,7 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
     @NotNull
@@ -186,39 +169,38 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
     }
 
     @NotNull
-    public ResourceLocation getDisabledBackgroundImageResource()
+    public IIdentifier getDisabledBackgroundImageResource()
     {
         return disabledBackgroundImageResource.get(this);
     }
 
     @NotNull
-    public ResourceLocation getCheckedBackgroundImageResource()
+    public IIdentifier getCheckedBackgroundImageResource()
     {
         return checkedBackgroundImageResource.get(this);
     }
 
     @NotNull
-    public ResourceLocation getNormalBackgroundImageResource()
+    public IIdentifier getNormalBackgroundImageResource()
     {
         return normalBackgroundImageResource.get(this);
     }
 
-    public void setNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImage)
+    public void setNormalBackgroundImageResource(@NotNull final IIdentifier normalBackgroundImage)
     {
         this.normalBackgroundImageResource.set(this, normalBackgroundImage);
     }
 
-    public void setCheckedBackgroundImageResource(@NotNull final ResourceLocation checkedBackgroundImage)
+    public void setCheckedBackgroundImageResource(@NotNull final IIdentifier checkedBackgroundImage)
     {
         this.checkedBackgroundImageResource.set(this, checkedBackgroundImage);
     }
 
-    public void setDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImage)
+    public void setDisabledBackgroundImageResource(@NotNull final IIdentifier disabledBackgroundImage)
     {
         this.disabledBackgroundImageResource.set(this, disabledBackgroundImage);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
@@ -249,37 +231,37 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource)
+        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> normalBackgroundImageResource)
         {
             return withDependency("normalBackgroundImageResource", normalBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final ResourceLocation normalBackgroundImageResource)
+        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IIdentifier normalBackgroundImageResource)
         {
             return withDependency("normalBackgroundImageResource", DependencyObjectHelper.createFromValue(normalBackgroundImageResource));
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> checkedBackgroundImageResource)
+        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> checkedBackgroundImageResource)
         {
             return withDependency("checkedBackgroundImageResource", checkedBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final ResourceLocation checkedBackgroundImageResource)
+        public ButtonConstructionDataBuilder withCheckedBackgroundImageResource(@NotNull final IIdentifier checkedBackgroundImageResource)
         {
             return withDependency("checkedBackgroundImageResource", DependencyObjectHelper.createFromValue(checkedBackgroundImageResource));
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource)
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> disabledBackgroundImageResource)
         {
             return withDependency("disabledBackgroundImageResource", disabledBackgroundImageResource);
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final ResourceLocation disabledBackgroundImageResource)
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IIdentifier disabledBackgroundImageResource)
         {
             return withDependency("disabledBackgroundImageResource", DependencyObjectHelper.createFromValue(disabledBackgroundImageResource));
         }
@@ -297,9 +279,9 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         public Factory()
         {
             super(CheckBox.class, KEY_CHECKBOX, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<ResourceLocation> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, MISSING);
-                final IDependencyObject<ResourceLocation> checkedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CHECKED_BACKGROUND_IMAGE, engine, MISSING);
-                final IDependencyObject<ResourceLocation> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<IIdentifier> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
+                final IDependencyObject<IIdentifier> checkedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CHECKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
+                final IDependencyObject<IIdentifier> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
                 final IDependencyObject<Boolean> checked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CHECKED, engine, false);
 
                 final CheckBox element = new CheckBox(

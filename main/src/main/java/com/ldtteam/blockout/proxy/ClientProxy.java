@@ -5,27 +5,24 @@ import com.ldtteam.blockout.connector.client.ClientSideOnlyGuiController;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.management.IUIManager;
-import com.ldtteam.blockout.management.network.INetworkManager;
-import com.ldtteam.blockout.management.render.IRenderManager;
-import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.management.client.network.ClientNetworkManager;
 import com.ldtteam.blockout.management.client.render.RenderManager;
 import com.ldtteam.blockout.management.client.update.NoOpUpdateManager;
+import com.ldtteam.blockout.management.network.INetworkManager;
+import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.color.ColorUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.world.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 
-@SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy
 {
 
@@ -34,7 +31,7 @@ public class ClientProxy extends CommonProxy
     @NotNull
     private final ClientSideOnlyGuiController clientSideOnlyGuiController;
     @NotNull
-    private       MultiColoredFontRenderer    multiColoredFontRenderer;
+    private       IFontRenderer               multiColoredFontRenderer;
 
     public ClientProxy()
     {
@@ -46,7 +43,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public IGuiController getGuiController()
     {
-        return SideHelper.on(
+        return IDistributionExecutor.on(
           () -> guiController,
           super::getGuiController
         );
@@ -54,7 +51,7 @@ public class ClientProxy extends CommonProxy
 
     @NotNull
     @Override
-    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
+    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
     {
         return Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
     }
@@ -63,7 +60,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public INetworkManager generateNewNetworkManagerForGui(@NotNull final IGuiKey key)
     {
-        return SideHelper.on(
+        return IDistributionExecutor.on(
           ClientNetworkManager::new,
           () -> new ServerNetworkManager(key)
         );
@@ -73,7 +70,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager)
     {
-        return SideHelper.on(
+        return IDistributionExecutor.on(
           NoOpUpdateManager::new,
           () -> new ServerUpdateManager(manager)
         );
@@ -81,7 +78,7 @@ public class ClientProxy extends CommonProxy
 
     @NotNull
     @Override
-    public World getDimensionFromDimensionId(@NotNull final int dimId)
+    public IDimension getDimensionFromDimensionId(@NotNull final int dimId)
     {
         return SideHelper.on(
           () -> Minecraft.getMinecraft().world,

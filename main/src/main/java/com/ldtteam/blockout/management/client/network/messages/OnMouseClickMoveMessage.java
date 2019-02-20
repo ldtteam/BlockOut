@@ -36,7 +36,7 @@ public class OnMouseClickMoveMessage implements IBlockOutClientToServerMessage
         final IGuiKey key = BlockOut.getBlockOut().getProxy().getGuiController().getOpenUI(player);
         if (key == null)
         {
-            Log.getLogger().error("Player is not watching a BlockOut gui.");
+            Log.getLogger().error("Player is not watching a BlockOut guitemp.");
             return;
         }
 

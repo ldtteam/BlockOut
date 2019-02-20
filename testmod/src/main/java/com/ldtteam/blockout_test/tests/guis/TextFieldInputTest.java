@@ -28,7 +28,7 @@ public class TextFieldInputTest implements IBlockOutUITest
 
         BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                       .ofFile(new ResourceLocation(
-                                                                                                        "blockout_test:gui/textfield_binding_test.json"))
+                                                                                                        "blockout_test:guitemp/textfield_binding_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("input",
                                                                                                                                                             TextField.TextFieldConstructionDataBuilder.class,

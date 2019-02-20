@@ -14,7 +14,7 @@ public interface IUIElementMetaData
      *
      * @return The type of control that the {@link IUIElementData} contains.
      */
-    IIdentifier getType();
+    String getType();
 
     /**
      * Returns the id of control that the corresponding {@link IUIElementData} contains.

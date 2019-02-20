@@ -6,15 +6,15 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.property.Property;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +26,7 @@ import java.util.function.Function;
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.Controls.Template.KEY_TEMPLATE;
 import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_TYPE;
+import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class Template extends AbstractChildrenContainingUIElement
 {
@@ -42,7 +43,7 @@ public class Template extends AbstractChildrenContainingUIElement
 
         @NotNull
         @Override
-        public ResourceLocation getTypeName()
+        public String getTypeName()
         {
             return KEY_TEMPLATE;
         }
@@ -51,7 +52,7 @@ public class Template extends AbstractChildrenContainingUIElement
         @Override
         public Template readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, new ResourceLocation("missingno"));
+            final IDependencyObject<IIdentifier> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, IIdentifier.create(MISSING));
             final String templateId = elementData.getMetaData().getId();
 
             return new Template(style, templateId, elementData);
@@ -67,7 +68,7 @@ public class Template extends AbstractChildrenContainingUIElement
     private final IUIElementData<?> ownData;
 
     public Template(
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @NotNull final IUIElementData ownData)
     {
@@ -116,7 +117,7 @@ public class Template extends AbstractChildrenContainingUIElement
                 return new IUIElementMetaData()
                 {
                     @Override
-                    public ResourceLocation getType()
+                    public String getType()
                     {
                         return convertedChildData.getMetaData().getType();
                     }

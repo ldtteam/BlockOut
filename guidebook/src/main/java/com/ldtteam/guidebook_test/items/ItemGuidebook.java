@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ItemGuidebook extends AbstractItemMinecolonies
 {
-    private static final String LOCATION_OF_GUIDEBOOKS = ":gui/guidebook/";
+    private static final String LOCATION_OF_GUIDEBOOKS = ":guitemp/guidebook/";
 
     /**
      * Sets the name, creative tab, and registers the Guide Book item.

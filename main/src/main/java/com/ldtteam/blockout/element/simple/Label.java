@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.element.simple;
 
 import com.ldtteam.blockout.BlockOut;
-import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
@@ -14,13 +13,12 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.translation.ITranslator;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +40,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public Label(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -69,32 +67,30 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         controller.getScissoringController().focus(this);
 
-        GlStateManager.pushMatrix();
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.pushMatrix();
+        IOpenGl.disableStandardItemLighting();
 
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
         BlockOut.getBlockOut()
           .getProxy()
           .getFontRenderer()
           .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), 0);
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.popMatrix();
+        IOpenGl.disableBlend();
+        IOpenGl.disableAlpha();
+        IOpenGl.popMatrix();
 
         controller.getScissoringController().pop();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
@@ -114,11 +110,11 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                 break;
             }
 
-            rawContents = rawContents.replace("${" + keyGroupMatching + "}", I18n.translateToLocal(keyGroupMatching));
+            rawContents = rawContents.replace("${" + keyGroupMatching + "}", ITranslator.format(keyGroupMatching));
             contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 
-        return ProxyHolder.getInstance().convertToColorCode(getFontColor()) + rawContents + TextFormatting.RESET.toString();
+        return ProxyHolder.getInstance().convertToColorCode(getFontColor()) + rawContents + ITextFormatting.reset();
     }
 
     public String getContents()
@@ -165,7 +161,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         {
             super(Label.class, KEY_LABEL, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");
-                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, TextFormatting.RESET.toString());
+                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, ITextFormatting.reset().toString());
 
                 final Label element = new Label(
                   id,

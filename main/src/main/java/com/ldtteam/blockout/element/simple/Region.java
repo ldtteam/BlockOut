@@ -8,7 +8,7 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class Region extends AbstractChildrenContainingUIElement
     public Region(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -35,7 +35,7 @@ public class Region extends AbstractChildrenContainingUIElement
     }
 
     public Region(
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent)
     {

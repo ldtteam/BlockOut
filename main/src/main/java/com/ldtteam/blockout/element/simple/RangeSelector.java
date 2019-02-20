@@ -15,11 +15,10 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -43,12 +42,12 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
                 @NotNull final IDependencyObject<Float> leftValue = elementData.getFromRawDataWithDefault(CONST_LEFT_VALUE, engine, 0f);
                 @NotNull final IDependencyObject<Float> rightValue = elementData.getFromRawDataWithDefault(CONST_RIGHT_VALUE, engine, 1f);
 
-                @NotNull final IDependencyObject<ResourceLocation> leftBackgroundTexture = elementData.getFromRawDataWithDefault(CONST_LEFT_BACKGROUND, engine, MISSING);
-                @NotNull final IDependencyObject<ResourceLocation> selectedRegionBackgroundTexture =
-                  elementData.getFromRawDataWithDefault(CONST_SELECTED_BACKGROUND, engine, MISSING);
-                @NotNull final IDependencyObject<ResourceLocation> rightBackgroundTexture = elementData.getFromRawDataWithDefault(CONST_RIGHT_BACKGROUND, engine, MISSING);
-                @NotNull final IDependencyObject<ResourceLocation> leftSelectorTexture = elementData.getFromRawDataWithDefault(CONST_LEFT_SELECTOR_BACKGROUND, engine, MISSING);
-                @NotNull final IDependencyObject<ResourceLocation> rightSelectorTexture = elementData.getFromRawDataWithDefault(CONST_RIGHT_SELECTOR_BACKGROUND, engine, MISSING);
+                @NotNull final IDependencyObject<IIdentifier> leftBackgroundTexture = elementData.getFromRawDataWithDefault(CONST_LEFT_BACKGROUND, engine, IIdentifier.create(MISSING));
+                @NotNull final IDependencyObject<IIdentifier> selectedRegionBackgroundTexture =
+                  elementData.getFromRawDataWithDefault(CONST_SELECTED_BACKGROUND, engine, IIdentifier.create(MISSING));
+                @NotNull final IDependencyObject<IIdentifier> rightBackgroundTexture = elementData.getFromRawDataWithDefault(CONST_RIGHT_BACKGROUND, engine, IIdentifier.create(MISSING));
+                @NotNull final IDependencyObject<IIdentifier> leftSelectorTexture = elementData.getFromRawDataWithDefault(CONST_LEFT_SELECTOR_BACKGROUND, engine, IIdentifier.create(MISSING));
+                @NotNull final IDependencyObject<IIdentifier> rightSelectorTexture = elementData.getFromRawDataWithDefault(CONST_RIGHT_SELECTOR_BACKGROUND, engine, IIdentifier.create(MISSING));
 
                 return new RangeSelector(
                   id,
@@ -85,15 +84,15 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     @NotNull
     public  IDependencyObject<Float>                    rightValue;
     @NotNull
-    public  IDependencyObject<ResourceLocation>         leftBackgroundTexture;
+    public  IDependencyObject<IIdentifier>         leftBackgroundTexture;
     @NotNull
-    public  IDependencyObject<ResourceLocation>         selectedRegionBackgroundTexture;
+    public  IDependencyObject<IIdentifier>         selectedRegionBackgroundTexture;
     @NotNull
-    public  IDependencyObject<ResourceLocation>         rightBackgroundTexture;
+    public  IDependencyObject<IIdentifier>         rightBackgroundTexture;
     @NotNull
-    public  IDependencyObject<ResourceLocation>         leftSelectorTexture;
+    public  IDependencyObject<IIdentifier>         leftSelectorTexture;
     @NotNull
-    public  IDependencyObject<ResourceLocation>         rightSelectorTexture;
+    public  IDependencyObject<IIdentifier>         rightSelectorTexture;
     @NotNull
     public  Event<RangeSelector, RangeChangedEventArgs> onValuesChanged     = new Event<>(RangeSelector.class, RangeChangedEventArgs.class);
     @NotNull
@@ -104,7 +103,7 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     public RangeSelector(
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -114,11 +113,11 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<Float> leftValue,
       @NotNull final IDependencyObject<Float> rightValue,
-      @NotNull final IDependencyObject<ResourceLocation> leftBackgroundTexture,
-      @NotNull final IDependencyObject<ResourceLocation> selectedRegionBackgroundTexture,
-      @NotNull final IDependencyObject<ResourceLocation> rightBackgroundTexture,
-      @NotNull final IDependencyObject<ResourceLocation> leftSelectorTexture,
-      @NotNull final IDependencyObject<ResourceLocation> rightSelectorTexture
+      @NotNull final IDependencyObject<IIdentifier> leftBackgroundTexture,
+      @NotNull final IDependencyObject<IIdentifier> selectedRegionBackgroundTexture,
+      @NotNull final IDependencyObject<IIdentifier> rightBackgroundTexture,
+      @NotNull final IDependencyObject<IIdentifier> leftSelectorTexture,
+      @NotNull final IDependencyObject<IIdentifier> rightSelectorTexture
     )
     {
         super(KEY_RANGE_SELECTOR, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
@@ -232,15 +231,14 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         return (float) v;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         IOpenGl.pushMatrix();
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.disableStandardItemLighting();
         IOpenGl.enableAlpha();
         IOpenGl.enableBlend();
-        IOpenGl.blendFunc(IOpenGl.SourceFactor.ONE_MINUS_SRC_ALPHA, IOpenGl.DestFactor.DST_ALPHA);
+        IOpenGl.blendFunc(SourceFactor.ONE_MINUS_SRC_ALPHA, DestinationFactor.DST_ALPHA);
 
         final ImageResource leftBackgroundResource = getLeftBackgroundTextureResource();
         final ImageResource selectorRegionBackgroundResource = getSelectedRegionBackgroundTextureResource();
@@ -356,57 +354,56 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         return CONST_SELECTOR_SIZE + (float) (getLocalBoundingBox().getSize().getX() - 2 * CONST_SELECTOR_SIZE) * getRightValue();
     }
 
-    public ResourceLocation getLeftBackgroundTexture()
+    public IIdentifier getLeftBackgroundTexture()
     {
         return this.leftBackgroundTexture.get(this);
     }
 
-    public void setLeftBackgroundTexture(@NotNull final ResourceLocation leftBackgroundTexture)
+    public void setLeftBackgroundTexture(@NotNull final IIdentifier leftBackgroundTexture)
     {
         this.leftBackgroundTexture.set(this, leftBackgroundTexture);
     }
 
-    public ResourceLocation getSelectedRegionBackgroundTexture()
+    public IIdentifier getSelectedRegionBackgroundTexture()
     {
         return this.selectedRegionBackgroundTexture.get(this);
     }
 
-    public void setSelectedRegionBackgroundTexture(@NotNull final ResourceLocation selectedRegionBackgroundTexture)
+    public void setSelectedRegionBackgroundTexture(@NotNull final IIdentifier selectedRegionBackgroundTexture)
     {
         this.selectedRegionBackgroundTexture.set(this, selectedRegionBackgroundTexture);
     }
 
-    public ResourceLocation getRightBackgroundTexture()
+    public IIdentifier getRightBackgroundTexture()
     {
         return this.rightBackgroundTexture.get(this);
     }
 
-    public void setRightBackgroundTexture(@NotNull final ResourceLocation rightBackgroundTexture)
+    public void setRightBackgroundTexture(@NotNull final IIdentifier rightBackgroundTexture)
     {
         this.rightBackgroundTexture.set(this, rightBackgroundTexture);
     }
 
-    public ResourceLocation getLeftSelectorTexture()
+    public IIdentifier getLeftSelectorTexture()
     {
         return this.leftSelectorTexture.get(this);
     }
 
-    public void setLeftSelectorTexture(@NotNull final ResourceLocation leftSelectorTexture)
+    public void setLeftSelectorTexture(@NotNull final IIdentifier leftSelectorTexture)
     {
         this.leftSelectorTexture.set(this, leftSelectorTexture);
     }
 
-    public ResourceLocation getRightSelectorTexture()
+    public IIdentifier getRightSelectorTexture()
     {
         return this.rightSelectorTexture.get(this);
     }
 
-    public void setRightSelectorTexture(@NotNull final ResourceLocation rightSelectorTexture)
+    public void setRightSelectorTexture(@NotNull final IIdentifier rightSelectorTexture)
     {
         this.rightSelectorTexture.set(this, rightSelectorTexture);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {

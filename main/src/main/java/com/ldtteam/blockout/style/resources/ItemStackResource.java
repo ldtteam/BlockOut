@@ -5,11 +5,10 @@ import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemStackResource implements IResource
@@ -37,26 +36,28 @@ public class ItemStackResource implements IResource
          * @param data The data to load from.
          */
         @Override
-        public ItemStackResource load(@NotNull final ResourceLocation id, @NotNull final JsonElement data)
+        public ItemStackResource load(@NotNull final IIdentifier id, @NotNull final JsonElement data)
         {
             try
             {
-                final NBTTagCompound compound = JsonToNBT.getTagFromJson(data.toString());
-                final ItemStack stack = new ItemStack(compound);
+                final INBTCompound compound = INBTBase.createFromJson(data.toString());
+                final IItemStack stack = IItemStack.create();
+
+                stack.read(compound);
 
                 return new ItemStackResource(id, stack);
             }
-            catch (NBTException e)
+            catch (Exception e)
             {
                 throw new IllegalArgumentException(String.format("The given NBT for ItemStackResource: %s is not parsable", id), e);
             }
         }
     }
 
-    private final ResourceLocation id;
-    private final ItemStack        stack;
+    private final IIdentifier id;
+    private final IItemStack        stack;
 
-    public ItemStackResource(final ResourceLocation id, final ItemStack stack)
+    public ItemStackResource(final IIdentifier id, final IItemStack stack)
     {
         this.id = id;
         this.stack = stack;
@@ -69,12 +70,12 @@ public class ItemStackResource implements IResource
      */
     @NotNull
     @Override
-    public ResourceLocation getId()
+    public IIdentifier getId()
     {
         return id;
     }
 
-    public ItemStack getStack()
+    public IItemStack getStack()
     {
         return stack.copy();
     }

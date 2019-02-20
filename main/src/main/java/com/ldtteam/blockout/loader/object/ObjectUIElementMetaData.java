@@ -1,21 +1,16 @@
 package com.ldtteam.blockout.loader.object;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,10 +28,10 @@ public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
     }
 
     @Override
-    public ResourceLocation getType()
+    public String getType()
     {
-        final IUIElementDataComponentConverter<ResourceLocation> factory =
-          ProxyHolder.getInstance().getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}));
+        final IUIElementDataComponentConverter<String> factory =
+          ProxyHolder.getInstance().getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<String>>() {}));
         return factory.readFromElement(object.get(Constants.Controls.General.CONST_TYPE), null);
     }
 

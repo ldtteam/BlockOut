@@ -26,7 +26,7 @@ public class BoundListHorizontalTest implements IBlockOutUITest
     {
         BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                       .ofFile(new ResourceLocation(
-                                                                                                        "blockout_test:gui/horizontal_bound_list_test.json"))
+                                                                                                        "blockout_test:guitemp/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("list",
                                                                                                                                                             ListConstructionDataBuilder.class,

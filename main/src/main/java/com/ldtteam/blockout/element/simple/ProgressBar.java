@@ -15,8 +15,8 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,30 +29,22 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    public IDependencyObject<ResourceLocation> backGroundResource;
+    public IDependencyObject<IIdentifier> backGroundResource;
     @NotNull
-    public IDependencyObject<ResourceLocation> foreGroundResource;
+    public IDependencyObject<IIdentifier> foreGroundResource;
     @NotNull
-    public IDependencyObject<Double>           value;
+    public IDependencyObject<Double>      value;
     @NotNull
-    public IDependencyObject<Double>           min;
+    public IDependencyObject<Double>      min;
     @NotNull
-    public IDependencyObject<Double>           max;
+    public IDependencyObject<Double>      max;
     @Nonnull
-    public IDependencyObject<Orientation>      orientation;
-
-    public ProgressBar(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent)
-    {
-        super(KEY_PROGRESS_BAR, style, id, parent);
-    }
+    public IDependencyObject<Orientation> orientation;
 
     public ProgressBar(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -60,8 +52,8 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> backGroundResource,
-      @NotNull final IDependencyObject<ResourceLocation> foreGroundResource,
+      @NotNull final IDependencyObject<IIdentifier> backGroundResource,
+      @NotNull final IDependencyObject<IIdentifier> foreGroundResource,
       @NotNull final IDependencyObject<Double> value,
       @NotNull final IDependencyObject<Double> min,
       @NotNull final IDependencyObject<Double> max,
@@ -206,23 +198,23 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     }
 
     @NotNull
-    public ResourceLocation getBackGroundResource()
+    public IIdentifier getBackGroundResource()
     {
         return backGroundResource.get(this);
     }
 
-    public void setBackGroundResource(@NotNull final ResourceLocation backGroundResource)
+    public void setBackGroundResource(@NotNull final IIdentifier backGroundResource)
     {
         this.backGroundResource.set(this, backGroundResource);
     }
 
     @NotNull
-    public ResourceLocation getForeGroundResource()
+    public IIdentifier getForeGroundResource()
     {
         return foreGroundResource.get(this);
     }
 
-    public void setForeGroundResource(@NotNull final ResourceLocation foreGroundResource)
+    public void setForeGroundResource(@NotNull final IIdentifier foreGroundResource)
     {
         this.foreGroundResource.set(this, foreGroundResource);
     }
@@ -282,25 +274,25 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
+        public ProgressBarConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> backgroundImageResource)
         {
             return withDependency("backGroundResource", backgroundImageResource);
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
+        public ProgressBarConstructionDataBuilder withBackgroundImageResource(@NotNull final IIdentifier backgroundImageResource)
         {
             return withDependency("backGroundResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withDependentForegroundImageResource(@NotNull final IDependencyObject<ResourceLocation> foregroundImageResource)
+        public ProgressBarConstructionDataBuilder withDependentForegroundImageResource(@NotNull final IDependencyObject<IIdentifier> foregroundImageResource)
         {
             return withDependency("foreGroundResource", foregroundImageResource);
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withForegroundImageResource(@NotNull final ResourceLocation foregroundImageResource)
+        public ProgressBarConstructionDataBuilder withForegroundImageResource(@NotNull final IIdentifier foregroundImageResource)
         {
             return withDependency("foreGroundResource", DependencyObjectHelper.createFromValue(foregroundImageResource));
         }
@@ -356,8 +348,8 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         protected Factory()
         {
             super(ProgressBar.class, KEY_PROGRESS_BAR, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<ResourceLocation> background = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, MISSING);
-                final IDependencyObject<ResourceLocation> foreground = elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, MISSING);
+                final IDependencyObject<IIdentifier> background = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
+                final IDependencyObject<IIdentifier> foreground = elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, IIdentifier.create(MISSING));
                 final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d);
                 final IDependencyObject<Double> max = elementData.getFromRawDataWithDefault(CONST_MAX, engine, 100d);
                 final IDependencyObject<Double> value = elementData.getFromRawDataWithDefault(CONST_VALUE, engine, 50d);

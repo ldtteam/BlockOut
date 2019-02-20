@@ -7,7 +7,7 @@ import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +22,8 @@ public abstract class AbstractFilteringChildrenContainingUIElement extends Abstr
 {
 
     public AbstractFilteringChildrenContainingUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
+      @NotNull final String type,
+      @NotNull final IDependencyObject<IIdentifier> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -35,15 +35,6 @@ public abstract class AbstractFilteringChildrenContainingUIElement extends Abstr
       @NotNull final IDependencyObject<Boolean> visible, @NotNull final IDependencyObject<Boolean> enabled)
     {
         super(type, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
-    }
-
-    public AbstractFilteringChildrenContainingUIElement(
-      @NotNull final ResourceLocation type,
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @Nullable final IUIElementHost parent)
-    {
-        super(type, style, id, parent);
     }
 
     public abstract Predicate<IUIElement> IsValidChildPredicate();

@@ -7,7 +7,7 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.advanced.list.List;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -24,13 +24,13 @@ public class AbstractListConstructionDataBuilder<B extends AbstractListConstruct
     }
 
     @NotNull
-    public B withDependentTemplateResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
+    public B withDependentTemplateResource(@NotNull final IDependencyObject<IIdentifier> iconResource)
     {
         return withDependency("templateResource", iconResource);
     }
 
     @NotNull
-    public B withTemplateResource(@NotNull final ResourceLocation iconResource)
+    public B withTemplateResource(@NotNull final IIdentifier iconResource)
     {
         return withDependency("templateResource", DependencyObjectHelper.createFromValue(iconResource));
     }

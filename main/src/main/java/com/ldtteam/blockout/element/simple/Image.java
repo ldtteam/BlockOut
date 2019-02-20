@@ -13,10 +13,10 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,22 +29,12 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    public IDependencyObject<ResourceLocation> iconResource;
-
-    public Image(
-      @NotNull final IDependencyObject<ResourceLocation> style,
-      @NotNull final String id,
-      @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> iconResource)
-    {
-        super(KEY_IMAGE, style, id, parent);
-        this.iconResource = iconResource;
-    }
+    public IDependencyObject<IIdentifier> iconResource;
 
     public Image(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -52,7 +42,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<ResourceLocation> iconResource)
+      @NotNull final IDependencyObject<IIdentifier> iconResource)
     {
         super(KEY_IMAGE, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
@@ -69,19 +59,18 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         }
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final ImageResource resource = getIcon();
 
-        GlStateManager.pushMatrix();
+        IOpenGl.pushMatrix();
 
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.enableAlpha();
+        IOpenGl.enableBlend();
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.color(1, 1, 1);
+        IOpenGl.color(1, 1, 1);
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -90,13 +79,12 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
+        IOpenGl.disableBlend();
+        IOpenGl.disableAlpha();
 
-        GlStateManager.popMatrix();
+        IOpenGl.popMatrix();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawForeground(@NotNull final IRenderingController controller)
     {
@@ -110,12 +98,12 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    public ResourceLocation getIconResource()
+    public IIdentifier getIconResource()
     {
         return iconResource.get(this);
     }
 
-    public void setIconResource(@NotNull final ResourceLocation icon)
+    public void setIconResource(@NotNull final IIdentifier icon)
     {
         this.iconResource.set(this, icon);
     }
@@ -131,13 +119,13 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         }
 
         @NotNull
-        public ImageConstructionDataBuilder withDependentIconResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
+        public ImageConstructionDataBuilder withDependentIconResource(@NotNull final IDependencyObject<IIdentifier> iconResource)
         {
             return withDependency("iconResource", iconResource);
         }
 
         @NotNull
-        public ImageConstructionDataBuilder withIconResource(@NotNull final ResourceLocation iconResource)
+        public ImageConstructionDataBuilder withIconResource(@NotNull final IIdentifier iconResource)
         {
             return withDependency("iconResource", DependencyObjectHelper.createFromValue(iconResource));
         }
@@ -148,7 +136,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Image.class, KEY_IMAGE, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, MISSING);
+                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING));
 
                 final Image element = new Image(
                   id,

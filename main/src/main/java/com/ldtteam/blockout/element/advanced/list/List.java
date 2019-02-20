@@ -1,57 +1,45 @@
 package com.ldtteam.blockout.element.advanced.list;
 
-import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
-import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
-import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.advanced.AbstractChildInstantiatingAndLayoutControllableUIElement;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.input.IScrollAcceptingUIElement;
-import com.ldtteam.blockout.element.values.*;
+import com.ldtteam.blockout.element.values.Alignment;
+import com.ldtteam.blockout.element.values.AxisDistance;
+import com.ldtteam.blockout.element.values.Dock;
+import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Optional;
-import java.util.function.Consumer;
 
-import static com.ldtteam.blockout.util.Constants.Controls.List.*;
-import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
+import static com.ldtteam.blockout.util.Constants.Controls.List.KEY_LIST;
 
 public class List extends AbstractChildInstantiatingAndLayoutControllableUIElement implements IScrollAcceptingUIElement, IClickAcceptingUIElement, IDrawableUIElement
 {
     private static final int CONST_SCROLLBAR_SIZE    = 5;
     private static final int CONST_SCROLLBAR_PADDING = 8;
 
-    public IDependencyObject<ResourceLocation> scrollBarBackgroundResource;
-    public IDependencyObject<ResourceLocation> scrollBarForegroundResource;
-    public IDependencyObject<Boolean>          showScrollbar;
-
-    public List(
-      @NotNull final IDependencyObject<ResourceLocation> style, @NotNull final String id, @Nullable final IUIElementHost parent)
-    {
-        super(KEY_LIST, style, id, parent);
-        this.scrollBarBackgroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.scrollBarForegroundResource = DependencyObjectHelper.createFromValue(new ResourceLocation(""));
-        this.showScrollbar = DependencyObjectHelper.createFromValue(true);
-    }
+    public IDependencyObject<IIdentifier> scrollBarBackgroundResource;
+    public IDependencyObject<IIdentifier> scrollBarForegroundResource;
+    public IDependencyObject<Boolean>     showScrollbar;
 
     public List(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<ResourceLocation> styleId,
+      @NotNull final IDependencyObject<IIdentifier> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -61,9 +49,9 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final boolean dataBoundMode,
-      @NotNull final IDependencyObject<ResourceLocation> templateResource,
-      @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
-      @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
+      @NotNull final IDependencyObject<IIdentifier> templateResource,
+      @NotNull final IDependencyObject<IIdentifier> scrollBarBackgroundResource,
+      @NotNull final IDependencyObject<IIdentifier> scrollBarForegroundResource,
       @NotNull final double scrollOffset,
       @NotNull final IDependencyObject<Orientation> orientation,
       @NotNull final IDependencyObject<Boolean> showScrollbar,
@@ -271,7 +259,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
         IOpenGl.enableAlpha();
         IOpenGl.enableBlend();
-        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
         IOpenGl.color(1, 1, 1);
 
@@ -296,7 +284,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
         IOpenGl.enableAlpha();
         IOpenGl.enableBlend();
-        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
         IOpenGl.color(1, 1, 1);
 
@@ -326,23 +314,23 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     }
 
     @NotNull
-    public ResourceLocation getScrollBarBackgroundResource()
+    public IIdentifier getScrollBarBackgroundResource()
     {
         return scrollBarBackgroundResource.get(this);
     }
 
-    public void setScrollBarBackgroundResource(@NotNull final ResourceLocation scrollBarBackground)
+    public void setScrollBarBackgroundResource(@NotNull final IIdentifier scrollBarBackground)
     {
         this.scrollBarBackgroundResource.set(this, scrollBarBackground);
     }
 
     @NotNull
-    public ResourceLocation getScrollBarForegroundResource()
+    public IIdentifier getScrollBarForegroundResource()
     {
         return scrollBarForegroundResource.get(this);
     }
 
-    public void setScrollBarForegroundResource(@NotNull final ResourceLocation scrollBarForeground)
+    public void setScrollBarForegroundResource(@NotNull final IIdentifier scrollBarForeground)
     {
         this.scrollBarForegroundResource.set(this, scrollBarForeground);
     }

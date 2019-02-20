@@ -51,4 +51,11 @@ public interface IColor
      * @return A Angle in 360 Degrees describing the color on the Adobe color wheel.
      */
     double getAngleInDegrees();
+
+    /**
+     * The int encoded RGB value of this color.
+     *
+     * @return The int encoded RGB channels
+     */
+    int getRGB();
 }

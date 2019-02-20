@@ -11,7 +11,7 @@ import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
 {
     public AbstractListFactory(
       @NotNull final Class<U> clz,
-      @NotNull final ResourceLocation key,
+      @NotNull final String key,
       @NotNull final IListConstructor<U> constructor,
       @NotNull final ISimpleUIElementWriter<U> writer
     )
@@ -33,8 +33,8 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           key,
           (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled, templateResource, source, orientation, dataBoundMode, scrollOffset) -> {
 
-              final IDependencyObject<ResourceLocation> scrollBarBackgroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, MISSING);
-              final IDependencyObject<ResourceLocation> scrollBarForegroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, MISSING);
+              final IDependencyObject<IIdentifier> scrollBarBackgroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, IIdentifier.create(MISSING));
+              final IDependencyObject<IIdentifier> scrollBarForegroundResource = elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, IIdentifier.create(MISSING));
               final IDependencyObject<Boolean> showScrollBar = elementData.getFromRawDataWithDefault(CONST_SHOW_BAR, engine, true);
 
               return constructor.constructUsing(
@@ -79,7 +79,7 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           @NotNull final IBindingEngine engine,
           @NotNull final String id,
           @Nullable final IUIElementHost parent,
-          @NotNull final IDependencyObject<ResourceLocation> styleId,
+          @NotNull final IDependencyObject<IIdentifier> styleId,
           @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
           @NotNull final IDependencyObject<Dock> dock,
           @NotNull final IDependencyObject<AxisDistance> margin,
@@ -88,11 +88,11 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           @NotNull final IDependencyObject<Object> dataContext,
           @NotNull final IDependencyObject<Boolean> visible,
           @NotNull final IDependencyObject<Boolean> enabled,
-          @NotNull final IDependencyObject<ResourceLocation> templateResource,
+          @NotNull final IDependencyObject<IIdentifier> templateResource,
           @NotNull final IDependencyObject<Object> source,
           @NotNull final IDependencyObject<Orientation> orientation,
-          @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
-          @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
+          @NotNull final IDependencyObject<IIdentifier> scrollBarBackgroundResource,
+          @NotNull final IDependencyObject<IIdentifier> scrollBarForegroundResource,
           @NotNull final IDependencyObject<Boolean> showScrollBar,
           @NotNull final boolean dataBoundMode,
           @NotNull final Double scrollOffset

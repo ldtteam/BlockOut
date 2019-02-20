@@ -111,7 +111,7 @@ public interface IUIElement extends IDependencyReceiver
     BoundingBox getLocalBoundingBox();
 
     /**
-     * Gets the absolute {@link BoundingBox} in terms of gui coordinates.
+     * Gets the absolute {@link BoundingBox} in terms of guitemp coordinates.
      *
      * @return The absolute {@link BoundingBox}.
      */
