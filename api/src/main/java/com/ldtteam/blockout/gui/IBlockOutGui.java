@@ -1,16 +1,7 @@
 package com.ldtteam.blockout.gui;
 
-import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.element.IUIElementHost;
-import org.jetbrains.annotations.NotNull;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 
-public interface IBlockOutGui
+public interface IBlockOutGui extends IGuiContainer<BlockOutGuiData>
 {
-    @NotNull
-    IUIElementHost getRoot();
-
-    void setRoot(@NotNull IUIElementHost root);
-
-    @NotNull
-    IGuiKey getKey();
 }

@@ -43,37 +43,6 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui, IGui
         this.root.getUiManager().getRenderManager().setGui(this);
     }
 
-    /**
-     * Handles mouse input.
-     */
-    @Override
-    public void handleMouseInput() throws IOException
-    {
-        int scaledMouseX = (int) ((Mouse.getEventX() * this.width / this.mc.displayWidth) * scaleFactor.getX());
-        int scaledMouseY = (int) ((this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1) * scaleFactor.getY());
-
-        int delta = Mouse.getEventDWheel();
-        if (delta != 0)
-        {
-            if (!getRoot().getUiManager()
-                   .getClientSideScrollManager()
-                   .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta))
-            {
-                getRoot().getUiManager()
-                  .getNetworkManager()
-                  .onMouseWheel((int) (scaledMouseX - (guiLeft * scaleFactor.getX())), (int) (scaledMouseY - (guiTop * scaleFactor.getY())), delta);
-            }
-        }
-
-        super.handleMouseInput();
-    }
-
-    @Override
-    @NotNull
-    public IUIElementHost getRoot()
-    {
-        return root;
-    }
 
     @Override
     public void setRoot(@NotNull final IUIElementHost root)
@@ -83,43 +52,6 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui, IGui
         this.root.update(this.root.getUiManager().getUpdateManager());
         this.initGui();
         ((BlockOutContainer) this.inventorySlots).setRoot(root);
-    }
-
-    @Override
-    public void initGui()
-    {
-        root.getUiManager().getUpdateManager().updateElement(root);
-        this.xSize = (int) root.getLocalBoundingBox().getSize().getX();
-        this.ySize = (int) root.getLocalBoundingBox().getSize().getY();
-
-        this.scaleFactor = new Vector2d(1, 1);
-
-        //Check if we need to scale the guitemp
-        if (this.xSize > this.width || this.ySize > this.height)
-        {
-            double xScalingFactor = Math.ceil(root.getLocalBoundingBox().getSize().getX() / this.width);
-            double yScalingFactor = Math.ceil(root.getLocalBoundingBox().getSize().getY() / this.height);
-
-            //Equalise the scaling.
-            xScalingFactor = Math.max(xScalingFactor, yScalingFactor);
-            yScalingFactor = xScalingFactor;
-
-            this.scaleFactor = new Vector2d(xScalingFactor, yScalingFactor);
-
-            this.xSize = (int) (root.getLocalBoundingBox().getSize().getX() / xScalingFactor);
-            this.ySize = (int) (root.getLocalBoundingBox().getSize().getY() / yScalingFactor);
-        }
-
-        root.getUiManager().getRenderManager().setRenderingScalingFactor(scaleFactor);
-
-        super.initGui();
-
-        //Update the margins to be scaled now.
-        int scaledGuiLeft = (int) (guiLeft * this.scaleFactor.getX());
-        int scaledGuiTop = (int) (guiTop * this.scaleFactor.getY());
-
-        root.setMargin(new AxisDistance(scaledGuiLeft, scaledGuiTop, scaledGuiLeft, scaledGuiTop));
-        root.getUiManager().getUpdateManager().updateElement(root);
     }
 
     @Override
@@ -145,18 +77,6 @@ public class BlockOutGui extends GuiContainer implements IBlockOutGui, IGui
         IOpenGl.popMatrix();
 
         this.isDrawing = false;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY)
-    {
-        getRoot().getUiManager().getRenderManager().drawForeground(getRoot());
-    }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
-    {
-        getRoot().getUiManager().getRenderManager().drawBackground(getRoot());
     }
 
     /**

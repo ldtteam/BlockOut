@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management.render;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.gui.IBlockOutGui;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,9 @@ public interface IRenderManager
     IRenderingController getRenderingController();
 
     @NotNull
-    IBlockOutGui getGui();
+    BlockOutGuiData getGui();
 
-    void setGui(@NotNull final IBlockOutGui gui);
+    void setGui(@NotNull final BlockOutGuiData gui);
 
     Vector2d getRenderingScalingFactor();
 
