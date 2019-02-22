@@ -4,29 +4,22 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.management.render.IRenderManager;
-import com.ldtteam.blockout.gui.IBlockOutGui;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import org.jetbrains.annotations.NotNull;
 
-@SideOnly(Side.CLIENT)
 public class RenderManager implements IRenderManager
 {
-    @SideOnly(Side.CLIENT)
     private final IRenderingController renderingController = new RenderingController(this);
 
-    @SideOnly(Side.CLIENT)
-    private IBlockOutGui gui;
+    private BlockOutGuiData gui;
 
-    @SideOnly(Side.CLIENT)
     private Vector2d scalingFactor;
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void drawBackground(@NotNull final IUIElement host)
     {
@@ -100,25 +93,23 @@ public class RenderManager implements IRenderManager
 
     @NotNull
     @Override
-    public IBlockOutGui getGui()
+    public BlockOutGuiData getGui()
     {
         return gui;
     }
 
     @Override
-    public void setGui(@NotNull final IBlockOutGui gui)
+    public void setGui(@NotNull final BlockOutGuiData gui)
     {
         this.gui = gui;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public Vector2d getRenderingScalingFactor()
     {
         return scalingFactor;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void setRenderingScalingFactor(@NotNull final Vector2d scalingFactor)
     {

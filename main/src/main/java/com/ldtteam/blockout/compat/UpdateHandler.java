@@ -2,11 +2,12 @@ package com.ldtteam.blockout.compat;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
-import com.ldtteam.blockout.gui.IBlockOutGui;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEvent;
 import com.ldtteam.jvoxelizer.common.gameevent.event.ITickEvent;
 import com.ldtteam.jvoxelizer.entity.player.IMultiplayerPlayerEntity;
@@ -38,10 +39,10 @@ public class UpdateHandler
         }
 
         IDistributionExecutor.onClient(() -> {
-            if (IGameEngine.getInstance().getCurrentGui() instanceof IBlockOutGui)
+            if (IGameEngine.getInstance().getCurrentGui() instanceof IGuiContainer && IGameEngine.getInstance().getCurrentGui().getInstanceData() instanceof BlockOutGuiData)
             {
-                IBlockOutGui currentScreen = (IBlockOutGui) IGameEngine.getInstance().getCurrentGui();
-                currentScreen.getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getRoot());
+                IGuiContainer<BlockOutGuiData> currentScreen = (IGuiContainer<BlockOutGuiData>) IGameEngine.getInstance().getCurrentGui();
+                currentScreen.getInstanceData().getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getInstanceData().getRoot());
 
                 ClientTickManager.getInstance().onClientTick();
             }

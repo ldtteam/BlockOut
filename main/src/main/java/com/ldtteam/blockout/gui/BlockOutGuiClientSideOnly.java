@@ -7,6 +7,7 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.client.guitemp.IGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IOpenGl;
@@ -15,7 +16,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
-public class BlockOutGuiClientSideOnly extends GuiScreen implements IBlockOutGui, IGui
+public class BlockOutGuiClientSideOnly extends GuiScreen implements IGui, IGuiContainer<BlockOutGuiData>
 {
     @NotNull
     private final IGuiKey        key;
