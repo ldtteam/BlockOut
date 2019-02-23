@@ -32,7 +32,7 @@ import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.template.SimpleTemplateEngine;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.world.IDimension;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;

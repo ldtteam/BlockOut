@@ -45,10 +45,10 @@ public class BlockOutHelper
     }
 
     /**
-     * Initiate a standard chest control at a certain position in the world.
+     * Initiate a standard chest control at a certain position in the dimension.
      *
      * @param theBuilder    the builder to append it to.
-     * @param world         the world the chest is in.
+     * @param world         the dimension the chest is in.
      * @param chestPosition the position of the chest.
      */
     public static void initiateChestControlAtPosition(

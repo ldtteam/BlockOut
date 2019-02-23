@@ -1,16 +1,14 @@
 package com.ldtteam.blockout.inventory.slot;
 
 import com.ldtteam.blockout.element.simple.Slot;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.NotNull;
 
-public class SlotBlockOut extends SlotItemHandler
+public class BlockOutSlotData
 {
     private final Slot uiSlotInstance;
 
-    public SlotBlockOut(@NotNull final IItemHandler itemHandler, @NotNull final Slot uiSlotInstance)
+    public BlockOutSlotData(final Slot uiSlotInstance) {this.uiSlotInstance = uiSlotInstance;}
+
+    /*public SlotBlockOut(@NotNull final IItemHandler itemHandler, @NotNull final Slot uiSlotInstance)
     {
         super(itemHandler,
           uiSlotInstance.getInventoryIndex(),
@@ -28,13 +26,13 @@ public class SlotBlockOut extends SlotItemHandler
                                                                                          .getY()));
 
         this.uiSlotInstance = uiSlotInstance;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean canTakeStack(final EntityPlayer playerIn)
     {
         return getUiSlotInstance().isEnabled() && super.canTakeStack(playerIn);
-    }
+    }*/
 
     public Slot getUiSlotInstance()
     {

@@ -415,7 +415,7 @@ public class RenderingController implements IRenderingController
                     return null;
                 }
 
-                //TODO: Pull in structurize compatible dummy world. Or make dummy world library.
+                //TODO: Pull in structurize compatible dummy dimension. Or make dummy dimension library.
                 return state.getBlock().createTileEntity(null, state);
             }
 

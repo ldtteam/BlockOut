@@ -10,7 +10,7 @@ import com.ldtteam.blockout.network.message.CloseGuiRequestMessage;
 import com.ldtteam.blockout.network.message.OpenGuiRequestMessage;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.entity.player.IPlayerEntity;
+import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -17,7 +17,7 @@ import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
 import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.world.IDimension;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

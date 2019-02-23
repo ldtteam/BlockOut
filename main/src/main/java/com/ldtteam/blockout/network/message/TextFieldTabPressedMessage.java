@@ -4,9 +4,8 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
-import com.ldtteam.jvoxelizer.entity.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
 import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 

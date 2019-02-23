@@ -10,7 +10,7 @@ import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.jvoxelizer.entity.IEntity;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
-import com.ldtteam.jvoxelizer.world.IDimension;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;

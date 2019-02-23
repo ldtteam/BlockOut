@@ -5,11 +5,15 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
+import com.ldtteam.blockout.inventory.BlockOutContainerData;
+import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.jvoxelizer.IGameEngine;
 import com.ldtteam.jvoxelizer.client.gui.IGui;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,9 +32,16 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
     {
         final IGui<?> openGuiScreen = IGameEngine.getInstance().getCurrentGui();
 
-        if (openGuiScreen.getInstanceData() instanceof BlockOutGuiData)
+        if (!(openGuiScreen instanceof IGuiContainer))
         {
-            final BlockOutGuiData blockOutGui = (BlockOutGuiData) openGuiScreen.getInstanceData();
+            throw new IllegalStateException("No container open!");
+        }
+
+        final IGuiContainer<?> openContainerScreen = (IGuiContainer<?>) openGuiScreen;
+
+        if (openContainerScreen.getInstanceData() instanceof BlockOutGuiData)
+        {
+            final BlockOutGuiData blockOutGui = (BlockOutGuiData) openContainerScreen.getInstanceData();
             final IUIElement containedElement = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
             if (!(containedElement instanceof RootGuiElement))
             {
@@ -55,6 +66,12 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 
             rootGuiElement.setUiManager(uiManager);
             blockOutGui.setRoot(rootGuiElement);
+            blockOutGui.getRoot().getUiManager().getRenderManager().setGui(blockOutGui);
+            blockOutGui.getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getRoot());
+            openContainerScreen.initGui();
+
+            final IContainer<BlockOutContainerData> container = (IContainer<BlockOutContainerData>) openContainerScreen.getContainer();
+            BlockOutContainerLogic.reinitializeSlots(container);
         }
         else
         {

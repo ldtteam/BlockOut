@@ -1,26 +1,24 @@
 package com.ldtteam.blockout.util.itemstack;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+import com.ldtteam.jvoxelizer.item.IItem;
+import com.ldtteam.jvoxelizer.item.IItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 public final class ItemStackHelper
 {
 
     @Nullable
-    public static Comparator<ItemStack> COMPARATOR = new Comparator<ItemStack>()
+    public static Comparator<IItemStack> COMPARATOR = new Comparator<IItemStack>()
     {
-        public int compare(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
+        public int compare(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
         {
             if (!pItemStack1.isEmpty() && !pItemStack2.isEmpty())
             {
                 // Sort on itemID
-                if (Item.getIdFromItem(pItemStack1.getItem()) - Item.getIdFromItem(pItemStack2.getItem()) == 0)
+                if (IItem.getIdFromItem(pItemStack1.getItem()) - IItem.getIdFromItem(pItemStack2.getItem()) == 0)
                 {
                     // Sort on item
                     if (pItemStack1.getItem() == pItemStack2.getItem())
@@ -32,13 +30,13 @@ public final class ItemStackHelper
                             if (pItemStack1.hasTagCompound() && pItemStack2.hasTagCompound())
                             {
                                 // Then sort on stack size
-                                if (ItemStack.areItemStackTagsEqual(pItemStack1, pItemStack2))
+                                if (IItemStack.areItemStackTagsEqual(pItemStack1, pItemStack2))
                                 {
                                     return (pItemStack1.getCount() - pItemStack2.getCount());
                                 }
                                 else
                                 {
-                                    return (pItemStack1.getTagCompound().hashCode() - pItemStack2.getTagCompound().hashCode());
+                                    return (pItemStack1.write().hashCode() - pItemStack2.write().hashCode());
                                 }
                             }
                             else if (!(pItemStack1.hasTagCompound()) && pItemStack2.hasTagCompound())
@@ -66,7 +64,7 @@ public final class ItemStackHelper
                 }
                 else
                 {
-                    return Item.getIdFromItem(pItemStack1.getItem()) - Item.getIdFromItem(pItemStack2.getItem());
+                    return IItem.getIdFromItem(pItemStack1.getItem()) - IItem.getIdFromItem(pItemStack2.getItem());
                 }
             }
             else if (!pItemStack1.isEmpty())
@@ -90,24 +88,24 @@ public final class ItemStackHelper
     }
 
     @NotNull
-    public static ItemStack cloneItemStack(@NotNull ItemStack pItemStack, int pStackSize)
+    public static IItemStack cloneItemStack(@NotNull IItemStack pItemStack, int pStackSize)
     {
-        ItemStack tClonedItemStack = pItemStack.copy();
+        IItemStack tClonedItemStack = pItemStack.copy();
         tClonedItemStack.setCount(pStackSize);
         return tClonedItemStack;
     }
 
-    public static boolean equals(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
+    public static boolean equals(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
     {
         return (COMPARATOR.compare(pItemStack1, pItemStack2) == 0);
     }
 
-    public static boolean equalsIgnoreStackSize(@NotNull ItemStack itemStack1, @NotNull ItemStack itemStack2)
+    public static boolean equalsIgnoreStackSize(@NotNull IItemStack itemStack1, @NotNull IItemStack itemStack2)
     {
         if (!itemStack1.isEmpty() && !itemStack2.isEmpty())
         {
             // Sort on itemID
-            if (Item.getIdFromItem(itemStack1.getItem()) - Item.getIdFromItem(itemStack2.getItem()) == 0)
+            if (IItem.getIdFromItem(itemStack1.getItem()) - IItem.getIdFromItem(itemStack2.getItem()) == 0)
             {
                 // Sort on item
                 if (itemStack1.getItem() == itemStack2.getItem())
@@ -119,7 +117,7 @@ public final class ItemStackHelper
                         if (itemStack1.hasTagCompound() && itemStack2.hasTagCompound())
                         {
                             // Then sort on stack size
-                            return ItemStack.areItemStackTagsEqual(itemStack1, itemStack2);
+                            return IItemStack.areItemStackTagsEqual(itemStack1, itemStack2);
                         }
                         else
                         {
@@ -141,13 +139,13 @@ public final class ItemStackHelper
      * @param doMerge     - To actually do the merge
      * @return The number of item that was successfully merged.
      */
-    public static int mergeStacks(@NotNull ItemStack mergeSource, @NotNull ItemStack mergeTarget, boolean doMerge)
+    public static int mergeStacks(@NotNull IItemStack mergeSource, @NotNull IItemStack mergeTarget, boolean doMerge)
     {
         if (!canStacksMerge(mergeSource, mergeTarget))
         {
             return 0;
         }
-        int mergeCount = Math.min(mergeTarget.getMaxStackSize() - mergeTarget.getCount(), mergeSource.getAnimationsToGo());
+        int mergeCount = Math.min(mergeTarget.getMaxStackSize() - mergeTarget.getCount(), mergeSource.getCount());
         if (mergeCount < 1)
         {
             return 0;
@@ -166,7 +164,7 @@ public final class ItemStackHelper
      * @param stack2 - The second stack
      * @return true if stacks can be merged, false otherwise
      */
-    public static boolean canStacksMerge(@NotNull ItemStack stack1, @NotNull ItemStack stack2)
+    public static boolean canStacksMerge(@NotNull IItemStack stack1, @NotNull IItemStack stack2)
     {
         if (stack1.isEmpty() || stack2.isEmpty())
         {
@@ -176,144 +174,23 @@ public final class ItemStackHelper
         {
             return false;
         }
-        return ItemStack.areItemStackTagsEqual(stack1, stack2);
+        return IItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
-    /**
-     * Determines whether the given ItemStack should be considered equivalent
-     * for crafting purposes.
-     *
-     * @param base          The stack to compare to.
-     * @param comparison    The stack to compare.
-     * @param oreDictionary true to take the Forge OreDictionary into account.
-     * @return true if comparison should be considered a crafting equivalent for
-     * base.
-     */
-    public static boolean isCraftingEquivalent(@NotNull ItemStack base, @NotNull ItemStack comparison, boolean oreDictionary)
-    {
-        if (isMatchingItem(base, comparison, true, false))
-        {
-            return true;
-        }
-        if (oreDictionary)
-        {
-            int[] idBase = OreDictionary.getOreIDs(base);
-            return isCraftingEquivalent(idBase, comparison);
-        }
-
-        return false;
-    }
-
-    /**
-     * Compares item id, and optionally damage and NBT. Accepts wildcard damage.
-     * Ignores damage entirely if the item doesn't have subtypes.
-     *
-     * @param a           ItemStack
-     * @param b           ItemStack
-     * @param matchDamage Whether to check the damage value of the item
-     * @param matchNBT    Whether to check the NBT tags on the item
-     * @return Whether the item match
-     */
-    public static boolean isMatchingItem(@NotNull final ItemStack a, @NotNull final ItemStack b, final boolean matchDamage, final boolean matchNBT)
-    {
-        if (a.isEmpty() || b.isEmpty())
-        {
-            return false;
-        }
-        if (a.getItem() != b.getItem())
-        {
-            return false;
-        }
-        if (matchDamage && a.getHasSubtypes())
-        {
-            if (!isWildcard(a) && !isWildcard(b))
-            {
-                if (a.getItemDamage() != b.getItemDamage())
-                {
-                    return false;
-                }
-            }
-        }
-        if (matchNBT)
-        {
-            return a.getTagCompound() == null || a.getTagCompound().equals(b.getTagCompound());
-        }
-        return true;
-    }
-
-    public static boolean isCraftingEquivalent(@NotNull int[] oreIDs, @NotNull ItemStack comparison)
-    {
-        if (oreIDs.length > 0)
-        {
-            for (int id : oreIDs)
-            {
-                for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(id)))
-                {
-                    if (comparison.getItem() == itemstack.getItem() && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                                                                          || comparison.getItemDamage() == itemstack.getItemDamage()))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean isWildcard(@NotNull ItemStack stack)
-    {
-        return isWildcard(stack.getItemDamage());
-    }
-
-    public static boolean isWildcard(int damage)
-    {
-        return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
-    }
-
-    /**
-     * Compares item id, damage and NBT. Accepts wildcard damage. Ignores damage
-     * entirely if the item doesn't have subtypes.
-     *
-     * @param base       The stack to compare to.
-     * @param comparison The stack to compare.
-     * @return true if id, damage and NBT match.
-     */
-    public static boolean isMatchingItem(@NotNull ItemStack base, @NotNull ItemStack comparison)
-    {
-        return isMatchingItem(base, comparison, true, true);
-    }
-
-    public static boolean isMatchingOreDict(@NotNull final ItemStack a, @NotNull final ItemStack b)
-    {
-        if (hasOreDictEntry(a) && hasOreDictEntry(b))
-        {
-            int[] idA = OreDictionary.getOreIDs(a);
-            int[] idB = OreDictionary.getOreIDs(b);
-            return Arrays.equals(idA, idB);
-        }
-        return false;
-    }
-
-    public static boolean hasOreDictEntry(@NotNull final ItemStack a)
-    {
-        int[] oreIDs = OreDictionary.getOreIDs(a);
-        return oreIDs != null;
-    }
-
-    public static int compare(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
+    public static int compare(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
     {
         return COMPARATOR.compare(pItemStack1, pItemStack2);
     }
 
-    public static String toString(@NotNull ItemStack pItemStack)
+    public static String toString(@NotNull IItemStack pItemStack)
     {
         if (!pItemStack.isEmpty())
         {
             return String.format("%sxitemStack[%s@%s][%s]",
               pItemStack.getCount(),
-              pItemStack.getTranslationKey(),
+              pItemStack.getTranslationKey(pItemStack),
               pItemStack.getItemDamage(),
-              pItemStack.hasTagCompound() ? pItemStack.getTagCompound().toString() : "");
+              pItemStack.hasTagCompound() ? pItemStack.write().toString() : "");
         }
 
         return "null";

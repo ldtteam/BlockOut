@@ -3,22 +3,16 @@ package com.ldtteam.blockout.render.standard;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Deque;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-@SideOnly(Side.CLIENT)
 public class ScissoringController implements IScissoringController
 {
     private static BoundingBox DEBUG_BOX = new BoundingBox();
@@ -31,7 +25,7 @@ public class ScissoringController implements IScissoringController
     @NotNull
     private final Deque<BoundingBox> scissorsQueue     = new ConcurrentLinkedDeque<>();
     @NotNull
-    private final Deque<Color>       scissorDebugColor = new ConcurrentLinkedDeque<>();
+    private final Deque<IColor>      scissorDebugColor = new ConcurrentLinkedDeque<>();
 
     @NotNull
     private final IRenderingController renderingController;

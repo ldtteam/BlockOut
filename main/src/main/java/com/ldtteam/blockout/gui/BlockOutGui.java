@@ -2,7 +2,6 @@ package com.ldtteam.blockout.gui;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.client.guitemp.IGui;
@@ -13,7 +12,7 @@ import net.minecraft.inventory.Slot;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
-public class BlockOutGuisdsd extends GuiContainer implements IGui, IGuiContainer<BlockOutGuiData>
+public class BlockOutGui extends GuiContainer implements IGui, IGuiContainer<BlockOutGuiData>
 {
     @NotNull
     private final IGuiKey        key;

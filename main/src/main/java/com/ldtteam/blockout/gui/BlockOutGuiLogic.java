@@ -4,7 +4,7 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.AxisDistance;
-import com.ldtteam.blockout.inventory.slot.SlotBlockOut;
+import com.ldtteam.blockout.inventory.slot.BlockOutSlotData;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
@@ -17,8 +17,6 @@ import com.ldtteam.jvoxelizer.client.mouse.IMouse;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
 import com.ldtteam.jvoxelizer.core.logic.VoidPipelineElementContext;
-
-import java.io.IOException;
 
 public class BlockOutGuiLogic
 {
@@ -138,7 +136,7 @@ public class BlockOutGuiLogic
 
     private static void drawSlot(final VoidPipelineElementContext<DrawSlotContext, IGuiContainer<BlockOutGuiData>, BlockOutGuiData> context)
     {
-        if (context.getInstanceData().isDrawing() && context.getContext().getSlot() instanceof SlotBlockOut)
+        if (context.getInstanceData().isDrawing() && context.getContext().getSlot() instanceof BlockOutSlotData)
         {
             return;
         }
@@ -214,7 +212,7 @@ public class BlockOutGuiLogic
         context.getContext().setMouseX(scaledMouseX);
         context.getContext().setMouseY(scaledMouseY);
 
-        return ((!context.getInstanceData().isDrawing() && (!(context.getContext().getSlot() instanceof SlotBlockOut) || ((SlotBlockOut) context.getContext().getSlot()).getUiSlotInstance().isEnabled())) || !(context.getContext().getSlot() instanceof SlotBlockOut))
+        return ((!context.getInstanceData().isDrawing() && (!(context.getContext().getSlot() instanceof BlockOutSlotData) || ((BlockOutSlotData) context.getContext().getSlot()).getUiSlotInstance().isEnabled())) || !(context.getContext().getSlot() instanceof BlockOutSlotData))
                  && context.callSuper();
     }
 
