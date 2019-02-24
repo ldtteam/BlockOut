@@ -29,7 +29,7 @@ import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.client.guitemp.IGuiScreen;
+import com.ldtteam.jvoxelizer.client.gui.IGuiScreen;
 import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
 import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
