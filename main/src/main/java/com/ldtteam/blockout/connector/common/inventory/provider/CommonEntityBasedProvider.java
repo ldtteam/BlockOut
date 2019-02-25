@@ -3,13 +3,12 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.EmptyHandler;
+import com.ldtteam.jvoxelizer.common.capability.ICapability;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,13 +20,13 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     private final String id;
 
     @NotNull
-    private final int        dimId;
+    private final int     dimId;
     @NotNull
-    private final UUID       entityId;
+    private final UUID    entityId;
     @Nullable
-    private final EnumFacing facing;
+    private final IFacing facing;
 
-    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final EnumFacing facing)
+    public CommonEntityBasedProvider(@NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final IFacing facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -81,9 +80,9 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
      */
     @NotNull
     @Override
-    public ResourceLocation getId()
+    public IIdentifier getId()
     {
-        return new ResourceLocation(id);
+        return IIdentifier.create(id);
     }
 
     /**
@@ -93,14 +92,17 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final World blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
-        final Entity entity = blockAccess.loadedEntityList.stream().filter(e -> e.getPersistentID().equals(entityId)).findFirst().orElse(null);
+        final IDimension<?> blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
+        final IEntity entity = blockAccess.getLoadedEntities().stream().filter(e -> e.getId().equals(entityId)).findFirst().orElse(null);
 
         if (entity == null)
         {
-            return new EmptyHandler();
+            return IItemHandler.createEmpty();
         }
 
-        return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+        if (!entity.hasCapability(ICapability.getItemHandlerCapability(), facing))
+            throw new IllegalStateException("Gui created with an entity inventory for an entity that has no entity.");
+
+        return entity.getCapability(ICapability.getItemHandlerCapability(), facing);
     }
 }

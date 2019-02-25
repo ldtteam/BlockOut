@@ -6,7 +6,12 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IScaledResolution;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISpriteMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Deque;
@@ -56,8 +61,8 @@ public class ScissoringController implements IScissoringController
             IOpenGl.pushMatrix();
             IOpenGl.enableAlpha();
             IOpenGl.enableBlend();
-            IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
-            renderingController.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
+            renderingController.bindTexture(ISpriteMap.getLocationOfBlocksTexture());
             renderingController.drawTexturedModalRect(new Vector2d(-10, -10),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(),
@@ -71,20 +76,19 @@ public class ScissoringController implements IScissoringController
 
     private static void disableScissor()
     {
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GL11.glPopAttrib();
+        IOpenGl.disableScissor();
     }
 
     @NotNull
-    private Color generateNewDebugDrawColor()
+    private IColor generateNewDebugDrawColor()
     {
-        Color color = new Color(random.nextInt());
+        IColor color = IColor.create(random.nextInt());
 
         int attempts = 0;
         while (scissorDebugColor.contains(color) && attempts < 100)
         {
             attempts++;
-            color = new Color(random.nextInt());
+            color = IColor.create(random.nextInt());
         }
 
         return color;
@@ -94,19 +98,16 @@ public class ScissoringController implements IScissoringController
     {
         calcScaleFactor();
 
-        GL11.glPushAttrib(GL11.GL_SCISSOR_BIT);
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor((int) (box.getUpperLeftCoordinate().getX() * GUISCALE),
+        IOpenGl.enableScissor((int) (box.getUpperLeftCoordinate().getX() * GUISCALE),
           (int) ((DISPLAYHEIGHT - box.getUpperRightCoordinate().getY()) * GUISCALE),
           (int) ((box.getSize().getX()) * GUISCALE),
           (int) ((box.getSize().getY()) * GUISCALE));
-        //GL11.glScissor(500,500,100,100);
     }
 
     private static void calcScaleFactor()
     {
-        Minecraft mc = Minecraft.getMinecraft();
-        ScaledResolution sc = new ScaledResolution(mc);
+        IGameEngine mc = IGameEngine.getInstance();
+        IScaledResolution sc = IScaledResolution.create(mc);
         DISPLAYWIDTH = sc.getScaledWidth();
         DISPLAYHEIGHT = sc.getScaledHeight();
         GUISCALE = sc.getScaleFactor();

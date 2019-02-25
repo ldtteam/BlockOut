@@ -3,7 +3,7 @@ package com.ldtteam.blockout.util.image;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -19,12 +19,12 @@ public final class ImageUtil
     }
 
     /**
-     * Load and image from a {@link ResourceLocation} and return a {@link Vector2d} containing its width and height.
+     * Load and image from a {@link IIdentifier} and return a {@link Vector2d} containing its width and height.
      *
-     * @param resourceLocation The {@link ResourceLocation} pointing to the image.
+     * @param resourceLocation The {@link IIdentifier} pointing to the image.
      * @return Width and height.
      */
-    public static Vector2d getImageDimensions(final ResourceLocation resourceLocation)
+    public static Vector2d getImageDimensions(final IIdentifier resourceLocation)
     {
         final Iterator<ImageReader> it = ImageIO.getImageReadersBySuffix("png");
         if (it.hasNext())

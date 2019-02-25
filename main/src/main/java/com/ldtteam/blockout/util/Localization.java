@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.util;
 
-import net.minecraft.client.resources.I18n;
+import com.ldtteam.jvoxelizer.translation.ITranslator;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -37,7 +37,7 @@ public class Localization
             }
 
             final String key = s.substring(index + 2, endIndex);
-            String replacement = I18n.format(key);
+            String replacement = ITranslator.format(key);
 
             if (replacement.equals(key))
             {

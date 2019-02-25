@@ -7,6 +7,8 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.Slot;
+import com.ldtteam.blockout.gui.BlockOutGuiLogic;
+import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
 import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
@@ -154,6 +156,6 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement)
     {
-        IGameEngine.getInstance().displayGuiScreen(new BlockOutGuiClientSideOnly(key, rootGuiElement));
+        IGameEngine.getInstance().displayGuiScreen(BlockOutGuiLogic.create(key, rootGuiElement, BlockOutContainerLogic.create(key, rootGuiElement, 0)));
     }
 }

@@ -9,7 +9,7 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.style.resources.TemplateResource;
-import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutionException;
@@ -20,7 +20,7 @@ public class SimpleTemplateEngine implements ITemplateEngine
 {
     private static SimpleTemplateEngine ourInstance = new SimpleTemplateEngine();
 
-    private final Cache<ResourceLocation, TemplateResource> CACHE_TEMPLATE_DATA = CacheBuilder.newBuilder()
+    private final Cache<IIdentifier, TemplateResource> CACHE_TEMPLATE_DATA = CacheBuilder.newBuilder()
                                                                                     .expireAfterAccess(30, TimeUnit.MINUTES)
                                                                                     .maximumSize(30)
                                                                                     .build();
@@ -38,7 +38,7 @@ public class SimpleTemplateEngine implements ITemplateEngine
     public IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final ResourceLocation resourceId,
+      @NotNull final IIdentifier resourceId,
       @NotNull final String controlId,
       @NotNull final
       Function<IUIElementData, IUIElementData> dataOverrideCallback)

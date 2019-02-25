@@ -2,10 +2,9 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.wrapper.RangedWrapper;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import com.ldtteam.jvoxelizer.item.handling.implementations.IRangedWrappedItemHandler;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,22 +30,17 @@ public class CommonRangedBasedProvider implements IItemHandlerProvider
 
     @NotNull
     @Override
-    public ResourceLocation getId()
+    public IIdentifier getId()
     {
-        return new ResourceLocation(id);
+        return IIdentifier.create(id);
     }
 
     @Nullable
     @Override
     public IItemHandler get(final IItemHandlerManager manager)
     {
-        final IItemHandler other = manager.getItemHandlerFromId(new ResourceLocation(wrappedId));
+        final IItemHandler other = manager.getItemHandlerFromId(IIdentifier.create(wrappedId));
 
-        if (!(other instanceof IItemHandlerModifiable))
-        {
-            throw new IllegalStateException("Can not range wrap none modifyable IItemHandlers");
-        }
-
-        return new RangedWrapper((IItemHandlerModifiable) other, minSlot, maxSlotExlcuding);
+        return IRangedWrappedItemHandler.create(other, minSlot, maxSlotExlcuding);
     }
 }

@@ -3,13 +3,13 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import com.ldtteam.jvoxelizer.block.entity.IBlockEntity;
+import com.ldtteam.jvoxelizer.common.capability.ICapability;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,15 +29,15 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     private final int z;
 
     @Nullable
-    private final EnumFacing facing;
+    private final IFacing facing;
 
     public CommonTileBasedProvider(
-      @NotNull final ResourceLocation id,
+      @NotNull final IIdentifier id,
       @NotNull final int dimId,
       @NotNull final int x,
       @NotNull final int y,
       @NotNull final int z,
-      @Nullable final EnumFacing facing)
+      @Nullable final IFacing facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -98,26 +98,26 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
 
     @NotNull
     @Override
-    public ResourceLocation getId()
+    public IIdentifier getId()
     {
-        return new ResourceLocation(id);
+        return IIdentifier.create(id);
     }
 
     @Nullable
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final World blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
-        final TileEntity tileEntity = blockAccess.getTileEntity(new BlockPos(x, y, z));
+        final IDimension<?> blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
+        final IBlockEntity tileEntity = blockAccess.getBlockEntity(IBlockCoordinate.create(x,y,z));
 
         if (tileEntity == null)
         {
             return null;
         }
 
-        if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing))
+        if (tileEntity.hasCapability(ICapability.getItemHandlerCapability(), facing))
         {
-            return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+            return tileEntity.getCapability(ICapability.getItemHandlerCapability(), facing);
         }
 
         return null;

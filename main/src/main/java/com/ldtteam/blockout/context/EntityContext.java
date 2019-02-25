@@ -2,7 +2,7 @@ package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.blockout.util.Constants;
-import net.minecraft.entity.Entity;
+import com.ldtteam.jvoxelizer.entity.IEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -23,9 +23,9 @@ public class EntityContext implements IContext
         this.entityId = entityId;
     }
 
-    public EntityContext(@NotNull final Entity entity)
+    public EntityContext(@NotNull final IEntity entity)
     {
-        this.entityId = entity.getPersistentID();
+        this.entityId = entity.getId();
     }
 
     @Override

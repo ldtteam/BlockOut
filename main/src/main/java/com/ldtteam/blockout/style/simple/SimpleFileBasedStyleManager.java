@@ -14,9 +14,10 @@ import com.ldtteam.blockout.style.definitions.deserializers.ResourceTypeDefiniti
 import com.ldtteam.blockout.style.definitions.deserializers.StyleDefinitionDeserializer;
 import com.ldtteam.blockout.style.definitions.deserializers.StylesDefinitionDeserializer;
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ProgressManager;
+import com.ldtteam.jvoxelizer.modloader.IModLoader;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
@@ -29,9 +30,9 @@ import java.util.stream.Collectors;
 
 public class SimpleFileBasedStyleManager implements IStyleManager
 {
-    public static final String                        CONST_STYLE_FILE_PATH = "styles/styles.json";
-    private static      SimpleFileBasedStyleManager   ourInstance           = new SimpleFileBasedStyleManager();
-    private final       Map<ResourceLocation, IStyle> styles                = new HashMap();
+    public static final String                      CONST_STYLE_FILE_PATH = "styles/styles.json";
+    private static      SimpleFileBasedStyleManager ourInstance           = new SimpleFileBasedStyleManager();
+    private final       Map<IIdentifier, IStyle>    styles                = new HashMap();
 
     private SimpleFileBasedStyleManager()
     {
@@ -49,7 +50,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
      */
     @NotNull
     @Override
-    public ImmutableMap<ResourceLocation, IStyle> getStyles()
+    public ImmutableMap<IIdentifier, IStyle> getStyles()
     {
         return ImmutableMap.copyOf(styles);
     }
@@ -66,10 +67,10 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 
     public void initialize()
     {
-        Loader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toList());
+        IModLoader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toList());
 
-        final Set<String> resourceDomains = Loader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toSet());
-        final ProgressManager.ProgressBar loadingBar = ProgressManager.push("Loading BlockOut Styles", resourceDomains.size());
+        final Set<String> resourceDomains = IModLoader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toSet());
+        final IProgressBar loadingBar = IProgressManager.push("Loading BlockOut Styles", resourceDomains.size());
 
         final Gson gson = new GsonBuilder()
                             .registerTypeAdapter(StylesDefinitionDeserializer.CONST_STYLES_DEFINITION_TYPE, StylesDefinitionDeserializer.getInstance())
@@ -80,7 +81,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
         resourceDomains.forEach(domain -> {
             loadingBar.step("Loading styles from: " + domain);
 
-            final ResourceLocation stylesLocation = new ResourceLocation(domain.toLowerCase(), CONST_STYLE_FILE_PATH);
+            final IIdentifier stylesLocation = IIdentifier.create(domain.toLowerCase(), CONST_STYLE_FILE_PATH);
             final StylesDefinition stylesDefinition;
             try
             {
@@ -93,8 +94,8 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                 return;
             }
 
-            final ProgressManager.ProgressBar domainLoadingBar =
-              ProgressManager.push(String.format("Loading styles from: %s", domain), stylesDefinition.getStyleLocations().size());
+            final IProgressBar domainLoadingBar =
+              IProgressManager.push(String.format("Loading styles from: %s", domain), stylesDefinition.getStyleLocations().size());
             stylesDefinition.getStyleLocations().forEach(styleLocation ->
             {
                 domainLoadingBar.step(String.format("Loading style from: %s", styleLocation));
@@ -110,9 +111,9 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                     return;
                 }
 
-                final ProgressManager.ProgressBar styleLoadingBar = ProgressManager.push(String.format("Loading style: %s in domain: %s", styleDefinition.getStyleId(), domain),
+                final IProgressBar styleLoadingBar = IProgressManager.push(String.format("Loading style: %s in domain: %s", styleDefinition.getStyleId(), domain),
                   styleDefinition.getResourceTypeDefinitionLocations().size());
-                final Map<ResourceLocation, IResource> resourcesForStyle =
+                final Map<IIdentifier, IResource> resourcesForStyle =
                   styleDefinition.getResourceTypeDefinitionLocations()
                     .stream()
                     .flatMap(resourceTypeLocation -> {
@@ -148,7 +149,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                     Log.getLogger().warn("Already existing style detected. Merging and overriding...");
                     final IStyle alreadyCreatedStyle = styles.remove(styleDefinition.getStyleId());
 
-                    final Map<ResourceLocation, IResource> merged = new HashMap<>(alreadyCreatedStyle.getResources());
+                    final Map<IIdentifier, IResource> merged = new HashMap<>(alreadyCreatedStyle.getResources());
                     resourcesForStyle.forEach((key, value) -> merged.merge(key, value, (one, two) -> two));
 
                     style = new SimpleStyle(styleDefinition.getStyleId(), merged);
@@ -160,12 +161,12 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 
                 styles.put(styleDefinition.getStyleId(), style);
 
-                ProgressManager.pop(styleLoadingBar);
+                IProgressManager.pop(styleLoadingBar);
             });
 
-            ProgressManager.pop(domainLoadingBar);
+            IProgressManager.pop(domainLoadingBar);
         });
 
-        ProgressManager.pop(loadingBar);
+        IProgressManager.pop(loadingBar);
     }
 }

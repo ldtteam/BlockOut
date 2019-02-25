@@ -5,7 +5,7 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.connector.common.CommonGuiKey;
 import com.ldtteam.blockout.connector.common.definition.loader.CommonClassBasedDefinitionLoader;
-import com.ldtteam.blockout.connector.common.definition.loader.CommonResourceLocationBasedGuiDefinitionLoader;
+import com.ldtteam.blockout.connector.common.definition.loader.CommonIIdentifierBasedGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.common.definition.loader.CommonWebFileBasedGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.common.inventory.builder.CommonItemHandlerManagerBuilder;
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
@@ -17,12 +17,10 @@ import com.ldtteam.blockout.context.ClientSideOnlyContext;
 import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -51,9 +49,9 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location)
+    public IGuiKeyBuilder ofFile(@NotNull final IIdentifier location)
     {
-        this.guiDefinitionLoader = new CommonResourceLocationBasedGuiDefinitionLoader(location);
+        this.guiDefinitionLoader = new CommonIIdentifierBasedGuiDefinitionLoader(location);
         return this;
     }
 
@@ -116,7 +114,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forEntity(@NotNull final Entity entity)
+    public IGuiKeyBuilder forEntity(@NotNull final IEntity entity)
     {
         this.context = new EntityContext(entity);
         return this;
@@ -132,13 +130,12 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos)
+    public IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos)
     {
         this.context = new PositionContext(world, blockPos);
         return this;
     }
 
-    @SideOnly(Side.CLIENT)
     @NotNull
     @Override
     public IGuiKeyBuilder forClientSideOnly()

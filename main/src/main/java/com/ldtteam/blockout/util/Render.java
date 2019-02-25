@@ -1,10 +1,9 @@
 package com.ldtteam.blockout.util;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IOpenGl;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
+import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
+import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
 
 /**
  * Render utility functions.
@@ -59,12 +58,12 @@ public final class Render
         final float g = (float) (((color >> GREEN_SHIFT) & COLOR_MASK) / COLOR_DIVISOR);
         final float b = (float) ((color & COLOR_MASK) / COLOR_DIVISOR);
 
-        final Tessellator tessellator = Tessellator.getInstance();
-        final BufferBuilder vertexBuffer = tessellator.getBuffer();
+        final ITessellator tessellator = ITessellator.getInstance();
+        final IBufferBuilder vertexBuffer = tessellator.getBuffer();
 
-        vertexBuffer.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
+        vertexBuffer.begin(IOpenGl.getOpenGlLineRenderMode(), IVertexFormat.position());
         IOpenGl.disableTexture2D();
-        GL11.glLineWidth(lineWidth);
+        IOpenGl.glLineWidth(lineWidth);
         IOpenGl.color(r, g, b, a);
 
         //Since our points do not have any u,v this seems to be the correct code

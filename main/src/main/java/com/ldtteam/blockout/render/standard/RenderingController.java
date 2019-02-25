@@ -1,47 +1,47 @@
 package com.ldtteam.blockout.render.standard;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.element.simple.Slot;
-import com.ldtteam.blockout.gui.BlockOutGui;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
+import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.core.IScissoringController;
+import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.biome.IBiomes;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.item.IItemRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
+import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISprite;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISpriteMap;
+import com.ldtteam.jvoxelizer.core.logic.DummyInstanceData;
+import com.ldtteam.jvoxelizer.dimension.IDimensionReader;
+import com.ldtteam.jvoxelizer.dimension.IDimensionType;
+import com.ldtteam.jvoxelizer.dimension.logic.builder.IDimensionReaderBuilder;
+import com.ldtteam.jvoxelizer.fluid.IFluidStack;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
+import com.ldtteam.jvoxelizer.inventory.slot.ISlot;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
 public class RenderingController implements IRenderingController
 {
 
     @NotNull
-    private final static RenderItem ITEMRENDERER = Minecraft.getMinecraft().getRenderItem();
+    private final static IItemRenderer ITEMRENDERER = IGameEngine.getInstance().getItemRenderer();
 
     @NotNull
     private final IRenderManager        renderManager;
@@ -73,18 +73,18 @@ public class RenderingController implements IRenderingController
     @Override
     public void bindTexture(@NotNull String textureAddress)
     {
-        bindTexture(new ResourceLocation(textureAddress));
+        bindTexture(IIdentifier.create(textureAddress));
     }
 
     /**
-     * Convenient helper function to bind the texture using a ResourceLocation
+     * Convenient helper function to bind the texture using a IIdentifier
      *
-     * @param textureLocation The ResourceLocation of the Texture to bind.
+     * @param textureLocation The IIdentifier of the Texture to bind.
      */
     @Override
-    public void bindTexture(@NotNull ResourceLocation textureLocation)
+    public void bindTexture(@NotNull IIdentifier textureLocation)
     {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(textureLocation);
+        IGameEngine.getInstance().getTextureManager().bindTexture(textureLocation);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class RenderingController implements IRenderingController
         IOpenGl.enableBlend();
         IOpenGl.disableAlpha();
         IOpenGl.disableLighting();
-        IOpenGl.blendFunc(IOpenGl.SourceFactor.SRC_ALPHA, IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA);
+        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
         IOpenGl.color(1, 1, 1, 1);
 
         double x = origin.getX();
@@ -111,9 +111,9 @@ public class RenderingController implements IRenderingController
         double textureWidth = inTextureSize.getX() / textureSize.getX();
         double textureHeight = inTextureSize.getY() / textureSize.getY();
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, IVertexFormat.positionTex());
         bufferbuilder
           .pos(x + 0, y + height, 0)
           .tex(textureX, textureY + textureHeight)
@@ -151,23 +151,23 @@ public class RenderingController implements IRenderingController
      * @param h     The total Height
      */
     @Override
-    public void drawFluid(@Nullable FluidStack fluid, int x, int y, int z, int w, int h)
+    public void drawFluid(@Nullable IFluidStack fluid, int x, int y, int z, int w, int h)
     {
         if (fluid == null || fluid.getFluid() == null)
         {
             return;
         }
 
-        TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
+        ISprite texture = IGameEngine.getInstance().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
 
         if (texture == null)
         {
-            texture = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)).getAtlasSprite("missingno");
+            texture = ((ISpriteMap) IGameEngine.getInstance().getTextureManager().getSpriteMap(ISpriteMap.getLocationOfBlocksTexture())).getAtlasSprite("missingno");
         }
 
-        final Color fluidColor = new Color(fluid.getFluid().getColor(fluid));
+        final IColor fluidColor = IColor.create(fluid.getFluid().getColor(fluid));
 
-        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        bindTexture(ISpriteMap.getLocationOfBlocksTexture());
         fluidColor.performOpenGLColoring();
 
         int fullX = w / 16 + 1;
@@ -193,11 +193,11 @@ public class RenderingController implements IRenderingController
      * @param cutOffVertical The vertical distance to cut of.
      */
     @Override
-    public void drawCutIcon(@NotNull TextureAtlasSprite icon, int x, int y, int z, int w, int h, int cutOffVertical)
+    public void drawCutIcon(@NotNull ISprite icon, int x, int y, int z, int w, int h, int cutOffVertical)
     {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder worldrenderer = tessellator.getBuffer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder worldrenderer = tessellator.getBuffer();
+        worldrenderer.begin(7, IVertexFormat.positionTex());
 
         worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex((double) icon.getMinU(), (double) icon.getInterpolatedV(h)).endVertex();
         worldrenderer.pos((double) (x + w), (double) (y + h), (double) z)
@@ -224,11 +224,11 @@ public class RenderingController implements IRenderingController
      * @param icon The IIcon describing the Texture
      */
     @Override
-    public void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull TextureAtlasSprite icon, int w, int h)
+    public void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull ISprite icon, int w, int h)
     {
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder worldrenderer = tessellator.getBuffer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder worldrenderer = tessellator.getBuffer();
+        worldrenderer.begin(7, IVertexFormat.positionTex());
         worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex((double) icon.getMinU(), (double) icon.getMaxV()).endVertex();
         worldrenderer.pos((double) (x + w), (double) (y + h), (double) z).tex((double) icon.getMaxU(), (double) icon.getMaxV()).endVertex();
         worldrenderer.pos((double) (x + w), (double) (y + 0), (double) z).tex((double) icon.getMaxU(), (double) icon.getMinV()).endVertex();
@@ -244,7 +244,7 @@ public class RenderingController implements IRenderingController
      * @param c   The color to render.
      */
     @Override
-    public void drawColoredRect(@NotNull BoundingBox box, int z, @NotNull Color c)
+    public void drawColoredRect(@NotNull BoundingBox box, int z, @NotNull IColor c)
     {
         drawGradiendColoredRect(box, z, c, c);
     }
@@ -258,7 +258,7 @@ public class RenderingController implements IRenderingController
      * @param colorEnd   The right color.
      */
     @Override
-    public void drawGradiendColoredRect(@NotNull BoundingBox box, int z, @NotNull Color colorStart, @NotNull Color colorEnd)
+    public void drawGradiendColoredRect(@NotNull BoundingBox box, int z, @NotNull IColor colorStart, @NotNull IColor colorEnd)
     {
         float f = colorStart.getAlphaFloat();
         float f1 = colorStart.getBlueFloat();
@@ -273,9 +273,9 @@ public class RenderingController implements IRenderingController
         IOpenGl.disableAlpha();
         IOpenGl.tryBlendFuncSeparate(770, 771, 1, 0);
         IOpenGl.shadeModel(7425);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder worldrenderer = tessellator.getBuffer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder worldrenderer = tessellator.getBuffer();
+        worldrenderer.begin(7, IVertexFormat.positionColor());
         worldrenderer.pos(box.getLowerRightCoordinate().getX(), box.getUpperLeftCoordinate().getY(), (double) z).color(f3, f2, f1, f).endVertex();
         worldrenderer.pos(box.getUpperLeftCoordinate().getX(), box.getUpperLeftCoordinate().getY(), (double) z).color(f3, f2, f1, f).endVertex();
         worldrenderer.pos(box.getUpperLeftCoordinate().getX(), box.getLowerRightCoordinate().getY(), (double) z).color(f7, f6, f5, f4).endVertex();
@@ -288,7 +288,7 @@ public class RenderingController implements IRenderingController
     }
 
     @Override
-    public void drawRect(final double left, final double top, final double right, final double bottom, @NotNull final Color color)
+    public void drawRect(final double left, final double top, final double right, final double bottom, @NotNull final IColor color)
     {
         double relativeLeft = left;
         double relativeRight = right;
@@ -313,16 +313,16 @@ public class RenderingController implements IRenderingController
         float f1 = color.getGreenFloat();
         float f2 = color.getBlueFloat();
         float f3 = color.getAlphaFloat();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder bufferbuilder = tessellator.getBuffer();
         IOpenGl.enableBlend();
         IOpenGl.disableTexture2D();
-        IOpenGl.tryBlendFuncSeparate(IOpenGl.SourceFactor.SRC_ALPHA,
-          IOpenGl.DestFactor.ONE_MINUS_SRC_ALPHA,
-          IOpenGl.SourceFactor.ONE,
-          IOpenGl.DestFactor.ZERO);
+        IOpenGl.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA,
+          DestinationFactor.ONE_MINUS_SRC_ALPHA,
+          SourceFactor.ONE,
+          DestinationFactor.ZERO);
         IOpenGl.color(f, f1, f2, f3);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.begin(7, IVertexFormat.position());
         bufferbuilder.pos(relativeLeft, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeTop, 0.0D).endVertex();
@@ -340,13 +340,13 @@ public class RenderingController implements IRenderingController
      * @param y     The Y Coordinate to render on
      */
     @Override
-    public void drawItemStack(@NotNull ItemStack stack, int x, int y)
+    public void drawItemStack(@NotNull IItemStack stack, int x, int y)
     {
         IOpenGl.enableLighting();
         IOpenGl.enableDepth();
-        RenderHelper.enableGUIStandardItemLighting();
+        IOpenGl.enableStandardItemLighting();
 
-        FontRenderer font = null;
+        IFontRenderer font = null;
         if (!stack.isEmpty())
         {
             font = stack.getItem().getFontRenderer(stack);
@@ -354,13 +354,13 @@ public class RenderingController implements IRenderingController
 
         if (font == null)
         {
-            font = Minecraft.getMinecraft().fontRenderer;
+            font = IGameEngine.getInstance().getDefaultFontRenderer();
         }
 
         ITEMRENDERER.renderItemAndEffectIntoGUI(stack, x, y);
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, "");
 
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.disableStandardItemLighting();
         IOpenGl.enableDepth();
         IOpenGl.disableLighting();
     }
@@ -374,13 +374,13 @@ public class RenderingController implements IRenderingController
      * @param altText The overlay text to render.
      */
     @Override
-    public void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText)
+    public void drawItemStack(@NotNull IItemStack stack, int x, int y, String altText)
     {
         IOpenGl.enableLighting();
         IOpenGl.enableDepth();
-        RenderHelper.enableGUIStandardItemLighting();
+        IOpenGl.enableStandardItemLighting();
 
-        FontRenderer font = null;
+        IFontRenderer font = null;
         if (!stack.isEmpty())
         {
             font = stack.getItem().getFontRenderer(stack);
@@ -388,13 +388,13 @@ public class RenderingController implements IRenderingController
 
         if (font == null)
         {
-            font = Minecraft.getMinecraft().fontRenderer;
+            font = IGameEngine.getInstance().getDefaultFontRenderer();
         }
 
         ITEMRENDERER.renderItemAndEffectIntoGUI(stack, x, y);
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, altText);
 
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.disableStandardItemLighting();
         IOpenGl.enableDepth();
         IOpenGl.disableLighting();
     }
@@ -402,86 +402,40 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawBlockState(@NotNull final IBlockState state, final int x, final int y)
     {
-        RenderHelper.disableStandardItemLighting();
+        IOpenGl.disableStandardItemLighting();
 
-        final IBlockAccess blockAccess = new IBlockAccess()
-        {
-            @javax.annotation.Nullable
-            @Override
-            public TileEntity getTileEntity(final BlockPos pos)
+        final IDimensionReaderBuilder<?, DummyInstanceData, IDimensionReader<DummyInstanceData>> dimensionReaderBuilder = IDimensionReaderBuilder.create();
+        final IDimensionReader<?> dimensionReader = dimensionReaderBuilder
+          .GetBlockEntity(context -> {
+              if (context.getContext().getPos().getX() != 0 || context.getContext().getPos().getY() != 0 || context.getContext().getPos().getZ() != 0)
+              {
+                  return null;
+              }
+
+              //TODO: Pull in structurize compatible dummy dimension. Or make dummy dimension library.
+              return state.getBlock().createBlockEntity(null, state);
+          }).GetCombinedLight(context -> {
+              int i = 15;
+              int j = 15;
+              if (j < context.getContext().getLightValue())
+              {
+                  j = context.getContext().getLightValue();
+              }
+              return i << 20 | j << 4;
+          }).GetBlockState(context -> {
+            if (context.getContext().getPos().getX() != 0 || context.getContext().getPos().getY() != 0 || context.getContext().getPos().getZ() != 0)
             {
-                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
-                {
-                    return null;
-                }
-
-                //TODO: Pull in structurize compatible dummy dimension. Or make dummy dimension library.
-                return state.getBlock().createTileEntity(null, state);
+                return IBlockState.defaultState();
             }
 
-            @Override
-            public int getCombinedLight(final BlockPos pos, final int lightValue)
-            {
-                int i = 15;
-                int j = 15;
-                if (j < lightValue)
-                {
-                    j = lightValue;
-                }
-                return i << 20 | j << 4;
-            }
-
-            @Override
-            public IBlockState getBlockState(final BlockPos pos)
-            {
-                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
-                {
-                    return Blocks.AIR.getDefaultState();
-                }
-
-                return state;
-            }
-
-            @Override
-            public boolean isAirBlock(final BlockPos pos)
-            {
-                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
-                {
-                    return true;
-                }
-
-                return state.getBlock() instanceof BlockAir;
-            }
-
-            @Override
-            public Biome getBiome(final BlockPos pos)
-            {
-                return Biomes.PLAINS;
-            }
-
-            @Override
-            public int getStrongPower(final BlockPos pos, final EnumFacing direction)
-            {
-                return 15;
-            }
-
-            @Override
-            public WorldType getWorldType()
-            {
-                return WorldType.DEFAULT;
-            }
-
-            @Override
-            public boolean isSideSolid(final BlockPos pos, final EnumFacing side, final boolean _default)
-            {
-                if (pos.getX() != 0 || pos.getY() != 0 || pos.getX() != 0)
-                {
-                    return Blocks.AIR.getDefaultState().isSideSolid(this, pos, side);
-                }
-
-                return state.isSideSolid(this, pos, side);
-            }
-        };
+            return state;
+          })
+          .IsAirBlock(context -> context.getInstance().getBlockState(context.getContext().getPos()).getBlock().isAir())
+          .GetBiome(context -> IBiomes.getPlains())
+          .GetStrongPower(context -> 15)
+          .GetWorldType(context -> IDimensionType.getDefault())
+          .IsSideSolid(context -> context.getInstance().getBlockState(context.getContext().getPos()).isSideSolid(context.getInstance(), context.getContext().getPos(), context.getContext().getSide()))
+          .build(new DummyInstanceData());
 
         IOpenGl.pushMatrix();
         IOpenGl.translate(0f, 0f, 0f);
@@ -489,13 +443,13 @@ public class RenderingController implements IRenderingController
         IOpenGl.rotate(210.0F, 1.0F, 0.0F, 0.0F);
         IOpenGl.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 
-        BufferBuilder buf = Tessellator.getInstance().getBuffer();
+        IBufferBuilder buf = ITessellator.getInstance().getBuffer();
 
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        buf.begin(IOpenGl.getOpenGlQuadsRenderMode(), IVertexFormat.block());
 
         try
         {
-            Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(state, BlockPos.ORIGIN, blockAccess, buf);
+            IGameEngine.getInstance().getBlockRendererDispatcher().renderBlock(state, IBlockCoordinate.create(0,0,0), dimensionReader, buf);
         }
         catch (Throwable t)
         {
@@ -505,7 +459,7 @@ public class RenderingController implements IRenderingController
             }
             // TODO: draw something to indicate it's broken
         }
-        Tessellator.getInstance().draw();
+        ITessellator.getInstance().draw();
 
         IOpenGl.popMatrix();
     }
@@ -520,70 +474,65 @@ public class RenderingController implements IRenderingController
 
         final Slot slot = (Slot) element;
 
-        if (!(renderManager.getGui() instanceof BlockOutGui))
-        {
-            throw new IllegalArgumentException("Can not draw slot contents on ClientSide Only guitemp.");
-        }
-
-        final BlockOutGui gui = (BlockOutGui) renderManager.getGui();
+        final IGuiContainer<BlockOutGuiData> gui = (IGuiContainer<BlockOutGuiData>) IGameEngine.getInstance().getCurrentGui();
 
         int x = 1;
         int y = 1;
-        final ResourceLocation inventoryId = slot.getInventoryId();
+        final IIdentifier inventoryId = slot.getInventoryId();
         final int inventoryIndex = slot.getInventoryIndex();
-        ItemStack itemstack = gui.getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
-        net.minecraft.inventory.Slot slotIn = gui.inventorySlots.getSlot(slot.getSlotIndex());
+        IItemStack itemstack = gui.getInstanceData().getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
+        ISlot<?> slotIn = gui.getContainer().getSlot(slot.getSlotIndex());
 
         boolean flag = false;
-        boolean isDraggingStartSlot = slotIn == gui.clickedSlot && !gui.draggedStack.isEmpty() && !gui.isRightMouseClick;
-        ItemStack itemstack1 = gui.mc.player.inventory.getItemStack();
+        boolean isDraggingStartSlot = slotIn == gui.getClickedSlot() && !gui.getDraggedStack().isEmpty() && !gui.isRightMouseClicked();
+        IItemStack itemstack1 = gui.getGameEngine().getSinglePlayerPlayerEntity().getInventory().getItemStack();
         String s = null;
 
-        if (slotIn == gui.clickedSlot && !gui.draggedStack.isEmpty() && gui.isRightMouseClick && !itemstack.isEmpty())
+        if (slotIn == gui.getClickedSlot() && !gui.getDraggedStack().isEmpty() && gui.isRightMouseClicked() && !itemstack.isEmpty())
         {
             itemstack = itemstack.copy();
             itemstack.setCount(itemstack.getCount() / 2);
         }
-        else if (gui.dragSplitting && gui.dragSplittingSlots.contains(slotIn) && !itemstack1.isEmpty())
+        else if (gui.isDragSplitting() && gui.getSlotsUsedInDragSplitting().contains(slotIn) && !itemstack1.isEmpty())
         {
-            if (gui.dragSplittingSlots.size() == 1)
+            if (gui.getSlotsUsedInDragSplitting().size() == 1)
             {
                 return;
             }
 
-            if (Container.canAddItemToSlot(slotIn, itemstack1, true) && gui.inventorySlots.canDragIntoSlot(slotIn))
+            if (IContainer.canAddItemToSlot(slotIn, itemstack1, true) && gui.getContainer().canDragIntoSlot(slotIn))
             {
                 itemstack = itemstack1.copy();
                 flag = true;
-                Container.computeStackSize(gui.dragSplittingSlots,
-                  gui.dragSplittingLimit,
+                IContainer.computeStackSize(gui.getSlotsUsedInDragSplitting(),
+                  gui.getDragSplittingLimit(),
                   itemstack,
                   slotIn.getStack().isEmpty() ? 0 : slotIn.getStack().getCount());
                 int k = Math.min(itemstack.getMaxStackSize(), slotIn.getItemStackLimit(itemstack));
 
                 if (itemstack.getCount() > k)
                 {
-                    s = TextFormatting.YELLOW.toString() + k;
+                    s = ITextFormatting.yellow().toString() + k;
                     itemstack.setCount(k);
                 }
             }
             else
             {
-                gui.dragSplittingSlots.remove(slotIn);
+                gui.getSlotsUsedInDragSplitting().remove(slotIn);
                 gui.updateDragSplitting();
             }
         }
 
-        gui.itemRender.zLevel = 100.0F;
+        gui.getItemRenderer().setZLevel(100.0f);
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
-            TextureAtlasSprite textureatlassprite = slotIn.getBackgroundSprite();
+            ISprite textureatlassprite = slotIn.getBackgroundSprite();
 
             if (textureatlassprite != null)
             {
                 IOpenGl.disableLighting();
-                gui.mc.getTextureManager().bindTexture(slotIn.getBackgroundLocation());
+                gui.getGameEngine().getTextureManager().bindTexture(slotIn.getBackgroundLocation());
                 gui.drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
                 IOpenGl.enableLighting();
                 isDraggingStartSlot = true;
@@ -594,14 +543,14 @@ public class RenderingController implements IRenderingController
         {
             if (flag)
             {
-                drawRect(x, y, x + 16, y + 16, new Color(-2130706433));
+                drawRect(x, y, x + 16, y + 16, IColor.create(-2130706433));
             }
 
             IOpenGl.enableDepth();
             drawItemStack(itemstack, x, y, s);
         }
 
-        gui.itemRender.zLevel = 0.0F;
+        gui.getItemRenderer().setZLevel(0f);
     }
 
     /**
@@ -618,20 +567,15 @@ public class RenderingController implements IRenderingController
         }
 
         final Slot slot = (Slot) element;
-
-        if (!(renderManager.getGui() instanceof BlockOutGui))
-        {
-            throw new IllegalArgumentException("Can not draw slot overlay on ClientSide Only guitemp.");
-        }
-
-        final BlockOutGui gui = (BlockOutGui) renderManager.getGui();
+        
+        final IGuiContainer<BlockOutGuiData> gui = (IGuiContainer<BlockOutGuiData>) IGameEngine.getInstance().getCurrentGui();
 
         if (!slot.getAbsoluteBoundingBox().includes(getMousePosition()))
         {
             return;
         }
 
-        gui.hoveredSlot = gui.inventorySlots.getSlot(slot.getSlotIndex());
+        gui.setHoveredSlot(gui.getContainer().getSlot(slot.getSlotIndex()));
         IOpenGl.disableLighting();
         IOpenGl.disableDepth();
         int x = 1;

@@ -1,12 +1,8 @@
 package com.ldtteam.blockout.compat;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 /**
  * Manages the client tick systems of BlockOut.
  */
-@SideOnly(Side.CLIENT)
 public class ClientTickManager
 {
     private static ClientTickManager ourInstance = new ClientTickManager();

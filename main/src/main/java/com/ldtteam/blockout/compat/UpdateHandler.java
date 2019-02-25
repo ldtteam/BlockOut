@@ -3,6 +3,8 @@ package com.ldtteam.blockout.compat;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
+import com.ldtteam.blockout.inventory.BlockOutContainerData;
+import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
@@ -10,7 +12,7 @@ import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEvent;
 import com.ldtteam.jvoxelizer.common.gameevent.event.ITickEvent;
 import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.inventory.IInventoryContainer;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -73,11 +75,11 @@ public class UpdateHandler
                     {
                         updateManager.onNetworkTick();
                         guiController.getUUIDsOfPlayersWatching(e.getKey()).forEach(uuid -> {
-                            final IInventoryContainer blockOutCandidate = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid).getOpenContainer();
-                            if (blockOutCandidate instanceof BlockOutContainer)
+                            final IContainer<?> blockOutCandidate = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid).getOpenContainer();
+                            if (blockOutCandidate.getInstanceData() instanceof BlockOutContainerData)
                             {
-                                final BlockOutContainer blockOutContainer = (BlockOutContainer) blockOutCandidate;
-                                blockOutContainer.reinitializeSlots();
+                                final IContainer<BlockOutContainerData> blockOutContainer = (IContainer<BlockOutContainerData>) blockOutCandidate;
+                                BlockOutContainerLogic.reinitializeSlots(blockOutContainer);
                             }
                             else
                             {

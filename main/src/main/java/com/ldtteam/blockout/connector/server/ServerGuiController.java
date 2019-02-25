@@ -9,6 +9,8 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.inventory.BlockOutContainerData;
+import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
@@ -19,6 +21,7 @@ import com.ldtteam.jvoxelizer.entity.living.player.IFakePlayer;
 import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
 import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
 import com.ldtteam.jvoxelizer.event.manager.IEventManager;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,7 +180,8 @@ public class ServerGuiController implements IGuiController
         NetworkManager.sendTo(new OpenGuiCommandMessage(key, BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(rootGuiElement), playerMP.getCurrentWindowId()),
           playerMP);
 
-        playerMP.setOpenContainer(new BlockOutContainer(key, openUis.get(key), playerMP.getCurrentWindowId()));
+        final IContainer<BlockOutContainerData> container = BlockOutContainerLogic.create(key, openUis.get(key), playerMP.getCurrentWindowId());
+        playerMP.setOpenContainer(container);
         playerMP.getOpenContainer().addListener(playerMP);
 
         IEventManager.post(IPlayerEvent.IPlayerContainerEvent.IOpen.create(playerMP, playerMP.getOpenContainer()));
