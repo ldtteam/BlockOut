@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.util.color;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 public interface IColor
 {
     /**
@@ -8,6 +10,11 @@ public interface IColor
     static void resetOpenGLColoring()
     {
         //TODO: Link open gl code.
+    }
+
+    static IColor create(int color)
+    {
+        throw new NotImplementedException();
     }
 
     String encodeColor();

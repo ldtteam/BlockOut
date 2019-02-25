@@ -7,7 +7,6 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.Slot;
-import com.ldtteam.blockout.gui.BlockOutGuiClientSideOnly;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
 import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;

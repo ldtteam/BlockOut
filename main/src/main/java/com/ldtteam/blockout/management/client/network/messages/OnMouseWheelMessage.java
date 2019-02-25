@@ -5,8 +5,8 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public class OnMouseWheelMessage implements IBlockOutClientToServerMessage
@@ -26,9 +26,9 @@ public class OnMouseWheelMessage implements IBlockOutClientToServerMessage
     }
 
     @Override
-    public void onMessageArrivalAtServer(@NotNull final MessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final EntityPlayerMP player = ctx.getServerHandler().player;
+        final IMultiplayerPlayerEntity player = ctx.getServerHandler().getPlayer();
         final IGuiKey key = BlockOut.getBlockOut().getProxy().getGuiController().getOpenUI(player);
         if (key == null)
         {

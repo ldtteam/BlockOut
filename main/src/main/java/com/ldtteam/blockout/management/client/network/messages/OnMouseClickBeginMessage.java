@@ -6,8 +6,8 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public class OnMouseClickBeginMessage implements IBlockOutClientToServerMessage
@@ -27,13 +27,13 @@ public class OnMouseClickBeginMessage implements IBlockOutClientToServerMessage
     }
 
     @Override
-    public void onMessageArrivalAtServer(@NotNull final MessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final EntityPlayerMP player = ctx.getServerHandler().player;
+        final IMultiplayerPlayerEntity player = ctx.getServerHandler().getPlayer();
         final IGuiKey key = BlockOut.getBlockOut().getProxy().getGuiController().getOpenUI(player);
         if (key == null)
         {
-            Log.getLogger().error("Player is not watching a BlockOut guitemp.");
+            Log.getLogger().error("Player is not watching a BlockOut Gui.");
             return;
         }
 

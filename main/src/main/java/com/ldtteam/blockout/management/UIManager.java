@@ -2,9 +2,14 @@ package com.ldtteam.blockout.management;
 
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
+import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.management.client.input.ClientSideClickManager;
 import com.ldtteam.blockout.management.client.input.ClientSideKeyManager;
 import com.ldtteam.blockout.management.client.input.ClientSideScrollManager;
+import com.ldtteam.blockout.management.common.focus.FocusManager;
+import com.ldtteam.blockout.management.common.input.ClickManager;
+import com.ldtteam.blockout.management.common.input.KeyManager;
+import com.ldtteam.blockout.management.common.input.ScrollManager;
 import com.ldtteam.blockout.management.focus.IFocusManager;
 import com.ldtteam.blockout.management.input.IClickManager;
 import com.ldtteam.blockout.management.input.IKeyManager;
@@ -15,14 +20,8 @@ import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.management.common.focus.FocusManager;
-import com.ldtteam.blockout.management.common.input.ClickManager;
-import com.ldtteam.blockout.management.common.input.KeyManager;
-import com.ldtteam.blockout.management.common.input.ScrollManager;
-import net.minecraft.profiler.Profiler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.ldtteam.jvoxelizer.profiler.IProfiler;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -50,7 +49,7 @@ public class UIManager implements IUIManager
     @NotNull
     private final IRenderManager           renderManager;
     @NotNull
-    private final Profiler                 profiler;
+    private final IProfiler                profiler;
     @NotNull
     private       RootGuiElement           rootGuiElement;
 
@@ -59,10 +58,10 @@ public class UIManager implements IUIManager
         this.rootGuiElement = rootGuiElement;
         this.networkManager = BlockOut.getBlockOut().getProxy().generateNewNetworkManagerForGui(key);
         this.updateManager = BlockOut.getBlockOut().getProxy().generateNewUpdateManager(this);
-        this.renderManager = SideHelper.on(() -> BlockOut.getBlockOut().getProxy().generateNewRenderManager(), () -> null);
-        this.profiler = new Profiler();
-        this.profiler.profilingEnabled = true;
-        this.profiler.profilingMap = new LinkedHashMap<>();
+        this.renderManager = IDistributionExecutor.on(() -> BlockOut.getBlockOut().getProxy().generateNewRenderManager(), () -> null);
+        this.profiler = IProfiler.create();
+        this.profiler.enableProfiling();
+        this.profiler.setProfilingMap(new LinkedHashMap<>());
     }
 
     @NotNull
@@ -137,14 +136,13 @@ public class UIManager implements IUIManager
 
     @NotNull
     @Override
-    @SideOnly(Side.CLIENT)
     public IRenderManager getRenderManager()
     {
         return renderManager;
     }
 
     @Override
-    public Profiler getProfiler()
+    public IProfiler getProfiler()
     {
         return profiler;
     }

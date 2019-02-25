@@ -4,11 +4,16 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.gui.BlockOutGui;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
+import com.ldtteam.blockout.gui.BlockOutGuiLogic;
+import com.ldtteam.blockout.inventory.BlockOutContainerData;
+import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,9 +52,10 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         final RootGuiElement root = (RootGuiElement) element;
         root.setUiManager(new UIManager(root, getKey()));
         root.getUiManager().getUpdateManager().updateElement(root);
-        final BlockOutGui gui = new BlockOutGui(new BlockOutContainer(getKey(), root, getWindowId()));
+        final IContainer<BlockOutContainerData> container = BlockOutContainerLogic.create(getKey(), root, getWindowId());
+        final IGuiContainer<BlockOutGuiData> blockOutGuiDataIGuiContainer = BlockOutGuiLogic.create(getKey(), root, container);
 
-        IGameEngine.getInstance().displayGuiScreen(gui);
+        IGameEngine.getInstance().displayGuiScreen(blockOutGuiDataIGuiContainer);
     }
 
     @NotNull

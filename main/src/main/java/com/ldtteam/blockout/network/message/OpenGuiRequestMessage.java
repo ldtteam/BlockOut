@@ -3,8 +3,8 @@ package com.ldtteam.blockout.network.message;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,10 +24,10 @@ public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
 
     @Nullable
     @Override
-    public void onMessageArrivalAtServer(@NotNull final MessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final EntityPlayerMP playerMP = ctx.getServerHandler().player;
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(playerMP.getUniqueID(), getKey());
+        final IMultiplayerPlayerEntity playerMP = ctx.getServerHandler().getPlayer();
+        BlockOut.getBlockOut().getProxy().getGuiController().openUI(playerMP.getId(), getKey());
     }
 
     @NotNull

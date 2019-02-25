@@ -1,10 +1,12 @@
 package com.ldtteam.blockout.management.server.network.messages;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.gui.BlockOutGui;
+import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGui;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,27 +30,27 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
     }
 
     @Override
-    public void onMessageArrivalAtClient(@NotNull final MessageContext ctx)
+    public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
     {
-        final GuiScreen openGuiScreen = Minecraft.getMinecraft().currentScreen;
+        final IGui<?> openGuiScreen = IGameEngine.getInstance().getCurrentGui();
 
-        if (openGuiScreen instanceof BlockOutGui)
+        if (openGuiScreen instanceof IGuiContainer && openGuiScreen.getInstanceData() instanceof BlockOutGuiData)
         {
-            final BlockOutGui blockOutGui = (BlockOutGui) openGuiScreen;
+            final IGuiContainer<BlockOutGuiData> blockOutGui = (IGuiContainer<BlockOutGuiData>) openGuiScreen;
 
             if (focusedElementId != null && !focusedElementId.isEmpty())
             {
-                blockOutGui.getRoot()
+                blockOutGui.getInstanceData().getRoot()
                   .getUiManager()
                   .getFocusManager()
-                  .setFocusedElement(blockOutGui.getRoot()
+                  .setFocusedElement(blockOutGui.getInstanceData().getRoot()
                                        .searchExactElementById(focusedElementId)
                                        .orElseThrow(() -> new IllegalStateException("Tried to focus unknown element."))
                   );
             }
             else
             {
-                blockOutGui.getRoot()
+                blockOutGui.getInstanceData().getRoot()
                   .getUiManager()
                   .getFocusManager()
                   .setFocusedElement(null);

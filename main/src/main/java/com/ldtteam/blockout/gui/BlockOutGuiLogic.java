@@ -4,6 +4,7 @@ import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.AxisDistance;
+import com.ldtteam.blockout.inventory.BlockOutContainerData;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlotData;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
@@ -17,12 +18,13 @@ import com.ldtteam.jvoxelizer.client.mouse.IMouse;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
 import com.ldtteam.jvoxelizer.core.logic.VoidPipelineElementContext;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 
 public class BlockOutGuiLogic
 {
-    public static IGui<BlockOutGuiData> generate(IGuiKey key, IUIElementHost host)
+    public static IGuiContainer<BlockOutGuiData> create(IGuiKey key, IUIElementHost host, IContainer<BlockOutContainerData> container)
     {
-        final IGuiContainerBuilder<?, BlockOutGuiData, IGuiContainer<BlockOutGuiData>> builder = IGuiContainerBuilder.create(new BlockOutGuiData(key, host));
+        final IGuiContainerBuilder<?, BlockOutGuiData, IGuiContainer<BlockOutGuiData>> builder = IGuiContainerBuilder.create(new BlockOutGuiData(key, host), container);
 
         final IGuiContainer<BlockOutGuiData> gui = builder
                  .HandleMouseInput(BlockOutGuiLogic::handleMouseInput)
