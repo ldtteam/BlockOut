@@ -20,6 +20,8 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ProgressManager;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -104,11 +106,11 @@ public class BlockOut
         getProxy().getStyleManager().loadStyles();
 
         final Set<Class<?>> clzs = ProxyHolder.getInstance().getFactoryController().getAllKnownTypes();
-        final ProgressManager.ProgressBar dependencyEventResolverBar = ProgressManager.push("Analyzing known elements. Determining dependency objects and events.", clzs.size());
+        final IProgressBar dependencyEventResolverBar = IProgressManager.push("Analyzing known elements. Determining dependency objects and events.", clzs.size());
         clzs.forEach(clz -> {
             dependencyEventResolverBar.step(clz.getName());
             ReflectionManager.getInstance().getFieldsForClass(clz);
         });
-        ProgressManager.pop(dependencyEventResolverBar);
+        IProgressManager.pop(dependencyEventResolverBar);
     }
 }

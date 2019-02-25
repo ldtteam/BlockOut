@@ -21,7 +21,7 @@ public final class ProfilerExporter
     public static void exportProfiler(@NotNull final IUIElement element)
     {
         final Map<String, Long> sortedMap =
-          element.getParent().getUiManager().getProfiler().profilingMap; //new TreeMap<>(element.getParent().getUiManager().getProfiler().profilingMap);
+          element.getParent().getUiManager().getProfiler().getProfilingMap(); //new TreeMap<>(element.getParent().getUiManager().getProfiler().profilingMap);
 
         try (Writer writer = new FileWriter("profiler.json"))
         {
