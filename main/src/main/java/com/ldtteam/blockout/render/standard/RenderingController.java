@@ -10,7 +10,7 @@ import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.biome.IBiomes;
+import com.ldtteam.jvoxelizer.biome.IBiome;
 import com.ldtteam.jvoxelizer.block.state.IBlockState;
 import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
@@ -162,7 +162,7 @@ public class RenderingController implements IRenderingController
 
         if (texture == null)
         {
-            texture = ((ISpriteMap) IGameEngine.getInstance().getTextureManager().getSpriteMap(ISpriteMap.getLocationOfBlocksTexture())).getAtlasSprite("missingno");
+            texture = IGameEngine.getInstance().getTextureManager().getSpriteMap(ISpriteMap.getLocationOfBlocksTexture()).getAtlasSprite("missingno");
         }
 
         final IColor fluidColor = IColor.create(fluid.getFluid().getColor(fluid));
@@ -431,7 +431,7 @@ public class RenderingController implements IRenderingController
             return state;
           })
           .IsAirBlock(context -> context.getInstance().getBlockState(context.getContext().getPos()).getBlock().isAir())
-          .GetBiome(context -> IBiomes.getPlains())
+                                                      .GetBiome(context -> IBiome.getPlains())
           .GetStrongPower(context -> 15)
           .GetWorldType(context -> IDimensionType.getDefault())
           .IsSideSolid(context -> context.getInstance().getBlockState(context.getContext().getPos()).isSideSolid(context.getInstance(), context.getContext().getPos(), context.getContext().getSide()))
