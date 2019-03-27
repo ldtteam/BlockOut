@@ -8,8 +8,6 @@ import com.ldtteam.blockout.connector.common.inventory.provider.CommonTileBasedP
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

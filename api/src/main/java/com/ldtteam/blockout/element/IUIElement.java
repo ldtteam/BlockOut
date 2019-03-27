@@ -9,7 +9,6 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

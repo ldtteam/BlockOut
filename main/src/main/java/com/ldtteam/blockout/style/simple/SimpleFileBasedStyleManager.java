@@ -14,10 +14,6 @@ import com.ldtteam.blockout.style.definitions.deserializers.ResourceTypeDefiniti
 import com.ldtteam.blockout.style.definitions.deserializers.StyleDefinitionDeserializer;
 import com.ldtteam.blockout.style.definitions.deserializers.StylesDefinitionDeserializer;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.modloader.IModLoader;
-import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
-import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;

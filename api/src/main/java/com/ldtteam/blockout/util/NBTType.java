@@ -1,8 +1,5 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
-import com.ldtteam.jvoxelizer.util.nbt.INBTByte;
-
 public enum NBTType
 {
     TAG_BYTE,

@@ -6,8 +6,6 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public class OnKeyPressedMessage implements IBlockOutClientToServerMessage

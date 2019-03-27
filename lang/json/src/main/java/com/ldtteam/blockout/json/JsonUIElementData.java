@@ -1,17 +1,8 @@
 package com.ldtteam.blockout.json;
 
-import com.google.gson.JsonObject;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.blockout.loader.core.IUIElementMetaData;
-import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
-import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class JsonUIElementData implements IUIElementData<JsonUIElementDataComponent>

@@ -9,7 +9,6 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.style.resources.TemplateResource;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutionException;

@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.binding.dependency;
 
-import com.ldtteam.blockout.element.IUIElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

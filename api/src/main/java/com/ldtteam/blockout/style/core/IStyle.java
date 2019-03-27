@@ -2,7 +2,6 @@ package com.ldtteam.blockout.style.core;
 
 import com.google.common.collect.ImmutableMap;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

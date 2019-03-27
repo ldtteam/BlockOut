@@ -13,12 +13,6 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.translation.ITranslator;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

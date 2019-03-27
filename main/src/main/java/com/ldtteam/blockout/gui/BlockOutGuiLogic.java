@@ -9,16 +9,6 @@ import com.ldtteam.blockout.inventory.slot.BlockOutSlotData;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGui;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.client.gui.logic.builder.IGuiContainerBuilder;
-import com.ldtteam.jvoxelizer.client.gui.logic.builder.contexts.*;
-import com.ldtteam.jvoxelizer.client.mouse.IMouse;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
-import com.ldtteam.jvoxelizer.core.logic.VoidPipelineElementContext;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
 
 public class BlockOutGuiLogic
 {

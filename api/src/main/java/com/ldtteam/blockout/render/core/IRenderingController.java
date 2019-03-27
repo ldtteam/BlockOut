@@ -4,11 +4,6 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.block.state.IBlockState;
-import com.ldtteam.jvoxelizer.client.renderer.texture.ISprite;
-import com.ldtteam.jvoxelizer.fluid.IFluidStack;
-import com.ldtteam.jvoxelizer.item.IItemStack;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

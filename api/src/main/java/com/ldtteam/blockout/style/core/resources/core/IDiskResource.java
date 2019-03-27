@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.style.core.resources.core;
 
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -3,7 +3,6 @@ package com.ldtteam.blockout.util.image;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;

@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.management.input.client;
 
-import com.ldtteam.blockout.management.input.IInputManager;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 
 public interface IClientSideClickManager

@@ -17,10 +17,6 @@ import com.ldtteam.blockout.context.ClientSideOnlyContext;
 import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.IEntity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;

@@ -1,18 +1,13 @@
 package com.ldtteam.blockout.loader.object;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
-import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

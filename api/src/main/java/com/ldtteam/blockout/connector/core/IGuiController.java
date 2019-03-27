@@ -2,7 +2,6 @@ package com.ldtteam.blockout.connector.core;
 
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -7,24 +7,10 @@ import com.ldtteam.blockout.inventory.slot.BlockOutSlotData;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlotLogic;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.itemstack.ItemStackHelper;
-import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
-import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
-import com.ldtteam.jvoxelizer.inventory.logic.builder.IContainerBuilder;
-import com.ldtteam.jvoxelizer.inventory.logic.builder.contexts.MergeItemStackContext;
-import com.ldtteam.jvoxelizer.inventory.logic.builder.contexts.TransferStackInSlotContext;
-import com.ldtteam.jvoxelizer.inventory.slot.ISlot;
-import com.ldtteam.jvoxelizer.inventory.slot.ISlotItemHandler;
-import com.ldtteam.jvoxelizer.item.IItemStack;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class BlockOutContainerLogic

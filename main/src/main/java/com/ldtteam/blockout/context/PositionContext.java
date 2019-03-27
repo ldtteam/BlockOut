@@ -2,8 +2,6 @@ package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 
 public class PositionContext implements IContext

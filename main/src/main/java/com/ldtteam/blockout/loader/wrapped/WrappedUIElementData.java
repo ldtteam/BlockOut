@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.loader.wrapped;
 
-import com.google.inject.Injector;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;

@@ -8,7 +8,6 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public class TemplateResource implements IResource

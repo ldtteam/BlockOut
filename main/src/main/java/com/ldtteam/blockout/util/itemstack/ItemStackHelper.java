@@ -1,7 +1,5 @@
 package com.ldtteam.blockout.util.itemstack;
 
-import com.ldtteam.jvoxelizer.item.IItem;
-import com.ldtteam.jvoxelizer.item.IItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

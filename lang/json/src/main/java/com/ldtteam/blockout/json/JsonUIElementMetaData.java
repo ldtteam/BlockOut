@@ -1,16 +1,9 @@
 package com.ldtteam.blockout.json;
 
-import com.google.gson.JsonObject;
-import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.loader.core.IUIElementMetaData;
-import com.ldtteam.blockout.util.Constants;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
-
-import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 
 public class JsonUIElementMetaData implements IUIElementMetaData
 {

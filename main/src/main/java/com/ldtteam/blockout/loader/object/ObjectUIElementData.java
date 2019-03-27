@@ -1,15 +1,11 @@
 package com.ldtteam.blockout.loader.object;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
-import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.beans.Transient;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;

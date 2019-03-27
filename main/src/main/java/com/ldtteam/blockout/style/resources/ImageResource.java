@@ -8,7 +8,6 @@ import com.ldtteam.blockout.style.core.resources.core.IDiskResource;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static com.ldtteam.blockout.util.Constants.ResourceTypes.CONST_IMAGE_RESOURCE_TYPE;

@@ -1,8 +1,6 @@
 package com.ldtteam.blockout.loader.object;
 
 import com.google.common.collect.Lists;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.internal.MoreTypes;
 import com.ldtteam.blockout.BlockOut;

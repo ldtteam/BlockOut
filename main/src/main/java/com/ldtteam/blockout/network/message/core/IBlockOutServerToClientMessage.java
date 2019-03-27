@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.network.message.core;
 
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public interface IBlockOutServerToClientMessage extends IBlockOutNetworkMessage

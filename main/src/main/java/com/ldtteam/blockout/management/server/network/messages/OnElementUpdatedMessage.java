@@ -10,11 +10,6 @@ import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGui;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage

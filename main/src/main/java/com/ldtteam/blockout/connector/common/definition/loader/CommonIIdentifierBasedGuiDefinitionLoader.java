@@ -4,7 +4,6 @@ import com.google.common.io.CharStreams;
 import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;

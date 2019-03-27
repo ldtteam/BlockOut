@@ -13,7 +13,11 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.color.ColorUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,7 +53,7 @@ public class ClientProxy extends CommonProxy
     @Override
     public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
     {
-        return Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
+        return Minecraft.getMinecraft().getResourceManager().getResource(Identifier.asForge(location)).getInputStream();
     }
 
     @NotNull
@@ -77,7 +81,7 @@ public class ClientProxy extends CommonProxy
     public IDimension getDimensionFromDimensionId(@NotNull final int dimId)
     {
         return SideHelper.on(
-          () -> Minecraft.getMinecraft().world,
+          () -> Dimension.fromForge(Minecraft.getMinecraft().world),
           () -> super.getDimensionFromDimensionId(dimId)
         );
     }
@@ -90,7 +94,7 @@ public class ClientProxy extends CommonProxy
         return new RenderManager();
     }
 
-    @Override
+    /*@Override
     public void initializeFontRenderer()
     {
         multiColoredFontRenderer =
@@ -102,13 +106,13 @@ public class ClientProxy extends CommonProxy
             multiColoredFontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
         }
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(multiColoredFontRenderer);
-    }
+    }*/
 
     @NotNull
     @Override
-    public MultiColoredFontRenderer getFontRenderer()
+    public IFontRenderer getFontRenderer()
     {
-        return multiColoredFontRenderer;
+        return FontRenderer.fromForge(Minecraft.getMinecraft().fontRenderer);
     }
 
     @NotNull

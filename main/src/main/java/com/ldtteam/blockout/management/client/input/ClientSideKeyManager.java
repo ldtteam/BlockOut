@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.management.client.input;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
 import com.ldtteam.blockout.element.input.client.IClientSideKeyAcceptingUIElement;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.input.client.IClientSideKeyManager;

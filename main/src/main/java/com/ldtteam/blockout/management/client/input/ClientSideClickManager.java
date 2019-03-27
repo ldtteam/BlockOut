@@ -7,7 +7,6 @@ import com.ldtteam.blockout.management.input.client.IClientSideClickManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.sun.javafx.scene.control.behavior.OptionalBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

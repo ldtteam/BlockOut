@@ -5,9 +5,6 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.ldtteam.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.ldtteam.blockout.util.kryo.KryoUtil;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessage;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageHandler;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayOutputStream;

@@ -6,12 +6,6 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IScaledResolution;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.client.renderer.texture.ISpriteMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Deque;

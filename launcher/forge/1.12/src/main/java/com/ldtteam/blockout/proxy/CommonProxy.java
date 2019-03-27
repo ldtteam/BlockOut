@@ -30,8 +30,14 @@ import com.ldtteam.blockout.style.simple.SimpleFileBasedStyleManager;
 import com.ldtteam.blockout.style.simple.SimpleResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.template.SimpleTemplateEngine;
+import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,9 +91,9 @@ public class CommonProxy implements IProxy
 
     @Override
     @NotNull
-    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
+    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
     {
-        final String modId = location.getNamespace().toLowerCase();
+        final String modId = location.getDomain().toLowerCase();
         String path = "assets/" + modId + "/" + location.getPath();
 
         final Object mod;
@@ -115,7 +121,7 @@ public class CommonProxy implements IProxy
 
     @NotNull
     @Override
-    public Vector2d getImageSize(@NotNull final ResourceLocation location)
+    public Vector2d getImageSize(@NotNull final IIdentifier location)
     {
         return ImageUtil.getImageDimensions(location);
     }
@@ -138,7 +144,7 @@ public class CommonProxy implements IProxy
     @Override
     public IDimension getDimensionFromDimensionId(@NotNull final int dimId)
     {
-        return FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimId);
+        return Dimension.fromForge(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimId));
     }
 
     @SuppressWarnings({"ConstantConditions", "NullableProblems"})
@@ -150,15 +156,9 @@ public class CommonProxy implements IProxy
         return null;
     }
 
-    @Override
-    public void initializeFontRenderer()
-    {
-        //NOOP
-    }
-
     @Nullable
     @Override
-    public MultiColoredFontRenderer getFontRenderer()
+    public IFontRenderer getFontRenderer()
     {
         //noinspection ConstantConditions
         return null;

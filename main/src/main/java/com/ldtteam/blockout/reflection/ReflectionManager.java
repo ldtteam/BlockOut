@@ -6,9 +6,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Sets;
 import com.ldtteam.blockout.util.Log;
 
-import java.lang.reflect.Field;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 /**

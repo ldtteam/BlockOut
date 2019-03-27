@@ -15,13 +15,6 @@ import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEvent;
-import com.ldtteam.jvoxelizer.entity.living.player.IFakePlayer;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
-import com.ldtteam.jvoxelizer.event.manager.IEventManager;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

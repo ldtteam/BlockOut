@@ -14,7 +14,6 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

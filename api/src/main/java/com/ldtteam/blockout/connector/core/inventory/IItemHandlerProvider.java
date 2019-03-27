@@ -1,7 +1,5 @@
 package com.ldtteam.blockout.connector.core.inventory;
 
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -9,7 +9,6 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderManager implements IRenderManager

@@ -20,8 +20,6 @@ import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.jvoxelizer.profiler.IProfiler;
-import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;

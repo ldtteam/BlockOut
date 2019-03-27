@@ -29,17 +29,6 @@ import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.client.gui.IGuiScreen;
-import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
-import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.LogicOp;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
-import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

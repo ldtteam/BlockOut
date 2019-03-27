@@ -16,7 +16,6 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
