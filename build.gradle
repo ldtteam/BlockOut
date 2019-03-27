@@ -101,7 +101,10 @@ project(':BlockOut - Api') {
     }
 }
 
-//Special configuration for the main jar.
+project(':lang:BlockOut - Languages - JSON') {
+    
+}
+
 project(':BlockOut - Main') {
     //Set up the shading of the jars into the primary project.
     configurations {
@@ -226,6 +229,7 @@ project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
         classifier 'universal'
     }
 }
+
 /*
 project(':utilities') {
     dependencies {
@@ -280,7 +284,10 @@ task setupDecompWorkspace {
     description 'Sets up the build environment for IDEA'
 
     subprojects.each {
-        dependsOn("${it.path}:setupDecompWorkspace" )
+        if (it.tasks.findByName("setupDecompWorkspace") != null)
+        {
+            dependsOn("${it.path}:setupDecompWorkspace" )
+        }
     }
 
     dependsOn (project(':launcher:forge:BlockOut - Launchers - Forge - 1.12').tasks.genIntellijRuns)
