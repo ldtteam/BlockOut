@@ -9,6 +9,31 @@ import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.biome.IBiome;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.item.IItemRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
+import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISprite;
+import com.ldtteam.jvoxelizer.client.renderer.texture.ISpriteMap;
+import com.ldtteam.jvoxelizer.core.logic.DummyInstanceData;
+import com.ldtteam.jvoxelizer.dimension.IDimensionReader;
+import com.ldtteam.jvoxelizer.dimension.IDimensionType;
+import com.ldtteam.jvoxelizer.dimension.logic.builder.IDimensionReaderBuilder;
+import com.ldtteam.jvoxelizer.fluid.IFluidStack;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
+import com.ldtteam.jvoxelizer.inventory.slot.ISlot;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -133,11 +158,11 @@ public class RenderingController implements IRenderingController
             return;
         }
 
-        ISprite texture = IGameEngine.getInstance().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill(fluid).toString());
+        ISprite texture = IGameEngine.getInstance().getTextureMapBlocks().getSrite(fluid.getFluid().getStill(fluid).toString());
 
         if (texture == null)
         {
-            texture = IGameEngine.getInstance().getTextureManager().getSpriteMap(ISpriteMap.getLocationOfBlocksTexture()).getAtlasSprite("missingno");
+            texture = IGameEngine.getInstance().getTextureManager().getSpriteMap(ISpriteMap.getLocationOfBlocksTexture()).getSrite("missingno");
         }
 
         final IColor fluidColor = IColor.create(fluid.getFluid().getColor(fluid));
@@ -379,7 +404,7 @@ public class RenderingController implements IRenderingController
     {
         IOpenGl.disableStandardItemLighting();
 
-        final IDimensionReaderBuilder<?, DummyInstanceData, IDimensionReader<DummyInstanceData>> dimensionReaderBuilder = IDimensionReaderBuilder.create();
+        final IDimensionReaderBuilder<?, DummyInstanceData, ? extends IDimensionReader<DummyInstanceData>> dimensionReaderBuilder = IDimensionReaderBuilder.create();
         final IDimensionReader<?> dimensionReader = dimensionReaderBuilder
           .GetBlockEntity(context -> {
               if (context.getContext().getPos().getX() != 0 || context.getContext().getPos().getY() != 0 || context.getContext().getPos().getZ() != 0)
@@ -456,7 +481,7 @@ public class RenderingController implements IRenderingController
         final IIdentifier inventoryId = slot.getInventoryId();
         final int inventoryIndex = slot.getInventoryIndex();
         IItemStack itemstack = gui.getInstanceData().getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
-        ISlot<?> slotIn = gui.getContainer().getSlot(slot.getSlotIndex());
+        ISlot<?> slotIn = gui.getContainer().getSlotById(slot.getSlotIndex());
 
         boolean flag = false;
         boolean isDraggingStartSlot = slotIn == gui.getClickedSlot() && !gui.getDraggedStack().isEmpty() && !gui.isRightMouseClicked();
@@ -482,7 +507,7 @@ public class RenderingController implements IRenderingController
                 IContainer.computeStackSize(gui.getSlotsUsedInDragSplitting(),
                   gui.getDragSplittingLimit(),
                   itemstack,
-                  slotIn.getStack().isEmpty() ? 0 : slotIn.getStack().getCount());
+                  slotIn.getContainedStack().isEmpty() ? 0 : slotIn.getContainedStack().getCount());
                 int k = Math.min(itemstack.getMaxStackSize(), slotIn.getItemStackLimit(itemstack));
 
                 if (itemstack.getCount() > k)
@@ -502,12 +527,12 @@ public class RenderingController implements IRenderingController
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
-            ISprite textureatlassprite = slotIn.getBackgroundSprite();
+            ISprite textureatlassprite = slotIn.getBackgroundTexture();
 
             if (textureatlassprite != null)
             {
                 IOpenGl.disableLighting();
-                gui.getGameEngine().getTextureManager().bindTexture(slotIn.getBackgroundLocation());
+                gui.getGameEngine().getTextureManager().bindTexture(slotIn.getIdentifierOfBackgroundLocation());
                 gui.drawTexturedModalRect(x, y, textureatlassprite, 16, 16);
                 IOpenGl.enableLighting();
                 isDraggingStartSlot = true;
@@ -550,18 +575,48 @@ public class RenderingController implements IRenderingController
             return;
         }
 
-        gui.setHoveredSlot(gui.getContainer().getSlot(slot.getSlotIndex()));
+        gui.setHoveredSlot(gui.getContainer().getSlotById(slot.getSlotIndex()));
         IOpenGl.disableLighting();
         IOpenGl.disableDepth();
         int x = 1;
         int y = 1;
         IOpenGl.colorMask(true, true, true, false);
-        gui.drawGradientRect(x, y, x + 16, y + 16, -2130706433, -2130706433);
+        this.drawGradientRect(0, x, y, x + 16, y + 16, -2130706433, -2130706433);
         IOpenGl.colorMask(true, true, true, true);
         IOpenGl.enableLighting();
         IOpenGl.enableDepth();
     }
 
+    @Override
+    public void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor)
+    {
+        float f = (float) (startColor >> 24 & 255) / 255.0F;
+        float f1 = (float) (startColor >> 16 & 255) / 255.0F;
+        float f2 = (float) (startColor >> 8 & 255) / 255.0F;
+        float f3 = (float) (startColor & 255) / 255.0F;
+        float f4 = (float) (endColor >> 24 & 255) / 255.0F;
+        float f5 = (float) (endColor >> 16 & 255) / 255.0F;
+        float f6 = (float) (endColor >> 8 & 255) / 255.0F;
+        float f7 = (float) (endColor & 255) / 255.0F;
+        IOpenGl.disableTexture2D();
+        IOpenGl.enableBlend();
+        IOpenGl.disableAlpha();
+        IOpenGl.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestinationFactor.ZERO);
+        IOpenGl.shadeModel(7425);
+        ITessellator tessellator = ITessellator.getInstance();
+        IBufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, IVertexFormat.positionColor());
+        bufferbuilder.pos((double) right, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos((double) left, (double) top, (double) zLevel).color(f1, f2, f3, f).endVertex();
+        bufferbuilder.pos((double) left, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos((double) right, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
+        tessellator.draw();
+        IOpenGl.shadeModel(7424);
+        IOpenGl.disableBlend();
+        IOpenGl.enableAlpha();
+        IOpenGl.enableTexture2D();
+    }
+    
     /**
      * Returns the mouse position for rendering.
      *

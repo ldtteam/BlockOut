@@ -17,6 +17,8 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -277,10 +279,13 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         public Factory()
         {
             super(CheckBox.class, KEY_CHECKBOX, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<IIdentifier> checkedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CHECKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<IIdentifier> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<Boolean> checked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CHECKED, engine, false);
+                final IDependencyObject<IIdentifier> defaultBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<IIdentifier> checkedBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_CHECKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<IIdentifier> disabledBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<Boolean> checked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CHECKED, engine, false, Boolean.class);
 
                 final CheckBox element = new CheckBox(
                   id,
@@ -300,10 +305,10 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
-                                       .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
-                                       .addComponent(CONST_CHECKED_BACKGROUND_IMAGE, element.getCheckedBackgroundImageResource())
-                                       .addComponent(CONST_INITIALLY_CHECKED, element.isChecked()));
+                                       .addComponent(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_CHECKED_BACKGROUND_IMAGE, element.getCheckedBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_INITIALLY_CHECKED, element.isChecked(), Boolean.class));
         }
     }
 

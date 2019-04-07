@@ -3,8 +3,8 @@ package com.ldtteam.blockout.utilities;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(modid = com.ldtteam.blockout.utilities.util.Constants.MOD_ID, name = com.ldtteam.blockout.utilities.util.Constants.MOD_NAME, version = Constants.VERSION,
-  dependencies = Constants.FORGE_VERSION + "required:blockout;required:" + com.ldtteam.blockout.json.util.Constants.MOD_ID, acceptedMinecraftVersions = Constants.MC_VERSION)
+@Mod(modid = "blockout_utilities", name = "BlockOut - Utilities", version = Constants.VERSION,
+  dependencies = Constants.FORGE_VERSION + "required-after:blockout;required-after:blockout_lang_json", acceptedMinecraftVersions = Constants.MC_VERSION)
 public class BlockOutUtilities
 {
 

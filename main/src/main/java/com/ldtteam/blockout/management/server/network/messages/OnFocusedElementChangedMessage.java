@@ -3,6 +3,10 @@ package com.ldtteam.blockout.management.server.network.messages;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGui;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

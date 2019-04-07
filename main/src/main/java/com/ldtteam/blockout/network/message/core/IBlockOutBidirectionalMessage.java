@@ -1,5 +1,8 @@
 package com.ldtteam.blockout.network.message.core;
 
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+
 public interface IBlockOutBidirectionalMessage extends IBlockOutClientToServerMessage, IBlockOutServerToClientMessage
 {
 

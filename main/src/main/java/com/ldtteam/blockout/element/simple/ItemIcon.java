@@ -13,6 +13,9 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,7 +126,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
         public Factory()
         {
             super(ItemIcon.class, KEY_ITEM, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING));
+                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final ItemIcon element = new ItemIcon(
                   id,
@@ -140,7 +143,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
                 );
 
                 return element;
-            }, (element, builder) -> builder.addComponent(CONST_ICON, element.getIconResource()));
+            }, (element, builder) -> builder.addComponent(CONST_ICON, element.getIconResource(), IIdentifier.class));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.proxy;
 
+import com.ldtteam.blockout.client.util.color.ColorProvider;
 import com.ldtteam.blockout.connector.client.ClientGuiController;
 import com.ldtteam.blockout.connector.client.ClientSideOnlyGuiController;
 import com.ldtteam.blockout.connector.core.IGuiController;
@@ -15,6 +16,15 @@ import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.SideHelper;
 import com.ldtteam.blockout.util.color.ColorUtils;
+import com.ldtteam.blockout.util.color.IColor;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.core.provider.holder.ProviderResolver;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.client.renderer.font.FontRenderer;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.dimension.Dimension;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.identifier.Identifier;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,6 +47,13 @@ public class ClientProxy extends CommonProxy
     {
         guiController = new ClientGuiController();
         clientSideOnlyGuiController = new ClientSideOnlyGuiController();
+    }
+
+    @Override
+    public void onPreInit()
+    {
+        super.onPreInit();
+        ProviderResolver.getInstance().registerProvider(IColor.class, ColorProvider.getInstance());
     }
 
     @NotNull

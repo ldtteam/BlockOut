@@ -13,6 +13,8 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -207,9 +209,10 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Slot.class, KEY_SLOT, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> inventoryId = elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1);
-                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
+                final IDependencyObject<IIdentifier> inventoryId =
+                  elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1, Integer.class);
+                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final Slot element = new Slot(
                   id,
@@ -228,9 +231,9 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource())
-                                       .addComponent(CONST_INVENTORY_ID, element.getInventoryId())
-                                       .addComponent(CONST_INVENTORY_INDEX, element.getInventoryIndex()));
+                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_INVENTORY_ID, element.getInventoryId(), IIdentifier.class)
+                                       .addComponent(CONST_INVENTORY_INDEX, element.getInventoryIndex(), Integer.class));
         }
     }
 }

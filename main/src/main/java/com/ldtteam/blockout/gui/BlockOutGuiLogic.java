@@ -1,14 +1,23 @@
 package com.ldtteam.blockout.gui;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.inventory.BlockOutContainerData;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlotData;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.client.gui.logic.builder.IGuiContainerBuilder;
+import com.ldtteam.jvoxelizer.client.gui.logic.builder.contexts.*;
+import com.ldtteam.jvoxelizer.client.mouse.IMouse;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
+import com.ldtteam.jvoxelizer.core.logic.VoidPipelineElementContext;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
 
 public class BlockOutGuiLogic
 {
@@ -75,9 +84,8 @@ public class BlockOutGuiLogic
             yScalingFactor = xScalingFactor;
 
             context.getInstanceData().setScaleFactor(new Vector2d(xScalingFactor, yScalingFactor));
-
             context.getInstance().setXSize((int) (context.getInstanceData().getRoot().getLocalBoundingBox().getSize().getX() / xScalingFactor));
-            context.getInstance().setYSize((int) (context.getInstanceData().getRoot().getLocalBoundingBox().getSize().getY() / yScalingFactor));
+            context.getInstance().setYSize((int) (context.getInstanceData().getRoot().getLocalBoundingBox().getSize().getY() / xScalingFactor));
         }
 
         context.getInstanceData().getRoot().getUiManager().getRenderManager().setRenderingScalingFactor(context.getInstanceData().getScaleFactor());
@@ -138,8 +146,8 @@ public class BlockOutGuiLogic
 
     private static void mouseClicked(final VoidPipelineElementContext<MouseClickedContext, IGuiContainer<BlockOutGuiData>, BlockOutGuiData> context)
     {
-        int scaledMouseX = (int) (IMouse.getX() * context.getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) (IMouse.getY() * context.getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (context.getContext().getMouseX() * context.getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (context.getContext().getMouseY() * context.getInstanceData().getScaleFactor().getY());
 
         context.getContext().setMouseX(scaledMouseX);
         context.getContext().setMouseY(scaledMouseY);
@@ -158,8 +166,8 @@ public class BlockOutGuiLogic
 
     private static void mouseClickMove(final VoidPipelineElementContext<MouseClickMoveContext, IGuiContainer<BlockOutGuiData>, BlockOutGuiData> context)
     {
-        int scaledMouseX = (int) (IMouse.getX() * context.getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) (IMouse.getY() * context.getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (context.getContext().getMouseX() * context.getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (context.getContext().getMouseY() * context.getInstanceData().getScaleFactor().getY());
 
         context.getContext().setMouseX(scaledMouseX);
         context.getContext().setMouseY(scaledMouseY);
@@ -178,8 +186,8 @@ public class BlockOutGuiLogic
 
     private static void mouseReleased(final VoidPipelineElementContext<MouseReleasedContext, IGuiContainer<BlockOutGuiData>, BlockOutGuiData> context)
     {
-        int scaledMouseX = (int) (IMouse.getX() * context.getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) (IMouse.getY() * context.getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (context.getContext().getMouseX() * context.getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (context.getContext().getMouseY() * context.getInstanceData().getScaleFactor().getY());
 
         context.getContext().setMouseX(scaledMouseX);
         context.getContext().setMouseY(scaledMouseY);
@@ -213,7 +221,7 @@ public class BlockOutGuiLogic
         final KeyboardKey key = KeyboardKey.getForCode(context.getContext().getKeyCode());
         if (key == KeyboardKey.KEY_ESCAPE)
         {
-            BlockOut.getBlockOut().getProxy().getGuiController().closeUI(IGameEngine.getInstance().getSinglePlayerPlayerEntity());
+            ProxyHolder.getInstance().getGuiController().closeUI(IGameEngine.getInstance().getSinglePlayerPlayerEntity());
             return;
         }
 

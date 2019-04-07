@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.network.message;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
@@ -11,6 +10,11 @@ import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +42,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     @Override
     public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
     {
-        final IUIElement element = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(getData());
+        final IUIElement element = ProxyHolder.getInstance().getFactoryController().getElementFromData(getData());
 
         if (!(element instanceof RootGuiElement))
         {

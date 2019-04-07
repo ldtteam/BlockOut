@@ -1,5 +1,10 @@
 package com.ldtteam.blockout.util.nbt;
 
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTByteArray;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
+import com.ldtteam.jvoxelizer.util.nbt.INBTList;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;

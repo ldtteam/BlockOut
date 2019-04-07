@@ -12,6 +12,7 @@ import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +37,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public String readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public String readFromElement(@NotNull final IUIElementDataComponent component, final IUIElementData sourceData, @NotNull final Object... params)
         {
             if (!component.isString())
             {
@@ -198,9 +199,7 @@ public final class BaseValueComponentConverters
         @Override
         public IIdentifier readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            //TODO: Add constructor for identifier
-            //return new ResourceLocation(component.getAsString());
-            return null;
+            return IIdentifier.create(component.getAsString());
         }
 
         @Override

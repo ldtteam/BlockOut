@@ -3,7 +3,7 @@ package com.ldtteam.blockout.style.simple;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.IStyle;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
@@ -14,6 +14,10 @@ import com.ldtteam.blockout.style.definitions.deserializers.ResourceTypeDefiniti
 import com.ldtteam.blockout.style.definitions.deserializers.StyleDefinitionDeserializer;
 import com.ldtteam.blockout.style.definitions.deserializers.StylesDefinitionDeserializer;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.jvoxelizer.modloader.IModLoader;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
@@ -81,7 +85,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
             final StylesDefinition stylesDefinition;
             try
             {
-                stylesDefinition = gson.fromJson(new InputStreamReader(BlockOut.getBlockOut().getProxy().getResourceStream(stylesLocation)),
+                stylesDefinition = gson.fromJson(new InputStreamReader(ProxyHolder.getInstance().getResourceStream(stylesLocation)),
                   StylesDefinitionDeserializer.CONST_STYLES_DEFINITION_TYPE);
             }
             catch (Exception e)
@@ -98,7 +102,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                 final StyleDefinition styleDefinition;
                 try
                 {
-                    styleDefinition = gson.fromJson(new InputStreamReader(BlockOut.getBlockOut().getProxy().getResourceStream(styleLocation)),
+                    styleDefinition = gson.fromJson(new InputStreamReader(ProxyHolder.getInstance().getResourceStream(styleLocation)),
                       StyleDefinitionDeserializer.CONST_STYLE_DEFINTION_TYPE);
                 }
                 catch (Exception e)
@@ -118,7 +122,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                         final ResourceTypeDefinition resourceTypeDefinition;
                         try
                         {
-                            resourceTypeDefinition = gson.fromJson(new InputStreamReader(BlockOut.getBlockOut().getProxy().getResourceStream(resourceTypeLocation)),
+                            resourceTypeDefinition = gson.fromJson(new InputStreamReader(ProxyHolder.getInstance().getResourceStream(resourceTypeLocation)),
                               ResourceTypeDefinitionDeserializer.CONST_RESOURCE_TYPE_DEFINITION_TYPE);
                         }
                         catch (Exception e)
@@ -127,7 +131,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                             return (new ArrayList<IResource>().stream());
                         }
 
-                        return BlockOut.getBlockOut().getProxy().getResourceLoaderManager().loadResources(resourceTypeDefinition).stream();
+                        return ProxyHolder.getInstance().getResourceLoaderManager().loadResources(resourceTypeDefinition).stream();
                     })
                     .collect(
                       Collectors.toMap(

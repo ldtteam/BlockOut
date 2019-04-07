@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.util.itemstack;
 
+import com.ldtteam.jvoxelizer.item.IItem;
+import com.ldtteam.jvoxelizer.item.IItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,7 +188,7 @@ public final class ItemStackHelper
         {
             return String.format("%sxitemStack[%s@%s][%s]",
               pItemStack.getCount(),
-              pItemStack.getTranslationKey(pItemStack),
+              pItemStack.getTranslationKey(),
               pItemStack.getItemDamage(),
               pItemStack.hasTagCompound() ? pItemStack.write().toString() : "");
         }

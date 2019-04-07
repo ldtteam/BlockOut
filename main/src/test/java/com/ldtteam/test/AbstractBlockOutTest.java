@@ -1,7 +1,9 @@
 package com.ldtteam.test;
 
 import com.ldtteam.blockout.util.Log;
-import net.minecraft.item.ItemStack;
+import com.ldtteam.jvoxelizer.core.provider.holder.ProviderResolver;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifierProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -18,7 +20,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 /**
  * Abstract test class to abstract away some common uses functionality in Tests
  */
-@PrepareForTest({Log.class, ItemStack.class})
+@PrepareForTest({Log.class})
 @PowerMockIgnore("javax.management.*")
 @RunWith(PowerMockRunner.class)
 public abstract class AbstractBlockOutTest
@@ -35,6 +37,55 @@ public abstract class AbstractBlockOutTest
         random = new Random(getTestName().hashCode());
 
         doReturn(logger).when(Log.class, "getLogger");
+    }
+
+    @Before
+    public void setupJVoxelizerProviders()
+    {
+        ProviderResolver.getInstance().registerProvider(IIdentifier.class.getName(), new IIdentifierProvider()
+        {
+            @Override
+            public IIdentifier provide(final String s, final String s1)
+            {
+                return new IIdentifier()
+                {
+                    @Override
+                    public String getDomain()
+                    {
+                        return s;
+                    }
+
+                    @Override
+                    public String getPath()
+                    {
+                        return s1;
+                    }
+                };
+            }
+
+            @Override
+            public IIdentifier provide(final String s)
+            {
+                final String[] sComp = s.split(":");
+                final String domain = sComp.length == 1 ? "minecraft" : sComp[0];
+                final String path = sComp.length == 1 ? sComp[0] : sComp[1];
+
+                return new IIdentifier()
+                {
+                    @Override
+                    public String getDomain()
+                    {
+                        return domain;
+                    }
+
+                    @Override
+                    public String getPath()
+                    {
+                        return path;
+                    }
+                };
+            }
+        });
     }
 
     public String getTestName()

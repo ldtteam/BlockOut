@@ -5,6 +5,10 @@ import com.google.inject.TypeLiteral;
 import com.ldtteam.blockout.loader.factory.NBTBaseConverter;
 import com.ldtteam.blockout.loader.factory.NBTDependingConverters;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.nbt.*;
 
 public class NBTFactoryInjectionModule extends AbstractModule
 {

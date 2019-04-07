@@ -12,6 +12,9 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -108,7 +111,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         public Factory()
         {
             super(BlockStateIcon.class, KEY_BLOCKSTATE, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IBlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, IBlockState.defaultState());
+                final IDependencyObject<IBlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, IBlockState.defaultState(), IBlockState.class);
 
                 final BlockStateIcon element = new BlockStateIcon(
                   id,
@@ -125,7 +128,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
                 );
 
                 return element;
-            }, (element, builder) -> builder.addComponent(CONST_BLOCK_STATE, element.getBlockState()));
+            }, (element, builder) -> builder.addComponent(CONST_BLOCK_STATE, element.getBlockState(), IBlockState.class));
         }
     }
 }

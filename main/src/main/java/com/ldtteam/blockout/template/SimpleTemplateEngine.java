@@ -2,13 +2,14 @@ package com.ldtteam.blockout.template;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.resources.TemplateResource;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutionException;
@@ -47,7 +48,7 @@ public class SimpleTemplateEngine implements ITemplateEngine
         {
             templateData = CACHE_TEMPLATE_DATA.get(resourceId,
               () ->
-                BlockOut.getBlockOut().getProxy().getStyleManager().getResource(parent.getStyleId(), resourceId));
+                ProxyHolder.getInstance().getStyleManager().getResource(parent.getStyleId(), resourceId));
         }
         catch (ExecutionException e)
         {
@@ -66,7 +67,7 @@ public class SimpleTemplateEngine implements ITemplateEngine
       @NotNull final
       Function<IUIElementData, IUIElementData> dataOverrideCallback)
     {
-        final IUIElement templateCandidate = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(templateData);
+        final IUIElement templateCandidate = ProxyHolder.getInstance().getFactoryController().getElementFromData(templateData);
         if (templateCandidate instanceof Template)
         {
             Template template = (Template) templateCandidate;

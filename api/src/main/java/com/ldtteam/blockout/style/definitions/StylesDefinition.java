@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.style.definitions;
 
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+
 import java.util.Collection;
 
 public class StylesDefinition

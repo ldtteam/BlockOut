@@ -17,7 +17,7 @@ buildscript {
 }
 
 //Now configure all subprojects.
-subprojects {
+allprojects {
     System.out.println(name)
     
     //Add the central repository so that we always have access to our cached dependencies.
@@ -32,6 +32,13 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
 
+    //Force minecraft compatible versions of dependencies
+    configurations.all {
+        resolutionStrategy {
+            force 'com.google.guava:guava:21.0'
+        }
+    }
+
     //All mods have the same test harness.
     //JUNIT, MOCKITO, POWERMOCK and HAMCREST are being added here.
     dependencies {
@@ -43,6 +50,8 @@ subprojects {
         testCompile group: 'pl.pragmatists', name:'JUnitParams', version: '1.1.1'
 
         compile 'com.intellij:annotations:+@jar'
+
+        compile (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'api')
     }
 
     group = "com.ldtteam"
@@ -76,60 +85,65 @@ subprojects {
 }
 
 project(':BlockOut - Api') {
-    //Set up the shading of the jars into the primary project.
-    configurations {
-        shade{}
 
-        compile.extendsFrom shade
-    }
+}
 
-    //TODO: Shade JVoxelizer api into the api.
+project(':BlockOut - Main') {
     dependencies {
-    }
-
-    jar {
-        from (configurations.shade.files){
-            include '*'
-            into 'META-INF/libraries'
-        }
-
-        manifest {
-            attributes([
-                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
-            ])
-        }
+        compile project(':BlockOut - Api')
+        compile 'io.netty:netty-all:4.1.9.Final'
+        compile 'org.apache.httpcomponents:httpclient:4.3.3'
     }
 }
 
 project(':lang:BlockOut - Languages - JSON') {
-    
-}
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'maven'
 
-project(':BlockOut - Main') {
-    //Set up the shading of the jars into the primary project.
-    configurations {
-        shade{}
+    archivesBaseName = "BlockOut-Languages-JSON"
 
-        compile.extendsFrom shade
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
+    }
+
+    minecraft {
+        version = minecraft_version + "-" + forge_version
+        runDir = "run"
+
+        mappings = "${blockout_mappings}"
+
+        replace "@VERSION@", project.version
+        replace "@MCVERSION@", minecraft_version
+        replace "@FORGEVERSION@", forge_version
+
+        // Set the jar signature in code prior to compilation, if it exists as a build property
+        if (project.hasProperty("signature")) {
+            replace "@FINGERPRINT@", project.signature
+        }
+    }
+
+    processResources {
+        // this will ensure that this task is redone when the versions change.
+        inputs.property "version", project.version
+        inputs.property "mcversion", project.minecraft.version
+
+        // replace stuff in mcmod.info, nothing else
+        from(sourceSets.main.resources.srcDirs) {
+            include 'mcmod.info'
+
+            // replace version and mcversion
+            expand 'version':project.version, 'mcversion':project.minecraft.version
+        }
+
+        // copy everything else except the mcmod.info
+        from(sourceSets.main.resources.srcDirs) {
+            exclude 'mcmod.info'
+        }
     }
 
     dependencies {
-        shade project(':BlockOut - Api')
-        compile 'io.netty:netty-all:4.1.9.Final'
-        compile 'org.apache.httpcomponents:httpclient:4.3.3'
-    }
-
-    jar {
-        from (configurations.shade.files){
-            include '*'
-            into 'META-INF/libraries'
-        }
-
-        manifest {
-            attributes([
-                    'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' '))
-            ])
-        }
+        compile project(':BlockOut - Api')
     }
 }
 
@@ -138,7 +152,7 @@ project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
     apply plugin: 'net.minecraftforge.gradle.forge'
     apply plugin: 'maven'
 
-    archivesBaseName = "blockout_forge_1_12"
+    archivesBaseName = "BlockOut"
 
     sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
     compileJava {
@@ -207,35 +221,146 @@ project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
 
     configurations {
         shade{}
+        deobfShade {}
 
         compile.extendsFrom shade
+        deobfCompile.extendsFrom deobfShade
     }
 
     dependencies {
         shade project(':BlockOut - Api')
         shade project(':BlockOut - Main')
+        shade project(':lang:BlockOut - Languages - JSON')
+        
+        deobfShade (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'forge-1.12')  {
+            exclude group: 'com.google.guava'
+        }
     }
-    
+
     jar {
+        from (configurations.shade.files){
+            include '*'
+            into 'META-INF/libraries'
+        }
+
+        from (configurations.deobfShade.files){
+            include '*'
+            into 'META-INF/libraries'
+        }
 
         manifest {
             attributes([
-                    'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:api",
-                    'Timestamp': System.currentTimeMillis(),
-                    'FMLAT': "blockout_at.cfg"
+                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' ') + ' ' + configurations.deobfShade.files.collect { it.name }.join(' '))
             ])
         }
+    }
+}
 
-        classifier 'universal'
+project(':utilities') {
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'maven'
+
+    archivesBaseName = "BlockOut-Languages-JSON"
+
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
+    }
+
+    minecraft {
+        version = minecraft_version + "-" + forge_version
+        runDir = "run"
+
+        mappings = "${blockout_mappings}"
+
+        replace "@VERSION@", project.version
+        replace "@MCVERSION@", minecraft_version
+        replace "@FORGEVERSION@", forge_version
+
+        // Set the jar signature in code prior to compilation, if it exists as a build property
+        if (project.hasProperty("signature")) {
+            replace "@FINGERPRINT@", project.signature
+        }
+    }
+
+    processResources {
+        // this will ensure that this task is redone when the versions change.
+        inputs.property "version", project.version
+        inputs.property "mcversion", project.minecraft.version
+
+        // replace stuff in mcmod.info, nothing else
+        from(sourceSets.main.resources.srcDirs) {
+            include 'mcmod.info'
+
+            // replace version and mcversion
+            expand 'version':project.version, 'mcversion':project.minecraft.version
+        }
+
+        // copy everything else except the mcmod.info
+        from(sourceSets.main.resources.srcDirs) {
+            exclude 'mcmod.info'
+        }
+    }
+
+    dependencies {
+        compile project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
+    }
+}
+
+project(':testmod') {
+    apply plugin: 'net.minecraftforge.gradle.forge'
+    apply plugin: 'maven'
+
+    archivesBaseName = "BlockOut-Languages-JSON"
+
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
+    }
+
+    minecraft {
+        version = minecraft_version + "-" + forge_version
+        runDir = "run"
+
+        mappings = "${blockout_mappings}"
+
+        replace "@VERSION@", project.version
+        replace "@MCVERSION@", minecraft_version
+        replace "@FORGEVERSION@", forge_version
+
+        // Set the jar signature in code prior to compilation, if it exists as a build property
+        if (project.hasProperty("signature")) {
+            replace "@FINGERPRINT@", project.signature
+        }
+    }
+
+    processResources {
+        // this will ensure that this task is redone when the versions change.
+        inputs.property "version", project.version
+        inputs.property "mcversion", project.minecraft.version
+
+        // replace stuff in mcmod.info, nothing else
+        from(sourceSets.main.resources.srcDirs) {
+            include 'mcmod.info'
+
+            // replace version and mcversion
+            expand 'version':project.version, 'mcversion':project.minecraft.version
+        }
+
+        // copy everything else except the mcmod.info
+        from(sourceSets.main.resources.srcDirs) {
+            exclude 'mcmod.info'
+        }
+    }
+
+    dependencies {
+        compile project(':launcher:forge:BlockOut - Launchers - Forge - 1.12')
+        compile project(':utilities')
     }
 }
 
 /*
-project(':utilities') {
-    dependencies {
-        compile project(':main')
-    }
-}
+
 
 task runTestModClient {
     group 'runtime'
@@ -265,12 +390,7 @@ task runGuidebookServer {
     dependsOn project(':guidebook').tasks.runServer
 }
 
-project('testmod') {
-    dependencies {
-        compile project(':main')
-        compile project(':utilities')
-    }
-}
+
 
 project('guidebook') {
     dependencies {
@@ -290,5 +410,5 @@ task setupDecompWorkspace {
         }
     }
 
-    dependsOn (project(':launcher:forge:BlockOut - Launchers - Forge - 1.12').tasks.genIntellijRuns)
+    //dependsOn (project(':launcher:forge:BlockOut - Launchers - Forge - 1.12').tasks.genIntellijRuns)
 }

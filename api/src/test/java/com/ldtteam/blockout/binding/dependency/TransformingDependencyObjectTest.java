@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class TransformingDependencyObjectTest extends AbstractBlockOutApiTest
 {
@@ -20,8 +21,8 @@ public class TransformingDependencyObjectTest extends AbstractBlockOutApiTest
         final IDependencyObject<String> propDepOne = new PropertyBasedDependencyObject<>(properOne, "Default");
         final IDependencyObject<String> propDepTwo = new PropertyBasedDependencyObject<>(properTwo, "Default");
 
-        final IDependencyObject<String> targetOne = new TransformingDependencyObject<>(propDepOne, Functions.identity(), Functions.identity());
-        final IDependencyObject<String> targetTwo = new TransformingDependencyObject<>(propDepTwo, Functions.identity(), Functions.identity());
+        final IDependencyObject<String> targetOne = new TransformingDependencyObject<>(propDepOne, Function.identity(), Function.identity());
+        final IDependencyObject<String> targetTwo = new TransformingDependencyObject<>(propDepTwo, Function.identity(), Function.identity());
 
         Assert.assertFalse(targetOne.requiresDataContext());
         Assert.assertTrue(targetTwo.requiresDataContext());

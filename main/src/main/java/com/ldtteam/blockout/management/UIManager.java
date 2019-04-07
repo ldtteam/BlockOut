@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.management;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.management.client.input.ClientSideClickManager;
@@ -20,6 +19,9 @@ import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.profiler.IProfiler;
+import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
@@ -54,9 +56,9 @@ public class UIManager implements IUIManager
     public UIManager(@NotNull final RootGuiElement rootGuiElement, @NotNull final IGuiKey key)
     {
         this.rootGuiElement = rootGuiElement;
-        this.networkManager = BlockOut.getBlockOut().getProxy().generateNewNetworkManagerForGui(key);
-        this.updateManager = BlockOut.getBlockOut().getProxy().generateNewUpdateManager(this);
-        this.renderManager = IDistributionExecutor.on(() -> BlockOut.getBlockOut().getProxy().generateNewRenderManager(), () -> null);
+        this.networkManager = ProxyHolder.getInstance().generateNewNetworkManagerForGui(key);
+        this.updateManager = ProxyHolder.getInstance().generateNewUpdateManager(this);
+        this.renderManager = IDistributionExecutor.on(() -> ProxyHolder.getInstance().generateNewRenderManager(), () -> null);
         this.profiler = IProfiler.create();
         this.profiler.enableProfiling();
         this.profiler.setProfilingMap(new LinkedHashMap<>());

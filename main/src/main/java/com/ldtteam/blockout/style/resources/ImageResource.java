@@ -3,11 +3,12 @@ package com.ldtteam.blockout.style.resources;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IDiskResource;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import static com.ldtteam.blockout.util.Constants.ResourceTypes.CONST_IMAGE_RESOURCE_TYPE;
@@ -80,7 +81,7 @@ public class ImageResource implements IDiskResource
             }
             else
             {
-                final Vector2d imageSize = BlockOut.getBlockOut().getProxy().getImageSize(diskLocation);
+                final Vector2d imageSize = ProxyHolder.getInstance().getImageSize(diskLocation);
                 size = imageSize.move(offset.invert()).nullifyNegatives();
             }
 
@@ -96,7 +97,7 @@ public class ImageResource implements IDiskResource
 
     public ImageResource(final IIdentifier id, final IIdentifier diskLocation)
     {
-        this(id, diskLocation, BlockOut.getBlockOut().getProxy().getImageSize(diskLocation));
+        this(id, diskLocation, ProxyHolder.getInstance().getImageSize(diskLocation));
     }
 
     public ImageResource(final IIdentifier id, final IIdentifier diskLocation, final Vector2d size)

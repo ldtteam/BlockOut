@@ -1,5 +1,6 @@
 package com.ldtteam.blockout;
 
+import com.ldtteam.blockout.compat.UpdateHandler;
 import com.ldtteam.blockout.element.advanced.TemplateInstance;
 import com.ldtteam.blockout.element.advanced.list.factory.ListFactory;
 import com.ldtteam.blockout.element.root.RootGuiElement;
@@ -7,49 +8,35 @@ import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
-import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
-import com.ldtteam.blockout.util.Constants;
-import org.jetbrains.annotations.NotNull;
+import com.ldtteam.jvoxelizer.common.gameevent.event.ITickEvent;
+import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerGameEvent;
+import com.ldtteam.jvoxelizer.event.handler.IEventHandlerManager;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
+import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
 
 import java.util.Set;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.VERSION,
-  dependencies = Constants.FORGE_VERSION, acceptedMinecraftVersions = Constants.MC_VERSION)
 public class BlockOut
 {
+    private static BlockOut ourInstance = new BlockOut();
 
-    @SidedProxy(clientSide = Constants.PROXY_CLIENT, serverSide = Constants.PROXY_COMMON)
-    private static IProxy   proxy;
-    @Mod.Instance
-    private static BlockOut blockOut;
-
-    public static BlockOut getBlockOut()
+    private BlockOut()
     {
-        return blockOut;
     }
 
-    public static boolean isDebugging() {return Constants.DEBUG.equals("@DEBUG@");}
-
-    /**
-     * Event handler for forge pre init event.
-     *
-     * @param event the forge pre init event.
-     */
-    @Mod.EventHandler
-    public void preInit(@NotNull final FMLPreInitializationEvent event)
+    public static BlockOut getInstance()
     {
-        ProxyHolder.getInstance().setProxy(proxy);
-        ProxyHolder.getInstance().onPreInit();
-        NetworkManager.init();
+        return ourInstance;
+    }
 
-        getProxy().getLoaderManager().registerLoader(new JsonLoader());
-        //getProxy().getLoaderManager().registerLoader(new XMLLoader());
+    public void preInit()
+    {
         getProxy().getLoaderManager().registerLoader(new ObjectUIElementLoader());
 
         getProxy().getFactoryController().registerFactory(new RootGuiElement.Factory());
@@ -74,6 +61,21 @@ public class BlockOut
         getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
 
         getProxy().getBindingEngine().registerBindingCommand(new DataContextBindingCommand());
+
+        IEventHandlerManager.registerHandler(
+          IPlayerGameEvent.ILoggedOutEvent.class,
+          UpdateHandler::onPlayerLoggedOut
+        );
+
+        IEventHandlerManager.registerHandler(
+          ITickEvent.IClientTickEvent.class,
+          UpdateHandler::onTickClientTick
+        );
+
+        IEventHandlerManager.registerHandler(
+          ITickEvent.IServerTickEvent.class,
+          UpdateHandler::onTickServerTick
+        );
     }
 
     public IProxy getProxy()
@@ -81,14 +83,7 @@ public class BlockOut
         return ProxyHolder.getInstance();
     }
 
-    @Mod.EventHandler
-    public void onInit(final FMLInitializationEvent event)
-    {
-        getProxy().initializeFontRenderer();
-    }
-
-    @Mod.EventHandler
-    public void onFMLPostInitialization(final FMLPostInitializationEvent event)
+    public void postInit()
     {
         getProxy().getStyleManager().loadStyles();
 

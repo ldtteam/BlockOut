@@ -3,7 +3,6 @@ package com.ldtteam.blockout.loader.object;
 import com.google.common.collect.Lists;
 import com.google.inject.Key;
 import com.google.inject.internal.MoreTypes;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
@@ -65,7 +64,7 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
     public IUIElementDataBuilder<ObjectUIElementData>
     addChild(final IUIElement element)
     {
-        final ObjectUIElementData data = BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
+        final ObjectUIElementData data = ProxyHolder.getInstance().getFactoryController().getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
         this.children.add(data);
         return this;
     }

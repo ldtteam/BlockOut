@@ -1,17 +1,19 @@
 package com.ldtteam.blockout_test.tests.guis;
 
 import com.google.common.collect.ImmutableList;
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.advanced.list.constructiondatabuilder.ListConstructionDataBuilder;
 import com.ldtteam.blockout.element.simple.Button;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout_test.context.BindingTestContext;
-import com.ldtteam.blockout_test.tests.IBlockOutUITest;
+import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 
-public class BoundListHorizontalTest implements IBlockOutUITest
+public class BoundListHorizontalTest implements IBlockOutGuiTest
 {
     @NotNull
     @Override
@@ -24,9 +26,9 @@ public class BoundListHorizontalTest implements IBlockOutUITest
     public void onTestButtonClicked(
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                      .ofFile(new ResourceLocation(
-                                                                                                        "blockout_test:guitemp/horizontal_bound_list_test.json"))
+        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                        "blockout_test:gui/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("list",
                                                                                                                                                             ListConstructionDataBuilder.class,
@@ -42,6 +44,6 @@ public class BoundListHorizontalTest implements IBlockOutUITest
                                                                                                                                                                                                      "Hello this is 3")
                                                                                                                                                                                                  ))))
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                      .forEntity(entityPlayer));
+                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
     }
 }

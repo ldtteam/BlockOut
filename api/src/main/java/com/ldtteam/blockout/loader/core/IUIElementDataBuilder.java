@@ -14,11 +14,6 @@ public interface IUIElementDataBuilder<D extends IUIElementData>
 
     IUIElementDataBuilder<D> addChild(IUIElement elementToWrite);
 
-    default <T> IUIElementDataBuilder<D> addComponent(String componentName, T value)
-    {
-        return this.addComponent(componentName, value, value.getClass());
-    }
-
     <T> IUIElementDataBuilder<D> addComponent(String componentName, T value, Type typeToken);
 
     D build();

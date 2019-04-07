@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.management.server.network.messages;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.root.RootGuiElement;
@@ -10,6 +9,12 @@ import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.IGameEngine;
+import com.ldtteam.jvoxelizer.client.gui.IGui;
+import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
+import com.ldtteam.jvoxelizer.inventory.IContainer;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import org.jetbrains.annotations.NotNull;
 
 public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
@@ -37,7 +42,7 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
         if (openContainerScreen.getInstanceData() instanceof BlockOutGuiData)
         {
             final BlockOutGuiData blockOutGui = (BlockOutGuiData) openContainerScreen.getInstanceData();
-            final IUIElement containedElement = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(elementData);
+            final IUIElement containedElement = ProxyHolder.getInstance().getFactoryController().getElementFromData(elementData);
             if (!(containedElement instanceof RootGuiElement))
             {
                 throw new IllegalStateException("The synced element is not a root.");

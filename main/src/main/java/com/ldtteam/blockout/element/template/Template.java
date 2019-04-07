@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.element.template;
 
 import com.google.common.collect.Lists;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.property.Property;
 import com.ldtteam.blockout.element.IUIElement;
@@ -14,6 +13,8 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.wrapped.WrappedUIElementData;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +52,7 @@ public class Template extends AbstractChildrenContainingUIElement
         @Override
         public Template readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<IIdentifier> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, IIdentifier.create(MISSING));
+            final IDependencyObject<IIdentifier> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
             final String templateId = elementData.getMetaData().getId();
 
             return new Template(style, templateId, elementData);
@@ -171,6 +172,6 @@ public class Template extends AbstractChildrenContainingUIElement
             }
         };
 
-        return BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(wrappedUIElementData);
+        return ProxyHolder.getInstance().getFactoryController().getElementFromData(wrappedUIElementData);
     }
 }

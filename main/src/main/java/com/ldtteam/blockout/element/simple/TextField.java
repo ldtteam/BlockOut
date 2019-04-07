@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.element.simple;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
@@ -29,6 +28,17 @@ import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.client.gui.IGuiScreen;
+import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
+import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.LogicOp;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
+import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -169,12 +179,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 scrollOffset = getContents().length();
             }
 
-            final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), internalWidth);
+            final String visibleString = ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), internalWidth);
             final int rightmostVisibleChar = visibleString.length() + scrollOffset;
 
             if (selectionEnd == scrollOffset)
             {
-                scrollOffset -= BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents(), internalWidth, true).length();
+                scrollOffset -= ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(getContents(), internalWidth, true).length();
             }
 
             if (selectionEnd > rightmostVisibleChar)
@@ -194,7 +204,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final int maxTextLength =
-          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().getFontHeight()));
+          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / ProxyHolder.getInstance().getFontRenderer().getFontHeight()));
 
         controller.getScissoringController().focus(this);
 
@@ -306,7 +316,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     private IFontRenderer getFontRenderer()
     {
-        return BlockOut.getBlockOut().getProxy().getFontRenderer();
+        return ProxyHolder.getInstance().getFontRenderer();
     }
 
     private long getCursorCounter()
@@ -483,9 +493,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private void writeText(final String str)
     {
-        final IFontRenderer fontRenderer = BlockOut.getBlockOut().getProxy().getFontRenderer();
+        final IFontRenderer fontRenderer = ProxyHolder.getInstance().getFontRenderer();
         final int maxTextLength =
-          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / BlockOut.getBlockOut().getProxy().getFontRenderer().getFontHeight()));
+          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / ProxyHolder.getInstance().getFontRenderer().getFontHeight()));
 
 
         final int insertAt = Math.min(cursorPosition, selectionEnd);
@@ -815,8 +825,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             return true;
         }
 
-        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
-        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
+        final String visibleString = ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
+        final String trimmedString = ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(visibleString, localX);
 
         sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), trimmedString.length() + scrollOffset, selectionEnd));
 
@@ -826,8 +836,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     @Override
     public boolean onMouseClickMoveClient(final int localX, final int localY, final MouseButton button, final float timeElapsed)
     {
-        final String visibleString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
-        final String trimmedString = BlockOut.getBlockOut().getProxy().getFontRenderer().trimStringToWidth(visibleString, localX);
+        final String visibleString = ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(getContents().substring(scrollOffset), getInternalWidth());
+        final String trimmedString = ProxyHolder.getInstance().getFontRenderer().trimStringToWidth(visibleString, localX);
 
         sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition, trimmedString.length() + scrollOffset));
 
@@ -915,20 +925,20 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         {
             super(TextField.class, KEY_TEXT_FIELD, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
 
-                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "");
-                final IDependencyObject<Boolean> doBackgroundDraw = elementData.getFromRawDataWithDefault(CONST_DO_BACK_DRAW, engine, true);
-                final IDependencyObject<Integer> maxContentLenght = elementData.getFromRawDataWithDefault(CONST_MAX_LENGTH, engine, Integer.MAX_VALUE);
-                final IDependencyObject<String> outerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_OUTER_BACKGROUND_COLOR, engine, "-6250336");
-                final IDependencyObject<String> innerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_INNER_BACKGROUND_COLOR, engine, "-16777216");
-                final IDependencyObject<String> enabledFontColor = elementData.getFromRawDataWithDefault(CONST_ENABLED_FONT_COLOR, engine, "14737632");
-                final IDependencyObject<String> disabledFontColor = elementData.getFromRawDataWithDefault(CONST_DISABLED_FONT_COLOR, engine, "7368816");
-                final IDependencyObject<String> cursorColor = elementData.getFromRawDataWithDefault(CONST_CURSOR_COLOR, engine, "-3092272");
-                final IDependencyObject<String> selectionColor = elementData.getFromRawDataWithDefault(CONST_SELECTION_COLOR, engine, "Blue");
+                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "", String.class);
+                final IDependencyObject<Boolean> doBackgroundDraw = elementData.getFromRawDataWithDefault(CONST_DO_BACK_DRAW, engine, true, Boolean.class);
+                final IDependencyObject<Integer> maxContentLenght = elementData.getFromRawDataWithDefault(CONST_MAX_LENGTH, engine, Integer.MAX_VALUE, Integer.class);
+                final IDependencyObject<String> outerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_OUTER_BACKGROUND_COLOR, engine, "-6250336", String.class);
+                final IDependencyObject<String> innerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_INNER_BACKGROUND_COLOR, engine, "-16777216", String.class);
+                final IDependencyObject<String> enabledFontColor = elementData.getFromRawDataWithDefault(CONST_ENABLED_FONT_COLOR, engine, "14737632", String.class);
+                final IDependencyObject<String> disabledFontColor = elementData.getFromRawDataWithDefault(CONST_DISABLED_FONT_COLOR, engine, "7368816", String.class);
+                final IDependencyObject<String> cursorColor = elementData.getFromRawDataWithDefault(CONST_CURSOR_COLOR, engine, "-3092272", String.class);
+                final IDependencyObject<String> selectionColor = elementData.getFromRawDataWithDefault(CONST_SELECTION_COLOR, engine, "Blue", String.class);
 
 
-                final int cursorPosition = elementData.getRawWithoutBinding(CONST_CURSOR_POS, 0);
-                final int scrollOffset = elementData.getRawWithoutBinding(CONST_CURSOR_SCROLL_OFF, 0);
-                final int selectionEnd = elementData.getRawWithoutBinding(CONST_CURSOR_SEL_END, 0);
+                final int cursorPosition = elementData.getRawWithoutBinding(CONST_CURSOR_POS, 0, Integer.class);
+                final int scrollOffset = elementData.getRawWithoutBinding(CONST_CURSOR_SCROLL_OFF, 0, Integer.class);
+                final int selectionEnd = elementData.getRawWithoutBinding(CONST_CURSOR_SEL_END, 0, Integer.class);
 
                 final TextField element = new TextField(
                   id,
@@ -958,18 +968,18 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 return element;
             }, (element, builder) -> {
                 builder
-                  .addComponent(CONST_CONTENT, element.getContents())
-                  .addComponent(CONST_CURSOR_POS, element.cursorPosition)
-                  .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset)
-                  .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd)
-                  .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground())
-                  .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength())
-                  .addComponent(CONST_OUTER_BACKGROUND_COLOR, element.getOuterBackgroundColor())
-                  .addComponent(CONST_INNER_BACKGROUND_COLOR, element.getInnerBackgroundColor())
-                  .addComponent(CONST_ENABLED_FONT_COLOR, element.getEnabledColor())
-                  .addComponent(CONST_DISABLED_FONT_COLOR, element.getDisabledColor())
-                  .addComponent(CONST_CURSOR_COLOR, element.getCursorColor())
-                  .addComponent(CONST_SELECTION_COLOR, element.getSelectionColor());
+                  .addComponent(CONST_CONTENT, element.getContents(), String.class)
+                  .addComponent(CONST_CURSOR_POS, element.cursorPosition, Integer.class)
+                  .addComponent(CONST_CURSOR_SCROLL_OFF, element.scrollOffset, Integer.class)
+                  .addComponent(CONST_CURSOR_SEL_END, element.selectionEnd, Integer.class)
+                  .addComponent(CONST_DO_BACK_DRAW, element.shouldDrawBackground(), Boolean.class)
+                  .addComponent(CONST_MAX_LENGTH, element.getMaxStringLength(), Integer.class)
+                  .addComponent(CONST_OUTER_BACKGROUND_COLOR, element.getOuterBackgroundColor(), String.class)
+                  .addComponent(CONST_INNER_BACKGROUND_COLOR, element.getInnerBackgroundColor(), String.class)
+                  .addComponent(CONST_ENABLED_FONT_COLOR, element.getEnabledColor(), String.class)
+                  .addComponent(CONST_DISABLED_FONT_COLOR, element.getDisabledColor(), String.class)
+                  .addComponent(CONST_CURSOR_COLOR, element.getCursorColor(), String.class)
+                  .addComponent(CONST_SELECTION_COLOR, element.getSelectionColor(), String.class);
             });
         }
     }

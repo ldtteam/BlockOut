@@ -1,6 +1,8 @@
 package com.ldtteam.blockout.network.message.core;
 
 import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import com.ldtteam.jvoxelizer.threading.IExecutor;
 
 import java.io.Serializable;
 

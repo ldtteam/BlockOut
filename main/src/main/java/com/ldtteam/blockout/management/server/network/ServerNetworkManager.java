@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.management.server.network;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
 import com.ldtteam.blockout.element.IUIElement;
@@ -10,6 +9,7 @@ import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
 import com.ldtteam.blockout.management.server.network.messages.OnFocusedElementChangedMessage;
 import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class ServerNetworkManager implements INetworkManager
     public ServerNetworkManager(@NotNull final IGuiKey guiKey)
     {
         this.guiKey = guiKey;
-        guiController = (ServerGuiController) BlockOut.getBlockOut().getProxy().getGuiController();
+        guiController = (ServerGuiController) ProxyHolder.getInstance().getGuiController();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ServerNetworkManager implements INetworkManager
     @Override
     public void onElementChanged(@NotNull final IUIElement changedElement)
     {
-        final IUIElementData dataCandidate = BlockOut.getBlockOut().getProxy().getFactoryController().getDataFromElement(changedElement);
+        final IUIElementData dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(changedElement);
         if (dataCandidate instanceof ObjectUIElementData)
         {
             guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnElementUpdatedMessage((ObjectUIElementData) dataCandidate), uuid));

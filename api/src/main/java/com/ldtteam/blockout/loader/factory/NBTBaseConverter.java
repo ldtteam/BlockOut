@@ -7,6 +7,7 @@ import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter
 import com.ldtteam.blockout.util.NBTType;
 import com.ldtteam.blockout.util.elementdata.IUIElementDataComponentStreamSupport;
 import com.ldtteam.blockout.util.nbt.NBTStreamSupport;
+import com.ldtteam.jvoxelizer.util.nbt.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

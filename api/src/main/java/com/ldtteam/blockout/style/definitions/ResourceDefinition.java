@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.style.definitions;
 
 import com.google.gson.JsonElement;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 
 public class ResourceDefinition
 {

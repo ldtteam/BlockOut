@@ -1,16 +1,18 @@
 package com.ldtteam.blockout_test.tests.guis;
 
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.element.simple.Label;
 import com.ldtteam.blockout.element.simple.TextField;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout_test.tests.IBlockOutUITest;
+import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class TextFieldInputTest implements IBlockOutUITest
+public class TextFieldInputTest implements IBlockOutGuiTest
 {
 
     @NotNull
@@ -26,9 +28,9 @@ public class TextFieldInputTest implements IBlockOutUITest
     {
         final TextFieldContext context = new TextFieldContext();
 
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                      .ofFile(new ResourceLocation(
-                                                                                                        "blockout_test:guitemp/textfield_binding_test.json"))
+        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                        "blockout_test:gui/textfield_binding_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("input",
                                                                                                                                                             TextField.TextFieldConstructionDataBuilder.class,
@@ -50,7 +52,7 @@ public class TextFieldInputTest implements IBlockOutUITest
                                                                                                                                                                 .withDataContext(
                                                                                                                                                                   context)))
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                      .forEntity(entityPlayer));
+                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
     }
 
     public class TextFieldContext

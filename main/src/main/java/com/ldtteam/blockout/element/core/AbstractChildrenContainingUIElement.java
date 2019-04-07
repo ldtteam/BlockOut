@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.element.core;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
@@ -14,8 +13,10 @@ import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +31,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     private final UUID uniqueIdentifier = UUID.randomUUID();
 
     @NotNull
-    protected final String                    type;
+    protected final String                         type;
     @NotNull
     protected final String                         id;
     @NotNull
@@ -610,7 +611,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
         {
             super(clz, type, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) ->
             {
-                final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, AxisDistance.DEFAULT);
+                final IDependencyObject<AxisDistance> padding = elementData.getFromRawDataWithDefault(CONST_PADDING, engine, AxisDistance.DEFAULT, AxisDistance.class);
 
                 final U element = constructor.constructUsing(
                   elementData,
@@ -631,7 +632,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
                 elementData.getFromRawDataWithDefault(CONST_CHILDREN, engine, new ArrayList<IUIElementData<?>>(), CHILDREN_LIST_TYPE, element)
                   .get(element)
                   .forEach(childData -> {
-                      IUIElement child = BlockOut.getBlockOut().getProxy().getFactoryController().getElementFromData(childData);
+                      IUIElement child = ProxyHolder.getInstance().getFactoryController().getElementFromData(childData);
                       element.put(child.getId(), child);
                   });
 
@@ -640,7 +641,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
                 writer.write(element, builder);
 
                 builder
-                  .addComponent(CONST_PADDING, element.getPadding());
+                  .addComponent(CONST_PADDING, element.getPadding(), AxisDistance.class);
 
                 element.values().forEach(builder::addChild);
             });

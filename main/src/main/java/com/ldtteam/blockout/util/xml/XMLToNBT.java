@@ -1,6 +1,10 @@
 package com.ldtteam.blockout.util.xml;
 
 import com.ldtteam.blockout.util.NBTType;
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTByte;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
+import com.ldtteam.jvoxelizer.util.nbt.INBTList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Node;

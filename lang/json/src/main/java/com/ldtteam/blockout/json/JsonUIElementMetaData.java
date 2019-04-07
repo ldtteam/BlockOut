@@ -1,9 +1,15 @@
 package com.ldtteam.blockout.json;
 
+import com.google.gson.JsonObject;
+import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.loader.core.IUIElementMetaData;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+
+import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 
 public class JsonUIElementMetaData implements IUIElementMetaData
 {
@@ -19,9 +25,9 @@ public class JsonUIElementMetaData implements IUIElementMetaData
     }
 
     @Override
-    public ResourceLocation getType()
+    public String getType()
     {
-        return new ResourceLocation(object.get(CONST_TYPE).getAsString());
+        return object.get(CONST_TYPE).getAsString();
     }
 
     @Override

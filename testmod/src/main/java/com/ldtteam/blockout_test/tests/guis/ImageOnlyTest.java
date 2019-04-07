@@ -1,15 +1,16 @@
 package com.ldtteam.blockout_test.tests.guis;
 
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.simple.Button;
-import com.ldtteam.blockout_test.tests.IBlockOutUITest;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class ImageOnlyTest implements IBlockOutUITest
+public class ImageOnlyTest implements IBlockOutGuiTest
 {
     @NotNull
     @Override
@@ -22,10 +23,11 @@ public class ImageOnlyTest implements IBlockOutUITest
     public void onTestButtonClicked(
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                      .ofFile(new ResourceLocation("blockout_test:guitemp/image_only_test.json"))
+        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                        "blockout_test:gui/image_only_test.json"))
                                                                                                       .usingDefaultData()
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                      .forEntity(entityPlayer));
+                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
     }
 }

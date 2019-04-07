@@ -2,6 +2,7 @@ package com.ldtteam.blockout.utilities.template;
 
 import com.google.common.collect.Lists;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -55,7 +56,7 @@ public class DefaultTemplateUtils
     }
 
     public static List<GridUtilityWrapper<BlockStateUtilityWrapper>> generateBlockStateGrid(
-      @NotNull final ResourceLocation templateId,
+      @NotNull final IIdentifier templateId,
       @NotNull final int width
     )
     {
@@ -65,24 +66,6 @@ public class DefaultTemplateUtils
           wrappers,
           width,
           templateId
-        );
-    }
-
-    public static List<GridUtilityWrapper<SlotUtilityWrapper>> generateSlotGrid(
-      @NotNull final IItemHandler iItemHandler,
-      @NotNull final ResourceLocation inventoryId,
-      @NotNull final ResourceLocation texture,
-      @NotNull final int width
-    )
-    {
-        return generateGrid(
-          generateSlotUtilsFromIItemHandler(
-            iItemHandler,
-            inventoryId,
-            texture
-          ),
-          width,
-          new ResourceLocation("template:slot")
         );
     }
 
@@ -98,7 +81,7 @@ public class DefaultTemplateUtils
     public static <T> List<GridUtilityWrapper<T>> generateGrid(
       @NotNull final List<T> input,
       @NotNull final int width,
-      @NotNull final ResourceLocation entryTemplateId
+      @NotNull final IIdentifier entryTemplateId
     )
     {
         final List<GridUtilityWrapper<T>> gridList = new ArrayList<>();
@@ -112,10 +95,28 @@ public class DefaultTemplateUtils
         return gridList;
     }
 
+    public static List<GridUtilityWrapper<SlotUtilityWrapper>> generateSlotGrid(
+      @NotNull final IItemHandler iItemHandler,
+      @NotNull final IIdentifier inventoryId,
+      @NotNull final IIdentifier texture,
+      @NotNull final int width
+    )
+    {
+        return generateGrid(
+          generateSlotUtilsFromIItemHandler(
+            iItemHandler,
+            inventoryId,
+            texture
+          ),
+          width,
+          IIdentifier.create("template:slot")
+        );
+    }
+
     public static List<SlotUtilityWrapper> generateSlotUtilsFromIItemHandler(
       @NotNull final IItemHandler iItemHandler,
-      @NotNull final ResourceLocation inventoryId,
-      @NotNull final ResourceLocation texture
+      @NotNull final IIdentifier inventoryId,
+      @NotNull final IIdentifier texture
     )
     {
         return IntStream.range(0, iItemHandler.getSlots()).mapToObj(index -> new SlotUtilityWrapper(inventoryId, texture, index)).collect(Collectors.toList());

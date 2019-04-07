@@ -7,8 +7,8 @@ import java.util.List;
 
 public class BlockOutUITestManager
 {
-    private static BlockOutUITestManager ourInstance = new BlockOutUITestManager();
-    private final  List<IBlockOutUITest> testList;
+    private static BlockOutUITestManager  ourInstance = new BlockOutUITestManager();
+    private final  List<IBlockOutGuiTest> testList;
 
     private BlockOutUITestManager()
     {
@@ -28,7 +28,7 @@ public class BlockOutUITestManager
         return ourInstance;
     }
 
-    public List<IBlockOutUITest> getTestList()
+    public List<IBlockOutGuiTest> getTestList()
     {
         return testList;
     }

@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.utilities.template;
 
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Objects;
@@ -7,11 +8,11 @@ import java.util.Objects;
 public class SlotUtilityWrapper
 {
 
-    private final ResourceLocation inventory;
-    private final ResourceLocation texture;
-    private final int              index;
+    private final IIdentifier inventory;
+    private final IIdentifier texture;
+    private final int         index;
 
-    public SlotUtilityWrapper(final ResourceLocation inventory, final ResourceLocation texture, final int index)
+    public SlotUtilityWrapper(final IIdentifier inventory, final IIdentifier texture, final int index)
     {
         this.inventory = inventory;
         this.texture = texture;
@@ -41,12 +42,12 @@ public class SlotUtilityWrapper
                  Objects.equals(getTexture(), that.getTexture());
     }
 
-    public ResourceLocation getInventory()
+    public IIdentifier getInventory()
     {
         return inventory;
     }
 
-    public ResourceLocation getTexture()
+    public IIdentifier getTexture()
     {
         return texture;
     }

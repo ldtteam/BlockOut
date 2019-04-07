@@ -1,5 +1,6 @@
 package com.ldtteam.blockout.util;
 
+import com.ldtteam.jvoxelizer.translation.ITranslator;
 import org.jetbrains.annotations.Nullable;
 
 /**

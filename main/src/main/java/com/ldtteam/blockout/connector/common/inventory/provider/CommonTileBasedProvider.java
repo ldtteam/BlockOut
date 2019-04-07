@@ -1,8 +1,15 @@
 package com.ldtteam.blockout.connector.common.inventory.provider;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.block.entity.IBlockEntity;
+import com.ldtteam.jvoxelizer.common.capability.ICapability;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,7 +107,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final IDimension<?> blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
+        final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
         final IBlockEntity tileEntity = blockAccess.getBlockEntity(IBlockCoordinate.create(x,y,z));
 
         if (tileEntity == null)

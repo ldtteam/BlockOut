@@ -1,9 +1,10 @@
 package com.ldtteam.blockout.connector.common.definition.loader;
 
 import com.google.common.io.CharStreams;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -37,7 +38,7 @@ public class CommonIIdentifierBasedGuiDefinitionLoader implements IGuiDefinition
     {
         try
         {
-            final InputStream stream = BlockOut.getBlockOut().getProxy().getResourceStream(getLocation());
+            final InputStream stream = ProxyHolder.getInstance().getResourceStream(getLocation());
             String data;
             try (final Reader reader = new InputStreamReader(stream))
             {

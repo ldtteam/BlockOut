@@ -5,11 +5,13 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.ldtteam.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.ldtteam.blockout.util.kryo.KryoUtil;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessage;
+import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import io.netty.buffer.ByteBuf;
 
 import java.io.ByteArrayOutputStream;
 
-public class BlockOutNetworkMessageWrapper implements IMessage, IMessageHandler<BlockOutNetworkMessageWrapper, BlockOutNetworkMessageWrapper>
+public class BlockOutNetworkMessageWrapper implements IMessage
 {
 
     private final Kryo                    KRYO   = KryoUtil.createNewKryo();
@@ -61,11 +63,11 @@ public class BlockOutNetworkMessageWrapper implements IMessage, IMessageHandler<
     }
 
     @Override
-    public BlockOutNetworkMessageWrapper onMessage(final BlockOutNetworkMessageWrapper message, final IMessageContext ctx)
+    public IMessage onArrived(final IMessageContext iMessageContext)
     {
-        if (message.loaded)
+        if (loaded)
         {
-            message.message.onMessage(ctx);
+            message.onMessage(iMessageContext);
         }
 
         return null;

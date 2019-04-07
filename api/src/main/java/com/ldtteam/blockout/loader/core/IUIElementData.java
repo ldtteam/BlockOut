@@ -32,53 +32,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
     IUIElementMetaData getMetaData();
 
     /**
-     * Returns a dependency target from raw data with a default value.
-     *
-     * @param name         The name of the raw data to get.
-     * @param defaultValue The default value.
-     * @param engine       The binding engine.
-     * @param params       The parameters used during conversion from {@link IUIElementDataComponent} to T
-     * @param <T>          The target type.
-     * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
-     */
-    default <T> IDependencyObject<T> getFromRawDataWithDefault(
-      @NotNull final String name,
-      @NotNull final IBindingEngine engine,
-      @NotNull final T defaultValue,
-      @NotNull final Object... params
-    )
-    {
-        return getFromRawDataWithProperty(
-          name,
-          engine,
-          PropertyCreationHelper.createFromStaticValue(defaultValue),
-          defaultValue,
-          params
-        );
-    }
-
-    /**
-     * Returns a dependency target from raw data with a default value.
-     *
-     * @param name            The name of the raw data to get.
-     * @param defaultProperty The default property.
-     * @param engine          The binding engine.
-     * @param params          The parameters used during conversion from {@link IUIElementDataComponent} to T
-     * @param <T>             The target type.
-     * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
-     */
-    default <T> IDependencyObject<T> getFromRawDataWithProperty(
-      @NotNull final String name,
-      @NotNull final IBindingEngine engine,
-      @NotNull final Property<T> defaultProperty,
-      @NotNull final T defaultValue,
-      @NotNull final Object... params
-    )
-    {
-        return getFromRawDataWithProperty(name, engine, defaultProperty, defaultValue, defaultValue.getClass(), params);
-    }
-
-    /**
      * Returns a dependency target from raw data with a default property.
      * Uses the given target type to lookup component converters in the injector.
      * <p>
@@ -157,24 +110,6 @@ public interface IUIElementData<C extends IUIElementDataComponent>
           targetType,
           params
         );
-    }
-
-    /**
-     * Returns raw data with a default value if not found
-     *
-     * @param name         The name of the raw data to get.
-     * @param defaultValue The default value.
-     * @param params       The parameters used during conversion from {@link IUIElementDataComponent} to T
-     * @param <T>          The target type.
-     * @return The converted raw data.
-     */
-    default <T> T getRawWithoutBinding(
-      @NotNull final String name,
-      @NotNull final T defaultValue,
-      @NotNull final Object... params
-    )
-    {
-        return getRawWithoutBinding(name, defaultValue, defaultValue.getClass(), params);
     }
 
     /**

@@ -1,11 +1,13 @@
 package com.ldtteam.blockout_test.tests.guis;
 
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.element.simple.Label;
-import com.ldtteam.blockout_test.tests.IBlockOutUITest;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CountdownTest implements IBlockOutUITest
+public class CountdownTest implements IBlockOutGuiTest
 {
     @NotNull
     @Override
@@ -26,8 +28,9 @@ public class CountdownTest implements IBlockOutUITest
     public void onTestButtonClicked(
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        BlockOut.getBlockOut().getProxy().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                      .ofFile(new ResourceLocation("blockout_test:guitemp/countdown_to_time.json"))
+        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                        "blockout_test:gui/countdown_to_time.json"))
                                                                                                       .usingData(builder -> {
                                                                                                           builder.withControl("countdown",
                                                                                                             Label.LabelConstructionDataBuilder.class,
@@ -36,7 +39,7 @@ public class CountdownTest implements IBlockOutUITest
                                                                                                             });
                                                                                                       })
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                      .forEntity(entityPlayer));
+                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
     }
 
     public class CountdownDataContext

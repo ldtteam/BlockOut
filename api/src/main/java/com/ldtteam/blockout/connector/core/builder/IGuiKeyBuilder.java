@@ -7,6 +7,10 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.ldtteam.blockout.context.core.IContext;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;

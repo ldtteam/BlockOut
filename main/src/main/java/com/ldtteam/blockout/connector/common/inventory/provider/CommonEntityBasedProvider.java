@@ -1,8 +1,14 @@
 package com.ldtteam.blockout.connector.common.inventory.provider;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
+import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.jvoxelizer.common.capability.ICapability;
+import com.ldtteam.jvoxelizer.dimension.IDimension;
+import com.ldtteam.jvoxelizer.entity.IEntity;
+import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,12 +92,12 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final IDimension<?> blockAccess = BlockOut.getBlockOut().getProxy().getDimensionFromDimensionId(dimId);
+        final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
         final IEntity entity = blockAccess.getLoadedEntities().stream().filter(e -> e.getId().equals(entityId)).findFirst().orElse(null);
 
         if (entity == null)
         {
-            return IItemHandler.createEmpty();
+            return IItemHandler.empty();
         }
 
         if (!entity.hasCapability(ICapability.getItemHandlerCapability(), facing))

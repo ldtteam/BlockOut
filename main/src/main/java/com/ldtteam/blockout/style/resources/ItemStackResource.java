@@ -5,6 +5,10 @@ import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.item.IItemStack;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemStackResource implements IResource
@@ -51,7 +55,7 @@ public class ItemStackResource implements IResource
     }
 
     private final IIdentifier id;
-    private final IItemStack        stack;
+    private final IItemStack  stack;
 
     public ItemStackResource(final IIdentifier id, final IItemStack stack)
     {

@@ -4,6 +4,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.ldtteam.blockout.style.definitions.ResourceDefinition;
 import com.ldtteam.blockout.util.json.IdentifierDeserializer;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 
 import java.lang.reflect.Type;
 

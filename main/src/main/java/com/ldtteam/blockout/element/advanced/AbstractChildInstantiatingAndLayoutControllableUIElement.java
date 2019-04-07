@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.element.advanced;
 
 import com.google.common.collect.Lists;
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.dependency.injection.DependencyObjectInjector;
@@ -20,10 +19,12 @@ import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Clamp;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -183,7 +184,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
         for (final Object context :
           newData)
         {
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
+            final IUIElement element = ProxyHolder.getInstance().getTemplateEngine().generateFromTemplate(
               this,
               DependencyObjectHelper.createFromValue(context)
               ,
@@ -433,10 +434,11 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
           @NotNull final ISimpleUIElementWriter<U> writer)
         {
             super(clz, type, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList());
-                final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d);
-                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM);
+                final IDependencyObject<IIdentifier> templateResource =
+                  elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList(), IIdentifier.class);
+                final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d, Double.class);
+                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM, Orientation.class);
 
                 final U instance = constructor.constructUsing(
                   elementData,
@@ -462,8 +464,8 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
                 return instance;
             }, (element, builder) ->  {
                 builder
-                  .addComponent(CONST_SCROLLOFFSET, element.scrollOffset)
-                  .addComponent(CONST_ORIENTATION, element.getOrientation());
+                  .addComponent(CONST_SCROLLOFFSET, element.scrollOffset, Double.class)
+                  .addComponent(CONST_ORIENTATION, element.getOrientation(), Orientation.class);
 
                 writer.write(element, builder);
             });

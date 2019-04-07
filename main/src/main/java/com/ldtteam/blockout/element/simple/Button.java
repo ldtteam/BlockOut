@@ -19,6 +19,8 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -301,10 +303,13 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         public Factory()
         {
             super(Button.class, KEY_BUTTON, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> defaultBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<IIdentifier> clickedBackgroundImage = elementData.getFromRawDataWithDefault(CONST_CLICKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<IIdentifier> disabledBackgroundImage = elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<Boolean> clicked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CLICKED, engine, false);
+                final IDependencyObject<IIdentifier> defaultBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<IIdentifier> clickedBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_CLICKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<IIdentifier> disabledBackgroundImage =
+                  elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<Boolean> clicked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CLICKED, engine, false, Boolean.class);
 
                 final Button element = new Button(
                   id,
@@ -325,10 +330,10 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource())
-                                       .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource())
-                                       .addComponent(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource())
-                                       .addComponent(CONST_INITIALLY_CLICKED, element.isClicked()));
+                                       .addComponent(CONST_DEFAULT_BACKGROUND_IMAGE, element.getNormalBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_DISABLED_BACKGROUND_IMAGE, element.getDisabledBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_CLICKED_BACKGROUND_IMAGE, element.getClickedBackgroundImageResource(), IIdentifier.class)
+                                       .addComponent(CONST_INITIALLY_CLICKED, element.isClicked(), Boolean.class));
         }
     }
 

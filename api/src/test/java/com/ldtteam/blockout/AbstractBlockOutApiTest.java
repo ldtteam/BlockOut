@@ -6,7 +6,9 @@ import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.reflection.IFieldReflectionEntry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
-import net.minecraft.init.Bootstrap;
+import com.ldtteam.jvoxelizer.core.provider.holder.ProviderResolver;
+import com.ldtteam.jvoxelizer.util.tuple.ITuple;
+import com.ldtteam.jvoxelizer.util.tuple.ITupleProvider;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -92,6 +94,32 @@ public class AbstractBlockOutApiTest
     @Before
     public void setupVanillaMinecraft()
     {
-        Bootstrap.register();
+    }
+
+    @Before
+    public void setupJVoxelizer()
+    {
+        //TODO: Create proper test harness
+        ProviderResolver.getInstance().registerProvider(ITuple.class.getName(), new ITupleProvider()
+        {
+            @Override
+            public <A, B> ITuple<A, B> provide(final A a, final B b)
+            {
+                return new ITuple<A, B>()
+                {
+                    @Override
+                    public A getFirst()
+                    {
+                        return a;
+                    }
+
+                    @Override
+                    public B getSecond()
+                    {
+                        return b;
+                    }
+                };
+            }
+        });
     }
 }

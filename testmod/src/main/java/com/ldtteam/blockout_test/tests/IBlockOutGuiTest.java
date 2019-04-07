@@ -4,9 +4,8 @@ import com.ldtteam.blockout.element.simple.Button;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.jetbrains.annotations.NotNull;
 
-public interface IBlockOutUITest
+public interface IBlockOutGuiTest
 {
-
     @NotNull
     String getTestName();
 

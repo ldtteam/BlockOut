@@ -15,10 +15,11 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
 
 import static com.ldtteam.blockout.util.Constants.Controls.ProgressBar.*;
@@ -36,7 +37,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     public IDependencyObject<Double>      min;
     @NotNull
     public IDependencyObject<Double>      max;
-    @Nonnull
+    @NotNull
     public IDependencyObject<Orientation> orientation;
 
     public ProgressBar(
@@ -346,12 +347,14 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         protected Factory()
         {
             super(ProgressBar.class, KEY_PROGRESS_BAR, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> background = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<IIdentifier> foreground = elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, IIdentifier.create(MISSING));
-                final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d);
-                final IDependencyObject<Double> max = elementData.getFromRawDataWithDefault(CONST_MAX, engine, 100d);
-                final IDependencyObject<Double> value = elementData.getFromRawDataWithDefault(CONST_VALUE, engine, 50d);
-                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.LEFT_RIGHT);
+                final IDependencyObject<IIdentifier> background =
+                  elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<IIdentifier> foreground =
+                  elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d, Double.class);
+                final IDependencyObject<Double> max = elementData.getFromRawDataWithDefault(CONST_MAX, engine, 100d, Double.class);
+                final IDependencyObject<Double> value = elementData.getFromRawDataWithDefault(CONST_VALUE, engine, 50d, Double.class);
+                final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.LEFT_RIGHT, Orientation.class);
 
                 final ProgressBar element = new ProgressBar(
                   id,
@@ -374,12 +377,12 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackGroundResource())
-                                       .addComponent(CONST_FOREGROUND_IMAGE, element.getForeGroundResource())
-                                       .addComponent(CONST_MIN, element.getMin())
-                                       .addComponent(CONST_MAX, element.getMax())
-                                       .addComponent(CONST_VALUE, element.getValue())
-                                       .addComponent(CONST_ORIENTATION, element.getOrientation()));
+                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackGroundResource(), IIdentifier.class)
+                                       .addComponent(CONST_FOREGROUND_IMAGE, element.getForeGroundResource(), IIdentifier.class)
+                                       .addComponent(CONST_MIN, element.getMin(), Double.class)
+                                       .addComponent(CONST_MAX, element.getMax(), Double.class)
+                                       .addComponent(CONST_VALUE, element.getValue(), Double.class)
+                                       .addComponent(CONST_ORIENTATION, element.getOrientation(), Orientation.class));
         }
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ldtteam.blockout.style.definitions.StylesDefinition;
 import com.ldtteam.blockout.util.json.IdentifierDeserializer;
 import com.ldtteam.blockout.util.stream.StreamHelper;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 
 import java.lang.reflect.Type;
 import java.util.Collection;

@@ -1,14 +1,15 @@
 package com.ldtteam.blockout.utilities.helpers;
 
-import com.ldtteam.blockout.BlockOut;
+import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.element.advanced.TemplateInstance;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.utilities.template.DefaultTemplateUtils;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -41,7 +42,7 @@ public class BlockOutHelper
      */
     public static IGuiController getGuiController()
     {
-        return BlockOut.getBlockOut().getProxy().getGuiController();
+        return ProxyHolder.getInstance().getGuiController();
     }
 
     /**
@@ -56,8 +57,8 @@ public class BlockOutHelper
       @NotNull final World world,
       @NotNull final String controlId,
       @NotNull final BlockPos chestPosition,
-      @NotNull final ResourceLocation inventoryId,
-      @NotNull final ResourceLocation slotResource)
+      @NotNull final IIdentifier inventoryId,
+      @NotNull final IIdentifier slotResource)
     {
         theBuilder.withControl(
           controlId,
@@ -80,8 +81,8 @@ public class BlockOutHelper
      */
     private static Consumer<TemplateInstance.TemplateInstanceConstructionDataBuilder> initiateStandardInventoryWithItemHandler(
       @NotNull final IItemHandler handler,
-      @NotNull final ResourceLocation inventoryId,
-      @NotNull final ResourceLocation slotResource,
+      @NotNull final IIdentifier inventoryId,
+      @NotNull final IIdentifier slotResource,
       final int width)
     {
         return templateInstanceConstructionDataBuilder -> templateInstanceConstructionDataBuilder.withDependentDataContext(
@@ -105,10 +106,10 @@ public class BlockOutHelper
       @NotNull final IBlockOutGuiConstructionDataBuilder theBuilder,
       @NotNull final String controlId,
       @NotNull final EntityPlayerMP entityPlayer,
-      @NotNull final ResourceLocation inventoryId,
+      @NotNull final IIdentifier inventoryId,
       final int minSlot,
       final int maxSlot,
-      @NotNull final ResourceLocation slotResource)
+      @NotNull final IIdentifier slotResource)
     {
         theBuilder.withControl(
           controlId,
@@ -136,8 +137,8 @@ public class BlockOutHelper
      */
     private static Consumer<TemplateInstance.TemplateInstanceConstructionDataBuilder> initiatePlayerInventoryControlForRange(
       @NotNull final EntityPlayerMP entityPlayer,
-      @NotNull final ResourceLocation inventoryId,
-      @NotNull final ResourceLocation slotResource,
+      @NotNull final IIdentifier inventoryId,
+      @NotNull final IIdentifier slotResource,
       final int width,
       final int minSlot,
       final int maxSlot)

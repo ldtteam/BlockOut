@@ -5,11 +5,8 @@ import junitparams.Parameters;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import scala.tools.cmd.gen.AnyValReps;
 
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 @RunWith(JUnitParamsRunner.class)
 public class PropertyTest

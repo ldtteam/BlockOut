@@ -18,6 +18,8 @@ import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -548,20 +550,24 @@ public abstract class AbstractSimpleUIElement implements IUIElement
           @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
             final IDependencyObject<IIdentifier> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
-              PropertyCreationHelper.createFromOptional((Function) o -> parent.getStyleId(), null ,
+              PropertyCreationHelper.createFromOptional(o -> parent.getStyleId(), null,
                 true
-              ), CONST_DEFAULT)).orElse(elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, CONST_DEFAULT));
+              ), IIdentifier.create(CONST_DEFAULT), IIdentifier.class))
+                                                           .orElse(elementData.getFromRawDataWithDefault(CONST_STYLE_ID,
+                                                             engine,
+                                                             IIdentifier.create(CONST_DEFAULT),
+                                                             IIdentifier.class));
             final IDependencyObject<EnumSet<Alignment>> alignments =
               elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP), ALIGNMENT_ENUMSET_TYPE);
             final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE, Dock.class, Dock.class); //We need it twice, sorry.
-            final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, AxisDistance.DEFAULT);
+            final IDependencyObject<AxisDistance> margin = elementData.getFromRawDataWithDefault(CONST_MARGIN, engine, AxisDistance.DEFAULT, AxisDistance.class);
             //TODO: Make dynamic sizing possible. Requires custom element control size type that can be dynamically resolved!
-            final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, Vector2d.DEFAULT);
+            final IDependencyObject<Vector2d> elementSize = elementData.getFromRawDataWithDefault(CONST_ELEMENT_SIZE, engine, Vector2d.DEFAULT, Vector2d.class);
             final IDependencyObject<Object> dataContext = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_CONTEXT, engine,
-              PropertyCreationHelper.createFromNonOptional((c) -> parent.getDataContext(), (c, o) -> parent.setDataContext(o), true), new Object()))
-                                                            .orElse(elementData.getFromRawDataWithDefault(CONST_DATACONTEXT, engine, new Object()));
-            final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true);
-            final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true);
+              PropertyCreationHelper.createFromNonOptional((c) -> parent.getDataContext(), (c, o) -> parent.setDataContext(o), true), new Object(), Object.class))
+                                                            .orElse(elementData.getFromRawDataWithDefault(CONST_DATACONTEXT, engine, new Object(), Object.class));
+            final IDependencyObject<Boolean> visible = elementData.getFromRawDataWithDefault(CONST_VISIBLE, engine, true, Boolean.class);
+            final IDependencyObject<Boolean> enabled = elementData.getFromRawDataWithDefault(CONST_ENABLED, engine, true, Boolean.class);
 
             final U element = constructor.constructUsing(
               elementData,
@@ -586,11 +592,11 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         {
             builder
               .addComponent(CONST_ALIGNMENT, element.getAlignment(), ALIGNMENT_ENUMSET_TYPE)
-              .addComponent(CONST_DOCK, element.getDock())
-              .addComponent(CONST_MARGIN, element.getMargin())
-              .addComponent(CONST_ELEMENT_SIZE, element.getElementSize())
-              .addComponent(CONST_VISIBLE, element.isVisible())
-              .addComponent(CONST_ENABLED, element.isEnabled());
+              .addComponent(CONST_DOCK, element.getDock(), Dock.class)
+              .addComponent(CONST_MARGIN, element.getMargin(), AxisDistance.class)
+              .addComponent(CONST_ELEMENT_SIZE, element.getElementSize(), Vector2d.class)
+              .addComponent(CONST_VISIBLE, element.isVisible(), Boolean.class)
+              .addComponent(CONST_ENABLED, element.isEnabled(), Boolean.class);
 
             writer.write(element, builder);
         }

@@ -173,28 +173,21 @@ public final class ColorUtils
     {
         if (input.isEmpty())
         {
-            //TODO: Introduce constructor for IColor
-            //return new Color(Color.WHITE);
+            return IColor.create(nameToColorMap.get("white"));
         }
 
         if (nameToColorMap.containsKey(input.toLowerCase()))
         {
-            //TODO: Introduce constructor for IColor
-            //return new Color(nameToColorMap.get(input.toLowerCase()));
+            return IColor.create(nameToColorMap.get(input.toLowerCase()));
         }
 
         try
         {
-            //TODO: Introduce constructor for IColor
-            //return new Color(Integer.decode(input), true);
+            return IColor.create(Integer.parseInt(input));
         }
         catch (Exception e)
         {
-            //TODO: Introduce constructor for IColor
-            //return new Color(Color.WHITE);
+            return IColor.create(nameToColorMap.get("white"));
         }
-
-        //TODO: Remove when color constructor has been introduced.
-        return null;
     }
 }

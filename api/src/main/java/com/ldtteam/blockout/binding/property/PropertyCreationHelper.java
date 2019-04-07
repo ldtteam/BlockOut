@@ -4,6 +4,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ldtteam.blockout.util.Log;
+import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -174,22 +175,19 @@ public final class PropertyCreationHelper
 
         try
         {
-            //TODO: Create constructor for ITuple
-            /*return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> {
+            return GETTER_CACHE.get(ITuple.create(targetClass, getMethodName), () -> {
                 try
                 {
                     final MethodAccess methodAccess = MethodAccess.get(targetClass);
                     final Integer accessIndex = methodAccess.getIndex(getMethodName);
 
-                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
+                    return Optional.of(ITuple.create(methodAccess, accessIndex));
                 }
                 catch (Exception ex)
                 {
                     return Optional.empty();
                 }
-            });*/
-
-            return null;
+            });
         }
         catch (Exception e)
         {
@@ -206,22 +204,19 @@ public final class PropertyCreationHelper
 
         try
         {
-            //TODO: Introduce a constructor for ITuple
-            /*return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> {
+            return SETTER_CACHE.get(ITuple.create(targetClass, setMethodName), () -> {
                 try
                 {
                     final MethodAccess methodAccess = MethodAccess.get(targetClass);
                     final Integer accessIndex = methodAccess.getIndex(setMethodName, 1);
 
-                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
+                    return Optional.of(ITuple.create(methodAccess, accessIndex));
                 }
                 catch (Exception ex)
                 {
                     return Optional.empty();
                 }
-            });*/
-
-            return null;
+            });
         }
         catch (Exception e)
         {

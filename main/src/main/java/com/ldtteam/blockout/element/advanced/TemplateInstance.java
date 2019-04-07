@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.element.advanced;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.dependency.injection.DependencyObjectInjector;
@@ -15,7 +14,9 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +62,8 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
             super(TemplateInstance.class,
               KEY_TEMPLATE_INSTANCE,
               (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> templateResource = elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING));
+                  final IDependencyObject<IIdentifier> templateResource =
+                    elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final TemplateInstance element = new TemplateInstance(
                   id,
@@ -85,11 +87,11 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
                 }
 
                 return element;
-            }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource()));
+              }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource(), IIdentifier.class));
         }
     }
 
-    public IDependencyObject<IIdentifier>             templateResource;
+    public IDependencyObject<IIdentifier>                  templateResource;
     public IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
     public TemplateInstance(
@@ -157,7 +159,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
 
             final IIdentifier resolvedTemplateResource = getTemplateResource();
 
-            final IUIElement element = BlockOut.getBlockOut().getProxy().getTemplateEngine().generateFromTemplate(
+            final IUIElement element = ProxyHolder.getInstance().getTemplateEngine().generateFromTemplate(
               this,
               DependencyObjectHelper.createFromGetterOnly(Function.identity(), new Object()),
               resolvedTemplateResource,

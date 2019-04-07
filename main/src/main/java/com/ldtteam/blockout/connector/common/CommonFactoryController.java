@@ -13,6 +13,7 @@ import com.ldtteam.blockout.loader.core.IUIElementMetaDataBuilder;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
 import com.ldtteam.blockout.util.Constants;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -66,7 +67,7 @@ public class CommonFactoryController implements IUIElementFactoryController
         final IUIElementFactory<T> factory = (IUIElementFactory<T>) factoryBiMap.get(type);
 
         builder.withMetaData(buildMetaDataBuilder(element));
-        builder.addComponent(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId());
+        builder.addComponent(Constants.Controls.General.CONST_STYLE_ID, element.getStyleId(), IIdentifier.class);
         factory.writeToElementData(element, builder);
 
         return builder.build();

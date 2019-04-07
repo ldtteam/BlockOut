@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.element.simple;
 
-import com.ldtteam.blockout.BlockOut;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
@@ -13,6 +12,12 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
+import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.jvoxelizer.translation.ITranslator;
+import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,8 +78,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         IOpenGl.enableBlend();
         IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
-        BlockOut.getBlockOut()
-          .getProxy()
+        ProxyHolder.getInstance()
           .getFontRenderer()
           .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), 0);
 
@@ -154,8 +158,8 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Label.class, KEY_LABEL, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>");
-                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, ITextFormatting.reset().toString());
+                final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>", String.class);
+                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, ITextFormatting.reset().toString(), String.class);
 
                 final Label element = new Label(
                   id,
@@ -175,8 +179,8 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                 return element;
             }, (element, builder) ->
                  builder
-                   .addComponent(CONST_CONTENT, element.getContents())
-                   .addComponent(CONST_FONT_COLOR, element.getFontColor()));
+                   .addComponent(CONST_CONTENT, element.getContents(), String.class)
+                   .addComponent(CONST_FONT_COLOR, element.getFontColor(), String.class));
         }
     }
 }

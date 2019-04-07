@@ -9,12 +9,12 @@ public interface IColor
      */
     static void resetOpenGLColoring()
     {
-        //TODO: Link open gl code.
+        IColorProviderHolder.getInstance().resetOpenGLColoring();
     }
 
     static IColor create(int color)
     {
-        throw new NotImplementedException();
+        return IColorProviderHolder.getInstance().create(color);
     }
 
     String encodeColor();
