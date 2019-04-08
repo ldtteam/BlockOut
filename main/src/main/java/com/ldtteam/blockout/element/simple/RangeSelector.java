@@ -73,8 +73,8 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
                   rightSelectorTexture
                 );
             }, ((element, builder) -> builder
-                                        .addComponent(CONST_LEFT_VALUE, element.getLeftValue(), Double.class)
-                                        .addComponent(CONST_RIGHT_VALUE, element.getRightValue(), Double.class)
+                                        .addComponent(CONST_LEFT_VALUE, element.getLeftValue(), Float.class)
+                                        .addComponent(CONST_RIGHT_VALUE, element.getRightValue(), Float.class)
                                         .addComponent(CONST_LEFT_BACKGROUND, element.getLeftBackgroundTexture(), IIdentifier.class)
                                         .addComponent(CONST_SELECTED_BACKGROUND, element.getSelectedRegionBackgroundTexture(), IIdentifier.class)
                                         .addComponent(CONST_RIGHT_BACKGROUND, element.getRightBackgroundTexture(), IIdentifier.class)

@@ -5,6 +5,7 @@ import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.AbstractForgeMod;
+import com.ldtteam.jvoxelizer.launcher.forge_1_12.core.IForgeJVoxelizerSetupProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -47,9 +48,11 @@ public class BlockOutForge extends AbstractForgeMod
     }
 
     @Override
-    protected void registerModProviders()
+    protected IForgeJVoxelizerSetupProxy getModSetupProxy()
     {
-
+        return () -> {
+            //Noop
+        };
     }
 
     @Mod.EventHandler
