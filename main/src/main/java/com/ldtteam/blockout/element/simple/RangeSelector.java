@@ -195,8 +195,6 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         this.currentMovementType = Optional.of(movementType);
         final float value = convertXPositionToValue(localX);
 
-        Log.getLogger().info(value);
-
         if (!movementType.IsValid(this, value))
         {
             this.lastClickX = localX;

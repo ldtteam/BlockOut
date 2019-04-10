@@ -68,7 +68,7 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             blockOutGui.setRoot(rootGuiElement);
             blockOutGui.getRoot().getUiManager().getRenderManager().setGui(blockOutGui);
             blockOutGui.getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getRoot());
-            openContainerScreen.initGui();
+            openContainerScreen.initializeGui();
 
             final IContainer<BlockOutContainerData> container = (IContainer<BlockOutContainerData>) openContainerScreen.getContainer();
             BlockOutContainerLogic.reinitializeSlots(container);

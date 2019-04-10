@@ -69,21 +69,23 @@ idea {
 build.dependsOn signJar
 
 configurations {
-    shade{}
-    deobfShade {}
-
-    compile.extendsFrom shade
-    deobfCompile.extendsFrom deobfShade
+    shade {
+        transitive = false
+    }
+    shadeTransitive{}
+    shade.extendsFrom shadeTransitive
 }
 
 dependencies {
-    shade project(':api')
+    shadeTransitive project(':api')
     shade project(':main')
     shade project(':lang:json')
+    shade (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'forge-1.12')
 
-    deobfShade (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'forge-1.12')  {
-        exclude group: 'com.google.guava'
-    }
+    compile project(':api')
+    compile project(':main')
+    compile project(':lang:json')
+    deobfCompile (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'forge-1.12')
 }
 
 jar {
@@ -92,14 +94,9 @@ jar {
         into 'META-INF/libraries'
     }
 
-    from (configurations.deobfShade.files){
-        include '*'
-        into 'META-INF/libraries'
-    }
-
     manifest {
         attributes([
-                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' ') + ' ' + configurations.deobfShade.files.collect { it.name }.join(' ')),
+                'ContainedDeps': configurations.shade.files.collect { it.name }.join(' '),
                 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:api",
                 'Timestamp': System.currentTimeMillis(),
                 'FMLAT': "blockout_at.cfg"

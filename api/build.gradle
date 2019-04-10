@@ -5,7 +5,6 @@ configurations {
 
 dependencies {
     contained ('com.google.inject:guice:4.2.1')
-    contained 'com.intellij:annotations:+@jar'
     contained ('com.esotericsoftware:kryo:4.+') {
         exclude group: 'org.ow2.asm', module: 'asm'
     }
@@ -13,6 +12,8 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'org.apache.logging.log4j:log4j-api:2.8.1'
     compile 'com.google.code.gson:gson:2.8.0' 
+    
+    testCompile 'org.ow2.asm:asm:5.0.4'
 }
 
 jar {

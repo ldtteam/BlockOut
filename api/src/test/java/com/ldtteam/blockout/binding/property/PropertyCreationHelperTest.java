@@ -90,7 +90,7 @@ public class PropertyCreationHelperTest extends AbstractBlockOutApiTest
         Assert.assertEquals("Set", testTarget.getValueOne());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void createFromNonOptionalFailureGetter()
     {
         final DummyTestTarget testTarget = new DummyTestTarget();
@@ -99,7 +99,7 @@ public class PropertyCreationHelperTest extends AbstractBlockOutApiTest
         fail();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void createFromNonOptionalFailureSetter()
     {
         final DummyTestTarget testTarget = new DummyTestTarget();

@@ -78,7 +78,7 @@ public final class BlockOutContainerLogic
         container.getInventoryItemStacks().clear();
         initializeSlots(container);
 
-        container.detectAndSendChanges();
+        container.updateListeners();
     }
 
     private static ITuple<Integer, Integer> findNextInventoryIndices(final IContainer<BlockOutContainerData> container, final ISlotItemHandler<BlockOutSlotData> slotBlockOut)
