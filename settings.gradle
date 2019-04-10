@@ -14,9 +14,3 @@ include 'main'
 include 'launcher:forge:1.12'
 include 'lang:json'
 include 'testmod'
-include 'utilities'
-
-project(':api').name = "BlockOut - Api"
-project(':main').name = "BlockOut - Main"
-project(':launcher:forge:1.12').name = "BlockOut - Launchers - Forge - 1.12"
-project(':lang:json').name = "BlockOut - Languages - JSON"

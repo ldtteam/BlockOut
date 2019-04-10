@@ -1,7 +1,105 @@
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
+
+archivesBaseName = "BlockOut"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = minecraft_version + "-" + forge_version
+    runDir = "run"
+
+    mappings = "${blockout_mappings}"
+
+    replace "@VERSION@", project.version
+    replace "@MCVERSION@", minecraft_version
+    replace "@FORGEVERSION@", forge_version
+
+    // Set the jar signature in code prior to compilation, if it exists as a build property
+    if (project.hasProperty("signature")) {
+        replace "@FINGERPRINT@", project.signature
+    }
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf { // Skip the task if our secret data isn't available
+        project.hasProperty('keyStore')
+    }
+
+    if (project.hasProperty('keyStore')) {
+        keyStore = project.keyStore // This needs to be a path to the keystore file
+        alias = project.keyStoreAlias
+        storePass = project.keyStorePass
+        keyPass = project.keyStoreKeyPass
+        inputFile = jar.archivePath
+        outputFile = jar.archivePath
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file('out')
+        testOutputDir = file('out_test')
+    }
+}
+
+build.dependsOn signJar
+
+configurations {
+    shade{}
+    deobfShade {}
+
+    compile.extendsFrom shade
+    deobfCompile.extendsFrom deobfShade
+}
+
+dependencies {
+    shade project(':api')
+    shade project(':main')
+    shade project(':lang:json')
+
+    deobfShade (group: 'com.ldtteam', name: 'JVoxelizer', version: jvoxelizer_version, classifier: 'forge-1.12')  {
+        exclude group: 'com.google.guava'
+    }
+}
+
 jar {
+    from (configurations.shade.files){
+        include '*'
+        into 'META-INF/libraries'
+    }
+
+    from (configurations.deobfShade.files){
+        include '*'
+        into 'META-INF/libraries'
+    }
 
     manifest {
         attributes([
+                'ContainedDeps': (configurations.shade.files.collect { it.name }.join(' ') + ' ' + configurations.deobfShade.files.collect { it.name }.join(' ')),
                 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:api",
                 'Timestamp': System.currentTimeMillis(),
                 'FMLAT': "blockout_at.cfg"

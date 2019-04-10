@@ -1,17 +1,18 @@
 package com.ldtteam.blockout.json;
 
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.blockout.util.Constants;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import com.ldtteam.jvoxelizer.discovery.IJVoxModPlugin;
 
-@Mod(modid = "blockout_lang_json", name = "BlockOut - Json Loader", version = Constants.VERSION,
-  dependencies = Constants.FORGE_VERSION + "required-after:blockout;", acceptedMinecraftVersions = Constants.MC_VERSION)
-public class BlockOutJson
+public class BlockOutJson implements IJVoxModPlugin
 {
+    @Override
+    public String getTargetModId()
+    {
+        return "blockout";
+    }
 
-    @Mod.EventHandler
-    public void onFMLPreInitialization(final FMLPreInitializationEvent event)
+    @Override
+    public void onPreInit()
     {
         ProxyHolder.getInstance().getLoaderManager().registerLoader(new JsonLoader());
     }

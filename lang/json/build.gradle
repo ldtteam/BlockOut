@@ -1,3 +1,7 @@
+dependencies {
+    compile project(':api')
+}
+
 jar {
     manifest {
         attributes([

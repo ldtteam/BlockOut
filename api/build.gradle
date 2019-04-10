@@ -26,7 +26,6 @@ jar {
                 'ContainedDeps': configurations.contained.files.collect { it.name }.join(' '),
                 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:api",
                 'Timestamp': System.currentTimeMillis(),
-                'FMLAT': "blockout_at.cfg"
         ])
     }
 

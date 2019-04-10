@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = Constants.MOD_ID + "_test", name = Constants.MOD_NAME + "_Test", version = Constants.VERSION,
-  dependencies = Constants.FORGE_VERSION + "required:blockout_utilities;", acceptedMinecraftVersions = Constants.MC_VERSION)
+  dependencies = Constants.FORGE_VERSION + ";required:blockout", acceptedMinecraftVersions = Constants.MC_VERSION)
 public class BlockOut_Test
 {
 

@@ -1,16 +1,13 @@
 package com.ldtteam.blockout_test.tests.guis;
 
 import com.ldtteam.blockout.element.simple.Button;
-import com.ldtteam.blockout.utilities.helpers.BlockOutHelper;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.facing.Facing;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +33,7 @@ public class InventoryGridTest implements IBlockOutGuiTest
     public void onTestButtonClicked(
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        BlockOutHelper.getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+        /*BlockOutHelper.getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                            .ofFile(IIdentifier.create("blockout_test:gui/inventory_grid_test.json"))
                                                                                    .usingData(
                                                                                      iBlockOutGuiConstructionDataBuilder -> BlockOutHelper.initiateChestControlAtPosition(
@@ -85,6 +82,6 @@ public class InventoryGridTest implements IBlockOutGuiTest
                                                                                                                                              PLAYER_INVENTORY_ID,
                                                                                                                                              0,
                                                                                                                                              9))
-                                                                                                           .forEntity(PlayerEntity.fromForge(entityPlayer)));
+                                                                                                           .forEntity(PlayerEntity.fromForge(entityPlayer)));*/
     }
 }

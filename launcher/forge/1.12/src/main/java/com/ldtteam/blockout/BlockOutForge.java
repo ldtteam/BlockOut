@@ -45,6 +45,9 @@ public class BlockOutForge extends AbstractForgeMod
         NetworkManager.init();
 
         BlockOut.getInstance().preInit();
+
+        //We are plugin capable. L
+        preInitializePlugins();
     }
 
     @Override
