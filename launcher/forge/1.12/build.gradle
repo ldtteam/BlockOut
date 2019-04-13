@@ -106,6 +106,10 @@ jar {
     classifier 'universal-forge-1.12'
 }
 
+artifacts {
+    archives sourceJar
+}
+
 curseforge {
     if (System.getenv().CURSEAPIKEY != null && System.getenv().CURSERELEASETYPE != null)
     {

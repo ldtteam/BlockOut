@@ -27,7 +27,8 @@ allprojects {
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: "com.jfrog.artifactory"
+    apply plugin: 'com.jfrog.artifactory'
+    apply plguin: 'maven'
 
     //Force minecraft compatible versions of dependencies
     configurations.all {
@@ -80,6 +81,13 @@ allprojects {
     //Ensures it is created and ready to upload.
     jar {
         dependsOn tasks.javadocJar
+    }
+}
+
+subprojects {
+    artifacts {
+        archives jar
+        archives javadocJar
     }
 }
 

@@ -56,3 +56,7 @@ jar {
 
     classifier 'testmod'
 }
+
+artifacts {
+    archives sourceJar
+}
