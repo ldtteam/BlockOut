@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
     }
 }
 
@@ -26,6 +27,7 @@ allprojects {
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
+    apply plugin: "com.jfrog.artifactory"
 
     //Force minecraft compatible versions of dependencies
     configurations.all {
