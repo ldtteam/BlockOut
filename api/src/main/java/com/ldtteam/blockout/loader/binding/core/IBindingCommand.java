@@ -24,7 +24,7 @@ public interface IBindingCommand
      * these characters will never be part of a valid bind syntax, since those are used by the overarching engine to detect
      * binding structures.
      * <p>
-     * EG: ((B|b)inding) or ((T|t)emplate(B|b)inding
+     * {@literal EG: ((B|b)inding) or ((T|t)emplate(B|b)inding}
      *
      * @return The bind command syntax.
      */
@@ -39,7 +39,7 @@ public interface IBindingCommand
      * these characters will never be part of a valid bind syntax, since those are used by the overarching engine to detect
      * binding structures.
      * <p>
-     * EG: (?<singleName>[a-zA-Z_]+) or ((?<getterName>[a-zA-Z_]+)#(?<setterName>[a-zA-Z_]+))
+     * {@literal EG: (?<singleName>[a-zA-Z_]+) or ((?<getterName>[a-zA-Z_]+)#(?<setterName>[a-zA-Z_]+))}
      *
      * @return The bind data syntax.
      */
