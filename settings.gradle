@@ -16,6 +16,7 @@ include 'lang:json'
 include 'testmod'
 
 ext.isPush = Boolean.valueOf(getProperty('gradle.cache.push'))
+logger.lifecycle("Pushing to build cache: " + isPush.toString())
 
 buildCache {
     local {
