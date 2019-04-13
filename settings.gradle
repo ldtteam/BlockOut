@@ -14,3 +14,15 @@ include 'main'
 include 'launcher:forge:1.12'
 include 'lang:json'
 include 'testmod'
+
+ext.isPush = Boolean.valueOf(getProperty('gradle.cache.push'))
+
+buildCache {
+    local {
+        enabled = !isPush
+    }
+    remote(HttpBuildCache) {
+        url = "${artifactory_url}/build-cache-gradle/"
+        push = isPush
+    }
+}
