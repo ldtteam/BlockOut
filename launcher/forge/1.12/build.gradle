@@ -122,7 +122,7 @@ curseforge {
         project {
             id = '275314'
 
-            changelog = file('build/changelog.md')
+            changelog = new File('build/changelog.md')
             changelogType = 'markdown'
             releaseType = System.getenv().CURSERELEASETYPE
 
