@@ -129,8 +129,7 @@ curseforge {
             mainArtifact(jar) {
                 displayName = "BlockOut: $project.version"
             }
-
-            addArtifact jar
+            
             addArtifact javadocJar
             addArtifact sourceJar
         }
