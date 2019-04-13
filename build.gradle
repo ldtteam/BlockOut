@@ -1,6 +1,9 @@
 import org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
 import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
 
+import java.util.function.Consumer
+import java.util.function.Predicate
+
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
@@ -95,9 +98,17 @@ subprojects {
         task.setAddArchivesConfigToTask(true)
     }
     
-    getTasks().stream().filter(s -> s instanceof Jar).forEach(s -> {
-        final Jar jar = s;
-        jar.from(new File("LICENSE"));
+    getTasks().stream().filter(new Predicate<Task>() {
+        @Override
+        boolean test(final Task task) {
+            task instanceof org.gradle.jvm.tasks.Jar
+        }
+    }).forEach(new Consumer<Task>() {
+        @Override
+        void accept(final Task task) {
+            final org.gradle.jvm.tasks.Jar jar = task;
+            jar.from(new File("LICENSE"));
+        }
     })
 
     artifacts {
