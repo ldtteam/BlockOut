@@ -1,6 +1,5 @@
 import org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
 import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
-im
 
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
