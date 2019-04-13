@@ -1,3 +1,7 @@
+import org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
+import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
+im
+
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
@@ -27,7 +31,6 @@ allprojects {
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'maven'
 
     //Force minecraft compatible versions of dependencies
@@ -85,6 +88,19 @@ allprojects {
 }
 
 subprojects {
+    apply plugin: ArtifactoryPlugin
+
+    Task t = getTasks().findByName(ArtifactoryTask.ARTIFACTORY_PUBLISH_TASK_NAME)
+    if (t != null) {
+        ArtifactoryTask task = (ArtifactoryTask)t
+        task.setAddArchivesConfigToTask(true)
+    }
+    
+    getTasks().stream().filter(s -> s instanceof org.gradle.jvm.tasks.Jar).forEach(s -> {
+        final Jar jar = s;
+        jar.from(new File(LICENSE));
+    })
+
     artifacts {
         archives jar
         archives javadocJar

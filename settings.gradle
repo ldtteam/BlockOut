@@ -26,3 +26,5 @@ buildCache {
         push = isPush
     }
 }
+
+gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))
