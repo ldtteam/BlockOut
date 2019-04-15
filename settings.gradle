@@ -7,11 +7,11 @@
  * in the user guide at https://docs.gradle.org/4.9/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'BlockOut'
+rootProject.name = 'blockout'
 
 include 'api'
 include 'main'
-include 'launcher:forge:1.12'
+include 'launcher:forge-1.12'
 include 'lang:json'
 include 'testmod'
 

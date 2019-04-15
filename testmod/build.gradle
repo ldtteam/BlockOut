@@ -42,19 +42,17 @@ processResources {
 }
 
 dependencies {
-    compile project(':launcher:forge:1.12')
+    compile project(':launcher:forge-1.12')
 }
 
 jar {
     manifest {
         attributes([
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}:testmod",
+                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
                 'Timestamp': System.currentTimeMillis(),
                 'FMLAT': 'blockout_at.cfg'
         ])
     }
-
-    classifier 'testmod'
 }
 
 artifacts {

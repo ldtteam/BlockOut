@@ -1,9 +1,3 @@
-import org.jfrog.gradle.plugin.artifactory.ArtifactoryPlugin
-import org.jfrog.gradle.plugin.artifactory.task.ArtifactoryTask
-
-import java.util.function.Consumer
-import java.util.function.Predicate
-
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
@@ -16,8 +10,11 @@ buildscript {
     }
 }
 
+apply plugin: "com.jfrog.artifactory"
+
 //Now configure all subprojects.
-allprojects {
+allprojects { project ->
+    
     //Add the central repository so that we always have access to our cached dependencies.
     repositories {
         maven {
@@ -29,7 +26,6 @@ allprojects {
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: 'maven'
 
     //Force minecraft compatible versions of dependencies
     configurations.all {
@@ -55,10 +51,10 @@ allprojects {
         }
     }
 
-    group = "com.ldtteam"
+    group = "com.ldtteam.blockout"
     version = minecraft_version.toString() + "-" + System.getenv().get("Version")
-    archivesBaseName = "blockout"
-
+    archivesBaseName = "blockout-$project.name"
+    
     //Setup for which java version we are compiling
     //Minecraft defaults to 1.8, anything higher does currently not work with Forge.
     sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -83,41 +79,63 @@ allprojects {
     jar {
         dependsOn tasks.javadocJar
     }
+
 }
 
-subprojects {
-    apply plugin: ArtifactoryPlugin
+subprojects {project ->
+    apply plugin: 'maven-publish'
 
-    Task t = getTasks().findByName(ArtifactoryTask.ARTIFACTORY_PUBLISH_TASK_NAME)
-    if (t != null) {
-        ArtifactoryTask task = (ArtifactoryTask)t
-        task.setAddArchivesConfigToTask(true)
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifactId = project.name
+
+                from components.java
+
+                pom {
+                    name = project.name
+                    url = 'https://github.com/ldtteam/BlockOut'
+                    licenses {
+                        license {
+                            name = 'GNU GENERAL PUBLIC LICENSE Version 3'
+                            url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'OrionDevelopment'
+                            name = 'Marc Hermans'
+                            email = 'oriondevelopment@outlook.com'
+                        }
+                    }
+                    contributors {
+                        contributor {
+                            id = 'ldtteam'
+                            name = 'Let\'s Develop Together - Team'
+                            email = 'info@ldtteam.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/ldtteam/blockout.git'
+                        developerConnection = 'scm:git:ssh://github.com/ldtteam/blockout.git'
+                        url = 'https://github.com/ldtteam/BlockOut'
+                    }
+                }
+            }
+        }
     }
-    
-    getTasks().stream().filter(new Predicate<Task>() {
-        @Override
-        boolean test(final Task task) {
-            task instanceof org.gradle.jvm.tasks.Jar
-        }
-    }).forEach(new Consumer<Task>() {
-        @Override
-        void accept(final Task task) {
-            final org.gradle.jvm.tasks.Jar jar = task;
-            jar.from(new File("LICENSE"));
-        }
-    })
+}
 
-    artifacts {
-        archives jar
-        archives javadocJar
+artifactory { 
+    publish {
+        defaults {
+            publications('maven')
+            publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
+            publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
+            publishPom = true   //Publish generated POM files to Artifactory (true by default).
+            publishIvy = true   //Publish generated Ivy descriptor files to Artifactory (true by default).
+        }
     }
 }
 
 
-/*
-project('guidebook') {
-    dependencies {
-        compile project(':main')
-        compile project(':utilities')
-    }
-}*/
