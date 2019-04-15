@@ -89,8 +89,6 @@ allprojects { project ->
     publishing {
         publications {
             maven(MavenPublication) {
-                artifactId = project.name
-
                 from components.java
 
                 pom {
@@ -139,64 +137,6 @@ allprojects { project ->
         }
     }
 }
-
-/*subprojects {project ->
-    apply plugin: 'maven-publish'
-    apply plugin: "com.jfrog.artifactory"
-
-    publishing {
-        publications {
-            maven(MavenPublication) {
-                artifactId = project.name
-
-                from components.java
-
-                pom {
-                    name = project.name
-                    url = 'https://github.com/ldtteam/BlockOut'
-                    licenses {
-                        license {
-                            name = 'GNU GENERAL PUBLIC LICENSE Version 3'
-                            url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = 'OrionDevelopment'
-                            name = 'Marc Hermans'
-                            email = 'oriondevelopment@outlook.com'
-                        }
-                    }
-                    contributors {
-                        contributor {
-                            id = 'ldtteam'
-                            name = 'Let\'s Develop Together - Team'
-                            email = 'info@ldtteam.com'
-                        }
-                    }
-                    scm {
-                        connection = 'scm:git:git://github.com/ldtteam/blockout.git'
-                        developerConnection = 'scm:git:ssh://github.com/ldtteam/blockout.git'
-                        url = 'https://github.com/ldtteam/BlockOut'
-                    }
-                }
-            }
-        }
-    }
-
-    artifactory {
-        publish {
-            defaults {
-                publications('maven')
-                publishConfigs('archives', 'published')
-                publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
-                publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
-                publishPom = true   //Publish generated POM files to Artifactory (true by default).
-                publishIvy = true   //Publish generated Ivy descriptor files to Artifactory (true by default).
-            }
-        }
-    }
-}*/
 
 
 
