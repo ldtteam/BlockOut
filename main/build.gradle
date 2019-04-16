@@ -7,9 +7,8 @@ dependencies {
 jar {
     manifest {
         attributes([
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-                'Timestamp': System.currentTimeMillis(),
-        		'FMLAT':'blockout_at.cfg'
+            'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
+            'Timestamp': System.currentTimeMillis(),
         ])
     }
 }

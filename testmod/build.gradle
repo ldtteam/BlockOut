@@ -50,7 +50,6 @@ jar {
         attributes([
                 'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
                 'Timestamp': System.currentTimeMillis(),
-                'FMLAT': 'blockout_at.cfg'
         ])
     }
 }
