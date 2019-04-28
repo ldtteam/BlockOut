@@ -53,7 +53,7 @@ allprojects { project ->
     }
 
     group = "com.ldtteam.blockout"
-    version = minecraft_version.toString() + "-" + System.getenv().get("Version")
+    version = System.getenv().get("Version")
     archivesBaseName = "blockout-$project.name"
 
     //Setup for which java version we are compiling
