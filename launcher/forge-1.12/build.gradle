@@ -82,12 +82,12 @@ dependencies {
     shadeTransitive project(':api')
     shade project(':main')
     shade project(':lang:json')
-    shade (group: 'com.ldtteam.jvoxelizer', name: 'forge-1.12', version: jvoxelizer_version)
+    shade (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 
     compile project(':api')
     compile project(':main')
     compile project(':lang:json')
-    deobfCompile (group: 'com.ldtteam.jvoxelizer', name: 'forge-1.12', version: jvoxelizer_version)
+    deobfCompile (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 }
 
 jar {

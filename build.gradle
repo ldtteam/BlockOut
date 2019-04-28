@@ -47,7 +47,7 @@ allprojects { project ->
 
         compile 'com.intellij:annotations:+@jar'
 
-        compile (group: 'com.ldtteam.jvoxelizer', name: 'api', version: jvoxelizer_version) {
+        compile (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-api', version: jvoxelizer_version) {
             transitive = false;
         }
     }
