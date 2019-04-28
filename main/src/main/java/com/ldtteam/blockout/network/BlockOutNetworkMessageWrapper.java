@@ -63,13 +63,11 @@ public class BlockOutNetworkMessageWrapper implements IMessage
     }
 
     @Override
-    public IMessage onArrived(final IMessageContext iMessageContext)
+    public void onArrived(final IMessageContext iMessageContext)
     {
         if (loaded)
         {
             message.onMessage(iMessageContext);
         }
-
-        return null;
     }
 }

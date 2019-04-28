@@ -28,7 +28,7 @@ public class TextFieldTabPressedMessage implements IBlockOutClientToServerMessag
     @Override
     public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final IMultiplayerPlayerEntity playerMP = ctx.getServerHandler().getPlayer();
+        final IMultiplayerPlayerEntity playerMP = ctx.getSendingPlayer();
         final IGuiKey guiKey = ProxyHolder.getInstance().getGuiController().getOpenUI(playerMP);
 
         if (guiKey == null)

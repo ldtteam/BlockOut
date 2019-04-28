@@ -12,7 +12,7 @@ public class CloseGuiRequestMessage implements IBlockOutClientToServerMessage
     @Override
     public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final IMultiplayerPlayerEntity playerMP = ctx.getServerHandler().getPlayer();
+        final IMultiplayerPlayerEntity playerMP = ctx.getSendingPlayer();
         ProxyHolder.getInstance().getGuiController().closeUI(playerMP.getId());
     }
 }

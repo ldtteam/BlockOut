@@ -32,7 +32,7 @@ public class OnMouseClickMoveMessage implements IBlockOutClientToServerMessage
     @Override
     public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
     {
-        final IMultiplayerPlayerEntity player = ctx.getServerHandler().getPlayer();
+        final IMultiplayerPlayerEntity player = ctx.getSendingPlayer();
         final IGuiKey key = ProxyHolder.getInstance().getGuiController().getOpenUI(player);
         if (key == null)
         {
