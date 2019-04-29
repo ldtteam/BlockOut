@@ -89,14 +89,7 @@ allprojects {project ->
         archives sourcesJar
         archives javadocJar
     }
-
-    //The primary jar needs to have a javadoc jar build
-    //Ensures it is created and ready to upload.
-    jar {
-        dependsOn tasks.javadocJar
-        dependsOn tasks.sourcesJar
-    }
-
+    
     publishing {
         publications {
             maven(MavenPublication) {
