@@ -5,7 +5,7 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.binding.property.Property;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.factory.IUIElementFactory;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;

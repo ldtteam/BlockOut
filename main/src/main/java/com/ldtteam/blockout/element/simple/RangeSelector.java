@@ -2,7 +2,7 @@ package com.ldtteam.blockout.element.simple;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
@@ -12,7 +12,6 @@ import com.ldtteam.blockout.event.Event;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;

@@ -1,4 +1,4 @@
-package com.ldtteam.blockout.element.core;
+package com.ldtteam.blockout.utils.controlconstruction.element.core;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
@@ -19,14 +19,12 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 
 import static com.ldtteam.blockout.util.Constants.Controls.General.*;
 import static com.ldtteam.blockout.util.Constants.ConverterTypes.ALIGNMENT_ENUMSET_TYPE;

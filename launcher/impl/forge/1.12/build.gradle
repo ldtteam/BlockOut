@@ -5,6 +5,10 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
+ext {
+    projectIdentifier = "forge-1.12"
+}
+
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
@@ -79,12 +83,12 @@ configurations {
 }
 
 dependencies {
-    shadeTransitive project(':api')
+    shadeTransitive project(':utils:concepts')
     shade project(':main')
     shade project(':lang:json')
     shade (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 
-    compile project(':api')
+    compile project(':utils:concepts')
     compile project(':main')
     compile project(':lang:json')
     deobfCompile (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
@@ -106,9 +110,6 @@ jar {
     }
 }
 
-artifacts {
-    archives sourceJar
-}
 
 curseforge {
     if (System.getenv().CURSEAPIKEY != null && System.getenv().CURSERELEASETYPE != null)
@@ -127,7 +128,7 @@ curseforge {
             }
             
             addArtifact javadocJar
-            addArtifact sourceJar
+            addArtifact sourcesJar
         }
     }
     else

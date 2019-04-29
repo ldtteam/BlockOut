@@ -8,7 +8,7 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;

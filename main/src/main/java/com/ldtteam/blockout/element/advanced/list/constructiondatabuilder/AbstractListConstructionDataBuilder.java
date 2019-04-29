@@ -6,7 +6,7 @@ import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.advanced.list.List;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 

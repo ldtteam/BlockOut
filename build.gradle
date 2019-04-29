@@ -10,8 +10,8 @@ buildscript {
     }
 }
 
-//Now configure all subprojects.
-allprojects { project ->
+//We only configure the leaf projects. We do not care about the root project or any inbetween project.
+allprojects {project ->
 
     //Add the central repository so that we always have access to our cached dependencies.
     repositories {
@@ -20,13 +20,16 @@ allprojects { project ->
             url 'https://ldtteam.jfrog.io/ldtteam/modding/'
         }
     }
+    
+    ext {
+        projectIdentifier = project.name
+    }
 
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: "com.jfrog.artifactory"
-
 
     //Force minecraft compatible versions of dependencies
     configurations.all {
@@ -51,10 +54,10 @@ allprojects { project ->
             transitive = false;
         }
     }
-
+    
     group = "com.ldtteam.blockout"
-    version = System.getenv().get("Version")
-    archivesBaseName = "blockout-$project.name"
+    version = System.getenv().containsKey("Version") ? System.getenv("Version") : "borked-" + System.currentTimeMillis()
+    archivesBaseName = "blockout-$projectIdentifier"
 
     //Setup for which java version we are compiling
     //Minecraft defaults to 1.8, anything higher does currently not work with Forge.
@@ -68,12 +71,11 @@ allprojects { project ->
         options.encoding = 'UTF-8'
         options.compilerArgs << "-Xlint"
     }
-    
+
     //Create a sources jar.
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'
         from sourceSets.main.allSource
-        from sourceSets.test.allSource
     }
 
     //Create a javadoc jar.
@@ -95,18 +97,16 @@ allprojects { project ->
         dependsOn tasks.sourcesJar
     }
 
-    artifacts {
-        archives jar
-        archives javadocJar
-    }
-
     publishing {
         publications {
             maven(MavenPublication) {
+                artifactId "blockout-$projectIdentifier"
+
                 from components.java
+                artifact javadocJar
+                artifact sourcesJar
 
                 pom {
-                    name = project.name
                     url = 'https://github.com/ldtteam/BlockOut'
                     licenses {
                         license {
@@ -137,21 +137,18 @@ allprojects { project ->
             }
         }
     }
-
+    
     artifactory {
         publish {
             defaults {
                 publications('maven')
-                publishConfigs('archives', 'published')
                 publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
                 publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
                 publishPom = true   //Publish generated POM files to Artifactory (true by default).
-                publishIvy = true   //Publish generated Ivy descriptor files to Artifactory (true by default).
             }
         }
     }
 }
-
 
 
 

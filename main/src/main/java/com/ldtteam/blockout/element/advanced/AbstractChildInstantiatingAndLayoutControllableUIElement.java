@@ -10,7 +10,7 @@ import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
 import com.ldtteam.blockout.element.simple.Region;
 import com.ldtteam.blockout.element.values.*;

@@ -19,7 +19,9 @@ public interface IItemHandlerProvider extends Serializable
     IIdentifier getId();
 
     /**
-     *
+     * Method to get the {@link IItemHandler} from this provider.
+     * @param manager The {@link IItemHandlerManager} to get other {@link IItemHandler} from.
+     * @return The {@link IItemHandler} that is provided by this provider.
      */
     @Nullable
     IItemHandler get(IItemHandlerManager manager);

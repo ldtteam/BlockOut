@@ -6,7 +6,7 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.compat.ClientTickManager;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
 import com.ldtteam.blockout.element.input.client.IClientSideClickAcceptingUIElement;

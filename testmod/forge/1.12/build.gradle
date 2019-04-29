@@ -1,3 +1,7 @@
+ext {
+    projectIdentifier = "testmod-forge-1.12"
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
@@ -42,7 +46,7 @@ processResources {
 }
 
 dependencies {
-    compile project(':launcher:forge-1.12')
+    compile project(':launcher:impl:forge:1.12')
 }
 
 jar {
@@ -52,8 +56,4 @@ jar {
                 'Timestamp': System.currentTimeMillis(),
         ])
     }
-}
-
-artifacts {
-    archives sourceJar
 }

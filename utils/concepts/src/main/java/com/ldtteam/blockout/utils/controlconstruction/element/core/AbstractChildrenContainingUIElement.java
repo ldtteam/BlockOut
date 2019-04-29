@@ -1,4 +1,4 @@
-package com.ldtteam.blockout.element.core;
+package com.ldtteam.blockout.utils.controlconstruction.element.core;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;

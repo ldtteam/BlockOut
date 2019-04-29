@@ -10,7 +10,7 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.core.AbstractSimpleUIElement;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
