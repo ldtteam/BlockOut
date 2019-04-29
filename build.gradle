@@ -84,12 +84,6 @@ allprojects {project ->
         from javadoc.destinationDir
     }
 
-    artifacts {
-        archives jar
-        archives sourcesJar
-        archives javadocJar
-    }
-    
     publishing {
         publications {
             maven(MavenPublication) {
