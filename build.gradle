@@ -10,9 +10,24 @@ buildscript {
     }
 }
 
-//We only configure the leaf projects. We do not care about the root project or any inbetween project.
-allprojects {project ->
+//Setup a property to hold all leaf projects.
+//Aka projects that are here only for organizational structure need to get eliminated
+//From configuration.
+ext {
+    leafProjects = new HashSet<Project>()
+}
 
+//Collect all leaf projects into a property to use.
+project.allprojects(new Action<Project>() {
+    @Override
+    void execute(final Project candidate) {
+        if (candidate.getChildProjects().isEmpty())
+            leafProjects.add(candidate)
+    }
+})
+
+//We only configure the leaf projects. We do not care about the root project or any inbetween project.
+configure(leafProjects) {projectToConfigure ->
     //Add the central repository so that we always have access to our cached dependencies.
     repositories {
         maven {
@@ -21,10 +36,14 @@ allprojects {project ->
         }
     }
     
+    //We want a unique project identifier based on the projects full name.
+    //Get the projects path (:projectRoot:projectTwo)
+    //Strip the initial :
+    //Replace all remaining : with -
     ext {
-        projectIdentifier = project.name
+        projectIdentifier = projectToConfigure.getPath().substring(1).replace(":", "-")
     }
-
+    
     //Setup the plugins that we need.
     apply plugin: 'idea'
     apply plugin: 'java'
@@ -55,6 +74,7 @@ allprojects {project ->
         }
     }
     
+    //Setup group, version and basename.
     group = "com.ldtteam.blockout"
     version = System.getenv().containsKey("Version") ? System.getenv("Version") : "borked-" + System.currentTimeMillis()
     archivesBaseName = "blockout-$projectIdentifier"
@@ -84,6 +104,7 @@ allprojects {project ->
         from javadoc.destinationDir
     }
 
+    //Define what to publish and how.
     publishing {
         publications {
             maven(MavenPublication) {
@@ -125,6 +146,7 @@ allprojects {project ->
         }
     }
     
+    //Notify artifactory of what to publish.
     artifactory {
         publish {
             defaults {
@@ -136,6 +158,66 @@ allprojects {project ->
         }
     }
 }
+
+//Configure the root project for publishing.
+project.configure([project]) { rootProject ->
+    //Setup the plugins that we need.
+    apply plugin: 'maven-publish'
+    apply plugin: "com.jfrog.artifactory"
+
+    //Setup group, version and basename.
+    group = "com.ldtteam.blockout"
+    version = System.getenv().containsKey("Version") ? System.getenv("Version") : "borked-" + System.currentTimeMillis()
+    
+    //Define what to publish and how.
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifactId "blockout"
+
+                pom {
+                    url = 'https://github.com/ldtteam/BlockOut'
+                    licenses {
+                        license {
+                            name = 'GNU GENERAL PUBLIC LICENSE Version 3'
+                            url = 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'OrionDevelopment'
+                            name = 'Marc Hermans'
+                            email = 'oriondevelopment@outlook.com'
+                        }
+                    }
+                    contributors {
+                        contributor {
+                            id = 'ldtteam'
+                            name = 'Let\'s Develop Together - Team'
+                            email = 'info@ldtteam.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/ldtteam/blockout.git'
+                        developerConnection = 'scm:git:ssh://github.com/ldtteam/blockout.git'
+                        url = 'https://github.com/ldtteam/BlockOut'
+                    }
+                }
+            }
+        }
+    }
+
+    //Notify artifactory of what to publish.
+    artifactory {
+        publish {
+            defaults {
+                publications('maven')
+            }
+        }
+    }
+}
+
+
 
 
 
