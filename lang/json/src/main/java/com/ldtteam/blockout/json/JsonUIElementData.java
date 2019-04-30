@@ -34,7 +34,7 @@ public class JsonUIElementData implements IUIElementData<JsonUIElementDataCompon
 
     @Nullable
     @Override
-    public Optional<JsonUIElementDataComponent> getComponentWithName(@NotNull final String name)
+    public Optional<JsonUIElementDataComponent> getComponentWithName(@NotNull final String name, boolean isPrimary)
     {
         if (object.has(name))
         {

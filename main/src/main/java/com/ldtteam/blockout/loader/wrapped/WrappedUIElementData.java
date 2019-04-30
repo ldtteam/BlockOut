@@ -24,7 +24,7 @@ public class WrappedUIElementData implements IUIElementData
 
     @Nullable
     @Override
-    public Optional getComponentWithName(@NotNull final String name)
+    public Optional getComponentWithName(@NotNull final String name, final boolean isPrimary)
     {
         return wrapped.getComponentWithName(name);
     }

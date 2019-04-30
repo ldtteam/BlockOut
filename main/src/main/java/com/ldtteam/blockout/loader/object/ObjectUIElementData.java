@@ -33,7 +33,7 @@ public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataCo
 
     @Nullable
     @Override
-    public Optional<ObjectUIElementDataComponent> getComponentWithName(@NotNull final String name)
+    public Optional<ObjectUIElementDataComponent> getComponentWithName(@NotNull final String name, final boolean isPrimary)
     {
         if (object.containsKey(name))
         {

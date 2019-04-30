@@ -107,6 +107,7 @@ curseforge {
             
             addArtifact javadocJar
             addArtifact sourcesJar
+            addArtifact project(':lang:xml').jar
         }
     }
     else

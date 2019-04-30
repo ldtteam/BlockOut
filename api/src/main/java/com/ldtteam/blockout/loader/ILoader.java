@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ILoader
 {
     /**
-     * Creates a {@link IUIElement} from a given {@link String}.
+     * Creates a {@link IUIElementData} from a given {@link String}.
      *
      * @param data The data to load the UI from.
      * @return The element.

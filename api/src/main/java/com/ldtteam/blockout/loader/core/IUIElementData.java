@@ -78,7 +78,21 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      * @return The optional containing the component if known.
      */
     @Nullable
-    Optional<C> getComponentWithName(@NotNull final String name);
+    default Optional<C> getComponentWithName(@NotNull final String name)
+    {
+        return getComponentWithName(name, false);
+    }
+
+    /**
+     * Returns a component with a given name, while checking if the given component is the
+     * primary property of the data.
+     *
+     * @param name The name of the component
+     * @param isPrimary Indication if this component is the primary property of this data set.
+     * @return The optional containing the component if known.
+     */
+    @Nullable
+    Optional<C> getComponentWithName(@NotNull final String name, final boolean isPrimary);
 
     /**
      * Returns a dependency target from raw data with a default value.

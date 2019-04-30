@@ -1,0 +1,8 @@
+<root id="root">
+    <root.children>
+        <image source="test" />
+    </root.children>
+    <root.tooltip>
+        <label contents="hello"/>
+    </root.tooltip>
+</root>
