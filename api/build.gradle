@@ -1,11 +1,6 @@
-configurations {
-    contained {}
-    compile.extendsFrom contained
-}
-
 dependencies {
-    contained ('com.google.inject:guice:4.2.1')
-    contained (group: 'com.esotericsoftware', name: 'kryo', version: '4.0.2') {
+    shadeTransitive ('com.google.inject:guice:4.2.1')
+    shadeTransitive (group: 'com.esotericsoftware', name: 'kryo', version: '4.0.2') {
         exclude group: 'org.ow2.asm', module: 'asm'
     }
     
@@ -15,19 +10,3 @@ dependencies {
     
     testCompile 'org.ow2.asm:asm:5.0.4'
 }
-
-jar {
-    from(configurations.contained.files) {
-        include '*'
-        into 'META-INF/libraries'
-    }
-
-    manifest {
-        attributes([
-                'ContainedDeps': configurations.contained.files.collect { it.name }.join(' '),
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-                'Timestamp': System.currentTimeMillis(),
-        ])
-    }
-}
-

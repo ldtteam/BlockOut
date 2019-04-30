@@ -28,6 +28,8 @@ project.allprojects(new Action<Project>() {
 
 //We only configure the leaf projects. We do not care about the root project or any inbetween project.
 configure(leafProjects) {projectToConfigure ->
+    projectToConfigure.logger.lifecycle("Setting up project: " + projectToConfigure.getPath() + " as leaf project.")
+    
     //Add the central repository so that we always have access to our cached dependencies.
     repositories {
         maven {
@@ -48,7 +50,12 @@ configure(leafProjects) {projectToConfigure ->
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'maven-publish'
-    apply plugin: "com.jfrog.artifactory"
+    apply plugin: 'com.jfrog.artifactory'
+    
+    //Setup group, version and basename.
+    group = "com.ldtteam.blockout"
+    version = System.getenv().containsKey("Version") ? System.getenv("Version") : "borked-" + System.currentTimeMillis()
+    archivesBaseName = "blockout-$projectIdentifier"
 
     //Force minecraft compatible versions of dependencies
     configurations.all {
@@ -57,35 +64,64 @@ configure(leafProjects) {projectToConfigure ->
         }
     }
 
+    //All projects should be able to shade artifacts into them selfs.
+    configurations {
+        shade {
+            transitive = false
+        }
+        shadeTransitive{}
+        shadeDeobf {
+            transitive = false
+        }
+        shadeDeobfTransitive{}
+
+        shadeDeobf.extendsFrom shadeDeobfTransitive
+        shade.extendsFrom shadeDeobf
+        shade.extendsFrom shadeTransitive
+        
+        compile.extendsFrom shade
+        deobfCompile.extendsFrom shadeDeobf
+    }
+
     //All mods have the same test harness.
     //JUNIT, MOCKITO, POWERMOCK and HAMCREST are being added here.
     dependencies {
+        shadeTransitive (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-api', version: jvoxelizer_version)
+
+        compile 'com.intellij:annotations:+@jar'
+        
         testCompile 'junit:junit:4.11'
         testCompile "org.mockito:mockito-core:1.+"
         testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.5'
         testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.5'
         testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
         testCompile group: 'pl.pragmatists', name:'JUnitParams', version: '1.1.1'
+    }
 
-        compile 'com.intellij:annotations:+@jar'
+    projectToConfigure.afterEvaluate {projectToConfigureAfterEvaluate ->
+        jar {
+            from (projectToConfigure.configurations.shade.files){
+                include '*'
+                into 'META-INF/libraries'
+            }
 
-        compile (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-api', version: jvoxelizer_version) {
-            transitive = false;
+            manifest {
+                attributes([
+                        'ContainedDeps': projectToConfigure.configurations.shade.files.collect { it.name }.join(' '),
+                        'Maven-Artifact': "${projectToConfigure.group}:${projectToConfigure.archivesBaseName}:${projectToConfigure.version}",
+                        'Timestamp': System.currentTimeMillis(),
+                ])
+            }
         }
     }
     
-    //Setup group, version and basename.
-    group = "com.ldtteam.blockout"
-    version = System.getenv().containsKey("Version") ? System.getenv("Version") : "borked-" + System.currentTimeMillis()
-    archivesBaseName = "blockout-$projectIdentifier"
-
     //Setup for which java version we are compiling
     //Minecraft defaults to 1.8, anything higher does currently not work with Forge.
     sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
     compileJava {
         sourceCompatibility = targetCompatibility = '1.8'
     }
-
+    
     //Setup the compiler to output all information we need.
     compileJava {
         options.encoding = 'UTF-8'
@@ -93,7 +129,7 @@ configure(leafProjects) {projectToConfigure ->
     }
 
     //Create a sources jar.
-    task sourcesJar(type: Jar, dependsOn: classes) {
+    task sourcesJar(type: Jar) {
         classifier = 'sources'
         from sourceSets.main.allSource
     }
@@ -163,7 +199,7 @@ configure(leafProjects) {projectToConfigure ->
 project.configure([project]) { rootProject ->
     //Setup the plugins that we need.
     apply plugin: 'maven-publish'
-    apply plugin: "com.jfrog.artifactory"
+    apply plugin: 'com.jfrog.artifactory'
 
     //Setup group, version and basename.
     group = "com.ldtteam.blockout"

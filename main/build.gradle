@@ -1,14 +1,7 @@
 dependencies {
+    shadeTransitive project(':utils:concepts')
+    
     compile project(':utils:concepts')
     compile 'io.netty:netty-all:4.1.9.Final'
     compile 'org.apache.httpcomponents:httpclient:4.3.3'
-}
-
-jar {
-    manifest {
-        attributes([
-            'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-            'Timestamp': System.currentTimeMillis(),
-        ])
-    }
 }

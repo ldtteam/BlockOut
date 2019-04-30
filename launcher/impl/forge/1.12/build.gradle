@@ -74,38 +74,16 @@ idea {
 
 build.dependsOn signJar
 
-configurations {
-    shade {
-        transitive = false
-    }
-    shadeTransitive{}
-    shade.extendsFrom shadeTransitive
-}
-
 dependencies {
-    shadeTransitive project(':utils:concepts')
-    shade project(':main')
-    shade project(':lang:json')
-    shade (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
-
-    compile project(':utils:concepts')
-    compile project(':main')
-    compile project(':lang:json')
-    deobfCompile (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
+    shadeTransitive project(':main')
+    shadeTransitive project(':lang:json')
+    shadeDeobfTransitive (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 }
 
 jar {
-    from (configurations.shade.files){
-        include '*'
-        into 'META-INF/libraries'
-    }
-
     manifest {
         attributes([
-                'ContainedDeps': configurations.shade.files.collect { it.name }.join(' '),
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-                'Timestamp': System.currentTimeMillis(),
-                'FMLAT': "blockout_at.cfg"
+            'FMLAT': "blockout_at.cfg"
         ])
     }
 }

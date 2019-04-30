@@ -1,12 +1,3 @@
 dependencies {
-    compile project(':api')
-}
-
-jar {
-    manifest {
-        attributes([
-            'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-            'Timestamp': System.currentTimeMillis()
-        ])
-    }
+    shadeTransitive project(':api')
 }
