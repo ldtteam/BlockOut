@@ -25,6 +25,11 @@ import java.io.InputStream;
 
 public interface IProxy
 {
+    static IProxy getInstance()
+    {
+        return ProxyHolder.getInstance();
+    }
+
     void onPreInit();
 
     @NotNull

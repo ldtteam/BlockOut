@@ -5,8 +5,12 @@ import com.google.common.collect.Maps;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.event.IEventHandler;
+import com.ldtteam.blockout.proxy.IProxy;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,12 +49,23 @@ public class BlockOutGuiConstructionData implements IBlockOutGuiConstructionData
             return ImmutableList.of();
         }
 
-        if (!eventHandlerData.get(id).get(sourceClass).containsKey(argumentClass))
-        {
-            return ImmutableList.of();
-        }
+        Map<Class<?>, List<IEventHandler<?, ?>>> eventHandlerMapOfSourceTypeForId = eventHandlerData.get(id).get(sourceClass);
+        Map<Class<? super A>, List<IEventHandler<S, A>>> eventHandlerTargetTypeMap = Maps.newHashMap();
 
-        return ImmutableList.copyOf(eventHandlerData.get(id).get(sourceClass).get(argumentClass).stream().map(e -> (IEventHandler<S, A>) e).collect(Collectors.toList()));
+        eventHandlerMapOfSourceTypeForId.keySet().forEach(candidateArgumentType -> {
+            if (IProxy.getInstance().getReflectionManager().getAllSupers(argumentClass).contains(candidateArgumentType))
+            {
+                final Class<? super A> argumentTypeSuper = (Class<? super A>) candidateArgumentType;
+                final List<IEventHandler<S, A>> eventHandlers = eventHandlerMapOfSourceTypeForId.get(candidateArgumentType)
+                    .stream()
+                    .map(unwrappedType -> (IEventHandler<S, A>) unwrappedType::handleWithCast)
+                  .collect(Collectors.toList());
+
+                eventHandlerTargetTypeMap.put(argumentTypeSuper, eventHandlers);
+            }
+        });
+
+        return ImmutableList.copyOf(eventHandlerTargetTypeMap.entrySet().stream().flatMap(e -> e.getValue().stream()).collect(Collectors.toList()));
     }
 
     public Map<String, IDependencyObject<?>> getDependencyData()

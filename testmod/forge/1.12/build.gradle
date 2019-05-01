@@ -46,13 +46,8 @@ processResources {
 
 dependencies {
     compile project(':launcher:impl:forge:1.12')
-}
-
-jar {
-    manifest {
-        attributes([
-                'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
-                'Timestamp': System.currentTimeMillis(),
-        ])
-    }
+    compile project(':main')
+    compile project(':lang:json')
+    compile project(':lang:xml')
+    deobfCompile(group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 }

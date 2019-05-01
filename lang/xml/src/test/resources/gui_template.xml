@@ -5,4 +5,7 @@
     <root.tooltip>
         <label contents="hello"/>
     </root.tooltip>
+    <root.information>
+        test
+    </root.information>
 </root>

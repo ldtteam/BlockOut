@@ -17,9 +17,9 @@ public interface IRenderManager
     IRenderingController getRenderingController();
 
     @NotNull
-    BlockOutGuiData getGui();
+    BlockOutGuiData getGuiData();
 
-    void setGui(@NotNull final BlockOutGuiData gui);
+    void setGuiData(@NotNull final BlockOutGuiData gui);
 
     Vector2d getRenderingScalingFactor();
 

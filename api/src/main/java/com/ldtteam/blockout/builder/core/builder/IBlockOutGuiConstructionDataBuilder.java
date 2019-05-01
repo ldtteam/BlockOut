@@ -39,7 +39,7 @@ public interface IBlockOutGuiConstructionDataBuilder
     @NotNull
     <S, A> IBlockOutGuiConstructionDataBuilder withEventHandler(
       @NotNull final String controlId, @NotNull final String eventName, @NotNull final Class<S> controlTypeClass, @NotNull final Class<A> argumentTypeClass, @NotNull final
-    IEventHandler<S, A> eventHandler);
+    IEventHandler<? super S, ? super A> eventHandler);
 
     /**
      * Binds a control as for example an inventory to a control in the GUI.

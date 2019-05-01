@@ -93,13 +93,13 @@ public class RenderManager implements IRenderManager
 
     @NotNull
     @Override
-    public BlockOutGuiData getGui()
+    public BlockOutGuiData getGuiData()
     {
         return gui;
     }
 
     @Override
-    public void setGui(@NotNull final BlockOutGuiData gui)
+    public void setGuiData(@NotNull final BlockOutGuiData gui)
     {
         this.gui = gui;
     }

@@ -46,7 +46,7 @@ public class BlockOutForge extends AbstractForgeMod
 
         BlockOut.getInstance().preInit();
 
-        //We are plugin capable. L
+        //We are plugin capable.
         preInitializePlugins();
     }
 

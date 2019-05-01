@@ -59,7 +59,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
         if (!key.getItemHandlerManager().getAllItemHandlerIds().isEmpty())
         {
-            throw new IllegalArgumentException("Can not build a ClientSide only guitemp with inventory support.");
+            throw new IllegalArgumentException("Can not build a ClientSide only gui with inventory support.");
         }
 
         RootGuiElement host;
@@ -70,12 +70,12 @@ public class ClientSideOnlyGuiController implements IGuiController
 
             if (host.getAllCombinedChildElements().entrySet().stream().anyMatch(e -> e instanceof Slot))
             {
-                throw new IllegalArgumentException("Can not open UI that holds Slots. Inventories are not supported in ClientSide only guitemp's.");
+                throw new IllegalArgumentException("Can not open UI that holds Slots. Inventories are not supported in ClientSide only gui's.");
             }
         }
         catch (IllegalArgumentException ex)
         {
-            Log.getLogger().error("Failed to build client side only guitemp.", ex);
+            Log.getLogger().error("Failed to build client side only gui.", ex);
             return;
         }
 
@@ -102,7 +102,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     {
         if (!(IGameEngine.getInstance().getSinglePlayerPlayerEntity() == player))
         {
-            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide guitemp's");
+            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
         }
 
         if (openClientSideOnlyGui == null)
@@ -120,7 +120,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         if ((IGameEngine.getInstance().getSinglePlayerPlayerEntity() == null && player != null) || (IGameEngine.getInstance().getSinglePlayerPlayerEntity() != null && player == null) || (
           IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId() != player))
         {
-            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide guitemp's");
+            throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
         }
 
 
@@ -145,7 +145,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         {
             if (openClientSideOnlyGui.getFirst() != guiKey)
             {
-                throw new IllegalArgumentException("Can not get root from unknown guitemp key.");
+                throw new IllegalArgumentException("Can not get root from unknown gui key.");
             }
 
             return openClientSideOnlyGui.getSecond();
@@ -156,6 +156,6 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement)
     {
-        IGameEngine.getInstance().displayGuiScreen(BlockOutGuiLogic.create(key, rootGuiElement, BlockOutContainerLogic.create(key, rootGuiElement, 0)));
+        IGameEngine.getInstance().displayGuiScreen(BlockOutGuiLogic.createClientSideOnly(key, rootGuiElement));
     }
 }

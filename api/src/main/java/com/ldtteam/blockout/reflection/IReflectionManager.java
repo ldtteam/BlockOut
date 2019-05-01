@@ -14,4 +14,9 @@ public interface IReflectionManager
      * @return Its accessible fields.
      */
     Set<IFieldReflectionEntry> getFieldsForClass(Class<?> clz);
+
+    /**
+     * Returns a list off super types of from a given class, including the class itself.
+     */
+    <A> Set<Class<? super A>> getAllSupers(Class<? super A> clz);
 }

@@ -37,7 +37,7 @@ public class BlockOutGuiConstructionDataBuilder implements IBlockOutGuiConstruct
       @NotNull final String eventName,
       @NotNull final Class<S> controlTypeClass,
       @NotNull final Class<A> argumentTypeClass,
-      @NotNull final IEventHandler<S, A> eventHandler)
+      @NotNull final IEventHandler<? super S, ? super A> eventHandler)
     {
         final String eventId = String.format("%s#%s", controlId, eventName);
 

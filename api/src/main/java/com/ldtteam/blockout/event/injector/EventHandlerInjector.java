@@ -6,6 +6,8 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class EventHandlerInjector
 {
 
@@ -32,6 +34,23 @@ public class EventHandlerInjector
               }
               provider.getEventHandlers(String.format("%s#%s", target.getId(), eventField.getName()), event.getSourceClass(), event.getArgumentClass())
                 .forEach(event::registerHandler);
+          });
+
+        ProxyHolder.getInstance().getReflectionManager().getFieldsForClass(target.getClass())
+          .stream()
+          .filter(field -> field.getType().equals(IEventHandlerProvider.class))
+          .forEach(eventHandlerProviderField -> {
+              final Set<IEventHandlerProvider> knownProviderData;
+
+              try
+              {
+                  knownProviderData = (Set<IEventHandlerProvider>) eventHandlerProviderField.get(target);
+                  knownProviderData.add(provider);
+              }
+              catch (IllegalAccessException e)
+              {
+                  Log.getLogger().error("Failed to set eventHandlerProvider field. Needs to be either protected, public, or package private. Private field is not supported.");
+              }
           });
     }
 }
