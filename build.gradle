@@ -9,7 +9,7 @@ buildscript {
         maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.0.128'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
     }
 }
