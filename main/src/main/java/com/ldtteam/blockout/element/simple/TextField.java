@@ -203,9 +203,6 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        final int maxTextLength =
-          (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / ProxyHolder.getInstance().getFontRenderer().getFontHeight()));
-
         controller.getScissoringController().focus(this);
 
         doDraw(controller);
@@ -221,8 +218,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         IOpenGl.enableBlend();
         IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
 
-        final int x = (int) this.getLocalBoundingBox().getLocalOrigin().getX();
-        final int y = (int) this.getLocalBoundingBox().getLocalOrigin().getY();
+        final int x = 0;//(int) this.getLocalBoundingBox().getLocalOrigin().getX();
+        final int y = 0;//(int) this.getLocalBoundingBox().getLocalOrigin().getY();
         final int width = (int) this.getLocalBoundingBox().getSize().getX();
         final int height = (int) this.getLocalBoundingBox().getSize().getY();
         final String contents = getContents();
@@ -593,7 +590,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             sendToServer(new TextFieldUpdateContentsMessage(getId(), result));
             if (backwards)
             {
-                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), selectionEnd + count, selectionEnd));
+                sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), selectionEnd + count, selectionEnd+count));
             }
         }
     }
