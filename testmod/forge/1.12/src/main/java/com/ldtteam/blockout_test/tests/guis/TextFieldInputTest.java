@@ -60,6 +60,8 @@ public class TextFieldInputTest implements IBlockOutGuiTest
 
         private String contents = "";
 
+        private String borderColor = "";
+
         public String getContents()
         {
             return contents;
@@ -68,6 +70,30 @@ public class TextFieldInputTest implements IBlockOutGuiTest
         public void setContents(final String contents)
         {
             this.contents = contents;
+            if (contents.equals(""))
+            {
+                borderColor = "Yellow";
+                return;
+            }
+
+            try{
+                Integer.parseInt(contents);
+                borderColor = "Green";
+            }
+            catch (Exception ex)
+            {
+                borderColor = "Red";
+            }
+        }
+
+        public String getBorderColor()
+        {
+            return borderColor;
+        }
+
+        public void setBorderColor(final String borderColor)
+        {
+            this.borderColor = borderColor;
         }
     }
 }

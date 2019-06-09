@@ -235,8 +235,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         if (shouldDrawBackground())
         {
-            controller.drawRect(x - 1, y - 1, x + width + 1, y + height + 1, outerBackgroundColor);
-            controller.drawRect(x, y, x + width, y + height, innerBackgroundColor);
+            controller.drawRect(x, y, x + width, y + height, outerBackgroundColor);
+            controller.drawRect(x + 1, y + 1, x + width - 1, y + height - 1, innerBackgroundColor);
+
         }
 
         IColor fontColor = this.isEnabled() ? enabledColor : disabledColor;

@@ -16,7 +16,7 @@
       "alignment": "LEFT,TOP,RIGHT",
       "margin": "5,5,5,",
       "content": "{Binding:Contents}",
-      "outerColor": "red",
+      "outerColor": "{Binding:BorderColor}",
       "cursorColor": "yellow",
       "selectionColor": "green"
     },
