@@ -5,6 +5,6 @@ ext {
 dependencies {
     shadeTransitive project(':api')
     
-    compile 'io.netty:netty-all:4.1.9.Final'
+    compile 'io.netty:netty-all:4.1.37.Final'
     compile 'org.apache.httpcomponents:httpclient:4.3.3'
 }
