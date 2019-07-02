@@ -49,5 +49,6 @@ dependencies {
     compile project(':main')
     compile project(':lang:json')
     compile project(':lang:xml')
+    compile project(':utils:helpers')
     deobfCompile(group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
 }

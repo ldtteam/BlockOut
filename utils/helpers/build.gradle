@@ -1,0 +1,11 @@
+ext {
+    projectIdentifier = "utils-helpers"
+}
+
+dependencies {
+    shadeTransitive project(':api')
+    shadeTransitive project(':main')
+    
+    compile 'io.netty:netty-all:4.1.9.Final'
+    compile 'org.apache.httpcomponents:httpclient:4.3.3'
+}
