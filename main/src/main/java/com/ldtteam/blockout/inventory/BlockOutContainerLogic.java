@@ -74,8 +74,7 @@ public final class BlockOutContainerLogic
 
     public static void reinitializeSlots(final IContainer<BlockOutContainerData> container)
     {
-        container.getInventorySlots().clear();
-        container.getInventoryItemStacks().clear();
+        container.clearInventory();
         initializeSlots(container);
 
         container.updateListeners();
