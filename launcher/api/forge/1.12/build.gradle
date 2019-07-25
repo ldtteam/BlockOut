@@ -69,6 +69,6 @@ dependencies {
     shadeTransitive project(':api')
     shadeDeobfTransitive (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-forge-1.12', version: jvoxelizer_version)
     
-    compile 'io.netty:netty-all:4.1.9.Final'
+    compile 'io.netty:netty-all:4.1.38.Final'
     compile 'org.apache.httpcomponents:httpclient:4.3.3'
 }
