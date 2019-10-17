@@ -3,9 +3,9 @@ package com.ldtteam.blockout.style.definitions.deserializers;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.ldtteam.blockout.style.definitions.StylesDefinition;
-import com.ldtteam.blockout.util.json.IdentifierDeserializer;
+import com.ldtteam.blockout.util.json.ResourceLocationDeserializer;
 import com.ldtteam.blockout.util.stream.StreamHelper;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -15,8 +15,8 @@ public class StylesDefinitionDeserializer implements JsonDeserializer<StylesDefi
 {
     public static final  Type                         CONST_STYLES_DEFINITION_TYPE = new TypeToken<StylesDefinition>() {}.getType();
     private static final Gson                         CONST_GSON                   = new GsonBuilder()
-                                                                                       .registerTypeAdapter(IdentifierDeserializer.CONST_IDENTIFIER_TYPE,
-                                                                                         IdentifierDeserializer.getInstance())
+                                                                                       .registerTypeAdapter(ResourceLocationDeserializer.CONST_RESOURCELOCATION_TYPE,
+                                                                                         ResourceLocationDeserializer.getInstance())
                                                                                        .create();
     private static       StylesDefinitionDeserializer ourInstance                  = new StylesDefinitionDeserializer();
 
@@ -38,9 +38,9 @@ public class StylesDefinitionDeserializer implements JsonDeserializer<StylesDefi
         }
 
         final JsonArray array = json.getAsJsonArray();
-        final Collection<IIdentifier> styles =
+        final Collection<ResourceLocation> styles =
           StreamHelper.getJsonArrayAsStream(array)
-            .map(e -> (IIdentifier) CONST_GSON.fromJson(e, IdentifierDeserializer.CONST_IDENTIFIER_TYPE))
+            .map(e -> (ResourceLocation) CONST_GSON.fromJson(e, ResourceLocationDeserializer.CONST_RESOURCELOCATION_TYPE))
             .collect(Collectors.toList());
 
         return new StylesDefinition(styles);

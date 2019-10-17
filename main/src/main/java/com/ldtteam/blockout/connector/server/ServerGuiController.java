@@ -19,7 +19,7 @@ import com.ldtteam.jvoxelizer.IGameEngine;
 import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEntityEvent;
 import com.ldtteam.jvoxelizer.entity.living.player.IFakePlayer;
 import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import com.ldtteam.jvoxelizer.event.manager.IEventManager;
 import com.ldtteam.jvoxelizer.inventory.IContainer;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class ServerGuiController implements IGuiController
 
     @Override
     public void openUI(
-      @NotNull final IPlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
+      @NotNull final PlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {
         final CommonGuiKeyBuilder builder = new CommonGuiKeyBuilder();
         Arrays.stream(guiKeyBuilderConsumer).forEach(iGuiKeyBuilderConsumer -> iGuiKeyBuilderConsumer.accept(builder));
@@ -46,7 +46,7 @@ public class ServerGuiController implements IGuiController
     }
 
     @Override
-    public void openUI(@NotNull final IPlayerEntity player, @NotNull final IGuiKey key)
+    public void openUI(@NotNull final PlayerEntity player, @NotNull final IGuiKey key)
     {
         openUI(player.getId(), key);
     }
@@ -107,7 +107,7 @@ public class ServerGuiController implements IGuiController
     }
 
     @Override
-    public void closeUI(@NotNull final IPlayerEntity player)
+    public void closeUI(@NotNull final PlayerEntity player)
     {
         closeUI(player.getId());
     }
@@ -153,7 +153,7 @@ public class ServerGuiController implements IGuiController
 
     @Nullable
     @Override
-    public IGuiKey getOpenUI(@NotNull final IPlayerEntity player)
+    public IGuiKey getOpenUI(@NotNull final PlayerEntity player)
     {
         return getOpenUI(player.getId());
     }

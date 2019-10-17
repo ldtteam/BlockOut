@@ -12,7 +12,7 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
     public BlockStateIcon(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -67,12 +67,12 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
     }
 
     @NotNull
-    public IBlockState getBlockState()
+    public BlockState getBlockState()
     {
         return blockState.get(this);
     }
 
-    public void setBlockState(@NotNull final IBlockState icon)
+    public void setBlockState(@NotNull final BlockState icon)
     {
         this.blockState.set(this, icon);
     }
@@ -100,7 +100,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         }
 
         @NotNull
-        public BlockStateIconConstructionDataBuilder withBlockState(@NotNull final IBlockState blockState)
+        public BlockStateIconConstructionDataBuilder withBlockState(@NotNull final BlockState blockState)
         {
             return withDependency("blockState", DependencyObjectHelper.createFromValue(blockState));
         }

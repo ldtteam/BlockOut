@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.util.itemstack;
 
 import com.ldtteam.jvoxelizer.item.IItem;
-import com.ldtteam.jvoxelizer.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +13,7 @@ public final class ItemStackHelper
     @Nullable
     public static Comparator<IItemStack> COMPARATOR = new Comparator<IItemStack>()
     {
-        public int compare(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
+        public int compare(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
         {
             if (!pItemStack1.isEmpty() && !pItemStack2.isEmpty())
             {
@@ -88,19 +88,19 @@ public final class ItemStackHelper
     }
 
     @NotNull
-    public static IItemStack cloneItemStack(@NotNull IItemStack pItemStack, int pStackSize)
+    public static ItemStackcloneItemStack(@NotNull ItemStackpItemStack, int pStackSize)
     {
-        IItemStack tClonedItemStack = pItemStack.copy();
+        ItemStacktClonedItemStack = pItemStack.copy();
         tClonedItemStack.setCount(pStackSize);
         return tClonedItemStack;
     }
 
-    public static boolean equals(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
+    public static boolean equals(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
     {
         return (COMPARATOR.compare(pItemStack1, pItemStack2) == 0);
     }
 
-    public static boolean equalsIgnoreStackSize(@NotNull IItemStack itemStack1, @NotNull IItemStack itemStack2)
+    public static boolean equalsIgnoreStackSize(@NotNull ItemStackitemStack1, @NotNull ItemStackitemStack2)
     {
         if (!itemStack1.isEmpty() && !itemStack2.isEmpty())
         {
@@ -139,7 +139,7 @@ public final class ItemStackHelper
      * @param doMerge     - To actually do the merge
      * @return The number of item that was successfully merged.
      */
-    public static int mergeStacks(@NotNull IItemStack mergeSource, @NotNull IItemStack mergeTarget, boolean doMerge)
+    public static int mergeStacks(@NotNull ItemStackmergeSource, @NotNull ItemStackmergeTarget, boolean doMerge)
     {
         if (!canStacksMerge(mergeSource, mergeTarget))
         {
@@ -164,7 +164,7 @@ public final class ItemStackHelper
      * @param stack2 - The second stack
      * @return true if stacks can be merged, false otherwise
      */
-    public static boolean canStacksMerge(@NotNull IItemStack stack1, @NotNull IItemStack stack2)
+    public static boolean canStacksMerge(@NotNull ItemStackstack1, @NotNull ItemStackstack2)
     {
         if (stack1.isEmpty() || stack2.isEmpty())
         {
@@ -177,12 +177,12 @@ public final class ItemStackHelper
         return IItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
-    public static int compare(@NotNull IItemStack pItemStack1, @NotNull IItemStack pItemStack2)
+    public static int compare(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
     {
         return COMPARATOR.compare(pItemStack1, pItemStack2);
     }
 
-    public static String toString(@NotNull IItemStack pItemStack)
+    public static String toString(@NotNull ItemStackpItemStack)
     {
         if (!pItemStack.isEmpty())
         {

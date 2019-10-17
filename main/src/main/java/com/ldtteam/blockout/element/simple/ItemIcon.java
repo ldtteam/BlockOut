@@ -14,7 +14,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,12 +28,12 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    public IDependencyObject<IIdentifier> iconResource;
+    public IDependencyObject<ResourceLocation> iconResource;
 
     public ItemIcon(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -41,7 +41,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IIdentifier> iconResource)
+      @NotNull final IDependencyObject<ResourceLocation> iconResource)
     {
         super(KEY_ITEM, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
@@ -62,7 +62,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
     public void drawBackground(@NotNull final IRenderingController controller)
     {
         final ItemStackResource resource = getIcon();
-        final IItemStack stack = resource.getStack();
+        final ItemStackstack = resource.getStack();
         if (stack != null && !stack.isEmpty())
         {
             IOpenGl.pushMatrix();
@@ -126,7 +126,7 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
         public Factory()
         {
             super(ItemIcon.class, KEY_ITEM, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final ItemIcon element = new ItemIcon(
                   id,

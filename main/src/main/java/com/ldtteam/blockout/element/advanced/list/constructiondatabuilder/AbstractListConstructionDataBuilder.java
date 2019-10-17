@@ -24,7 +24,7 @@ public class AbstractListConstructionDataBuilder<B extends AbstractListConstruct
     }
 
     @NotNull
-    public B withDependentTemplateResource(@NotNull final IDependencyObject<IIdentifier> iconResource)
+    public B withDependentTemplateResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
     {
         return withDependency("templateResource", iconResource);
     }

@@ -36,7 +36,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             super(controlId, data, controlClass);
         }
 
-        public SlotConstructionDataBuilder withDependentInventoryId(@NotNull final IDependencyObject<IIdentifier> inventoryId)
+        public SlotConstructionDataBuilder withDependentInventoryId(@NotNull final IDependencyObject<ResourceLocation> inventoryId)
         {
             return withDependency("inventoryId", inventoryId);
         }
@@ -56,7 +56,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             return withDependency("inventoryIndex", DependencyObjectHelper.createFromValue(inventoryIndex));
         }
 
-        public SlotConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> backgroundImageResource)
+        public SlotConstructionDataBuilder withDependentBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
         {
             return withDependency("backgroundImageResource", backgroundImageResource);
         }
@@ -68,18 +68,18 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    public  IDependencyObject<IIdentifier> inventoryId;
+    public  IDependencyObject<ResourceLocation> inventoryId;
     @NotNull
     public  IDependencyObject<Integer>          inventoryIndex;
     @NotNull
-    public  IDependencyObject<IIdentifier> backgroundImageResource;
+    public  IDependencyObject<ResourceLocation> backgroundImageResource;
     @NotNull
     private int                                 slotIndex;
 
     public Slot(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -87,9 +87,9 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IIdentifier> inventoryId,
+      @NotNull final IDependencyObject<ResourceLocation> inventoryId,
       @NotNull final IDependencyObject<Integer> inventoryIndex,
-      @NotNull final IDependencyObject<IIdentifier> backgroundImageResource)
+      @NotNull final IDependencyObject<ResourceLocation> backgroundImageResource)
     {
         super(KEY_SLOT, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.inventoryId = inventoryId;
@@ -209,10 +209,10 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Slot.class, KEY_SLOT, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> inventoryId =
+                final IDependencyObject<ResourceLocation> inventoryId =
                   elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
                 final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1, Integer.class);
-                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final Slot element = new Slot(
                   id,

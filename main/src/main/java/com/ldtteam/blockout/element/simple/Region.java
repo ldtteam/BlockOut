@@ -21,7 +21,7 @@ public class Region extends AbstractChildrenContainingUIElement
     public Region(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -35,7 +35,7 @@ public class Region extends AbstractChildrenContainingUIElement
     }
 
     public Region(
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent)
     {

@@ -5,7 +5,7 @@ import com.ldtteam.jvoxelizer.core.logic.TypedPipelineElementContext;
 import com.ldtteam.jvoxelizer.inventory.slot.ISlotItemHandler;
 import com.ldtteam.jvoxelizer.inventory.slot.logic.builder.ISlotItemHandlerBuilder;
 import com.ldtteam.jvoxelizer.inventory.slot.logic.builder.contexts.CanTakeStackContext;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public final class BlockOutSlotLogic
 {

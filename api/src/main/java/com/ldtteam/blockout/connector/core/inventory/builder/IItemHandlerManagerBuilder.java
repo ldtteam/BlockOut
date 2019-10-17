@@ -2,12 +2,12 @@ package com.ldtteam.blockout.connector.core.inventory.builder;
 
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import com.ldtteam.jvoxelizer.block.entity.IBlockEntity;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.IEntity;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,15 +21,15 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final IBlockEntity tileEntity, @Nullable IFacing facing
+      @NotNull final ResourceLocation id, @NotNull final TileEntity tileEntity, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, tileEntity.getDimension().getId(), tileEntity.getPosition(), facing);
+        return this.withTileBasedProvider(id, tileEntity.getWorld().getDimension().getType().getId(), tileEntity.getPos(), facing);
     }
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final IBlockCoordinate blockPos, @Nullable IFacing facing
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final BlockPos blockPos, @Nullable Direction facing
     )
     {
         return this.withTileBasedProvider(id, dimId, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
@@ -37,33 +37,33 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
-    IFacing facing);
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
+    Direction facing);
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos, @Nullable IFacing facing
+      @NotNull final ResourceLocation id, @NotNull final World world, @NotNull final BlockPos blockPos, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, world.getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
+        return this.withTileBasedProvider(id, world.getDimension().getType().getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
     }
 
     @NotNull
     default IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final IEntity entity, @Nullable final IFacing facing
+      @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final Direction facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.getDimension(), entity.getId(), facing);
+        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimension().getType().getId(), entity.getUniqueID(), facing);
     }
 
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final IFacing facing
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing
     );
 
     @NotNull
     IItemHandlerManagerBuilder withWrapped(
-      @NotNull final IIdentifier id, @NotNull final IIdentifier wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding
+      @NotNull final ResourceLocation id, @NotNull final ResourceLocation wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding
     );
 
     @NotNull

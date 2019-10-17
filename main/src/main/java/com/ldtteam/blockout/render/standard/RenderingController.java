@@ -11,7 +11,7 @@ import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.IGameEngine;
 import com.ldtteam.jvoxelizer.biome.IBiome;
-import com.ldtteam.jvoxelizer.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
 import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
 import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
@@ -27,12 +27,12 @@ import com.ldtteam.jvoxelizer.core.logic.DummyInstanceData;
 import com.ldtteam.jvoxelizer.dimension.IDimensionReader;
 import com.ldtteam.jvoxelizer.dimension.IDimensionType;
 import com.ldtteam.jvoxelizer.dimension.logic.builder.IDimensionReaderBuilder;
-import com.ldtteam.jvoxelizer.fluid.IFluidStack;
+import net.minecraftforge.fluids.FluidStack;
 import com.ldtteam.jvoxelizer.inventory.IContainer;
 import com.ldtteam.jvoxelizer.inventory.slot.ISlot;
-import com.ldtteam.jvoxelizer.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.util.math.BlockPos;
 import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -151,14 +151,14 @@ public class RenderingController implements IRenderingController
      * @param h     The total Height
      */
     @Override
-    public void drawFluid(@Nullable IFluidStack fluid, int x, int y, int z, int w, int h)
+    public void drawFluid(@Nullable FluidStackfluid, int x, int y, int z, int w, int h)
     {
         if (fluid == null || fluid.getFluid() == null)
         {
             return;
         }
 
-        ISprite texture = IGameEngine.getInstance().getTextureMapBlocks().getSrite(fluid.getFluid().getStill(fluid).toString());
+        TextureAtlasSprite 6texture = IGameEngine.getInstance().getTextureMapBlocks().getSrite(fluid.getFluid().getStill(fluid).toString());
 
         if (texture == null)
         {
@@ -193,7 +193,7 @@ public class RenderingController implements IRenderingController
      * @param cutOffVertical The vertical distance to cut of.
      */
     @Override
-    public void drawCutIcon(@NotNull ISprite icon, int x, int y, int z, int w, int h, int cutOffVertical)
+    public void drawCutIcon(@NotNull TextureAtlasSprite 6icon, int x, int y, int z, int w, int h, int cutOffVertical)
     {
         ITessellator tessellator = ITessellator.getInstance();
         IBufferBuilder worldrenderer = tessellator.getBuffer();
@@ -224,7 +224,7 @@ public class RenderingController implements IRenderingController
      * @param icon The IIcon describing the Texture
      */
     @Override
-    public void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull ISprite icon, int w, int h)
+    public void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull TextureAtlasSprite 6icon, int w, int h)
     {
         ITessellator tessellator = ITessellator.getInstance();
         IBufferBuilder worldrenderer = tessellator.getBuffer();
@@ -340,7 +340,7 @@ public class RenderingController implements IRenderingController
      * @param y     The Y Coordinate to render on
      */
     @Override
-    public void drawItemStack(@NotNull IItemStack stack, int x, int y)
+    public void drawItemStack(@NotNull ItemStackstack, int x, int y)
     {
         IOpenGl.enableLighting();
         IOpenGl.enableDepth();
@@ -374,7 +374,7 @@ public class RenderingController implements IRenderingController
      * @param altText The overlay text to render.
      */
     @Override
-    public void drawItemStack(@NotNull IItemStack stack, int x, int y, String altText)
+    public void drawItemStack(@NotNull ItemStackstack, int x, int y, String altText)
     {
         IOpenGl.enableLighting();
         IOpenGl.enableDepth();
@@ -400,7 +400,7 @@ public class RenderingController implements IRenderingController
     }
 
     @Override
-    public void drawBlockState(@NotNull final IBlockState state, final int x, final int y)
+    public void drawBlockState(@NotNull final BlockState state, final int x, final int y)
     {
         IOpenGl.disableStandardItemLighting();
 
@@ -480,12 +480,12 @@ public class RenderingController implements IRenderingController
         int y = 1;
         final IIdentifier inventoryId = slot.getInventoryId();
         final int inventoryIndex = slot.getInventoryIndex();
-        IItemStack itemstack = gui.getInstanceData().getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
+        ItemStackitemstack = gui.getInstanceData().getKey().getItemHandlerManager().getItemHandlerFromId(inventoryId).getStackInSlot(inventoryIndex);
         ISlot<?> slotIn = gui.getContainer().getSlotById(slot.getSlotIndex());
 
         boolean flag = false;
         boolean isDraggingStartSlot = slotIn == gui.getClickedSlot() && !gui.getDraggedStack().isEmpty() && !gui.isRightMouseClicked();
-        IItemStack itemstack1 = gui.getGameEngine().getSinglePlayerPlayerEntity().getInventory().getItemStack();
+        ItemStackitemstack1 = gui.getGameEngine().getSinglePlayerPlayerEntity().getInventory().getItemStack();
         String s = null;
 
         if (slotIn == gui.getClickedSlot() && !gui.getDraggedStack().isEmpty() && gui.isRightMouseClicked() && !itemstack.isEmpty())
@@ -527,7 +527,7 @@ public class RenderingController implements IRenderingController
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
-            ISprite textureatlassprite = slotIn.getBackgroundTexture();
+            TextureAtlasSprite 6textureatlassprite = slotIn.getBackgroundTexture();
 
             if (textureatlassprite != null)
             {

@@ -11,7 +11,7 @@ import com.ldtteam.blockout.management.input.client.IClientSideScrollManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.jvoxelizer.profiler.IProfiler;
+import net.minecraft.profiler.Profiler;
 import org.jetbrains.annotations.NotNull;
 
 public interface IUIManager
@@ -50,5 +50,5 @@ public interface IUIManager
     IRenderManager getRenderManager();
 
     @NotNull
-    IProfiler getProfiler();
+    Profiler getProfiler();
 }

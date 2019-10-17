@@ -52,7 +52,7 @@ public class Template extends AbstractChildrenContainingUIElement
         @Override
         public Template readFromElementData(@NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<IIdentifier> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
+            final IDependencyObject<ResourceLocation> style = elementData.getFromRawDataWithDefault(CONST_STYLE_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
             final String templateId = elementData.getMetaData().getId();
 
             return new Template(style, templateId, elementData);
@@ -68,7 +68,7 @@ public class Template extends AbstractChildrenContainingUIElement
     private final IUIElementData<?> ownData;
 
     public Template(
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementData ownData)
     {

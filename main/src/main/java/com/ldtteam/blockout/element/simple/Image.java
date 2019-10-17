@@ -29,12 +29,12 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    public IDependencyObject<IIdentifier> iconResource;
+    public IDependencyObject<ResourceLocation> iconResource;
 
     public Image(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -42,7 +42,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IIdentifier> iconResource)
+      @NotNull final IDependencyObject<ResourceLocation> iconResource)
     {
         super(KEY_IMAGE, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.iconResource = iconResource;
@@ -119,7 +119,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         }
 
         @NotNull
-        public ImageConstructionDataBuilder withDependentIconResource(@NotNull final IDependencyObject<IIdentifier> iconResource)
+        public ImageConstructionDataBuilder withDependentIconResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
         {
             return withDependency("iconResource", iconResource);
         }
@@ -136,7 +136,7 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
         public Factory()
         {
             super(Image.class, KEY_IMAGE, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_ICON, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final Image element = new Image(
                   id,

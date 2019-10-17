@@ -3,7 +3,7 @@ package com.ldtteam.blockout.connector.impl;
 import com.ldtteam.blockout.connector.core.inventory.IForgeItemHandlerProvider;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.item.handling.ItemHandler;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.identifier.Identifier;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;

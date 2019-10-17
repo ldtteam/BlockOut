@@ -6,10 +6,6 @@ include 'utils:helpers'
 include 'lang:json'
 include 'lang:xml'
 include 'main'
-include 'launcher:api:forge:1.12'
-include 'launcher:impl:forge:1.12'
-//include 'launcher:impl:forge-1.13'
-include 'testmod:forge:1.12'
 
 gradle.startParameter.setProjectProperties(new HashMap<>(gradle.startParameter.getProjectProperties()))
 gradle.startParameter.getProjectProperties().put("build.start", Long.toString(System.currentTimeMillis()))

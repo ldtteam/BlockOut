@@ -1,9 +1,6 @@
 package com.ldtteam.blockout.util.nbt;
 
-import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
-import com.ldtteam.jvoxelizer.util.nbt.INBTByteArray;
-import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
-import com.ldtteam.jvoxelizer.util.nbt.INBTList;
+import net.minecraft.nbt.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,17 +15,17 @@ public final class NBTStreamSupport
         throw new IllegalStateException("Tried to initialize: NBTStreamSupport but this is a Utility class.");
     }
 
-    public static Stream<INBTBase> streamList(final INBTList list)
+    public static Stream<INBT> streamList(final ListNBT list)
     {
         return list.stream();
     }
 
-    public static Stream<Byte> streamByteArray(final INBTByteArray byteArray)
+    public static Stream<Byte> streamByteArray(final ByteArrayNBT byteArray)
     {
-        return IntStream.range(0, byteArray.getValue().length).mapToObj(i -> byteArray.getValue()[i]);
+        return byteArray.stream().map(ByteNBT::getByte);
     }
 
-    public static Stream<Map.Entry<String, INBTBase>> streamCompound(final INBTCompound compound)
+    public static Stream<Map.Entry<String, INBT>> streamCompound(final CompoundNBT compound)
     {
         return compound.keySet().stream().map(key -> new HashMap.SimpleImmutableEntry<>(key, compound.get(key)));
     }

@@ -12,7 +12,7 @@ import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,7 +186,7 @@ public final class BaseValueComponentConverters
         }
     }
 
-    public static final class IdentifierConverter implements IUIElementDataComponentConverter<IIdentifier>
+    public static final class IdentifierConverter implements IUIElementDataComponentConverter<ResourceLocation>
     {
 
         @Override
@@ -197,14 +197,14 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public IIdentifier readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
         {
-            return IIdentifier.create(component.getAsString());
+            return new ResourceLocation(component.getAsString());
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
-          @NotNull final IIdentifier value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+          @NotNull final ResourceLocation value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
             newInstance.setString(value.toString());

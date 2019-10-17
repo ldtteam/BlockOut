@@ -5,9 +5,9 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.jvoxelizer.common.capability.ICapability;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.IEntity;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import net.minecraft.entity.Entity;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraft.util.Direction;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +24,9 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @NotNull
     private final UUID    entityId;
     @Nullable
-    private final IFacing facing;
+    private final Direction facing;
 
-    public CommonEntityBasedProvider(@NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final IFacing facing)
+    public CommonEntityBasedProvider(@NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -93,7 +93,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
         final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
-        final IEntity entity = blockAccess.getLoadedEntities().stream().filter(e -> e.getId().equals(entityId)).findFirst().orElse(null);
+        final Entityentity = blockAccess.getLoadedEntities().stream().filter(e -> e.getId().equals(entityId)).findFirst().orElse(null);
 
         if (entity == null)
         {

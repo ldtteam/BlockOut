@@ -5,28 +5,30 @@ import com.google.inject.TypeLiteral;
 import com.ldtteam.blockout.loader.factory.NBTBaseConverter;
 import com.ldtteam.blockout.loader.factory.NBTDependingConverters;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
-import com.ldtteam.jvoxelizer.block.state.IBlockState;
-import com.ldtteam.jvoxelizer.entity.IEntity;
-import com.ldtteam.jvoxelizer.item.IItemStack;
-import com.ldtteam.jvoxelizer.util.nbt.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.*;
+import net.minecraftforge.common.extensions.IForgeBlockState;
 
 public class NBTFactoryInjectionModule extends AbstractModule
 {
     @Override
     protected void configure()
     {
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTByte>>() {}).to(new TypeLiteral<NBTBaseConverter.ByteConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTByteArray>>() {}).to(new TypeLiteral<NBTBaseConverter.ByteArrayConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTCompound>>() {}).to(new TypeLiteral<NBTBaseConverter.CompoundConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTDouble>>() {}).to(new TypeLiteral<NBTBaseConverter.DoubleConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTFloat>>() {}).to(new TypeLiteral<NBTBaseConverter.FloatConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTInteger>>() {}).to(new TypeLiteral<NBTBaseConverter.IntConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTList>>() {}).to(new TypeLiteral<NBTBaseConverter.ListConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTLong>>() {}).to(new TypeLiteral<NBTBaseConverter.LongConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTShort>>() {}).to(new TypeLiteral<NBTBaseConverter.ShortConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<INBTString>>() {}).to(new TypeLiteral<NBTBaseConverter.StringConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<IItemStack>>() {}).to(new TypeLiteral<NBTDependingConverters.ItemStackConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<IEntity>>() {}).to(new TypeLiteral<NBTDependingConverters.EntityConverter>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<IBlockState>>() {}).to(new TypeLiteral<NBTDependingConverters.BlockStateConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ByteNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.ByteConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ByteArrayNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.ByteArrayConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<CompoundNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.CompoundConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<DoubleNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.DoubleConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<FloatNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.FloatConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<IntNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.IntConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ListNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.ListConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<LongNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.LongConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ShortNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.ShortConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<StringNBT>>() {}).to(new TypeLiteral<NBTBaseConverter.StringConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ItemStack>>() {}).to(new TypeLiteral<NBTDependingConverters.ItemStackConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<Entity>>() {}).to(new TypeLiteral<NBTDependingConverters.EntityConverter>() {});
+        bind(new TypeLiteral<IUIElementDataComponentConverter<BlockState>>() {}).to(new TypeLiteral<NBTDependingConverters.BlockStateConverter>() {});
     }
 }

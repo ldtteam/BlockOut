@@ -8,7 +8,7 @@ import com.ldtteam.blockout.connector.common.inventory.provider.CommonTileBasedP
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import net.minecraft.util.Direction;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final IFacing facing)
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final Direction facing)
     {
         return withProvider(new CommonTileBasedProvider(id, dimId, x, y, z, facing));
     }
@@ -41,7 +41,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final IFacing facing)
+      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
     {
         return withProvider(new CommonEntityBasedProvider(id, dimId, entityId, facing));
     }

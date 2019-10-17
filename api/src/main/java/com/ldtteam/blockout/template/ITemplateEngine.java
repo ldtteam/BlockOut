@@ -4,7 +4,7 @@ import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementData;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -23,7 +23,7 @@ public interface ITemplateEngine
     default IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final IIdentifier resourceId,
+      @NotNull final ResourceLocation resourceId,
       @NotNull final String controlId)
     {
         return this.generateFromTemplate(
@@ -33,7 +33,7 @@ public interface ITemplateEngine
     IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final IIdentifier resourceId,
+      @NotNull final ResourceLocation resourceId,
       @NotNull final String controlId,
       @NotNull final Function<IUIElementData, IUIElementData> dataOverrideCallback);
 

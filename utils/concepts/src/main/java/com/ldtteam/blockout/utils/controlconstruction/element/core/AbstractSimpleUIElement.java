@@ -40,7 +40,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
     @NotNull
     private final String                         id;
     @NotNull
-    private       IDependencyObject<IIdentifier> style;
+    private       IDependencyObject<ResourceLocation> style;
     @NotNull
     private       IUIElementHost                 parent;
 
@@ -68,7 +68,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
 
     public AbstractSimpleUIElement(
       @NotNull final String type,
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -547,7 +547,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
         public final U readFromElementData(
           @NotNull final IUIElementData<?> elementData, @NotNull final IBindingEngine engine)
         {
-            final IDependencyObject<IIdentifier> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
+            final IDependencyObject<ResourceLocation> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
               PropertyCreationHelper.createFromOptional(o -> parent.getStyleId(), null,
                 true
               ), IIdentifier.create(CONST_DEFAULT), IIdentifier.class))
@@ -607,7 +607,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
               @NotNull final IBindingEngine engine,
               @NotNull final String id,
               @Nullable final IUIElementHost parent,
-              @NotNull final IDependencyObject<IIdentifier> styleId,
+              @NotNull final IDependencyObject<ResourceLocation> styleId,
               @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
               @NotNull final IDependencyObject<Dock> dock,
               @NotNull final IDependencyObject<AxisDistance> margin,

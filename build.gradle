@@ -9,7 +9,7 @@ buildscript {
         maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
     }
 }
@@ -51,6 +51,7 @@ configure(leafProjects) {projectToConfigure ->
     }
     
     //Setup the plugins that we need.
+    apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'idea'
     apply plugin: 'java'
     apply plugin: 'maven-publish'
@@ -66,6 +67,15 @@ configure(leafProjects) {projectToConfigure ->
         resolutionStrategy {
             force 'com.google.guava:guava:21.0'
         }
+    }
+
+    minecraft {
+        // The mappings can be changed at any time, and must be in the following format.
+        // snapshot_YYYYMMDD   Snapshot are built nightly.
+        // stable_#            Stables are built at the discretion of the MCP team.
+        // Use non-default mappings at your own risk. they may not always work.
+        // Simply re-run your setup task after changing the mappings to update your workspace.
+        mappings channel: 'snapshot', version: '20190719-1.14.3'
     }
 
     //All projects should be able to shade artifacts into them selfs.
@@ -90,7 +100,7 @@ configure(leafProjects) {projectToConfigure ->
     //All mods have the same test harness.
     //JUNIT, MOCKITO, POWERMOCK and HAMCREST are being added here.
     dependencies {
-        shadeTransitive (group: 'com.ldtteam.jvoxelizer', name: 'jvoxelizer-api', version: jvoxelizer_version)
+        minecraft 'net.minecraftforge:forge:1.14.4-28.1.56'
 
         compile 'com.intellij:annotations:+@jar'
         

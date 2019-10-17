@@ -11,7 +11,7 @@ import com.ldtteam.blockout.gui.BlockOutGuiLogic;
 import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.entity.living.player.IPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     @Override
     public void openUI(
-      @Nullable final IPlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
+      @Nullable final PlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {
         final CommonGuiKeyBuilder builder = new CommonGuiKeyBuilder();
         Arrays.stream(guiKeyBuilderConsumer).forEach(iGuiKeyBuilderConsumer -> iGuiKeyBuilderConsumer.accept(builder));
@@ -38,7 +38,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     }
 
     @Override
-    public void openUI(@Nullable final IPlayerEntity player, @NotNull final IGuiKey key)
+    public void openUI(@Nullable final PlayerEntity player, @NotNull final IGuiKey key)
     {
         openUI(DUMMY_ID, key);
     }
@@ -85,7 +85,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     }
 
     @Override
-    public void closeUI(@Nullable final IPlayerEntity player)
+    public void closeUI(@Nullable final PlayerEntity player)
     {
         closeUI(DUMMY_ID);
     }
@@ -98,7 +98,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     @Nullable
     @Override
-    public IGuiKey getOpenUI(@Nullable final IPlayerEntity player)
+    public IGuiKey getOpenUI(@Nullable final PlayerEntity player)
     {
         if (!(IGameEngine.getInstance().getSinglePlayerPlayerEntity() == player))
         {

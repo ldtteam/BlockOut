@@ -18,9 +18,9 @@ import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.IEntity;
+import net.minecraft.entity.Entity;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -114,7 +114,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forEntity(@NotNull final IEntity entity)
+    public IGuiKeyBuilder forEntity(@NotNull final Entityentity)
     {
         this.context = new EntityContext(entity);
         return this;
@@ -130,7 +130,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos)
+    public IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final BlockPos blockPos)
     {
         this.context = new PositionContext(world, blockPos);
         return this;

@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
+import net.minecraft.nbt.INBT;
 
 public enum NBTType
 {
@@ -15,9 +15,9 @@ public enum NBTType
     TAG_LIST,
     TAG_COMPOUND;
 
-    public static NBTType fromNBTBase(INBTBase base)
+    public static NBTType fromNBTBase(INBT base)
     {
-        switch (base.getType())
+        switch (base.getId())
         {
             case 1:
                 return TAG_BYTE;
@@ -40,7 +40,7 @@ public enum NBTType
             case 10:
                 return TAG_COMPOUND;
             default:
-                throw new IllegalArgumentException("Unknown NBTBase type with Id: " + base.getType());
+                throw new IllegalArgumentException("Unknown NBTBase type with Id: " + base.getId());
         }
     }
 }

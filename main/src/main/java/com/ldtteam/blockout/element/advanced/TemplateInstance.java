@@ -42,7 +42,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
 
         @NotNull
-        public TemplateInstanceConstructionDataBuilder withDependentTemplateResource(@NotNull final IDependencyObject<IIdentifier> iconResource)
+        public TemplateInstanceConstructionDataBuilder withDependentTemplateResource(@NotNull final IDependencyObject<ResourceLocation> iconResource)
         {
             return withDependency("templateResource", iconResource);
         }
@@ -62,7 +62,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
             super(TemplateInstance.class,
               KEY_TEMPLATE_INSTANCE,
               (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                  final IDependencyObject<IIdentifier> templateResource =
+                  final IDependencyObject<ResourceLocation> templateResource =
                     elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 final TemplateInstance element = new TemplateInstance(
@@ -91,13 +91,13 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
     }
 
-    public IDependencyObject<IIdentifier>                  templateResource;
+    public IDependencyObject<ResourceLocation>                  templateResource;
     public IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
 
     public TemplateInstance(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -106,7 +106,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IIdentifier> templateResource)
+      @NotNull final IDependencyObject<ResourceLocation> templateResource)
     {
         super(KEY_TEMPLATE_INSTANCE, styleId, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
 
@@ -115,7 +115,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
     }
 
     public TemplateInstance(
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData)

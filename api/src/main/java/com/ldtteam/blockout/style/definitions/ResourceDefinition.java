@@ -1,21 +1,21 @@
 package com.ldtteam.blockout.style.definitions;
 
 import com.google.gson.JsonElement;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 public class ResourceDefinition
 {
 
-    private final IIdentifier id;
+    private final ResourceLocation id;
     private final JsonElement data;
 
-    public ResourceDefinition(final IIdentifier id, final JsonElement data)
+    public ResourceDefinition(final ResourceLocation id, final JsonElement data)
     {
         this.id = id;
         this.data = data;
     }
 
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
         return id;
     }

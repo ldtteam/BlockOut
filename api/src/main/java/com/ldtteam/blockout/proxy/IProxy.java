@@ -16,9 +16,9 @@ import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -42,10 +42,10 @@ public interface IProxy
     IUIElementFactoryController getFactoryController();
 
     @NotNull
-    InputStream getResourceStream(@NotNull IIdentifier location) throws Exception;
+    InputStream getResourceStream(@NotNull ResourceLocation location) throws Exception;
 
     @NotNull
-    Vector2d getImageSize(@NotNull final IIdentifier location);
+    Vector2d getImageSize(@NotNull final ResourceLocation location);
 
     @NotNull
     INetworkManager generateNewNetworkManagerForGui(@NotNull final IGuiKey key);
@@ -54,13 +54,13 @@ public interface IProxy
     IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager);
 
     @NotNull
-    IDimension getDimensionFromDimensionId(@NotNull final int dimId);
+    World getDimensionFromDimensionId(@NotNull final int dimId);
 
     @NotNull
     IRenderManager generateNewRenderManager();
 
     @NotNull
-    IFontRenderer getFontRenderer();
+    FontRenderer getFontRenderer();
 
     @NotNull
     IResourceLoaderManager getResourceLoaderManager();

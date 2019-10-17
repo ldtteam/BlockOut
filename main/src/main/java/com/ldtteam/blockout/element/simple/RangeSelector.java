@@ -41,15 +41,15 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
                 @NotNull final IDependencyObject<Float> leftValue = elementData.getFromRawDataWithDefault(CONST_LEFT_VALUE, engine, 0f, Float.class);
                 @NotNull final IDependencyObject<Float> rightValue = elementData.getFromRawDataWithDefault(CONST_RIGHT_VALUE, engine, 1f, Float.class);
 
-                @NotNull final IDependencyObject<IIdentifier> leftBackgroundTexture =
+                @NotNull final IDependencyObject<ResourceLocation> leftBackgroundTexture =
                   elementData.getFromRawDataWithDefault(CONST_LEFT_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                @NotNull final IDependencyObject<IIdentifier> selectedRegionBackgroundTexture =
+                @NotNull final IDependencyObject<ResourceLocation> selectedRegionBackgroundTexture =
                   elementData.getFromRawDataWithDefault(CONST_SELECTED_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                @NotNull final IDependencyObject<IIdentifier> rightBackgroundTexture =
+                @NotNull final IDependencyObject<ResourceLocation> rightBackgroundTexture =
                   elementData.getFromRawDataWithDefault(CONST_RIGHT_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                @NotNull final IDependencyObject<IIdentifier> leftSelectorTexture =
+                @NotNull final IDependencyObject<ResourceLocation> leftSelectorTexture =
                   elementData.getFromRawDataWithDefault(CONST_LEFT_SELECTOR_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                @NotNull final IDependencyObject<IIdentifier> rightSelectorTexture =
+                @NotNull final IDependencyObject<ResourceLocation> rightSelectorTexture =
                   elementData.getFromRawDataWithDefault(CONST_RIGHT_SELECTOR_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
 
                 return new RangeSelector(
@@ -87,15 +87,15 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     @NotNull
     public  IDependencyObject<Float>                    rightValue;
     @NotNull
-    public  IDependencyObject<IIdentifier>              leftBackgroundTexture;
+    public  IDependencyObject<ResourceLocation>              leftBackgroundTexture;
     @NotNull
-    public  IDependencyObject<IIdentifier>              selectedRegionBackgroundTexture;
+    public  IDependencyObject<ResourceLocation>              selectedRegionBackgroundTexture;
     @NotNull
-    public  IDependencyObject<IIdentifier>              rightBackgroundTexture;
+    public  IDependencyObject<ResourceLocation>              rightBackgroundTexture;
     @NotNull
-    public  IDependencyObject<IIdentifier>              leftSelectorTexture;
+    public  IDependencyObject<ResourceLocation>              leftSelectorTexture;
     @NotNull
-    public  IDependencyObject<IIdentifier>              rightSelectorTexture;
+    public  IDependencyObject<ResourceLocation>              rightSelectorTexture;
     @NotNull
     public  Event<RangeSelector, RangeChangedEventArgs> onValuesChanged     = new Event<>(RangeSelector.class, RangeChangedEventArgs.class);
     @NotNull
@@ -106,7 +106,7 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     public RangeSelector(
       @NotNull final String id,
       @NotNull final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -116,11 +116,11 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final IDependencyObject<Float> leftValue,
       @NotNull final IDependencyObject<Float> rightValue,
-      @NotNull final IDependencyObject<IIdentifier> leftBackgroundTexture,
-      @NotNull final IDependencyObject<IIdentifier> selectedRegionBackgroundTexture,
-      @NotNull final IDependencyObject<IIdentifier> rightBackgroundTexture,
-      @NotNull final IDependencyObject<IIdentifier> leftSelectorTexture,
-      @NotNull final IDependencyObject<IIdentifier> rightSelectorTexture
+      @NotNull final IDependencyObject<ResourceLocation> leftBackgroundTexture,
+      @NotNull final IDependencyObject<ResourceLocation> selectedRegionBackgroundTexture,
+      @NotNull final IDependencyObject<ResourceLocation> rightBackgroundTexture,
+      @NotNull final IDependencyObject<ResourceLocation> leftSelectorTexture,
+      @NotNull final IDependencyObject<ResourceLocation> rightSelectorTexture
     )
     {
         super(KEY_RANGE_SELECTOR, style, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);

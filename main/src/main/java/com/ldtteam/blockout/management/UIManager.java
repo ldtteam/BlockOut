@@ -20,7 +20,7 @@ import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.profiler.IProfiler;
+import net.minecraft.profiler.Profiler;
 import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,7 +49,7 @@ public class UIManager implements IUIManager
     @NotNull
     private final IRenderManager           renderManager;
     @NotNull
-    private final IProfiler                profiler;
+    private final Profiler                profiler;
     @NotNull
     private       RootGuiElement           rootGuiElement;
 
@@ -142,7 +142,7 @@ public class UIManager implements IUIManager
     }
 
     @Override
-    public IProfiler getProfiler()
+    public Profiler getProfiler()
     {
         return profiler;
     }

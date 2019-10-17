@@ -9,7 +9,7 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,10 +45,10 @@ public interface IUIElement extends IDependencyReceiver
      * @return The resource requested.
      *
      * @throws IllegalArgumentException when no resource can be found in ANY style that matches the given id.
-     * @see com.ldtteam.blockout.style.core.IStyleManager#getResource(IIdentifier, IIdentifier)
+     * @see com.ldtteam.blockout.style.core.IStyleManager#getResource(ResourceLocation, ResourceLocation)
      */
     @NotNull
-    default <T extends IResource> T getResource(final IIdentifier resourceId) throws IllegalArgumentException
+    default <T extends IResource> T getResource(final ResourceLocation resourceId) throws IllegalArgumentException
     {
         return ProxyHolder.getInstance().getStyleManager().getResource(getStyleId(), resourceId);
     }
@@ -59,7 +59,7 @@ public interface IUIElement extends IDependencyReceiver
      * @return The style of the element.
      */
     @NotNull
-    IIdentifier getStyleId();
+    ResourceLocation getStyleId();
 
     /**
      * Called before the drawing of the UI.

@@ -7,10 +7,10 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.IEntity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -24,7 +24,7 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder ofWebResource(@NotNull final URL url);
 
     @NotNull
-    IGuiKeyBuilder ofFile(@NotNull final IIdentifier location);
+    IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location);
 
     @NotNull
     IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz);
@@ -61,13 +61,13 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder forEntity(@NotNull final UUID entityId);
 
     @NotNull
-    IGuiKeyBuilder forEntity(@NotNull final IEntity entity);
+    IGuiKeyBuilder forEntity(@NotNull final Entity entity);
 
     @NotNull
     IGuiKeyBuilder forPosition(@NotNull final int dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z);
 
     @NotNull
-    IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final IBlockCoordinate blockPos);
+    IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos);
 
     @NotNull
     IGuiKeyBuilder forClientSideOnly();

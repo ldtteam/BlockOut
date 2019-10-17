@@ -9,11 +9,11 @@ import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.jvoxelizer.common.capability.ICapability;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
 import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import com.ldtteam.jvoxelizer.item.handling.IItemHandlerProvider;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import net.minecraft.util.Direction;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -31,7 +31,7 @@ public class InventoryGridHelper
           @NotNull final IBlockOutGuiConstructionDataBuilder theBuilder,
           @NotNull final IDimension IDimension,
           @NotNull final String controlId,
-          @NotNull final IBlockCoordinate chestPosition,
+          @NotNull final BlockPos chestPosition,
           @NotNull final IIdentifier inventoryId,
           @NotNull final IIdentifier slotResource)
         {

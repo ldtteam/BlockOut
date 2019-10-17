@@ -33,9 +33,9 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           key,
           (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled, templateResource, source, orientation, dataBoundMode, scrollOffset) -> {
 
-              final IDependencyObject<IIdentifier> scrollBarBackgroundResource =
+              final IDependencyObject<ResourceLocation> scrollBarBackgroundResource =
                 elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
-              final IDependencyObject<IIdentifier> scrollBarForegroundResource =
+              final IDependencyObject<ResourceLocation> scrollBarForegroundResource =
                 elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
               final IDependencyObject<Boolean> showScrollBar = elementData.getFromRawDataWithDefault(CONST_SHOW_BAR, engine, true, Boolean.class);
 
@@ -81,7 +81,7 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           @NotNull final IBindingEngine engine,
           @NotNull final String id,
           @Nullable final IUIElementHost parent,
-          @NotNull final IDependencyObject<IIdentifier> styleId,
+          @NotNull final IDependencyObject<ResourceLocation> styleId,
           @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
           @NotNull final IDependencyObject<Dock> dock,
           @NotNull final IDependencyObject<AxisDistance> margin,
@@ -90,11 +90,11 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           @NotNull final IDependencyObject<Object> dataContext,
           @NotNull final IDependencyObject<Boolean> visible,
           @NotNull final IDependencyObject<Boolean> enabled,
-          @NotNull final IDependencyObject<IIdentifier> templateResource,
+          @NotNull final IDependencyObject<ResourceLocation> templateResource,
           @NotNull final IDependencyObject<Object> source,
           @NotNull final IDependencyObject<Orientation> orientation,
-          @NotNull final IDependencyObject<IIdentifier> scrollBarBackgroundResource,
-          @NotNull final IDependencyObject<IIdentifier> scrollBarForegroundResource,
+          @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
+          @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
           @NotNull final IDependencyObject<Boolean> showScrollBar,
           @NotNull final boolean dataBoundMode,
           @NotNull final Double scrollOffset

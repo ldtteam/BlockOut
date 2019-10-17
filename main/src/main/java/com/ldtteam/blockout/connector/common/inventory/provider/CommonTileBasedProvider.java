@@ -3,13 +3,13 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.block.entity.IBlockEntity;
+import net.minecraft.tileentity.TileEntity;
 import com.ldtteam.jvoxelizer.common.capability.ICapability;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
-import com.ldtteam.jvoxelizer.util.facing.IFacing;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraft.util.Direction;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.math.coordinate.block.IBlockCoordinate;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +29,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     private final int z;
 
     @Nullable
-    private final IFacing facing;
+    private final Direction facing;
 
     public CommonTileBasedProvider(
       @NotNull final IIdentifier id,
@@ -37,7 +37,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
       @NotNull final int x,
       @NotNull final int y,
       @NotNull final int z,
-      @Nullable final IFacing facing)
+      @Nullable final Direction facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -108,7 +108,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
         final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
-        final IBlockEntity tileEntity = blockAccess.getBlockEntity(IBlockCoordinate.create(x,y,z));
+        final TileEntity tileEntity = blockAccess.getBlockEntity(IBlockCoordinate.create(x,y,z));
 
         if (tileEntity == null)
         {

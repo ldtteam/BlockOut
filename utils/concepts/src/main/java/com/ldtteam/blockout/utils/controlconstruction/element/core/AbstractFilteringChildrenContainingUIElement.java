@@ -23,7 +23,7 @@ public abstract class AbstractFilteringChildrenContainingUIElement extends Abstr
 
     public AbstractFilteringChildrenContainingUIElement(
       @NotNull final String type,
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,

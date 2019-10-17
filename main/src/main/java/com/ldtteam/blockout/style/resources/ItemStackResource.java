@@ -5,7 +5,7 @@ import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.item.IItemStack;
+import net.minecraft.item.ItemStack;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
 import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
@@ -41,7 +41,7 @@ public class ItemStackResource implements IResource
             try
             {
                 final INBTCompound compound = INBTBase.createFromJson(data.toString());
-                final IItemStack stack = IItemStack.create();
+                final ItemStackstack = IItemStack.create();
 
                 stack.read(compound);
 
@@ -55,9 +55,9 @@ public class ItemStackResource implements IResource
     }
 
     private final IIdentifier id;
-    private final IItemStack  stack;
+    private final ItemStack stack;
 
-    public ItemStackResource(final IIdentifier id, final IItemStack stack)
+    public ItemStackResource(final IIdentifier id, final ItemStackstack)
     {
         this.id = id;
         this.stack = stack;
@@ -75,7 +75,7 @@ public class ItemStackResource implements IResource
         return id;
     }
 
-    public IItemStack getStack()
+    public ItemStackgetStack()
     {
         return stack.copy();
     }

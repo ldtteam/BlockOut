@@ -34,11 +34,11 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
     @NotNull
-    public IDependencyObject<IIdentifier> normalBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull
-    public IDependencyObject<IIdentifier> clickedBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> clickedBackgroundImageResource;
     @NotNull
-    public IDependencyObject<IIdentifier> disabledBackgroundImageResource;
+    public IDependencyObject<ResourceLocation> disabledBackgroundImageResource;
     @NotNull
     public IDependencyObject<Boolean>     clicked;
 
@@ -48,7 +48,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
     public Button(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -57,9 +57,9 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IIdentifier> normalBackgroundImageResource,
-      @NotNull final IDependencyObject<IIdentifier> clickedBackgroundImageResource,
-      @NotNull final IDependencyObject<IIdentifier> disabledBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource,
+      @NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource,
       @NotNull final IDependencyObject<Boolean> clicked)
     {
         super(KEY_BUTTON, styleId, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
@@ -255,7 +255,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> normalBackgroundImageResource)
+        public ButtonConstructionDataBuilder withNormalBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> normalBackgroundImageResource)
         {
             return withDependency("normalBackgroundImageResource", normalBackgroundImageResource);
         }
@@ -267,7 +267,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> clickedBackgroundImageResource)
+        public ButtonConstructionDataBuilder withClickedBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> clickedBackgroundImageResource)
         {
             return withDependency("clickedBackgroundImageResource", clickedBackgroundImageResource);
         }
@@ -279,7 +279,7 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         }
 
         @NotNull
-        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IDependencyObject<IIdentifier> disabledBackgroundImageResource)
+        public ButtonConstructionDataBuilder withDisabledBackgroundImageResource(@NotNull final IDependencyObject<ResourceLocation> disabledBackgroundImageResource)
         {
             return withDependency("disabledBackgroundImageResource", disabledBackgroundImageResource);
         }
@@ -303,11 +303,11 @@ public class Button extends AbstractFilteringChildrenContainingUIElement impleme
         public Factory()
         {
             super(Button.class, KEY_BUTTON, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IIdentifier> defaultBackgroundImage =
+                final IDependencyObject<ResourceLocation> defaultBackgroundImage =
                   elementData.getFromRawDataWithDefault(CONST_DEFAULT_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                final IDependencyObject<IIdentifier> clickedBackgroundImage =
+                final IDependencyObject<ResourceLocation> clickedBackgroundImage =
                   elementData.getFromRawDataWithDefault(CONST_CLICKED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                final IDependencyObject<IIdentifier> disabledBackgroundImage =
+                final IDependencyObject<ResourceLocation> disabledBackgroundImage =
                   elementData.getFromRawDataWithDefault(CONST_DISABLED_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
                 final IDependencyObject<Boolean> clicked = elementData.getFromRawDataWithDefault(CONST_INITIALLY_CLICKED, engine, false, Boolean.class);
 

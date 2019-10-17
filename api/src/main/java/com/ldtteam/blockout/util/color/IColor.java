@@ -1,7 +1,5 @@
 package com.ldtteam.blockout.util.color;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public interface IColor
 {
     /**

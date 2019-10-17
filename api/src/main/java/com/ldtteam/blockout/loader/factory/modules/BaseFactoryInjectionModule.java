@@ -12,7 +12,7 @@ import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -27,7 +27,7 @@ public class BaseFactoryInjectionModule extends AbstractModule
         bind(new TypeLiteral<IUIElementDataComponentConverter<Double>>() {}).to(BaseValueComponentConverters.DoubleConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Float>>() {}).to(BaseValueComponentConverters.FloatConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Integer>>() {}).to(BaseValueComponentConverters.IntegerConverter.class);
-        bind(new TypeLiteral<IUIElementDataComponentConverter<IIdentifier>>() {}).to(BaseValueComponentConverters.IdentifierConverter.class);
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ResourceLocation>>() {}).to(BaseValueComponentConverters.IdentifierConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<AxisDistance>>() {}).to(BaseValueComponentConverters.AxisDistanceConverter.class);
         bind((Key<IUIElementDataComponentConverter<EnumSet<Alignment>>>) Key.get(Constants.ConverterTypes.ALIGNMENT_ENUMSET_FACTORY_TYPE)).to(BaseValueComponentConverters.AlignmentConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Orientation>>() {}).to(BaseValueComponentConverters.OrientationConverter.class);

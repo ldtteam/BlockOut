@@ -35,7 +35,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     @NotNull
     protected final String                         id;
     @NotNull
-    public          IDependencyObject<IIdentifier> style;
+    public          IDependencyObject<ResourceLocation> style;
     @NotNull
     protected       IUIElementHost                 parent;
 
@@ -69,7 +69,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
     public AbstractChildrenContainingUIElement(
       @NotNull final String type,
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
@@ -98,7 +98,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
 
     public AbstractChildrenContainingUIElement(
       @NotNull final String type,
-      @NotNull final IDependencyObject<IIdentifier> style,
+      @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
       @Nullable final IUIElementHost parent)
     {
@@ -655,7 +655,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
               @NotNull final IBindingEngine engine,
               @NotNull final String id,
               @Nullable final IUIElementHost parent,
-              @NotNull final IDependencyObject<IIdentifier> styleId,
+              @NotNull final IDependencyObject<ResourceLocation> styleId,
               @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
               @NotNull final IDependencyObject<Dock> dock,
               @NotNull final IDependencyObject<AxisDistance> margin,

@@ -4,11 +4,11 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.block.state.IBlockState;
-import com.ldtteam.jvoxelizer.client.renderer.texture.ISprite;
-import com.ldtteam.jvoxelizer.fluid.IFluidStack;
-import com.ldtteam.jvoxelizer.item.IItemStack;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +39,7 @@ public interface IRenderingController
      *
      * @param textureLocation the resource location of it.
      */
-    void bindTexture(@NotNull IIdentifier textureLocation);
+    void bindTexture(@NotNull ResourceLocation textureLocation);
 
     /**
      * Draw a modal texture.
@@ -67,7 +67,7 @@ public interface IRenderingController
      * @param w     the width.
      * @param h     the height.
      */
-    void drawFluid(@Nullable IFluidStack fluid, int x, int y, int z, int w, int h);
+    void drawFluid(@Nullable FluidStack fluid, int x, int y, int z, int w, int h);
 
     /**
      * Draw an icon.
@@ -80,7 +80,7 @@ public interface IRenderingController
      * @param pHeight         the height.
      * @param pCutOffVertical the vertical cutOff.
      */
-    void drawCutIcon(@NotNull ISprite pIcon, int pX, int pY, int pZ, int pWidth, int pHeight, int pCutOffVertical);
+    void drawCutIcon(@NotNull TextureAtlasSprite pIcon, int pX, int pY, int pZ, int pWidth, int pHeight, int pCutOffVertical);
 
     /**
      * Draw a texture from an icon.
@@ -92,7 +92,7 @@ public interface IRenderingController
      * @param w    the width.
      * @param h    the height.
      */
-    void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull ISprite icon, int w, int h);
+    void drawTexturedModelRectFromIcon(int x, int y, int z, @NotNull TextureAtlasSprite icon, int w, int h);
 
     /**
      * Draw a colored rect.
@@ -131,7 +131,7 @@ public interface IRenderingController
      * @param x     the x pos.
      * @param y     the y pos.
      */
-    void drawItemStack(@NotNull IItemStack stack, int x, int y);
+    void drawItemStack(@NotNull ItemStack stack, int x, int y);
 
     /**
      * Draw an itemStack with alt text.
@@ -141,7 +141,7 @@ public interface IRenderingController
      * @param y       the y pos.
      * @param altText the alt text.
      */
-    void drawItemStack(@NotNull IItemStack stack, int x, int y, String altText);
+    void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText);
 
     /**
      * Draw an BlockState in a given position
@@ -150,7 +150,7 @@ public interface IRenderingController
      * @param x     The x pos
      * @param y     The y pos
      */
-    void drawBlockState(@NotNull IBlockState state, int x, int y);
+    void drawBlockState(@NotNull BlockState state, int x, int y);
 
     /**
      * Draws the slot contents.

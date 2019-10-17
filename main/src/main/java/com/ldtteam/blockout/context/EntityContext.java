@@ -2,7 +2,7 @@ package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.entity.IEntity;
+import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class EntityContext implements IContext
         this.entityId = entityId;
     }
 
-    public EntityContext(@NotNull final IEntity entity)
+    public EntityContext(@NotNull final Entityentity)
     {
         this.entityId = entity.getId();
     }

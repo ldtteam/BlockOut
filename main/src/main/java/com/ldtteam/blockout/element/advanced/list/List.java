@@ -32,14 +32,14 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     private static final int CONST_SCROLLBAR_SIZE    = 5;
     private static final int CONST_SCROLLBAR_PADDING = 8;
 
-    public IDependencyObject<IIdentifier> scrollBarBackgroundResource;
-    public IDependencyObject<IIdentifier> scrollBarForegroundResource;
+    public IDependencyObject<ResourceLocation> scrollBarBackgroundResource;
+    public IDependencyObject<ResourceLocation> scrollBarForegroundResource;
     public IDependencyObject<Boolean>     showScrollbar;
 
     public List(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,
-      @NotNull final IDependencyObject<IIdentifier> styleId,
+      @NotNull final IDependencyObject<ResourceLocation> styleId,
       @NotNull final IDependencyObject<EnumSet<Alignment>> alignments,
       @NotNull final IDependencyObject<Dock> dock,
       @NotNull final IDependencyObject<AxisDistance> margin,
@@ -49,9 +49,9 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
       @NotNull final boolean dataBoundMode,
-      @NotNull final IDependencyObject<IIdentifier> templateResource,
-      @NotNull final IDependencyObject<IIdentifier> scrollBarBackgroundResource,
-      @NotNull final IDependencyObject<IIdentifier> scrollBarForegroundResource,
+      @NotNull final IDependencyObject<ResourceLocation> templateResource,
+      @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
+      @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
       @NotNull final double scrollOffset,
       @NotNull final IDependencyObject<Orientation> orientation,
       @NotNull final IDependencyObject<Boolean> showScrollbar,

@@ -14,8 +14,8 @@ import com.ldtteam.jvoxelizer.inventory.logic.builder.contexts.MergeItemStackCon
 import com.ldtteam.jvoxelizer.inventory.logic.builder.contexts.TransferStackInSlotContext;
 import com.ldtteam.jvoxelizer.inventory.slot.ISlot;
 import com.ldtteam.jvoxelizer.inventory.slot.ISlotItemHandler;
-import com.ldtteam.jvoxelizer.item.IItemStack;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import com.ldtteam.jvoxelizer.util.tuple.ITuple;
 import org.jetbrains.annotations.NotNull;
@@ -41,16 +41,16 @@ public final class BlockOutContainerLogic
         return container;
     }
 
-    private static IItemStack TransferStackInSlot(final TypedPipelineElementContext<TransferStackInSlotContext, IItemStack, IContainer<BlockOutContainerData>, BlockOutContainerData> context)
+    private static ItemStackTransferStackInSlot(final TypedPipelineElementContext<TransferStackInSlotContext, IItemStack, IContainer<BlockOutContainerData>, BlockOutContainerData> context)
     {
-        IItemStack newItemStack = IItemStack.create();
+        ItemStacknewItemStack = IItemStack.create();
         ISlot<?> slot = context.getInstance().getInventorySlots().get(context.getContext().getIndex());
         if (slot instanceof ISlotItemHandler && slot.getInstanceData() instanceof BlockOutSlotData)
         {
             ISlotItemHandler<BlockOutSlotData> slotBlockOut = (ISlotItemHandler<BlockOutSlotData>) slot;
             if (slotBlockOut.getHasStack())
             {
-                IItemStack itemStack = slotBlockOut.getContainedStack();
+                ItemStackitemStack = slotBlockOut.getContainedStack();
                 newItemStack = itemStack.copy();
                 final ITuple<Integer, Integer> containerRange = findNextInventoryIndices(context.getInstance(), slotBlockOut);
 
@@ -100,7 +100,7 @@ public final class BlockOutContainerLogic
         boolean slotFound = false;
         int currentSlotIndex = context.getContext().getReverseDirection() ? context.getContext().getEndIndex() - 1 : context.getContext().getStartIndex();
         ISlot<?> slot;
-        IItemStack stackInSlot;
+        ItemStackstackInSlot;
         if (context.getContext().getStack().isStackable())
         {
             while (context.getContext().getStack().getCount() > 0 && (!context.getContext().getReverseDirection() && currentSlotIndex < context.getContext().getEndIndex()

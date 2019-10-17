@@ -1,17 +1,17 @@
 package com.ldtteam.blockout.style.definitions;
 
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.Collection;
 
 public class StylesDefinition
 {
 
-    private final Collection<IIdentifier> styleLocations;
+    private final Collection<ResourceLocation> styleLocations;
 
-    public StylesDefinition(final Collection<IIdentifier> styleLocations) {this.styleLocations = styleLocations;}
+    public StylesDefinition(final Collection<ResourceLocation> styleLocations) {this.styleLocations = styleLocations;}
 
-    public Collection<IIdentifier> getStyleLocations()
+    public Collection<ResourceLocation> getStyleLocations()
     {
         return styleLocations;
     }

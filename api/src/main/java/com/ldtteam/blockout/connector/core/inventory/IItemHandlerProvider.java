@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.connector.core.inventory;
 
-import com.ldtteam.jvoxelizer.item.handling.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ public interface IItemHandlerProvider extends Serializable
      * @return The id.
      */
     @NotNull
-    IIdentifier getId();
+    ResourceLocation getId();
 
     /**
      * Method to get the {@link IItemHandler} from this provider.

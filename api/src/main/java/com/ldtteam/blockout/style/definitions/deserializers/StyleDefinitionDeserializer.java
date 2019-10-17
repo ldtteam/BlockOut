@@ -3,9 +3,9 @@ package com.ldtteam.blockout.style.definitions.deserializers;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.ldtteam.blockout.style.definitions.StyleDefinition;
-import com.ldtteam.blockout.util.json.IdentifierDeserializer;
+import com.ldtteam.blockout.util.json.ResourceLocationDeserializer;
 import com.ldtteam.blockout.util.stream.StreamHelper;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -15,8 +15,8 @@ public class StyleDefinitionDeserializer implements JsonDeserializer<StyleDefini
 {
     public static final  Type                        CONST_STYLE_DEFINTION_TYPE = new TypeToken<StyleDefinition>() {}.getType();
     private static final Gson                        CONST_GSON                 = new GsonBuilder()
-                                                                                    .registerTypeAdapter(IdentifierDeserializer.CONST_IDENTIFIER_TYPE,
-                                                                                      IdentifierDeserializer.getInstance())
+                                                                                    .registerTypeAdapter(ResourceLocationDeserializer.CONST_RESOURCELOCATION_TYPE,
+                                                                                      ResourceLocationDeserializer.getInstance())
                                                                                     .create();
     private static       StyleDefinitionDeserializer ourInstance                = new StyleDefinitionDeserializer();
 
@@ -44,16 +44,16 @@ public class StyleDefinitionDeserializer implements JsonDeserializer<StyleDefini
             throw new JsonParseException("Style Definition needs an id.");
         }
 
-        final IIdentifier id = CONST_GSON.fromJson(object.get("id"), IdentifierDeserializer.CONST_IDENTIFIER_TYPE);
+        final ResourceLocation id = CONST_GSON.fromJson(object.get("id"), ResourceLocationDeserializer.CONST_RESOURCELOCATION_TYPE);
 
         if (!object.has("types") || !object.get("types").isJsonArray())
         {
             throw new JsonParseException("Style Definition needs a types array.");
         }
 
-        final Collection<IIdentifier> resourceTypeLocations =
+        final Collection<ResourceLocation> resourceTypeLocations =
           StreamHelper.getJsonArrayAsStream(object.get("types").getAsJsonArray())
-            .map(e -> (IIdentifier) CONST_GSON.fromJson(e, IdentifierDeserializer.CONST_IDENTIFIER_TYPE))
+            .map(e -> (ResourceLocation) CONST_GSON.fromJson(e, ResourceLocationDeserializer.CONST_RESOURCELOCATION_TYPE))
             .collect(Collectors.toList());
 
         return new StyleDefinition(id, resourceTypeLocations);

@@ -16,9 +16,9 @@ import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.world.World;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,14 +67,14 @@ public class ProxyHolder implements IProxy
 
     @Override
     @NotNull
-    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
+    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
         return proxy.getResourceStream(location);
     }
 
     @Override
     @NotNull
-    public Vector2d getImageSize(@NotNull final IIdentifier location)
+    public Vector2d getImageSize(@NotNull final ResourceLocation location)
     {
         return proxy.getImageSize(location);
     }
@@ -95,7 +95,7 @@ public class ProxyHolder implements IProxy
 
     @Override
     @NotNull
-    public IDimension getDimensionFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final int dimId)
     {
         return proxy.getDimensionFromDimensionId(dimId);
     }
@@ -109,7 +109,7 @@ public class ProxyHolder implements IProxy
 
     @Override
     @Nullable
-    public IFontRenderer getFontRenderer()
+    public FontRenderer getFontRenderer()
     {
         return proxy.getFontRenderer();
     }
