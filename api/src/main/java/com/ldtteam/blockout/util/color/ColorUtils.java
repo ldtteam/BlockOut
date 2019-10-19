@@ -169,25 +169,25 @@ public final class ColorUtils
     }
 
     @NotNull
-    public static IColor convertToColor(@NotNull final String input)
+    public static Color convertToColor(@NotNull final String input)
     {
         if (input.isEmpty())
         {
-            return IColor.create(nameToColorMap.get("white"));
+            return new Color(nameToColorMap.get("white"));
         }
 
         if (nameToColorMap.containsKey(input.toLowerCase()))
         {
-            return IColor.create(nameToColorMap.get(input.toLowerCase()));
+            return new Color(nameToColorMap.get(input.toLowerCase()));
         }
 
         try
         {
-            return IColor.create(Integer.parseInt(input));
+            return new Color(Integer.parseInt(input));
         }
         catch (Exception e)
         {
-            return IColor.create(nameToColorMap.get("white"));
+            return new Color(nameToColorMap.get("white"));
         }
     }
 }
