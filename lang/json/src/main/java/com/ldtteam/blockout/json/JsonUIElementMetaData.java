@@ -3,7 +3,6 @@ package com.ldtteam.blockout.json;
 import com.google.gson.JsonObject;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,9 +1,8 @@
 package com.ldtteam.blockout.json;
 
-import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.discovery.IJVoxModPlugin;
+//TODO Fix this, this needs to be a mod that gets loaded and is a child of BlockOutMain.
 
-public class BlockOutJson implements IJVoxModPlugin
+/*public class BlockOutJson implements IJVoxModPlugin
 {
     @Override
     public String getTargetModId()
@@ -16,4 +15,4 @@ public class BlockOutJson implements IJVoxModPlugin
     {
         ProxyHolder.getInstance().getLoaderManager().registerLoader(new JsonLoader());
     }
-}
+}*/

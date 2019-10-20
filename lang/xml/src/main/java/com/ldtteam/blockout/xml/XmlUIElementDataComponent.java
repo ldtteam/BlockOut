@@ -5,8 +5,9 @@ import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.core.IUIElementMetaData;
 import com.ldtteam.blockout.loader.core.component.ComponentType;
 import com.ldtteam.blockout.loader.core.component.IUIElementDataComponent;
+import com.ldtteam.blockout.util.stream.CollectorHelper;
 import com.ldtteam.blockout.xml.util.XmlStreamSupport;
-import com.ldtteam.jvoxelizer.util.tuple.ITuple;
+import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Node;
@@ -152,8 +153,8 @@ public class XmlUIElementDataComponent implements IUIElementDataComponent
     {
         return XmlStreamSupport.streamNodeList(node.getChildNodes())
                  .filter(childNode -> !excludeNodeNamedPrefixedChildren || !childNode.getNodeName().startsWith(node.getPrefix()))
-          .map(childNode -> ITuple.create(childNode.getNodeName(), new XmlUIElementDataComponent(childNode, false)))
-          .collect(Collectors.toMap(ITuple::getFirst, ITuple::getSecond));
+          .map(childNode -> new Tuple<String, IUIElementDataComponent>(childNode.getNodeName(), new XmlUIElementDataComponent(childNode, false)))
+          .collect(CollectorHelper.tupleToMapCollector());
     }
 
     /**

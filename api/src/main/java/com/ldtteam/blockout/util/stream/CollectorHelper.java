@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.util.stream;
 
+import net.minecraft.util.Tuple;
+
 import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -17,6 +19,14 @@ public final class CollectorHelper
         return Collectors.toMap(
           Map.Entry::getKey,
           Map.Entry::getValue
+        );
+    }
+
+    public static <K,V> Collector<Tuple<K, V>, ?, Map<K, V>> tupleToMapCollector()
+    {
+        return Collectors.toMap(
+          kvTuple -> kvTuple.getA(),
+          kvTuple -> kvTuple.getB()
         );
     }
 }
