@@ -4,7 +4,7 @@ import com.esotericsoftware.reflectasm.MethodAccess;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.util.tuple.ITuple;
+import net.minecraft.util.Tuple;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +19,8 @@ import java.util.function.Function;
 public final class PropertyCreationHelper
 {
     //Caches used to minimize heavy reflective look ups, but keep memory footprint relatively low.
-    private static final Cache<ITuple<Class, String>, Optional<ITuple<MethodAccess, Integer>>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
-    private static final Cache<ITuple<Class, String>, Optional<ITuple<MethodAccess, Integer>>> SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>> SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
 
     private PropertyCreationHelper()
     {
@@ -134,11 +134,11 @@ public final class PropertyCreationHelper
     {
         final Optional<Function<Object, T>> getter = getMethodName.map(name -> o -> {
             final Class<?> clazz = o.getClass();
-            final Optional<ITuple<MethodAccess, Integer>> getterMethod = getGetter(clazz, name);
+            final Optional<Tuple<MethodAccess, Integer>> getterMethod = getGetter(clazz, name);
             return getterMethod.map(method -> {
                 try
                 {
-                    return (T) method.getFirst().invoke(o, method.getSecond());
+                    return (T) method.getA().invoke(o, method.getB());
                 }
                 catch (Exception e)
                 {
@@ -150,11 +150,11 @@ public final class PropertyCreationHelper
 
         final Optional<BiConsumer<Object, T>> setter = setMethodName.map(name -> (o, t) -> {
             final Class<?> clazz = o.getClass();
-            final Optional<ITuple<MethodAccess, Integer>> setterMethod = getSetter(clazz, name);
+            final Optional<Tuple<MethodAccess, Integer>> setterMethod = getSetter(clazz, name);
             setterMethod.ifPresent(method -> {
                 try
                 {
-                    method.getFirst().invoke(o, method.getSecond(), t);
+                    method.getA().invoke(o, method.getB(), t);
                 }
                 catch (Exception e)
                 {
@@ -166,7 +166,7 @@ public final class PropertyCreationHelper
         return create(getter, setter, true);
     }
 
-    private static Optional<ITuple<MethodAccess, Integer>> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
+    private static Optional<Tuple<MethodAccess, Integer>> getGetter(@Nullable final Class<?> targetClass, @NotNull final String getMethodName)
     {
         if (targetClass == null)
         {
@@ -175,13 +175,13 @@ public final class PropertyCreationHelper
 
         try
         {
-            return GETTER_CACHE.get(ITuple.create(targetClass, getMethodName), () -> {
+            return GETTER_CACHE.get(new Tuple<>(targetClass, getMethodName), () -> {
                 try
                 {
                     final MethodAccess methodAccess = MethodAccess.get(targetClass);
                     final Integer accessIndex = methodAccess.getIndex(getMethodName);
 
-                    return Optional.of(ITuple.create(methodAccess, accessIndex));
+                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
                 }
                 catch (Exception ex)
                 {
@@ -195,7 +195,7 @@ public final class PropertyCreationHelper
         }
     }
 
-    private static Optional<ITuple<MethodAccess, Integer>> getSetter(@Nullable final Class<?> targetClass, @NotNull final String setMethodName)
+    private static Optional<Tuple<MethodAccess, Integer>> getSetter(@Nullable final Class<?> targetClass, @NotNull final String setMethodName)
     {
         if (targetClass == null)
         {
@@ -204,13 +204,13 @@ public final class PropertyCreationHelper
 
         try
         {
-            return SETTER_CACHE.get(ITuple.create(targetClass, setMethodName), () -> {
+            return SETTER_CACHE.get(new Tuple<>(targetClass, setMethodName), () -> {
                 try
                 {
                     final MethodAccess methodAccess = MethodAccess.get(targetClass);
                     final Integer accessIndex = methodAccess.getIndex(setMethodName, 1);
 
-                    return Optional.of(ITuple.create(methodAccess, accessIndex));
+                    return Optional.of(new Tuple<>(methodAccess, accessIndex));
                 }
                 catch (Exception ex)
                 {
