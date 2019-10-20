@@ -1,16 +1,16 @@
 package com.ldtteam.blockout.helpers.template;
 
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.Objects;
 
 public class GridUtilityWrapper<T>
 {
-    private final List<T>     entries;
-    private final IIdentifier template;
+    private final List<T>          entries;
+    private final ResourceLocation template;
 
-    public GridUtilityWrapper(final List<T> entries, final IIdentifier template)
+    public GridUtilityWrapper(final List<T> entries, final ResourceLocation template)
     {
         this.entries = entries;
         this.template = template;
@@ -43,7 +43,7 @@ public class GridUtilityWrapper<T>
         return entries;
     }
 
-    public IIdentifier getTemplate()
+    public ResourceLocation getTemplate()
     {
         return template;
     }

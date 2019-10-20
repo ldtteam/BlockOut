@@ -18,7 +18,7 @@ import com.ldtteam.blockout.loader.core.IUIElementDataBuilder;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,7 +112,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
      */
     @NotNull
     @Override
-    public IIdentifier getStyleId()
+    public ResourceLocation getStyleId()
     {
         return style.get(this);
     }
@@ -550,11 +550,11 @@ public abstract class AbstractSimpleUIElement implements IUIElement
             final IDependencyObject<ResourceLocation> style = elementData.getMetaData().getParent().map(parent -> elementData.getFromRawDataWithProperty(CONST_STYLE_ID, engine,
               PropertyCreationHelper.createFromOptional(o -> parent.getStyleId(), null,
                 true
-              ), IIdentifier.create(CONST_DEFAULT), IIdentifier.class))
+              ), new ResourceLocation(CONST_DEFAULT), ResourceLocation.class))
                                                            .orElse(elementData.getFromRawDataWithDefault(CONST_STYLE_ID,
                                                              engine,
-                                                             IIdentifier.create(CONST_DEFAULT),
-                                                             IIdentifier.class));
+                                                             new ResourceLocation(CONST_DEFAULT),
+                                                             ResourceLocation.class));
             final IDependencyObject<EnumSet<Alignment>> alignments =
               elementData.getFromRawDataWithDefault(CONST_ALIGNMENT, engine, EnumSet.of(Alignment.LEFT, Alignment.TOP), ALIGNMENT_ENUMSET_TYPE);
             final IDependencyObject<Dock> dock = elementData.getFromRawDataWithDefault(CONST_DOCK, engine, Dock.NONE, Dock.class, Dock.class); //We need it twice, sorry.

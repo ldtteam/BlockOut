@@ -16,7 +16,7 @@ import com.ldtteam.blockout.event.IEventHandler;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,13 +31,13 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
     private final UUID uniqueIdentifier = UUID.randomUUID();
 
     @NotNull
-    protected final String                         type;
+    protected final String                              type;
     @NotNull
-    protected final String                         id;
+    protected final String                              id;
     @NotNull
     public          IDependencyObject<ResourceLocation> style;
     @NotNull
-    protected       IUIElementHost                 parent;
+    protected       IUIElementHost                      parent;
 
     @NotNull
     public IDependencyObject<EnumSet<Alignment>> alignments  = DependencyObjectHelper.createFromValue(EnumSet.of(Alignment.NONE));
@@ -128,7 +128,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
      */
     @NotNull
     @Override
-    public IIdentifier getStyleId()
+    public ResourceLocation getStyleId()
     {
         return style.get(this);
     }

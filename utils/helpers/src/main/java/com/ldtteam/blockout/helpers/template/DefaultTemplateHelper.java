@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.helpers.template;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ public class DefaultTemplateHelper
 {
     public static List<GridUtilityWrapper<SlotUtilityWrapper>> generateSlotGrid(
       @NotNull final IItemHandler iItemHandler,
-      @NotNull final IIdentifier inventoryId,
-      @NotNull final IIdentifier texture,
+      @NotNull final ResourceLocation inventoryId,
+      @NotNull final ResourceLocation texture,
       @NotNull final int width
     )
     {
@@ -25,7 +25,7 @@ public class DefaultTemplateHelper
             texture
           ),
           width,
-          IIdentifier.create("template:slot")
+          new ResourceLocation("template:slot")
         );
     }
 
@@ -41,7 +41,7 @@ public class DefaultTemplateHelper
     public static <T> List<GridUtilityWrapper<T>> generateGrid(
       @NotNull final List<T> input,
       @NotNull final int width,
-      @NotNull final IIdentifier entryTemplateId
+      @NotNull final ResourceLocation entryTemplateId
     )
     {
         final List<GridUtilityWrapper<T>> gridList = new ArrayList<>();
@@ -57,10 +57,10 @@ public class DefaultTemplateHelper
 
     public static List<SlotUtilityWrapper> generateSlotUtilsFromIItemHandler(
       @NotNull final IItemHandler iItemHandler,
-      @NotNull final IIdentifier inventoryId,
-      @NotNull final IIdentifier texture
+      @NotNull final ResourceLocation inventoryId,
+      @NotNull final ResourceLocation texture
     )
     {
-        return IntStream.range(0, iItemHandler.getSize()).mapToObj(index -> new SlotUtilityWrapper(inventoryId, texture, index)).collect(Collectors.toList());
+        return IntStream.range(0, iItemHandler.getSlots()).mapToObj(index -> new SlotUtilityWrapper(inventoryId, texture, index)).collect(Collectors.toList());
     }
 }

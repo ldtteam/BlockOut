@@ -2,18 +2,18 @@ package com.ldtteam.blockout.helpers.inventory;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
-import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.element.advanced.TemplateInstance;
 import com.ldtteam.blockout.helpers.template.DefaultTemplateHelper;
-import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.common.capability.ICapability;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import net.minecraftforge.items.IItemHandler;
-import com.ldtteam.jvoxelizer.item.handling.IItemHandlerProvider;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -24,21 +24,21 @@ public class InventoryGridHelper
          * Initiate a standard chest control at a certain position in the IDimension.
          *
          * @param theBuilder    the builder to append it to.
-         * @param IDimension         the IDimension the chest is in.
+         * @param world         the IDimension the chest is in.
          * @param chestPosition the position of the chest.
          */
         public static void initiateChestControlAtPosition(
           @NotNull final IBlockOutGuiConstructionDataBuilder theBuilder,
-          @NotNull final IDimension IDimension,
+          @NotNull final World world,
           @NotNull final String controlId,
           @NotNull final BlockPos chestPosition,
-          @NotNull final IIdentifier inventoryId,
-          @NotNull final IIdentifier slotResource)
+          @NotNull final ResourceLocation inventoryId,
+          @NotNull final ResourceLocation slotResource)
         {
             theBuilder.withControl(
               controlId,
               TemplateInstance.TemplateInstanceConstructionDataBuilder.class,
-              initiateStandardInventoryWithItemHandler(IDimension.getBlockEntity(chestPosition).getCapability(ICapability.getItemHandlerCapability(), null),
+              initiateStandardInventoryWithItemHandler(world.getTileEntity(chestPosition).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElseThrow(() -> new IllegalArgumentException("The tileentity at possition: " + chestPosition.toString() + " does not contain in inventory for side null")),
                 inventoryId,
                 slotResource,
                 9)
@@ -56,8 +56,8 @@ public class InventoryGridHelper
          */
         private static Consumer<TemplateInstance.TemplateInstanceConstructionDataBuilder> initiateStandardInventoryWithItemHandler(
           @NotNull final IItemHandler handler,
-          @NotNull final IIdentifier inventoryId,
-          @NotNull final IIdentifier slotResource,
+          @NotNull final ResourceLocation inventoryId,
+          @NotNull final ResourceLocation slotResource,
           final int width)
         {
             return templateInstanceConstructionDataBuilder -> templateInstanceConstructionDataBuilder.withDependentDataContext(
@@ -80,11 +80,11 @@ public class InventoryGridHelper
         public static void initiatePlayerInventoryControl(
           @NotNull final IBlockOutGuiConstructionDataBuilder theBuilder,
           @NotNull final String controlId,
-          @NotNull final IMultiplayerPlayerEntity entityPlayer,
-          @NotNull final IIdentifier inventoryId,
+          @NotNull final ServerPlayerEntity entityPlayer,
+          @NotNull final ResourceLocation inventoryId,
           final int minSlot,
           final int maxSlot,
-          @NotNull final IIdentifier slotResource)
+          @NotNull final ResourceLocation slotResource)
         {
             theBuilder.withControl(
               controlId,
@@ -111,16 +111,21 @@ public class InventoryGridHelper
          * @return the finished data builder.
          */
         private static Consumer<TemplateInstance.TemplateInstanceConstructionDataBuilder> initiatePlayerInventoryControlForRange(
-          @NotNull final IMultiplayerPlayerEntity entityPlayer,
-          @NotNull final IIdentifier inventoryId,
-          @NotNull final IIdentifier slotResource,
+          @NotNull final ServerPlayerEntity entityPlayer,
+          @NotNull final ResourceLocation inventoryId,
+          @NotNull final ResourceLocation slotResource,
           final int width,
           final int minSlot,
           final int maxSlot)
         {
+            final IItemHandlerModifiable iItemHandlerModifiable = entityPlayer.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, Direction.DOWN)
+                                   .filter(i -> i instanceof IItemHandlerModifiable)
+                                   .map(i -> (IItemHandlerModifiable) i)
+                                   .orElseThrow(() -> new IllegalArgumentException("Can not create player inventory. Player: " + entityPlayer.getUniqueID() + " does not contain modifiable inventory on the side down!"));
+
             return initiateStandardInventoryWithItemHandler(
-              IItemHandler.ranged(
-                entityPlayer.getCapability(ICapability.getItemHandlerCapability(), IFacing.getDown()),
+              new RangedWrapper(
+                iItemHandlerModifiable,
                 minSlot,
                 maxSlot
               ),
