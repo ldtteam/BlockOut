@@ -23,9 +23,9 @@ public class EntityContext implements IContext
         this.entityId = entityId;
     }
 
-    public EntityContext(@NotNull final Entityentity)
+    public EntityContext(@NotNull final Entity entity)
     {
-        this.entityId = entity.getId();
+        this.entityId = entity.getUniqueID();
     }
 
     @Override

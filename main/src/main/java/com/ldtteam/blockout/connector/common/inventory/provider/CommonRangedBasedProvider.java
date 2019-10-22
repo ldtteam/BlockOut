@@ -3,7 +3,7 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraftforge.items.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,16 +29,16 @@ public class CommonRangedBasedProvider implements IItemHandlerProvider
 
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
-        return IIdentifier.create(id);
+        return new ResourceLocation(id);
     }
 
     @Nullable
     @Override
     public IItemHandler get(final IItemHandlerManager manager)
     {
-        final IItemHandler other = manager.getItemHandlerFromId(IIdentifier.create(wrappedId));
+        final IItemHandler other = manager.getItemHandlerFromId(new ResourceLocation(wrappedId));
 
         return IItemHandler.ranged(other, minSlot, maxSlotExlcuding);
     }

@@ -3,16 +3,15 @@ package com.ldtteam.blockout.connector.common.inventory.provider;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.common.capability.ICapability;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
 import net.minecraft.entity.Entity;
+import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraft.util.Direction;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.wrapper.EmptyHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public class CommonEntityBasedProvider implements IItemHandlerProvider
 {
@@ -22,15 +21,15 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @NotNull
     private final int     dimId;
     @NotNull
-    private final UUID    entityId;
+    private final int    entityNetworkId;
     @Nullable
     private final Direction facing;
 
-    public CommonEntityBasedProvider(@NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
+    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityNetworkId, @Nullable final Direction facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
-        this.entityId = entityId;
+        this.entityNetworkId = entityNetworkId;
         this.facing = facing;
     }
 
@@ -39,7 +38,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     {
         int result = getId().hashCode();
         result = 31 * result + dimId;
-        result = 31 * result + entityId.hashCode();
+        result = 31 * result + entityNetworkId;
         result = 31 * result + (facing != null ? facing.hashCode() : 0);
         return result;
     }
@@ -66,7 +65,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
         {
             return false;
         }
-        if (!entityId.equals(that.entityId))
+        if (entityNetworkId != that.entityNetworkId)
         {
             return false;
         }
@@ -80,9 +79,9 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
      */
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
-        return IIdentifier.create(id);
+        return new ResourceLocation(id);
     }
 
     /**
@@ -92,17 +91,14 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
-        final Entityentity = blockAccess.getLoadedEntities().stream().filter(e -> e.getId().equals(entityId)).findFirst().orElse(null);
+        final World blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
+        final Entity entity = blockAccess.getEntityByID(entityNetworkId);
 
         if (entity == null)
         {
-            return IItemHandler.empty();
+            return EmptyHandler.INSTANCE;
         }
 
-        if (!entity.hasCapability(ICapability.getItemHandlerCapability(), facing))
-            throw new IllegalStateException("Gui created with an entity inventory for an entity that has no entity.");
-
-        return entity.getCapability(ICapability.getItemHandlerCapability(), facing);
+        return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing).orElseThrow(() -> new IllegalArgumentException("Entity with network id: " + entityNetworkId + " does not have in inventory at facing: " + facing));
     }
 }

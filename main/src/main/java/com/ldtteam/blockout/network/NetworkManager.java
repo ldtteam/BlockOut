@@ -3,23 +3,38 @@ package com.ldtteam.blockout.network;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.networking.endpoint.INetworkEndpoint;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
-import com.ldtteam.jvoxelizer.networking.utils.target.INetworkTargetPoint;
-import com.ldtteam.jvoxelizer.threading.IExecutor;
-import com.ldtteam.jvoxelizer.util.distribution.IDistribution;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.UUID;
 
 public class NetworkManager
 {
-    private static INetworkEndpoint network;
+    private static final String LATEST_PROTO_VER = "1.0";
+    private static final String ACCEPTED_PROTO_VERS = LATEST_PROTO_VER;
+
+    private static SimpleChannel network;
 
     public static void init()
     {
-        network = INetworkEndpoint.create(Constants.NETWORK_NAME);
+        network = NetworkRegistry.newSimpleChannel(new ResourceLocation(Constants.NETWORK_NAME), () -> LATEST_PROTO_VER, ACCEPTED_PROTO_VERS::equals, ACCEPTED_PROTO_VERS::equals);
+
+        network.registerMessage(0,
+          BlockOutNetworkMessageWrapper.class,
+          (msg, packetBuffer) -> msg.toBytes(packetBuffer),
+          packetBuffer -> {
+            final BlockOutNetworkMessageWrapper msg = new BlockOutNetworkMessageWrapper();
+            msg.fromBytes(packetBuffer);
+            return msg;
+          },
+          (msg, context) -> {
+            msg.onArrived(context.get());
+          });
     }
 
     /**
@@ -34,7 +49,7 @@ public class NetworkManager
             return;
         }
 
-        network.sendToAll(new BlockOutNetworkMessageWrapper(message));
+        network.send(PacketDistributor.ALL.with(() -> null), new BlockOutNetworkMessageWrapper(message));
     }
 
     /**
@@ -45,7 +60,7 @@ public class NetworkManager
      */
     public static void sendTo(IBlockOutServerToClientMessage message, UUID uuid)
     {
-        sendTo(message, IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid));
+        sendTo(message, ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(uuid));
     }
 
     /**
@@ -54,14 +69,14 @@ public class NetworkManager
      * @param message The message to send
      * @param player  The player to send it to
      */
-    public static void sendTo(IBlockOutServerToClientMessage message, IMultiplayerPlayerEntity player)
+    public static void sendTo(IBlockOutServerToClientMessage message, ServerPlayerEntity player)
     {
         if (network == null)
         {
             return;
         }
 
-        network.sendTo(new BlockOutNetworkMessageWrapper(message), player);
+        network.send(PacketDistributor.PLAYER.with(() -> player), new BlockOutNetworkMessageWrapper(message));
     }
 
     /**
@@ -71,14 +86,14 @@ public class NetworkManager
      * @param point   The {
      *                if (network == null) return;@link NetworkRegistry.TargetPoint} around which to send
      */
-    public static void sendToAllAround(IBlockOutServerToClientMessage message, INetworkTargetPoint point)
+    public static void sendToAllAround(IBlockOutServerToClientMessage message, PacketDistributor.TargetPoint point)
     {
         if (network == null)
         {
             return;
         }
 
-        network.sendToAllAround(new BlockOutNetworkMessageWrapper(message), point);
+        network.send(PacketDistributor.NEAR.with(() -> point), new BlockOutNetworkMessageWrapper(message));
     }
 
     /**
@@ -87,14 +102,14 @@ public class NetworkManager
      * @param message     The message to send
      * @param dimensionId The dimension id to target
      */
-    public static void sendToDimension(IBlockOutServerToClientMessage message, int dimensionId)
+    public static void sendToDimension(IBlockOutServerToClientMessage message, DimensionType dimensionId)
     {
         if (network == null)
         {
             return;
         }
 
-        network.sendToDimension(new BlockOutNetworkMessageWrapper(message), dimensionId);
+        network.send(PacketDistributor.DIMENSION.with(() -> dimensionId), new BlockOutNetworkMessageWrapper(message));
     }
 
     /**
@@ -110,15 +125,5 @@ public class NetworkManager
         }
 
         network.sendToServer(new BlockOutNetworkMessageWrapper(message));
-    }
-
-    public static IExecutor getExecutor(final IMessageContext context)
-    {
-        if (network == null)
-        {
-            return null;
-        }
-
-        return network.getExecutorFromContext(context);
     }
 }

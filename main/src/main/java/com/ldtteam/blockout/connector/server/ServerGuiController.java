@@ -8,20 +8,16 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.inventory.BlockOutContainerData;
-import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
+import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerEntityEvent;
-import com.ldtteam.jvoxelizer.entity.living.player.IFakePlayer;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.event.manager.IEventManager;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +44,7 @@ public class ServerGuiController implements IGuiController
     @Override
     public void openUI(@NotNull final PlayerEntity player, @NotNull final IGuiKey key)
     {
-        openUI(player.getId(), key);
+        openUI(player.getUniqueID(), key);
     }
 
     @Override
@@ -65,14 +61,14 @@ public class ServerGuiController implements IGuiController
     {
         closeUI(playerId);
 
-        final IMultiplayerPlayerEntity player = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(playerId);
+        final ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(playerId);
         if (player == null)
         {
             Log.getLogger().warn("Failed to open UI for: " + playerId.toString() + ". Could not Identify player.");
             return;
         }
 
-        if (player instanceof IFakePlayer)
+        if (player instanceof FakePlayer)
         {
             //NOOP Return.
             return;
@@ -109,20 +105,20 @@ public class ServerGuiController implements IGuiController
     @Override
     public void closeUI(@NotNull final PlayerEntity player)
     {
-        closeUI(player.getId());
+        closeUI(player.getUniqueID());
     }
 
     @Override
     public void closeUI(@NotNull final UUID playerId)
     {
-        final IMultiplayerPlayerEntity player = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(playerId);
+        final ServerPlayerEntity player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(playerId);
         if (player == null)
         {
             Log.getLogger().warn("Failed to close UI for: " + playerId.toString() + ". Could not Identify player.");
             return;
         }
 
-        if (player instanceof IFakePlayer)
+        if (player instanceof FakePlayer)
         {
             //NOOP Return.
             return;
@@ -155,7 +151,7 @@ public class ServerGuiController implements IGuiController
     @Override
     public IGuiKey getOpenUI(@NotNull final PlayerEntity player)
     {
-        return getOpenUI(player.getId());
+        return getOpenUI(player.getUniqueID());
     }
 
     @Nullable
@@ -172,19 +168,20 @@ public class ServerGuiController implements IGuiController
         return openUis.get(guiKey);
     }
 
-    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final IMultiplayerPlayerEntity playerMP)
+    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final ServerPlayerEntity playerMP)
     {
-        playerMP.incrementWindowId();
-        playerMP.closeOpenContainer();
+        playerMP.getNextWindowId();
+        playerMP.closeScreen();
 
-        NetworkManager.sendTo(new OpenGuiCommandMessage(key, ProxyHolder.getInstance().getFactoryController().getDataFromElement(rootGuiElement), playerMP.getCurrentWindowId()),
+        NetworkManager.sendTo(new OpenGuiCommandMessage(key, ProxyHolder.getInstance().getFactoryController().getDataFromElement(rootGuiElement), playerMP.currentWindowId),
           playerMP);
 
-        final IContainer<BlockOutContainerData> container = BlockOutContainerLogic.create(key, openUis.get(key), playerMP.getCurrentWindowId());
-        playerMP.setOpenContainer(container);
-        playerMP.getOpenContainer().addListener(playerMP);
+        final BlockOutContainer container = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
+        playerMP.openContainer = container;
+        playerMP.openContainer.addListener(playerMP);
 
-        IEventManager.post(IPlayerEntityEvent.IContainerEvent.IOpen.create(playerMP, playerMP.getOpenContainer()));
+
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.player.PlayerContainerEvent.Open(playerMP, playerMP.openContainer));
     }
 
     /**

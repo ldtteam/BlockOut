@@ -7,6 +7,7 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "https://files.minecraftforge.net/maven" }
+        mavenLocal()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -29,6 +30,8 @@ project.allprojects(new Action<Project>() {
             leafProjects.add(candidate)
     }
 })
+
+def globalAT = file('main/src/main/resources/META-INF/accesstransformer.cfg');
 
 //We only configure the leaf projects. We do not care about the root project or any inbetween project.
 configure(leafProjects) {projectToConfigure ->
@@ -70,12 +73,9 @@ configure(leafProjects) {projectToConfigure ->
     }
 
     minecraft {
-        // The mappings can be changed at any time, and must be in the following format.
-        // snapshot_YYYYMMDD   Snapshot are built nightly.
-        // stable_#            Stables are built at the discretion of the MCP team.
-        // Use non-default mappings at your own risk. they may not always work.
-        // Simply re-run your setup task after changing the mappings to update your workspace.
         mappings channel: 'snapshot', version: '20190719-1.14.3'
+
+        accessTransformer = globalAT
     }
 
     //All projects should be able to shade artifacts into them selfs.

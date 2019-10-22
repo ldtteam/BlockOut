@@ -4,7 +4,7 @@ import com.google.common.io.CharStreams;
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Objects;
 
-public class CommonIIdentifierBasedGuiDefinitionLoader implements IGuiDefinitionLoader
+public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefinitionLoader
 {
 
     @NotNull
@@ -20,15 +20,15 @@ public class CommonIIdentifierBasedGuiDefinitionLoader implements IGuiDefinition
     @NotNull
     private final String path;
 
-    private CommonIIdentifierBasedGuiDefinitionLoader()
+    private CommonResourceLocationBasedGuiDefinitionLoader()
     {
         this.domain = "";
         this.path = "";
     }
 
-    public CommonIIdentifierBasedGuiDefinitionLoader(final IIdentifier location)
+    public CommonResourceLocationBasedGuiDefinitionLoader(final ResourceLocation location)
     {
-        this.domain = location.getDomain();
+        this.domain = location.getNamespace();
         this.path = location.getPath();
     }
 
@@ -55,9 +55,9 @@ public class CommonIIdentifierBasedGuiDefinitionLoader implements IGuiDefinition
     }
 
     @NotNull
-    public IIdentifier getLocation()
+    public ResourceLocation getLocation()
     {
-        return IIdentifier.create(domain, path);
+        return new ResourceLocation(domain, path);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CommonIIdentifierBasedGuiDefinitionLoader implements IGuiDefinition
         {
             return false;
         }
-        final CommonIIdentifierBasedGuiDefinitionLoader that = (CommonIIdentifierBasedGuiDefinitionLoader) o;
+        final CommonResourceLocationBasedGuiDefinitionLoader that = (CommonResourceLocationBasedGuiDefinitionLoader) o;
         return Objects.equals(getLocation(), that.getLocation());
     }
 }

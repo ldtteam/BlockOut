@@ -13,8 +13,8 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             return withDependency("inventoryId", inventoryId);
         }
 
-        public SlotConstructionDataBuilder withInventoryId(@NotNull final IIdentifier inventoryId)
+        public SlotConstructionDataBuilder withInventoryId(@NotNull final ResourceLocation inventoryId)
         {
             return withDependency("inventoryId", DependencyObjectHelper.createFromValue(inventoryId));
         }
@@ -61,7 +61,7 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
             return withDependency("backgroundImageResource", backgroundImageResource);
         }
 
-        public SlotConstructionDataBuilder withBackgroundImageResource(@NotNull final IIdentifier backgroundImageResource)
+        public SlotConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
         {
             return withDependency("backgroundImageResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
         }
@@ -123,12 +123,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         final ImageResource resource = getBackgroundImage();
         final Vector2d scalingFactor = resource.getScalingFactor(size);
 
-        IOpenGl.pushMatrix();
-        IOpenGl.scale(scalingFactor.getX(), scalingFactor.getY(), 1f);
-        IOpenGl.disableLighting();
-        IOpenGl.disableDepth();
-        IOpenGl.disableAlpha();
-        IOpenGl.enableBlend();
+        GlStateManager.pushMatrix();
+        GlStateManager.scaled(scalingFactor.getX(), scalingFactor.getY(), 1d);
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepthTest();
+        GlStateManager.disableAlphaTest();
+        GlStateManager.enableBlend();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -137,11 +137,11 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
-        IOpenGl.disableBlend();
-        IOpenGl.enableAlpha();
-        IOpenGl.enableLighting();
-        IOpenGl.enableDepth();
-        IOpenGl.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepthTest();
+        GlStateManager.popMatrix();
 
         controller.drawSlotContent(this);
         controller.drawSlotMouseOverlay(this);
@@ -160,23 +160,23 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
     }
 
     @NotNull
-    public IIdentifier getBackgroundImageResource()
+    public ResourceLocation getBackgroundImageResource()
     {
         return backgroundImageResource.get(this);
     }
 
-    void setBackgroundImageResource(@NotNull final IIdentifier location)
+    void setBackgroundImageResource(@NotNull final ResourceLocation location)
     {
         backgroundImageResource.set(this, location);
     }
 
     @NotNull
-    public IIdentifier getInventoryId()
+    public ResourceLocation getInventoryId()
     {
         return inventoryId.get(this);
     }
 
-    void setInventoryId(@NotNull final IIdentifier inventoryId)
+    void setInventoryId(@NotNull final ResourceLocation inventoryId)
     {
         this.inventoryId.set(this, inventoryId);
     }
@@ -210,9 +210,9 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         {
             super(Slot.class, KEY_SLOT, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> inventoryId =
-                  elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                  elementData.getFromRawDataWithDefault(CONST_INVENTORY_ID, engine, new ResourceLocation(MISSING), ResourceLocation.class);
                 final IDependencyObject<Integer> inventoryIndex = elementData.getFromRawDataWithDefault(CONST_INVENTORY_INDEX, engine, -1, Integer.class);
-                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                final IDependencyObject<ResourceLocation> icon = elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, new ResourceLocation(MISSING), ResourceLocation.class);
 
                 final Slot element = new Slot(
                   id,
@@ -231,8 +231,8 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource(), IIdentifier.class)
-                                       .addComponent(CONST_INVENTORY_ID, element.getInventoryId(), IIdentifier.class)
+                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackgroundImageResource(), ResourceLocation.class)
+                                       .addComponent(CONST_INVENTORY_ID, element.getInventoryId(), ResourceLocation.class)
                                        .addComponent(CONST_INVENTORY_INDEX, element.getInventoryIndex(), Integer.class));
         }
     }

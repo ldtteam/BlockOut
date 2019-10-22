@@ -12,13 +12,12 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -183,7 +182,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
             return;
         }
 
-        IOpenGl.pushMatrix();
+        GlStateManager.pushMatrix();
 
         if (getOrientation() == Orientation.TOP_BOTTOM)
         {
@@ -193,7 +192,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
             if (maxOffset < 1)
             {
-                IOpenGl.popMatrix();
+                GlStateManager.popMatrix();
                 return;
             }
 
@@ -218,7 +217,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
 
             if (maxOffset < 1)
             {
-                IOpenGl.popMatrix();
+                GlStateManager.popMatrix();
                 return;
             }
 
@@ -236,7 +235,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
             drawSrollbarForeground(controller, scrollBarBox);
         }
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -255,13 +254,13 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     {
         final ImageResource resource = getScrollBarBackground();
 
-        IOpenGl.pushMatrix();
+        GlStateManager.pushMatrix();
 
-        IOpenGl.enableAlpha();
-        IOpenGl.enableBlend();
-        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        IOpenGl.color(1, 1, 1);
+        Color.resetOpenGLColoring();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(scrollBox.getLocalOrigin(),
@@ -270,23 +269,23 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
           resource.getSize(),
           resource.getFileSize());
 
-        IOpenGl.disableBlend();
-        IOpenGl.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlphaTest();
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     private void drawSrollbarForeground(@NotNull final IRenderingController controller, @NotNull final BoundingBox scrollBarBox)
     {
         final ImageResource resource = getScrollBarForeground();
 
-        IOpenGl.pushMatrix();
+        GlStateManager.pushMatrix();
 
-        IOpenGl.enableAlpha();
-        IOpenGl.enableBlend();
-        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        IOpenGl.color(1, 1, 1);
+        Color.resetOpenGLColoring();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(scrollBarBox.getLocalOrigin(),
@@ -295,10 +294,10 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
           resource.getSize(),
           resource.getFileSize());
 
-        IOpenGl.disableBlend();
-        IOpenGl.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlphaTest();
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     @NotNull
@@ -314,23 +313,23 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     }
 
     @NotNull
-    public IIdentifier getScrollBarBackgroundResource()
+    public ResourceLocation getScrollBarBackgroundResource()
     {
         return scrollBarBackgroundResource.get(this);
     }
 
-    public void setScrollBarBackgroundResource(@NotNull final IIdentifier scrollBarBackground)
+    public void setScrollBarBackgroundResource(@NotNull final ResourceLocation scrollBarBackground)
     {
         this.scrollBarBackgroundResource.set(this, scrollBarBackground);
     }
 
     @NotNull
-    public IIdentifier getScrollBarForegroundResource()
+    public ResourceLocation getScrollBarForegroundResource()
     {
         return scrollBarForegroundResource.get(this);
     }
 
-    public void setScrollBarForegroundResource(@NotNull final IIdentifier scrollBarForeground)
+    public void setScrollBarForegroundResource(@NotNull final ResourceLocation scrollBarForeground)
     {
         this.scrollBarForegroundResource.set(this, scrollBarForeground);
     }

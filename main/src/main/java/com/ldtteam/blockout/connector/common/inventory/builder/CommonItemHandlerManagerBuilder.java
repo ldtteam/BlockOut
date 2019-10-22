@@ -9,7 +9,7 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import net.minecraft.util.Direction;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +33,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final Direction facing)
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final Direction facing)
     {
         return withProvider(new CommonTileBasedProvider(id, dimId, x, y, z, facing));
     }
@@ -41,7 +41,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final IIdentifier id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
     {
         return withProvider(new CommonEntityBasedProvider(id, dimId, entityId, facing));
     }
@@ -49,7 +49,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withWrapped(
-      @NotNull final IIdentifier id, @NotNull final IIdentifier wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding)
+      @NotNull final ResourceLocation id, @NotNull final ResourceLocation wrappedId, @NotNull final int minSlot, @NotNull final int maxSlotExcluding)
     {
         return withProvider(new CommonRangedBasedProvider(id.toString(), wrappedId.toString(), minSlot, maxSlotExcluding));
     }

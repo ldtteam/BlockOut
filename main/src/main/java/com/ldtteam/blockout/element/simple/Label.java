@@ -16,8 +16,11 @@ import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
 import com.ldtteam.jvoxelizer.translation.ITranslator;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.ResourceLocation;
 import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
+import net.minecraftforge.fml.ForgeI18n;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,20 +74,22 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     {
         controller.getScissoringController().focus(this);
 
-        IOpenGl.pushMatrix();
-        IOpenGl.disableStandardItemLighting();
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
 
-        IOpenGl.enableAlpha();
-        IOpenGl.enableBlend();
-        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         ProxyHolder.getInstance()
           .getFontRenderer()
           .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), 0);
 
-        IOpenGl.disableBlend();
-        IOpenGl.disableAlpha();
-        IOpenGl.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.popMatrix();
+
+        RenderHelper.enableStandardItemLighting();
 
         controller.getScissoringController().pop();
     }
@@ -108,7 +113,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                 break;
             }
 
-            rawContents = rawContents.replace("${" + keyGroupMatching + "}", ITranslator.format(keyGroupMatching));
+            rawContents = rawContents.replace("${" + keyGroupMatching + "}", ForgeI18n.format(keyGroupMatching));
             contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 

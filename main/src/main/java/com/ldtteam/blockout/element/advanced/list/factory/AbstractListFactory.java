@@ -11,7 +11,7 @@ import com.ldtteam.blockout.element.values.Orientation;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,9 +34,9 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled, templateResource, source, orientation, dataBoundMode, scrollOffset) -> {
 
               final IDependencyObject<ResourceLocation> scrollBarBackgroundResource =
-                elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                elementData.getFromRawDataWithDefault(CONST_SCROLL_BACKGROUND, engine, new ResourceLocation(MISSING), ResourceLocation.class);
               final IDependencyObject<ResourceLocation> scrollBarForegroundResource =
-                elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                elementData.getFromRawDataWithDefault(CONST_SCROLL_FOREGROUND, engine, new ResourceLocation(MISSING), ResourceLocation.class);
               final IDependencyObject<Boolean> showScrollBar = elementData.getFromRawDataWithDefault(CONST_SHOW_BAR, engine, true, Boolean.class);
 
               return constructor.constructUsing(
@@ -65,8 +65,8 @@ public class AbstractListFactory<U extends List> extends AbstractChildInstantiat
           },
           (element, builder) -> {
               builder
-                .addComponent(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource(), IIdentifier.class)
-                .addComponent(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource(), IIdentifier.class)
+                .addComponent(CONST_SCROLL_BACKGROUND, element.getScrollBarBackgroundResource(), ResourceLocation.class)
+                .addComponent(CONST_SCROLL_FOREGROUND, element.getScrollBarForegroundResource(), ResourceLocation.class)
                 .addComponent(CONST_SHOW_BAR, element.getShowScrollBar(), Boolean.class);
 
               writer.write(element, builder);

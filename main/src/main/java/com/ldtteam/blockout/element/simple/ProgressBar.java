@@ -16,7 +16,7 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -197,23 +197,23 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
     }
 
     @NotNull
-    public IIdentifier getBackGroundResource()
+    public ResourceLocation getBackGroundResource()
     {
         return backGroundResource.get(this);
     }
 
-    public void setBackGroundResource(@NotNull final IIdentifier backGroundResource)
+    public void setBackGroundResource(@NotNull final ResourceLocation backGroundResource)
     {
         this.backGroundResource.set(this, backGroundResource);
     }
 
     @NotNull
-    public IIdentifier getForeGroundResource()
+    public ResourceLocation getForeGroundResource()
     {
         return foreGroundResource.get(this);
     }
 
-    public void setForeGroundResource(@NotNull final IIdentifier foreGroundResource)
+    public void setForeGroundResource(@NotNull final ResourceLocation foreGroundResource)
     {
         this.foreGroundResource.set(this, foreGroundResource);
     }
@@ -279,7 +279,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withBackgroundImageResource(@NotNull final IIdentifier backgroundImageResource)
+        public ProgressBarConstructionDataBuilder withBackgroundImageResource(@NotNull final ResourceLocation backgroundImageResource)
         {
             return withDependency("backGroundResource", DependencyObjectHelper.createFromValue(backgroundImageResource));
         }
@@ -291,7 +291,7 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         }
 
         @NotNull
-        public ProgressBarConstructionDataBuilder withForegroundImageResource(@NotNull final IIdentifier foregroundImageResource)
+        public ProgressBarConstructionDataBuilder withForegroundImageResource(@NotNull final ResourceLocation foregroundImageResource)
         {
             return withDependency("foreGroundResource", DependencyObjectHelper.createFromValue(foregroundImageResource));
         }
@@ -348,9 +348,9 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
         {
             super(ProgressBar.class, KEY_PROGRESS_BAR, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> background =
-                  elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                  elementData.getFromRawDataWithDefault(CONST_BACKGROUND_IMAGE, engine, new ResourceLocation(MISSING), ResourceLocation.class);
                 final IDependencyObject<ResourceLocation> foreground =
-                  elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                  elementData.getFromRawDataWithDefault(CONST_FOREGROUND_IMAGE, engine, new ResourceLocation(MISSING), ResourceLocation.class);
                 final IDependencyObject<Double> min = elementData.getFromRawDataWithDefault(CONST_MIN, engine, 0d, Double.class);
                 final IDependencyObject<Double> max = elementData.getFromRawDataWithDefault(CONST_MAX, engine, 100d, Double.class);
                 final IDependencyObject<Double> value = elementData.getFromRawDataWithDefault(CONST_VALUE, engine, 50d, Double.class);
@@ -377,8 +377,8 @@ public class ProgressBar extends AbstractSimpleUIElement implements IDrawableUIE
 
                 return element;
             }, (element, builder) -> builder
-                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackGroundResource(), IIdentifier.class)
-                                       .addComponent(CONST_FOREGROUND_IMAGE, element.getForeGroundResource(), IIdentifier.class)
+                                       .addComponent(CONST_BACKGROUND_IMAGE, element.getBackGroundResource(), ResourceLocation.class)
+                                       .addComponent(CONST_FOREGROUND_IMAGE, element.getForeGroundResource(), ResourceLocation.class)
                                        .addComponent(CONST_MIN, element.getMin(), Double.class)
                                        .addComponent(CONST_MAX, element.getMax(), Double.class)
                                        .addComponent(CONST_VALUE, element.getValue(), Double.class)

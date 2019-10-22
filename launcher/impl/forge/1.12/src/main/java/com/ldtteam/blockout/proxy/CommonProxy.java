@@ -36,7 +36,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.dimension.Dimension;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -95,7 +95,7 @@ public class CommonProxy implements IProxy
 
     @Override
     @NotNull
-    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
+    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
         final String modId = location.getDomain().toLowerCase();
         String path = "assets/" + modId + "/" + location.getPath();
@@ -125,7 +125,7 @@ public class CommonProxy implements IProxy
 
     @NotNull
     @Override
-    public Vector2d getImageSize(@NotNull final IIdentifier location)
+    public Vector2d getImageSize(@NotNull final ResourceLocation location)
     {
         return ImageUtil.getImageDimensions(location);
     }

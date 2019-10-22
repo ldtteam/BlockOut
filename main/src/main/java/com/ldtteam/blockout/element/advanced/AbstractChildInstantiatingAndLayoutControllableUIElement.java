@@ -24,7 +24,7 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Clamp;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -218,7 +218,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
      *
      * @return The template resource.
      */
-    public IIdentifier getTemplateResource()
+    public ResourceLocation getTemplateResource()
     {
         return templateResource.get(this);
     }
@@ -228,7 +228,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
      *
      * @param templateResource The new template resource.
      */
-    public void setTemplateResource(@NotNull final IIdentifier templateResource)
+    public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
         this.templateResource.set(this, templateResource);
         this.dataBoundMode = true;
@@ -435,8 +435,8 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
         {
             super(clz, type, (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<ResourceLocation> templateResource =
-                  elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING), IIdentifier.class);
-                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList(), IIdentifier.class);
+                  elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, new ResourceLocation(MISSING), ResourceLocation.class);
+                final IDependencyObject<Object> source = elementData.getFromRawDataWithDefault(CONST_SOURCE, engine, Lists.newArrayList(), ResourceLocation.class);
                 final Double scrollOffset = elementData.getRawWithoutBinding(CONST_SCROLLOFFSET, 0d, Double.class);
                 final IDependencyObject<Orientation> orientation = elementData.getFromRawDataWithDefault(CONST_ORIENTATION, engine, Orientation.TOP_BOTTOM, Orientation.class);
 

@@ -6,7 +6,7 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraftforge.items.IItemHandler;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.item.handling.ItemHandler;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.identifier.Identifier;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ class CustomForgeItemHandlerProvider implements IItemHandlerProvider
      */
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
         return Identifier.fromForge(wrappedForgeProvider.getId());
     }

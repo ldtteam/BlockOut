@@ -17,7 +17,7 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.modloader.IModLoader;
 import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
 import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
@@ -32,7 +32,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 {
     public static final String                      CONST_STYLE_FILE_PATH = "styles/styles.json";
     private static      SimpleFileBasedStyleManager ourInstance           = new SimpleFileBasedStyleManager();
-    private final       Map<IIdentifier, IStyle>    styles                = new HashMap();
+    private final       Map<ResourceLocation, IStyle>    styles                = new HashMap();
 
     private SimpleFileBasedStyleManager()
     {
@@ -50,7 +50,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
      */
     @NotNull
     @Override
-    public ImmutableMap<IIdentifier, IStyle> getStyles()
+    public ImmutableMap<ResourceLocation, IStyle> getStyles()
     {
         return ImmutableMap.copyOf(styles);
     }
@@ -81,7 +81,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
         resourceDomains.forEach(domain -> {
             loadingBar.step("Loading styles from: " + domain);
 
-            final IIdentifier stylesLocation = IIdentifier.create(domain.toLowerCase(), CONST_STYLE_FILE_PATH);
+            final ResourceLocation stylesLocation = new ResourceLocation(domain.toLowerCase(), CONST_STYLE_FILE_PATH);
             final StylesDefinition stylesDefinition;
             try
             {
@@ -113,7 +113,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 
                 final IProgressBar styleLoadingBar = IProgressManager.push(String.format("Loading style: %s in domain: %s", styleDefinition.getStyleId(), domain),
                   styleDefinition.getResourceTypeDefinitionLocations().size());
-                final Map<IIdentifier, IResource> resourcesForStyle =
+                final Map<ResourceLocation, IResource> resourcesForStyle =
                   styleDefinition.getResourceTypeDefinitionLocations()
                     .stream()
                     .flatMap(resourceTypeLocation -> {
@@ -149,7 +149,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                     Log.getLogger().warn("Already existing style detected. Merging and overriding...");
                     final IStyle alreadyCreatedStyle = styles.remove(styleDefinition.getStyleId());
 
-                    final Map<IIdentifier, IResource> merged = new HashMap<>(alreadyCreatedStyle.getResources());
+                    final Map<ResourceLocation, IResource> merged = new HashMap<>(alreadyCreatedStyle.getResources());
                     resourcesForStyle.forEach((key, value) -> merged.merge(key, value, (one, two) -> two));
 
                     style = new SimpleStyle(styleDefinition.getStyleId(), merged);

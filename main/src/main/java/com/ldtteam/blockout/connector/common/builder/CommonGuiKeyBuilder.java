@@ -5,7 +5,7 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.connector.common.CommonGuiKey;
 import com.ldtteam.blockout.connector.common.definition.loader.CommonClassBasedDefinitionLoader;
-import com.ldtteam.blockout.connector.common.definition.loader.CommonIIdentifierBasedGuiDefinitionLoader;
+import com.ldtteam.blockout.connector.common.definition.loader.CommonResourceLocationBasedGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.common.definition.loader.CommonWebFileBasedGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.common.inventory.builder.CommonItemHandlerManagerBuilder;
 import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
@@ -17,10 +17,10 @@ import com.ldtteam.blockout.context.ClientSideOnlyContext;
 import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
 import net.minecraft.entity.Entity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -49,9 +49,9 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder ofFile(@NotNull final IIdentifier location)
+    public IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location)
     {
-        this.guiDefinitionLoader = new CommonIIdentifierBasedGuiDefinitionLoader(location);
+        this.guiDefinitionLoader = new CommonResourceLocationBasedGuiDefinitionLoader(location);
         return this;
     }
 
@@ -114,7 +114,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forEntity(@NotNull final Entityentity)
+    public IGuiKeyBuilder forEntity(@NotNull final Entity entity)
     {
         this.context = new EntityContext(entity);
         return this;
@@ -130,7 +130,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forPosition(@NotNull final IDimension world, @NotNull final BlockPos blockPos)
+    public IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos)
     {
         this.context = new PositionContext(world, blockPos);
         return this;

@@ -1,19 +1,19 @@
 package com.ldtteam.blockout.compat;
 
 import com.ldtteam.blockout.connector.server.ServerGuiController;
-import com.ldtteam.blockout.gui.BlockOutGuiData;
-import com.ldtteam.blockout.inventory.BlockOutContainerData;
-import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
+import com.ldtteam.blockout.gui.BlockOutContainerGui;
+import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.common.gameevent.event.ITickEvent;
-import com.ldtteam.jvoxelizer.common.gameevent.event.player.IPlayerGameEvent;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
-import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.Container;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.time.StopWatch;
 
 import java.util.concurrent.TimeUnit;
@@ -22,37 +22,42 @@ public class UpdateHandler
 {
     private static Thread updateThread = null;
 
-    public static void onPlayerLoggedOut(final IPlayerGameEvent.ILoggedOutEvent event)
+    public static void onPlayerLoggedOut(final PlayerEvent.PlayerLoggedOutEvent event)
     {
-        if (event.getPlayerEntity() instanceof IMultiplayerPlayerEntity)
+        if (event.getPlayer() instanceof ServerPlayerEntity)
         {
-            IMultiplayerPlayerEntity playerMP = (IMultiplayerPlayerEntity) event.getPlayerEntity();
+            ServerPlayerEntity playerMP = (ServerPlayerEntity) event.getPlayer();
 
             ProxyHolder.getInstance().getGuiController().closeUI(playerMP);
         }
     }
 
-    public static void onTickClientTick(final ITickEvent.IClientTickEvent event)
+    public static void onTickClientTick(final TickEvent.ClientTickEvent event)
     {
-        if (event.getPhase() != ITickEvent.Phase.END)
+        if (event.phase != TickEvent.Phase.END)
         {
             return;
         }
 
-        IDistributionExecutor.onClient(() -> {
-            if (IGameEngine.getInstance().getCurrentGui() instanceof IGuiContainer && IGameEngine.getInstance().getCurrentGui().getInstanceData() instanceof BlockOutGuiData)
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+            if (Minecraft.getInstance().currentScreen instanceof BlockOutContainerGui)
             {
-                IGuiContainer<BlockOutGuiData> currentScreen = (IGuiContainer<BlockOutGuiData>) IGameEngine.getInstance().getCurrentGui();
-                currentScreen.getInstanceData().getRoot().getUiManager().getUpdateManager().updateElement(currentScreen.getInstanceData().getRoot());
+                final BlockOutContainerGui blockOutGui = (BlockOutContainerGui) Minecraft.getInstance().currentScreen;
+                blockOutGui.getInstanceData().getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getInstanceData().getRoot());
 
                 ClientTickManager.getInstance().onClientTick();
             }
         });
     }
 
-    public static void onTickServerTick(final ITickEvent.IServerTickEvent event)
+    public static void onTickServerTick(final TickEvent.ServerTickEvent event)
     {
-        IDistributionExecutor.onServer(() -> {
+        if (event.phase != TickEvent.Phase.END)
+        {
+            return;
+        }
+
+        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
             ServerGuiController guiController = (ServerGuiController) ProxyHolder.getInstance().getGuiController();
 
             guiController.getOpenUis().entrySet().forEach(e -> {
@@ -75,11 +80,11 @@ public class UpdateHandler
                     {
                         updateManager.onNetworkTick();
                         guiController.getUUIDsOfPlayersWatching(e.getKey()).forEach(uuid -> {
-                            final IContainer<?> blockOutCandidate = IGameEngine.getInstance().getCurrentServerInstance().getPlayerManager().getById(uuid).getOpenContainer();
-                            if (blockOutCandidate.getInstanceData() instanceof BlockOutContainerData)
+                            final Container blockOutCandidate = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayerByUUID(uuid).openContainer;
+                            if (blockOutCandidate instanceof BlockOutContainer)
                             {
-                                final IContainer<BlockOutContainerData> blockOutContainer = (IContainer<BlockOutContainerData>) blockOutCandidate;
-                                BlockOutContainerLogic.reinitializeSlots(blockOutContainer);
+                                final BlockOutContainer blockOutContainer = (BlockOutContainer) blockOutCandidate;
+                                blockOutContainer.reinitializeSlots();
                             }
                             else
                             {

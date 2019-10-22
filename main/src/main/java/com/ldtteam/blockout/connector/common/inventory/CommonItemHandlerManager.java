@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraftforge.items.IItemHandler;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public class CommonItemHandlerManager implements IItemHandlerManager
 
     @Nullable
     @Override
-    public IItemHandler getItemHandlerFromId(@NotNull final IIdentifier id)
+    public IItemHandler getItemHandlerFromId(@NotNull final ResourceLocation id)
     {
         if (providerMap.containsKey(id.toString()))
         {
@@ -46,7 +46,7 @@ public class CommonItemHandlerManager implements IItemHandlerManager
     @Override
     public List<ResourceLocation> getAllItemHandlerIds()
     {
-        return ImmutableList.copyOf(providerMap.keySet().stream().map(IIdentifier::create).collect(Collectors.toList()));
+        return ImmutableList.copyOf(providerMap.keySet().stream().map(ResourceLocation::create).collect(Collectors.toList()));
     }
 
     @NotNull

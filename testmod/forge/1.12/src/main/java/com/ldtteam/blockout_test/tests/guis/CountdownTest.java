@@ -6,7 +6,7 @@ import com.ldtteam.blockout.element.simple.Label;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public class CountdownTest implements IBlockOutGuiTest
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                      .ofFile(new ResourceLocation(
                                                                                                                         "blockout_test:gui/countdown_to_time.json"))
                                                                                                       .usingData(builder -> {
                                                                                                           builder.withControl("countdown",

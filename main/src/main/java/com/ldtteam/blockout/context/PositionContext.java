@@ -2,8 +2,8 @@ package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
 import com.ldtteam.blockout.util.Constants;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 public class PositionContext implements IContext
@@ -28,9 +28,9 @@ public class PositionContext implements IContext
         this.z = z;
     }
 
-    public PositionContext(@NotNull final IDimension world, @NotNull final BlockPos pos)
+    public PositionContext(@NotNull final World world, @NotNull final BlockPos pos)
     {
-        this.dimensionId = world.getId();
+        this.dimensionId = world.getDimension().getType().getId();
         this.x = pos.getX();
         this.y = pos.getY();
         this.z = pos.getZ();

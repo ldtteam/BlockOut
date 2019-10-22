@@ -16,7 +16,7 @@ import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +48,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         }
 
         @NotNull
-        public TemplateInstanceConstructionDataBuilder withTemplateResource(@NotNull final IIdentifier iconResource)
+        public TemplateInstanceConstructionDataBuilder withTemplateResource(@NotNull final ResourceLocation iconResource)
         {
             return withDependency("templateResource", DependencyObjectHelper.createFromValue(iconResource));
         }
@@ -63,7 +63,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
               KEY_TEMPLATE_INSTANCE,
               (elementData, engine, id, parent, styleId, alignments, dock, margin, padding, elementSize, dataContext, visible, enabled) -> {
                   final IDependencyObject<ResourceLocation> templateResource =
-                    elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, IIdentifier.create(MISSING), IIdentifier.class);
+                    elementData.getFromRawDataWithDefault(CONST_TEMPLATE, engine, new ResourceLocation(MISSING), ResourceLocation.class);
 
                 final TemplateInstance element = new TemplateInstance(
                   id,
@@ -87,7 +87,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
                 }
 
                 return element;
-              }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource(), IIdentifier.class));
+              }, (element, builder) -> builder.addComponent(CONST_TEMPLATE, element.getTemplateResource(), ResourceLocation.class));
         }
     }
 
@@ -122,7 +122,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
     {
         super(KEY_TEMPLATE_INSTANCE, style, id, parent);
 
-        this.templateResource = DependencyObjectHelper.createFromValue(IIdentifier.create("minecraft:missingno"));
+        this.templateResource = DependencyObjectHelper.createFromValue(new ResourceLocation("minecraft:missingno"));
         this.templateConstructionData = DependencyObjectHelper.createFromValue(new BlockOutGuiConstructionData());
     }
 
@@ -157,7 +157,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
             updateManager.markDirty();
             this.clear();
 
-            final IIdentifier resolvedTemplateResource = getTemplateResource();
+            final ResourceLocation resolvedTemplateResource = getTemplateResource();
 
             final IUIElement element = ProxyHolder.getInstance().getTemplateEngine().generateFromTemplate(
               this,
@@ -197,12 +197,12 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
         this.templateConstructionData.set(this, templateConstructionData);
     }
 
-    public IIdentifier getTemplateResource()
+    public ResourceLocation getTemplateResource()
     {
         return templateResource.get(this);
     }
 
-    public void setTemplateResource(@NotNull final IIdentifier templateResource)
+    public void setTemplateResource(@NotNull final ResourceLocation templateResource)
     {
         this.templateResource.set(this, templateResource);
     }

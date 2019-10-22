@@ -8,7 +8,7 @@ import com.ldtteam.blockout.style.core.resources.core.IDiskResource;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import static com.ldtteam.blockout.util.Constants.ResourceTypes.CONST_IMAGE_RESOURCE_TYPE;
@@ -38,12 +38,12 @@ public class ImageResource implements IDiskResource
          * @param data The data to load from.
          */
         @Override
-        public ImageResource load(@NotNull final IIdentifier id, @NotNull final JsonElement data)
+        public ImageResource load(@NotNull final ResourceLocation id, @NotNull final JsonElement data)
         {
             if (data.isJsonPrimitive())
             {
                 final String diskLocationPath = data.getAsString();
-                final IIdentifier diskLocation = IIdentifier.create(diskLocationPath);
+                final ResourceLocation diskLocation = new ResourceLocation(diskLocationPath);
                 return new ImageResource(id, diskLocation);
             }
 
@@ -60,7 +60,7 @@ public class ImageResource implements IDiskResource
             }
 
             final String diskLocationPath = data.getAsString();
-            final IIdentifier diskLocation = IIdentifier.create(diskLocationPath);
+            final ResourceLocation diskLocation = new ResourceLocation(diskLocationPath);
 
             final Vector2d offset;
             if (object.has("offset") && object.get("offset").isJsonArray())
@@ -89,23 +89,23 @@ public class ImageResource implements IDiskResource
         }
     }
 
-    private final IIdentifier diskLocation;
-    private final IIdentifier id;
+    private final ResourceLocation diskLocation;
+    private final ResourceLocation id;
     private final Vector2d         size;
     private final Vector2d         offset;
     private final Vector2d         fileSize;
 
-    public ImageResource(final IIdentifier id, final IIdentifier diskLocation)
+    public ImageResource(final ResourceLocation id, final ResourceLocation diskLocation)
     {
         this(id, diskLocation, ProxyHolder.getInstance().getImageSize(diskLocation));
     }
 
-    public ImageResource(final IIdentifier id, final IIdentifier diskLocation, final Vector2d size)
+    public ImageResource(final ResourceLocation id, final ResourceLocation diskLocation, final Vector2d size)
     {
         this(id, diskLocation, size, new Vector2d(), size);
     }
 
-    public ImageResource(final IIdentifier id, final IIdentifier diskLocation, final Vector2d size, final Vector2d offset, final Vector2d fileSize)
+    public ImageResource(final ResourceLocation id, final ResourceLocation diskLocation, final Vector2d size, final Vector2d offset, final Vector2d fileSize)
     {
         this.diskLocation = diskLocation;
         this.id = id;
@@ -141,7 +141,7 @@ public class ImageResource implements IDiskResource
      */
     @NotNull
     @Override
-    public IIdentifier getDiskLocation()
+    public ResourceLocation getDiskLocation()
     {
         return diskLocation;
     }
@@ -153,7 +153,7 @@ public class ImageResource implements IDiskResource
      */
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
         return id;
     }

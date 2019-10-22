@@ -5,7 +5,7 @@ import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiCreateWorld;
@@ -49,7 +49,7 @@ public class ClientGuiEventHandler
     {
         ProxyHolder.getInstance().getClientSideOnlyGuiController().openUI(
           PlayerEntity.fromForge(Minecraft.getMinecraft().player),
-          iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(IIdentifier.create("blockout_test:gui/button_click_test.json"))
+          iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(new ResourceLocation("blockout_test:gui/button_click_test.json"))
                               .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                   .withControl(
                                                                                     "test_click",

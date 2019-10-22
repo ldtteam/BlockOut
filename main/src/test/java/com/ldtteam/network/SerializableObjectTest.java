@@ -1,6 +1,6 @@
 package com.ldtteam.network;
 
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import com.ldtteam.test.AbstractBlockOutTest;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class SerializableObjectTest extends AbstractBlockOutTest
     @Test(expected = NotSerializableException.class)
     public void resourceLocation() throws Exception
     {
-        final IIdentifier location = IIdentifier.create("blockout", "test");
+        final ResourceLocation location = new ResourceLocation("blockout", "test");
 
         attemptObjectTest(location);
     }

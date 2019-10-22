@@ -9,7 +9,7 @@ import static com.ldtteam.blockout.util.color.ColorUtils.MARKER;
 public class Color
 {
 
-    static void resetOpenGLColoring()
+    public static void resetOpenGLColoring()
     {
         GlStateManager.color4f(1f, 1f, 1f, 1f);
     }

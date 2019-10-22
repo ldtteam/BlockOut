@@ -8,7 +8,7 @@ import com.ldtteam.jvoxelizer.common.capability.ICapability;
 import com.ldtteam.jvoxelizer.dimension.IDimension;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraft.util.Direction;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     private final Direction facing;
 
     public CommonTileBasedProvider(
-      @NotNull final IIdentifier id,
+      @NotNull final ResourceLocation id,
       @NotNull final int dimId,
       @NotNull final int x,
       @NotNull final int y,
@@ -98,9 +98,9 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
 
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
-        return IIdentifier.create(id);
+        return new ResourceLocation(id);
     }
 
     @Nullable

@@ -5,13 +5,12 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.ldtteam.blockout.network.message.core.IBlockOutNetworkMessage;
 import com.ldtteam.blockout.util.kryo.KryoUtil;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessage;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.io.ByteArrayOutputStream;
 
-public class BlockOutNetworkMessageWrapper implements IMessage
+public class BlockOutNetworkMessageWrapper
 {
 
     private final Kryo                    KRYO   = KryoUtil.createNewKryo();
@@ -27,7 +26,6 @@ public class BlockOutNetworkMessageWrapper implements IMessage
         this.message = message;
     }
 
-    @Override
     public void fromBytes(final ByteBuf buf)
     {
         final ByteBuf localBuffer = buf.retain();
@@ -45,7 +43,6 @@ public class BlockOutNetworkMessageWrapper implements IMessage
         }
     }
 
-    @Override
     public void toBytes(final ByteBuf buf)
     {
         byte[] data;
@@ -62,8 +59,7 @@ public class BlockOutNetworkMessageWrapper implements IMessage
         buf.writeBytes(data);
     }
 
-    @Override
-    public void onArrived(final IMessageContext iMessageContext)
+    public void onArrived(final NetworkEvent.Context iMessageContext)
     {
         if (loaded)
         {

@@ -2,8 +2,8 @@ package com.ldtteam.test;
 
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.jvoxelizer.core.provider.holder.ProviderResolver;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifierProvider;
+import net.minecraft.util.ResourceLocation;
+import com.ldtteam.jvoxelizer.util.identifier.ResourceLocationProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -42,12 +42,12 @@ public abstract class AbstractBlockOutTest
     @Before
     public void setupJVoxelizerProviders()
     {
-        ProviderResolver.getInstance().registerProvider(IIdentifier.class.getName(), new IIdentifierProvider()
+        ProviderResolver.getInstance().registerProvider(ResourceLocation.class.getName(), new ResourceLocationProvider()
         {
             @Override
-            public IIdentifier provide(final String s, final String s1)
+            public ResourceLocation provide(final String s, final String s1)
             {
-                return new IIdentifier()
+                return new ResourceLocation()
                 {
                     @Override
                     public String getDomain()
@@ -64,13 +64,13 @@ public abstract class AbstractBlockOutTest
             }
 
             @Override
-            public IIdentifier provide(final String s)
+            public ResourceLocation provide(final String s)
             {
                 final String[] sComp = s.split(":");
                 final String domain = sComp.length == 1 ? "minecraft" : sComp[0];
                 final String path = sComp.length == 1 ? sComp[0] : sComp[1];
 
-                return new IIdentifier()
+                return new ResourceLocation()
                 {
                     @Override
                     public String getDomain()

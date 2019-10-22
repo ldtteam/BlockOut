@@ -8,7 +8,7 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.entity.player.EntityPlayerMP;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +29,7 @@ public class TextFieldInputTest implements IBlockOutGuiTest
         final TextFieldContext context = new TextFieldContext();
 
         ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(IIdentifier.create(
+                                                                                                                      .ofFile(new ResourceLocation(
                                                                                                                         "blockout_test:gui/textfield_binding_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("input",

@@ -24,7 +24,7 @@ import com.ldtteam.jvoxelizer.launcher.forge_1_12.client.renderer.font.FontRende
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.dimension.Dimension;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.identifier.Identifier;
 import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -68,7 +68,7 @@ public class ClientProxy extends CommonProxy
 
     @NotNull
     @Override
-    public InputStream getResourceStream(@NotNull final IIdentifier location) throws Exception
+    public InputStream getResourceStream(@NotNull final ResourceLocation location) throws Exception
     {
         return Minecraft.getMinecraft().getResourceManager().getResource(Identifier.asForge(location)).getInputStream();
     }

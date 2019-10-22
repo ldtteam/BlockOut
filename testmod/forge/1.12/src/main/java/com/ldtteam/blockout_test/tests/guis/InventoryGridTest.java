@@ -9,7 +9,7 @@ import com.ldtteam.jvoxelizer.launcher.forge_1_12.dimension.Dimension;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.MultiplayerPlayerEntity;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
 import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.facing.Facing;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumFacing;
@@ -19,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
 public class InventoryGridTest implements IBlockOutGuiTest
 {
     private static final String      CHEST_CONTROL_ID         = "chest_inventory";
-    private static final IIdentifier CHEST_INVENTORY_ID       = IIdentifier.create("minecraft:chest");
+    private static final ResourceLocation CHEST_INVENTORY_ID       = new ResourceLocation("minecraft:chest");
     private static final String      PLAYER_MAIN_CONTROL_ID   = "player_main_inventory";
     private static final String      PLAYER_TOOL_CONTROL_ID   = "player_tool_inventory";
-    private static final IIdentifier PLAYER_INVENTORY_ID      = IIdentifier.create("minecraft:player");
-    private static final IIdentifier PLAYER_MAIN_INVENTORY_ID = IIdentifier.create("minecraft:player_main");
-    private static final IIdentifier PLAYER_TOOL_INVENTORY_ID = IIdentifier.create("minecraft:player_tool");
-    private static final IIdentifier SLOT_BACKGROUND          = IIdentifier.create("image:slot_default_18x18");
+    private static final ResourceLocation PLAYER_INVENTORY_ID      = new ResourceLocation("minecraft:player");
+    private static final ResourceLocation PLAYER_MAIN_INVENTORY_ID = new ResourceLocation("minecraft:player_main");
+    private static final ResourceLocation PLAYER_TOOL_INVENTORY_ID = new ResourceLocation("minecraft:player_tool");
+    private static final ResourceLocation SLOT_BACKGROUND          = new ResourceLocation("image:slot_default_18x18");
 
     @NotNull
     @Override
@@ -39,7 +39,7 @@ public class InventoryGridTest implements IBlockOutGuiTest
       final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         IGuiController.getInstance().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                           .ofFile(IIdentifier.create("blockout_test:gui/inventory_grid_test.json"))
+                                                                                                           .ofFile(new ResourceLocation("blockout_test:gui/inventory_grid_test.json"))
                                                                                    .usingData(
                                                                                      iBlockOutGuiConstructionDataBuilder -> InventoryGridHelper.initiateChestControlAtPosition(
                                                                                        iBlockOutGuiConstructionDataBuilder,

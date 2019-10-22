@@ -1,7 +1,8 @@
 package com.ldtteam.blockout.util.itemstack;
 
-import com.ldtteam.jvoxelizer.item.IItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,39 +12,39 @@ public final class ItemStackHelper
 {
 
     @Nullable
-    public static Comparator<IItemStack> COMPARATOR = new Comparator<IItemStack>()
+    public static Comparator<ItemStack> COMPARATOR = new Comparator<ItemStack>()
     {
-        public int compare(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
+        public int compare(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
         {
             if (!pItemStack1.isEmpty() && !pItemStack2.isEmpty())
             {
                 // Sort on itemID
-                if (IItem.getIdFromItem(pItemStack1.getItem()) - IItem.getIdFromItem(pItemStack2.getItem()) == 0)
+                if (Item.getIdFromItem(pItemStack1.getItem()) - Item.getIdFromItem(pItemStack2.getItem()) == 0)
                 {
                     // Sort on item
                     if (pItemStack1.getItem() == pItemStack2.getItem())
                     {
                         // Then sort on meta
-                        if (pItemStack1.getItemDamage() == pItemStack2.getItemDamage())
+                        if (pItemStack1.getDamage() == pItemStack2.getDamage())
                         {
                             // Then sort on NBT
-                            if (pItemStack1.hasTagCompound() && pItemStack2.hasTagCompound())
+                            if (pItemStack1.hasTag() && pItemStack2.hasTag())
                             {
                                 // Then sort on stack size
-                                if (IItemStack.areItemStackTagsEqual(pItemStack1, pItemStack2))
+                                if (ItemStack.areItemStackTagsEqual(pItemStack1, pItemStack2))
                                 {
                                     return (pItemStack1.getCount() - pItemStack2.getCount());
                                 }
                                 else
                                 {
-                                    return (pItemStack1.write().hashCode() - pItemStack2.write().hashCode());
+                                    return (pItemStack1.write(new CompoundNBT()).hashCode() - pItemStack2.write(new CompoundNBT()).hashCode());
                                 }
                             }
-                            else if (!(pItemStack1.hasTagCompound()) && pItemStack2.hasTagCompound())
+                            else if (!(pItemStack1.hasTag()) && pItemStack2.hasTag())
                             {
                                 return -1;
                             }
-                            else if (pItemStack1.hasTagCompound() && !(pItemStack2.hasTagCompound()))
+                            else if (pItemStack1.hasTag() && !(pItemStack2.hasTag()))
                             {
                                 return 1;
                             }
@@ -54,7 +55,7 @@ public final class ItemStackHelper
                         }
                         else
                         {
-                            return (pItemStack1.getItemDamage() - pItemStack2.getItemDamage());
+                            return (pItemStack1.getDamage() - pItemStack2.getDamage());
                         }
                     }
                     else
@@ -64,7 +65,7 @@ public final class ItemStackHelper
                 }
                 else
                 {
-                    return IItem.getIdFromItem(pItemStack1.getItem()) - IItem.getIdFromItem(pItemStack2.getItem());
+                    return Item.getIdFromItem(pItemStack1.getItem()) - Item.getIdFromItem(pItemStack2.getItem());
                 }
             }
             else if (!pItemStack1.isEmpty())
@@ -88,36 +89,36 @@ public final class ItemStackHelper
     }
 
     @NotNull
-    public static ItemStackcloneItemStack(@NotNull ItemStackpItemStack, int pStackSize)
+    public static ItemStack cloneItemStack(@NotNull ItemStack pItemStack, int pStackSize)
     {
-        ItemStacktClonedItemStack = pItemStack.copy();
-        tClonedItemStack.setCount(pStackSize);
-        return tClonedItemStack;
+        ItemStack clonedStack = pItemStack.copy();
+        clonedStack.setCount(pStackSize);
+        return clonedStack;
     }
 
-    public static boolean equals(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
+    public static boolean equals(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
     {
         return (COMPARATOR.compare(pItemStack1, pItemStack2) == 0);
     }
 
-    public static boolean equalsIgnoreStackSize(@NotNull ItemStackitemStack1, @NotNull ItemStackitemStack2)
+    public static boolean equalsIgnoreStackSize(@NotNull ItemStack itemStack1, @NotNull ItemStack itemStack2)
     {
         if (!itemStack1.isEmpty() && !itemStack2.isEmpty())
         {
             // Sort on itemID
-            if (IItem.getIdFromItem(itemStack1.getItem()) - IItem.getIdFromItem(itemStack2.getItem()) == 0)
+            if (Item.getIdFromItem(itemStack1.getItem()) - Item.getIdFromItem(itemStack2.getItem()) == 0)
             {
                 // Sort on item
                 if (itemStack1.getItem() == itemStack2.getItem())
                 {
                     // Then sort on meta
-                    if (itemStack1.getItemDamage() == itemStack2.getItemDamage())
+                    if (itemStack1.getDamage() == itemStack2.getDamage())
                     {
                         // Then sort on NBT
-                        if (itemStack1.hasTagCompound() && itemStack2.hasTagCompound())
+                        if (itemStack1.hasTag() && itemStack2.hasTag())
                         {
                             // Then sort on stack size
-                            return IItemStack.areItemStackTagsEqual(itemStack1, itemStack2);
+                            return ItemStack.areItemStackTagsEqual(itemStack1, itemStack2);
                         }
                         else
                         {
@@ -139,7 +140,7 @@ public final class ItemStackHelper
      * @param doMerge     - To actually do the merge
      * @return The number of item that was successfully merged.
      */
-    public static int mergeStacks(@NotNull ItemStackmergeSource, @NotNull ItemStackmergeTarget, boolean doMerge)
+    public static int mergeStacks(@NotNull ItemStack mergeSource, @NotNull ItemStack mergeTarget, boolean doMerge)
     {
         if (!canStacksMerge(mergeSource, mergeTarget))
         {
@@ -164,7 +165,7 @@ public final class ItemStackHelper
      * @param stack2 - The second stack
      * @return true if stacks can be merged, false otherwise
      */
-    public static boolean canStacksMerge(@NotNull ItemStackstack1, @NotNull ItemStackstack2)
+    public static boolean canStacksMerge(@NotNull ItemStack stack1, @NotNull ItemStack stack2)
     {
         if (stack1.isEmpty() || stack2.isEmpty())
         {
@@ -174,23 +175,23 @@ public final class ItemStackHelper
         {
             return false;
         }
-        return IItemStack.areItemStackTagsEqual(stack1, stack2);
+        return ItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 
-    public static int compare(@NotNull ItemStackpItemStack1, @NotNull ItemStackpItemStack2)
+    public static int compare(@NotNull ItemStack pItemStack1, @NotNull ItemStack pItemStack2)
     {
         return COMPARATOR.compare(pItemStack1, pItemStack2);
     }
 
-    public static String toString(@NotNull ItemStackpItemStack)
+    public static String toString(@NotNull ItemStack pItemStack)
     {
         if (!pItemStack.isEmpty())
         {
             return String.format("%sxitemStack[%s@%s][%s]",
               pItemStack.getCount(),
               pItemStack.getTranslationKey(),
-              pItemStack.getItemDamage(),
-              pItemStack.hasTagCompound() ? pItemStack.write().toString() : "");
+              pItemStack.getDamage(),
+              pItemStack.hasTag() ? pItemStack.write(new CompoundNBT()).toString() : "");
         }
 
         return "null";

@@ -37,7 +37,7 @@ import com.ldtteam.jvoxelizer.client.renderer.opengl.util.LogicOp;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
 import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
 import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import com.ldtteam.jvoxelizer.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

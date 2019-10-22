@@ -9,7 +9,7 @@ import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiRequestMessage;
 import com.ldtteam.blockout.network.message.OpenGuiRequestMessage;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.IGameEngine;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +33,7 @@ public class ClientGuiController implements IGuiController
     @Override
     public void openUI(@NotNull final PlayerEntity player, @NotNull final IGuiKey key)
     {
-        openUI(player.getId(), key);
+        openUI(player.getUniqueID(), key);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ClientGuiController implements IGuiController
     @Override
     public void openUI(@NotNull final UUID playerId, @NotNull final IGuiKey key)
     {
-        if (!playerId.equals(IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId()))
+        if (!playerId.equals(Minecraft.getInstance().player.getUniqueID()))
         {
             Log.getLogger().warn("Cannot open UI of other player.");
             return;
@@ -60,13 +60,13 @@ public class ClientGuiController implements IGuiController
     @Override
     public void closeUI(@NotNull final PlayerEntity player)
     {
-        closeUI(player.getId());
+        closeUI(player.getUniqueID());
     }
 
     @Override
     public void closeUI(@NotNull final UUID playerId)
     {
-        if (!playerId.equals(IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId()))
+        if (!playerId.equals(Minecraft.getInstance().player.getUniqueID()))
         {
             Log.getLogger().warn("Cannot close UI of other player.");
             return;

@@ -3,17 +3,17 @@ package com.ldtteam.blockout.style.simple;
 import com.google.common.collect.ImmutableMap;
 import com.ldtteam.blockout.style.core.IStyle;
 import com.ldtteam.blockout.style.core.resources.core.IResource;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class SimpleStyle implements IStyle
 {
-    private final IIdentifier                 id;
-    private final Map<IIdentifier, IResource> resources;
+    private final ResourceLocation                 id;
+    private final Map<ResourceLocation, IResource> resources;
 
-    public SimpleStyle(final IIdentifier id, final Map<IIdentifier, IResource> resources)
+    public SimpleStyle(final ResourceLocation id, final Map<ResourceLocation, IResource> resources)
     {
         this.id = id;
         this.resources = resources;
@@ -26,7 +26,7 @@ public class SimpleStyle implements IStyle
      */
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
         return id;
     }
@@ -38,7 +38,7 @@ public class SimpleStyle implements IStyle
      */
     @NotNull
     @Override
-    public ImmutableMap<IIdentifier, IResource> getResources()
+    public ImmutableMap<ResourceLocation, IResource> getResources()
     {
         return ImmutableMap.copyOf(resources);
     }

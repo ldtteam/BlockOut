@@ -6,9 +6,9 @@ import com.ldtteam.blockout.style.core.resources.loader.IResourceLoader;
 import com.ldtteam.blockout.util.Constants;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.item.ItemStack;
-import com.ldtteam.jvoxelizer.util.identifier.IIdentifier;
-import com.ldtteam.jvoxelizer.util.nbt.INBTBase;
-import com.ldtteam.jvoxelizer.util.nbt.INBTCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemStackResource implements IResource
@@ -36,16 +36,12 @@ public class ItemStackResource implements IResource
          * @param data The data to load from.
          */
         @Override
-        public ItemStackResource load(@NotNull final IIdentifier id, @NotNull final JsonElement data)
+        public ItemStackResource load(@NotNull final ResourceLocation id, @NotNull final JsonElement data)
         {
             try
             {
-                final INBTCompound compound = INBTBase.createFromJson(data.toString());
-                final ItemStackstack = IItemStack.create();
-
-                stack.read(compound);
-
-                return new ItemStackResource(id, stack);
+                final CompoundNBT compound = JsonToNBT.getTagFromJson(data.getAsString());
+                return new ItemStackResource(id, ItemStack.read(compound));
             }
             catch (Exception e)
             {
@@ -54,10 +50,10 @@ public class ItemStackResource implements IResource
         }
     }
 
-    private final IIdentifier id;
+    private final ResourceLocation id;
     private final ItemStack stack;
 
-    public ItemStackResource(final IIdentifier id, final ItemStackstack)
+    public ItemStackResource(final ResourceLocation id, final ItemStack stack)
     {
         this.id = id;
         this.stack = stack;
@@ -70,12 +66,12 @@ public class ItemStackResource implements IResource
      */
     @NotNull
     @Override
-    public IIdentifier getId()
+    public ResourceLocation getId()
     {
         return id;
     }
 
-    public ItemStackgetStack()
+    public ItemStack getStack()
     {
         return stack.copy();
     }
