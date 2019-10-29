@@ -17,6 +17,7 @@ import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,10 @@ public interface IProxy
     IRenderManager generateNewRenderManager();
 
     @NotNull
-    FontRenderer getFontRenderer();
+    IFontRendererProxy getFontRenderer();
+
+    @NotNull
+    II18nProxy getI18nProxy();
 
     @NotNull
     IResourceLoaderManager getResourceLoaderManager();
@@ -87,4 +91,5 @@ public interface IProxy
     IReflectionManager getReflectionManager();
 
     void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
+
 }

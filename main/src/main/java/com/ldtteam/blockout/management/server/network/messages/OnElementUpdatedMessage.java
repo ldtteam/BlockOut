@@ -3,18 +3,16 @@ package com.ldtteam.blockout.management.server.network.messages;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
-import com.ldtteam.blockout.inventory.BlockOutContainerData;
-import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
+import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGui;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
@@ -28,16 +26,16 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
     }
 
     @Override
-    public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx)
     {
-        final IGui<?> openGuiScreen = IGameEngine.getInstance().getCurrentGui();
+        final Screen openGuiScreen = Minecraft.getInstance().currentScreen;
 
-        if (!(openGuiScreen instanceof IGuiContainer))
+        if (!(openGuiScreen instanceof BlockOutContainerGui))
         {
             throw new IllegalStateException("No container open!");
         }
 
-        final IGuiContainer<?> openContainerScreen = (IGuiContainer<?>) openGuiScreen;
+        final BlockOutContainerGui openContainerScreen = (BlockOutContainerGui) openGuiScreen;
 
         if (openContainerScreen.getInstanceData() instanceof BlockOutGuiData)
         {
@@ -68,10 +66,10 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             blockOutGui.setRoot(rootGuiElement);
             blockOutGui.getRoot().getUiManager().getRenderManager().setGuiData(blockOutGui);
             blockOutGui.getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getRoot());
-            openContainerScreen.initializeGui();
+            openContainerScreen.init(Minecraft.getInstance(), Minecraft.getInstance().mainWindow.getScaledWidth(), Minecraft.getInstance().mainWindow.getScaledHeight());
 
-            final IContainer<BlockOutContainerData> container = (IContainer<BlockOutContainerData>) openContainerScreen.getContainer();
-            BlockOutContainerLogic.reinitializeSlots(container);
+            final BlockOutContainer container = openContainerScreen.getContainer();
+            container.reinitializeSlots();
         }
         else
         {

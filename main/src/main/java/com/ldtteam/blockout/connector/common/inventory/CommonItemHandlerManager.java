@@ -46,7 +46,7 @@ public class CommonItemHandlerManager implements IItemHandlerManager
     @Override
     public List<ResourceLocation> getAllItemHandlerIds()
     {
-        return ImmutableList.copyOf(providerMap.keySet().stream().map(ResourceLocation::create).collect(Collectors.toList()));
+        return ImmutableList.copyOf(providerMap.keySet().stream().map(ResourceLocation::new).collect(Collectors.toList()));
     }
 
     @NotNull

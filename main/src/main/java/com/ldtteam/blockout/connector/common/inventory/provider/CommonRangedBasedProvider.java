@@ -4,6 +4,8 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,6 +42,11 @@ public class CommonRangedBasedProvider implements IItemHandlerProvider
     {
         final IItemHandler other = manager.getItemHandlerFromId(new ResourceLocation(wrappedId));
 
-        return IItemHandler.ranged(other, minSlot, maxSlotExlcuding);
+        if (!(other instanceof IItemHandlerModifiable))
+        {
+            throw new IllegalArgumentException("Manager did not return a modifyable item handler: " + wrappedId);
+        }
+
+        return new RangedWrapper((IItemHandlerModifiable) other, minSlot, maxSlotExlcuding);
     }
 }

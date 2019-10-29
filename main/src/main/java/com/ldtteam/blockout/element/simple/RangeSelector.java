@@ -2,7 +2,6 @@ package com.ldtteam.blockout.element.simple;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IClickAcceptingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
@@ -14,9 +13,9 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -235,11 +234,11 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        IOpenGl.pushMatrix();
-        IOpenGl.disableStandardItemLighting();
-        IOpenGl.enableAlpha();
-        IOpenGl.enableBlend();
-        IOpenGl.blendFunc(SourceFactor.ONE_MINUS_SRC_ALPHA, DestinationFactor.DST_ALPHA);
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
 
         final ImageResource leftBackgroundResource = getLeftBackgroundTextureResource();
         final ImageResource selectorRegionBackgroundResource = getSelectedRegionBackgroundTextureResource();
@@ -269,7 +268,10 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         final Vector2d rightBackgroundSize = new Vector2d(getLocalBoundingBox().getSize().getX() - rightBackgroundOffset.getX(), height).nullifyNegatives();
         drawImageResource(controller, rightBackgroundResource, rightBackgroundOffset, rightBackgroundSize);
 
-        IOpenGl.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlphaTest();
+        RenderHelper.enableStandardItemLighting();
+        GlStateManager.popMatrix();
     }
 
     public ImageResource getLeftBackgroundTextureResource()

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.ldtteam.blockout.element.IUIElement;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -20,17 +21,6 @@ public final class ProfilerExporter
 
     public static void exportProfiler(@NotNull final IUIElement element)
     {
-        final Map<String, Long> sortedMap =
-          element.getParent().getUiManager().getProfiler().getProfilingMap(); //new TreeMap<>(element.getParent().getUiManager().getProfiler().profilingMap);
-
-        try (Writer writer = new FileWriter("profiler.json"))
-        {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(sortedMap, writer);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+      element.getParent().getUiManager().getProfiler().getResults().writeToFile(new File("profiler.json"));
     }
 }

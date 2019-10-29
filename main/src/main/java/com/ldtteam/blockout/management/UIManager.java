@@ -21,10 +21,9 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.profiler.Profiler;
-import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+import net.minecraft.util.Util;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.LinkedHashMap;
 
 public class UIManager implements IUIManager
 {
@@ -58,10 +57,9 @@ public class UIManager implements IUIManager
         this.rootGuiElement = rootGuiElement;
         this.networkManager = ProxyHolder.getInstance().generateNewNetworkManagerForGui(key);
         this.updateManager = ProxyHolder.getInstance().generateNewUpdateManager(this);
-        this.renderManager = IDistributionExecutor.on(() -> ProxyHolder.getInstance().generateNewRenderManager(), () -> null);
-        this.profiler = IProfiler.create();
-        this.profiler.enableProfiling();
-        this.profiler.setProfilingMap(new LinkedHashMap<>());
+        this.renderManager = DistExecutor.runForDist(() -> () -> ProxyHolder.getInstance().generateNewRenderManager(), () -> () -> null);
+        this.profiler = new Profiler(Util.nanoTime(), () -> 0);
+        this.profiler.startTick();
     }
 
     @NotNull

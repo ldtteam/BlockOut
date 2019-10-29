@@ -1,9 +1,10 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
-import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.GL11;
 
 /**
  * Render utility functions.
@@ -58,13 +59,13 @@ public final class Render
         final float g = (float) (((color >> GREEN_SHIFT) & COLOR_MASK) / COLOR_DIVISOR);
         final float b = (float) ((color & COLOR_MASK) / COLOR_DIVISOR);
 
-        final ITessellator tessellator = ITessellator.getInstance();
-        final IBufferBuilder vertexBuffer = tessellator.getBuffer();
+        final Tessellator tessellator = Tessellator.getInstance();
+        final BufferBuilder vertexBuffer = tessellator.getBuffer();
 
-        vertexBuffer.begin(IOpenGl.getOpenGlLineRenderMode(), IVertexFormat.position());
-        IOpenGl.disableTexture2D();
-        IOpenGl.glLineWidth(lineWidth);
-        IOpenGl.color(r, g, b, a);
+        vertexBuffer.begin(GL11.GL_LINE, DefaultVertexFormats.POSITION);
+        GlStateManager.disableTexture();
+        GlStateManager.lineWidth(lineWidth);
+        GlStateManager.color4f(r, g, b, a);
 
         //Since our points do not have any u,v this seems to be the correct code
         vertexBuffer.pos(x1, y2, 0.0D).endVertex();
@@ -73,6 +74,6 @@ public final class Render
         vertexBuffer.pos(x1, y1, 0.0D).endVertex();
 
         tessellator.draw();
-        IOpenGl.enableTexture2D();
+        GlStateManager.enableTexture();
     }
 }

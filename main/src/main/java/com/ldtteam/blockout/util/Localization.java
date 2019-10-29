@@ -1,6 +1,6 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.jvoxelizer.translation.ITranslator;
+import com.ldtteam.blockout.proxy.ProxyHolder;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -37,7 +37,7 @@ public class Localization
             }
 
             final String key = s.substring(index + 2, endIndex);
-            String replacement = ITranslator.format(key);
+            String replacement = ProxyHolder.getInstance().getI18nProxy().format(key);
 
             if (replacement.equals(key))
             {

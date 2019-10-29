@@ -14,10 +14,10 @@ import com.ldtteam.blockout.style.definitions.deserializers.ResourceTypeDefiniti
 import com.ldtteam.blockout.style.definitions.deserializers.StyleDefinitionDeserializer;
 import com.ldtteam.blockout.style.definitions.deserializers.StylesDefinitionDeserializer;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.modloader.IModLoader;
-import com.ldtteam.jvoxelizer.progressmanager.IProgressBar;
-import com.ldtteam.jvoxelizer.progressmanager.IProgressManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
@@ -67,9 +67,9 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 
     public void initialize()
     {
-        IModLoader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toList());
+        ModList.get().applyForEachModContainer(ModContainer::getModId).collect(Collectors.toList());
 
-        final Set<String> resourceDomains = IModLoader.instance().getActiveModList().stream().map(modContainer -> modContainer.getModId()).collect(Collectors.toSet());
+        final Set<String> resourceDomains = ModList.get().applyForEachModContainer(ModContainer::getModId).collect(Collectors.toSet());
         final IProgressBar loadingBar = IProgressManager.push("Loading BlockOut Styles", resourceDomains.size());
 
         final Gson gson = new GsonBuilder()

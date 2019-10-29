@@ -4,12 +4,12 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.tileentity.TileEntity;
-import com.ldtteam.jvoxelizer.common.capability.ICapability;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -107,19 +107,14 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     @Override
     public IItemHandler get(@NotNull final IItemHandlerManager manager)
     {
-        final IDimension<?> blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
-        final TileEntity tileEntity = blockAccess.getBlockEntity(IBlockCoordinate.create(x,y,z));
+        final IBlockReader blockAccess = ProxyHolder.getInstance().getDimensionFromDimensionId(dimId);
+        final TileEntity tileEntity = blockAccess.getTileEntity(new BlockPos(x,y,z));
 
         if (tileEntity == null)
         {
             return null;
         }
 
-        if (tileEntity.hasCapability(ICapability.getItemHandlerCapability(), facing))
-        {
-            return tileEntity.getCapability(ICapability.getItemHandlerCapability(), facing);
-        }
-
-        return null;
+        return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing).orElse(null);
     }
 }

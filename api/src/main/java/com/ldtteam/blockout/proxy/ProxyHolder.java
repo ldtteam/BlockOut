@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
 
@@ -108,10 +109,17 @@ public class ProxyHolder implements IProxy
     }
 
     @Override
-    @Nullable
-    public FontRenderer getFontRenderer()
+    @NotNull
+    public IFontRendererProxy getFontRenderer()
     {
         return proxy.getFontRenderer();
+    }
+
+    @NotNull
+    @Override
+    public II18nProxy getI18nProxy()
+    {
+        throw new NotImplementedException();
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import com.mojang.blaze3d.platform.GlStateManager;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderManager implements IRenderManager
@@ -28,8 +28,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        IOpenGl.pushMatrix();
-        IOpenGl.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -37,7 +37,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawBackground(renderingController);
         }
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {
@@ -60,8 +60,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        IOpenGl.pushMatrix();
-        IOpenGl.translate(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -69,7 +69,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawForeground(renderingController);
         }
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {

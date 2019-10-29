@@ -3,24 +3,20 @@ package com.ldtteam.blockout.element.simple;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.translation.ITranslator;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
-import com.ldtteam.jvoxelizer.util.textformatting.ITextFormatting;
-import net.minecraftforge.fml.ForgeI18n;
+import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,11 +109,11 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
                 break;
             }
 
-            rawContents = rawContents.replace("${" + keyGroupMatching + "}", ForgeI18n.format(keyGroupMatching));
+            rawContents = rawContents.replace("${" + keyGroupMatching + "}", IProxy.getInstance().getI18nProxy().format(keyGroupMatching));
             contentMatcher = TRANSLATION_RAW_PATTERN.matcher(rawContents);
         }
 
-        return ProxyHolder.getInstance().convertToColorCode(getFontColor()) + rawContents + ITextFormatting.reset();
+        return ProxyHolder.getInstance().convertToColorCode(getFontColor()) + rawContents + TextFormatting.RESET;
     }
 
     public String getContents()
@@ -164,7 +160,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
         {
             super(Label.class, KEY_LABEL, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
                 final IDependencyObject<String> contents = elementData.getFromRawDataWithDefault(CONST_CONTENT, engine, "<UNKNOWN>", String.class);
-                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, ITextFormatting.reset().toString(), String.class);
+                final IDependencyObject<String> fontColor = elementData.getFromRawDataWithDefault(CONST_FONT_COLOR, engine, TextFormatting.RESET.toString(), String.class);
 
                 final Label element = new Label(
                   id,

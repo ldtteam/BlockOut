@@ -6,7 +6,6 @@ import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBui
 import com.ldtteam.blockout.compat.ClientTickManager;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.input.IKeyAcceptingUIElement;
 import com.ldtteam.blockout.element.input.client.IClientSideClickAcceptingUIElement;
@@ -21,24 +20,25 @@ import com.ldtteam.blockout.network.message.TextFieldOnEnterPressed;
 import com.ldtteam.blockout.network.message.TextFieldTabPressedMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateContentsMessage;
 import com.ldtteam.blockout.network.message.TextFieldUpdateSelectionEndOrCursorPositionMessage;
+import com.ldtteam.blockout.proxy.IFontRendererProxy;
+import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.color.ColorUtils;
-import com.ldtteam.blockout.util.color.IColor;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
-import com.ldtteam.jvoxelizer.client.gui.IGuiScreen;
-import com.ldtteam.jvoxelizer.client.renderer.bufferbuilder.IBufferBuilder;
-import com.ldtteam.jvoxelizer.client.renderer.font.IFontRenderer;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.LogicOp;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.vertexformat.IVertexFormat;
-import com.ldtteam.jvoxelizer.client.renderer.tessellator.ITessellator;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import com.ldtteam.jvoxelizer.util.math.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -212,26 +212,26 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     public void doDraw(@NotNull final IRenderingController controller)
     {
-        IOpenGl.pushMatrix();
-        IOpenGl.disableStandardItemLighting();
-        IOpenGl.enableAlpha();
-        IOpenGl.enableBlend();
-        IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.pushMatrix();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.enableAlphaTest();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        final int x = 0;//(int) this.getLocalBoundingBox().getLocalOrigin().getX();
-        final int y = 0;//(int) this.getLocalBoundingBox().getLocalOrigin().getY();
+        final int x = 0;
+        final int y = 0;
         final int width = (int) this.getLocalBoundingBox().getSize().getX();
         final int height = (int) this.getLocalBoundingBox().getSize().getY();
         final String contents = getContents();
 
-        final IColor outerBackgroundColor = ColorUtils.convertToColor(getOuterBackgroundColor());
-        final IColor innerBackgroundColor = ColorUtils.convertToColor(getInnerBackgroundColor());
+        final Color outerBackgroundColor = ColorUtils.convertToColor(getOuterBackgroundColor());
+        final Color innerBackgroundColor = ColorUtils.convertToColor(getInnerBackgroundColor());
 
-        final IColor enabledColor = ColorUtils.convertToColor(getEnabledColor());
-        final IColor disabledColor = ColorUtils.convertToColor(getDisabledColor());
+        final Color enabledColor = ColorUtils.convertToColor(getEnabledColor());
+        final Color disabledColor = ColorUtils.convertToColor(getDisabledColor());
 
-        final IColor cursorColor = ColorUtils.convertToColor(getCursorColor());
-        final IColor selectionColor = ColorUtils.convertToColor(getSelectionColor());
+        final Color cursorColor = ColorUtils.convertToColor(getCursorColor());
+        final Color selectionColor = ColorUtils.convertToColor(getSelectionColor());
 
         if (shouldDrawBackground())
         {
@@ -240,7 +240,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         }
 
-        IColor fontColor = this.isEnabled() ? enabledColor : disabledColor;
+        Color fontColor = this.isEnabled() ? enabledColor : disabledColor;
         int cursorScrollOffset = this.cursorPosition - this.scrollOffset;
         int selectScrollOffset = this.selectionEnd - this.scrollOffset;
         String visibleString = getFontRenderer().trimStringToWidth(contents.substring(this.scrollOffset), width);
@@ -297,9 +297,10 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             this.drawSelectionBox(x, width, cursorDrawX, drawStartY - 1, selectionDrawEnd - 1, drawStartY + 1 + getFontRenderer().getFontHeight(), selectionColor);
         }
 
-        IOpenGl.disableBlend();
-        IOpenGl.disableAlpha();
-        IOpenGl.popMatrix();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlphaTest();
+        GlStateManager.popMatrix();
+        RenderHelper.enableStandardItemLighting();
     }
 
     public boolean shouldDrawBackground()
@@ -312,9 +313,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
     }
 
-    private IFontRenderer getFontRenderer()
+    private IFontRendererProxy getFontRenderer()
     {
-        return ProxyHolder.getInstance().getFontRenderer();
+        return IProxy.getInstance().getFontRenderer();
     }
 
     private long getCursorCounter()
@@ -437,7 +438,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     /**
      * Draws the blue selection box.
      */
-    private void drawSelectionBox(int x, int width, int startX, int startY, int endX, int endY, IColor selectionColor)
+    private void drawSelectionBox(int x, int width, int startX, int startY, int endX, int endY, Color selectionColor)
     {
         if (startX < endX)
         {
@@ -463,20 +464,20 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             startX = x + width;
         }
 
-        ITessellator tessellator = ITessellator.getInstance();
-        IBufferBuilder bufferbuilder = tessellator.getBuffer();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
         selectionColor.performOpenGLColoring();
-        IOpenGl.disableTexture2D();
-        IOpenGl.enableColorLogic();
-        IOpenGl.colorLogicOp(LogicOp.OR_REVERSE);
-        bufferbuilder.begin(7, IVertexFormat.position());
+        GlStateManager.disableTexture();
+        GlStateManager.enableColorLogicOp();
+        GlStateManager.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos((double) startX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) startY, 0.0D).endVertex();
         bufferbuilder.pos((double) startX, (double) startY, 0.0D).endVertex();
         tessellator.draw();
-        IOpenGl.disableColorLogic();
-        IOpenGl.enableTexture2D();
+        GlStateManager.disableColorLogicOp();
+        GlStateManager.enableTexture();
     }
 
     public void setShouldDrawBackground(final boolean drawBackground)
@@ -491,7 +492,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private void writeText(final String str)
     {
-        final IFontRenderer fontRenderer = ProxyHolder.getInstance().getFontRenderer();
+        final IFontRendererProxy fontRenderer = ProxyHolder.getInstance().getFontRenderer();
         final int maxTextLength =
           (int) (getLocalBoundingBox().getSize().getX() * (int) (getLocalBoundingBox().getSize().getY() / ProxyHolder.getInstance().getFontRenderer().getFontHeight()));
 
@@ -750,9 +751,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         final int direction = (key == KeyboardKey.KEY_LEFT) ? -1 : 1;
 
-        if (IGuiScreen.isShiftKeyDown())
+        if (Screen.hasShiftDown())
         {
-            if (IGuiScreen.isCtrlKeyDown())
+            if (Screen.hasControlDown())
             {
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getNthWordFromCursor(direction), getSelectionEnd()));
             }
@@ -761,7 +762,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), cursorPosition + direction, getSelectionEnd()));
             }
         }
-        else if (IGuiScreen.isCtrlKeyDown())
+        else if (Screen.hasControlDown())
         {
             sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getNthWordFromCursor(direction), getNthWordFromCursor(direction)));
         }
@@ -780,7 +781,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         final int position = (key == KeyboardKey.KEY_HOME) ? 0 : getContents().length();
 
-        if (IGuiScreen.isShiftKeyDown())
+        if (Screen.hasShiftDown())
         {
             sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), position, getSelectionEnd()));
         }
@@ -799,7 +800,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         final int direction = (key == KeyboardKey.KEY_BACK) ? -1 : 1;
 
-        if (IGuiScreen.isCtrlKeyDown())
+        if (Screen.hasControlDown())
         {
             deleteWords(direction);
         }
@@ -857,13 +858,13 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 sendToServer(new TextFieldUpdateSelectionEndOrCursorPositionMessage(getId(), getContents().length(), 0));
                 break;
             case 3:
-                IGuiScreen.setClipboardString(getSelectedText());
+                Minecraft.getInstance().keyboardListener.setClipboardString(getSelectedText());
                 break;
             case 22:
-                writeText(IGuiScreen.getClipboardString());
+                writeText(Minecraft.getInstance().keyboardListener.getClipboardString());
                 break;
             case 24:
-                IGuiScreen.setClipboardString(getSelectedText());
+                Minecraft.getInstance().keyboardListener.setClipboardString(getSelectedText());
                 writeText("");
                 break;
             default:

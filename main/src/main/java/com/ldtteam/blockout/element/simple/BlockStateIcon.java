@@ -4,7 +4,6 @@ import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
@@ -12,8 +11,10 @@ import com.ldtteam.blockout.element.values.Dock;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.BlockState;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ import static com.ldtteam.blockout.util.Constants.Controls.BlockStateIcon.KEY_BL
 public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawableUIElement
 {
     @NotNull
-    public IDependencyObject<IBlockState> blockState;
+    public IDependencyObject<BlockState> blockState;
 
     public BlockStateIcon(
       @NotNull final String id,
@@ -39,7 +40,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final IDependencyObject<IBlockState> blockState)
+      @NotNull final IDependencyObject<BlockState> blockState)
     {
         super(KEY_BLOCKSTATE, styleId, id, parent, alignments, dock, margin, elementSize, dataContext, visible, enabled);
         this.blockState = blockState;
@@ -59,11 +60,11 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        IOpenGl.pushMatrix();
+        GlStateManager.pushMatrix();
 
         controller.drawBlockState(getBlockState(), 0, 0);
 
-        IOpenGl.popMatrix();
+        GlStateManager.popMatrix();
     }
 
     @NotNull
@@ -94,7 +95,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         }
 
         @NotNull
-        public BlockStateIconConstructionDataBuilder withDependentBlockState(@NotNull final IDependencyObject<IBlockState> blockState)
+        public BlockStateIconConstructionDataBuilder withDependentBlockState(@NotNull final IDependencyObject<BlockState> blockState)
         {
             return withDependency("blockState", blockState);
         }
@@ -111,7 +112,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
         public Factory()
         {
             super(BlockStateIcon.class, KEY_BLOCKSTATE, (elementData, engine, id, parent, styleId, alignments, dock, margin, elementSize, dataContext, visible, enabled) -> {
-                final IDependencyObject<IBlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, IBlockState.defaultState(), IBlockState.class);
+                final IDependencyObject<BlockState> blockState = elementData.getFromRawDataWithDefault(CONST_BLOCK_STATE, engine, Blocks.AIR.getDefaultState(), BlockState.class);
 
                 final BlockStateIcon element = new BlockStateIcon(
                   id,
@@ -128,7 +129,7 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
                 );
 
                 return element;
-            }, (element, builder) -> builder.addComponent(CONST_BLOCK_STATE, element.getBlockState(), IBlockState.class));
+            }, (element, builder) -> builder.addComponent(CONST_BLOCK_STATE, element.getBlockState(), BlockState.class));
         }
     }
 }

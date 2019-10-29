@@ -5,8 +5,8 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -25,9 +25,9 @@ public class TextFieldOnEnterPressed implements IBlockOutClientToServerMessage
     }
 
     @Override
-    public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {
-        final IMultiplayerPlayerEntity playerMP = ctx.getSendingPlayer();
+        final ServerPlayerEntity playerMP = ctx.getSender();
         final IGuiKey guiKey = ProxyHolder.getInstance().getGuiController().getOpenUI(playerMP);
 
         if (guiKey == null)

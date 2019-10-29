@@ -15,7 +15,7 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
 {
     private final BlockOutGuiData guiData;
 
-    protected BlockOutScreenGui(final IGuiKey key, final IUIElementHost host)
+    public BlockOutScreenGui(final IGuiKey key, final IUIElementHost host)
     {
         super(new StringTextComponent(""));
 

@@ -1,12 +1,11 @@
 package com.ldtteam.blockout.management.server.network.messages;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.gui.BlockOutGuiData;
+import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGui;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,13 +29,13 @@ public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMe
     }
 
     @Override
-    public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx)
     {
-        final IGui<?> openGuiScreen = IGameEngine.getInstance().getCurrentGui();
+        final Screen openGuiScreen = Minecraft.getInstance().currentScreen;
 
-        if (openGuiScreen instanceof IGuiContainer && openGuiScreen.getInstanceData() instanceof BlockOutGuiData)
+        if (openGuiScreen instanceof BlockOutContainerGui)
         {
-            final IGuiContainer<BlockOutGuiData> blockOutGui = (IGuiContainer<BlockOutGuiData>) openGuiScreen;
+            final BlockOutContainerGui blockOutGui = (BlockOutContainerGui) openGuiScreen;
 
             if (focusedElementId != null && !focusedElementId.isEmpty())
             {

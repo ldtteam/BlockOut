@@ -7,12 +7,11 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.Slot;
-import com.ldtteam.blockout.gui.BlockOutGuiLogic;
-import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
+import com.ldtteam.blockout.gui.BlockOutScreenGui;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.IGameEngine;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.util.tuple.ITuple;
+import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     private static final UUID DUMMY_ID = new UUID(0, 0);
 
     @Nullable
-    private ITuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
+    private Tuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
 
     @Override
     public void openUI(
@@ -79,7 +78,7 @@ public class ClientSideOnlyGuiController implements IGuiController
             return;
         }
 
-        openClientSideOnlyGui = ITuple.create(key, host);
+        openClientSideOnlyGui = new Tuple<>(key, host);
 
         openGui(key, host);
     }
@@ -93,14 +92,14 @@ public class ClientSideOnlyGuiController implements IGuiController
     @Override
     public void closeUI(@Nullable final UUID playerId)
     {
-        IGameEngine.getInstance().displayGuiScreen(null);
+        Minecraft.getInstance().displayGuiScreen(null);
     }
 
     @Nullable
     @Override
     public IGuiKey getOpenUI(@Nullable final PlayerEntity player)
     {
-        if (!(IGameEngine.getInstance().getSinglePlayerPlayerEntity() == player))
+        if (!(Minecraft.getInstance().player == player))
         {
             throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
         }
@@ -110,15 +109,15 @@ public class ClientSideOnlyGuiController implements IGuiController
             return null;
         }
 
-        return openClientSideOnlyGui.getFirst();
+        return openClientSideOnlyGui.getA();
     }
 
     @Nullable
     @Override
     public IGuiKey getOpenUI(@Nullable final UUID player)
     {
-        if ((IGameEngine.getInstance().getSinglePlayerPlayerEntity() == null && player != null) || (IGameEngine.getInstance().getSinglePlayerPlayerEntity() != null && player == null) || (
-          IGameEngine.getInstance().getSinglePlayerPlayerEntity().getId() != player))
+        if ((Minecraft.getInstance().player == null && player != null) || (Minecraft.getInstance().player != null && player == null) || (
+          Minecraft.getInstance().player.getUniqueID() != player))
         {
             throw new IllegalArgumentException("Can not get UI from remote player for ClientSide gui's");
         }
@@ -129,7 +128,7 @@ public class ClientSideOnlyGuiController implements IGuiController
             return null;
         }
 
-        return openClientSideOnlyGui.getFirst();
+        return openClientSideOnlyGui.getA();
     }
 
     @Nullable
@@ -143,12 +142,12 @@ public class ClientSideOnlyGuiController implements IGuiController
 
         if (openClientSideOnlyGui != null)
         {
-            if (openClientSideOnlyGui.getFirst() != guiKey)
+            if (openClientSideOnlyGui.getA() != guiKey)
             {
                 throw new IllegalArgumentException("Can not get root from unknown gui key.");
             }
 
-            return openClientSideOnlyGui.getSecond();
+            return openClientSideOnlyGui.getB();
         }
 
         return null;
@@ -156,6 +155,6 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement)
     {
-        IGameEngine.getInstance().displayGuiScreen(BlockOutGuiLogic.createClientSideOnly(key, rootGuiElement));
+        Minecraft.getInstance().displayGuiScreen(new BlockOutScreenGui(key, rootGuiElement));
     }
 }

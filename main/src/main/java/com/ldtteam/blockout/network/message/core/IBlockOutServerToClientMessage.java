@@ -1,13 +1,13 @@
 package com.ldtteam.blockout.network.message.core;
 
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 public interface IBlockOutServerToClientMessage extends IBlockOutNetworkMessage
 {
 
     @Override
-    default void onArrived(final IMessageContext ctx)
+    default void onArrived(final NetworkEvent.Context ctx)
     {
         onMessageArrivalAtClient(ctx);
     }
@@ -15,7 +15,7 @@ public interface IBlockOutServerToClientMessage extends IBlockOutNetworkMessage
     /**
      * Method called by the network system when this {@link IBlockOutNetworkMessage} has arrived at the {@code Side.CLIENT}.
      *
-     * @param ctx The {@link IMessageContext} in which the {@link IBlockOutNetworkMessage} arrived.
+     * @param ctx The {@link NetworkEvent.Context} in which the {@link IBlockOutNetworkMessage} arrived.
      */
-    void onMessageArrivalAtClient(@NotNull final IMessageContext ctx);
+    void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx);
 }

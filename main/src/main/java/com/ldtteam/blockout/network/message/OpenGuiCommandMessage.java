@@ -3,18 +3,14 @@ package com.ldtteam.blockout.network.message;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.gui.BlockOutGuiData;
-import com.ldtteam.blockout.gui.BlockOutGuiLogic;
-import com.ldtteam.blockout.inventory.BlockOutContainerData;
-import com.ldtteam.blockout.inventory.BlockOutContainerLogic;
+import com.ldtteam.blockout.gui.BlockOutContainerGui;
+import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IGuiContainer;
-import com.ldtteam.jvoxelizer.inventory.IContainer;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +36,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
 
     @Nullable
     @Override
-    public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx)
     {
         final IUIElement element = ProxyHolder.getInstance().getFactoryController().getElementFromData(getData());
 
@@ -52,10 +48,10 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         final RootGuiElement root = (RootGuiElement) element;
         root.setUiManager(new UIManager(root, getKey()));
         root.getUiManager().getUpdateManager().updateElement(root);
-        final IContainer<BlockOutContainerData> container = BlockOutContainerLogic.create(getKey(), root, getWindowId());
-        final IGuiContainer<BlockOutGuiData> blockOutGuiDataIGuiContainer = BlockOutGuiLogic.create(getKey(), root, container);
+        final BlockOutContainer container = new BlockOutContainer(key, root, windowId);
+        final BlockOutContainerGui blockOutGuiDataIGuiContainer = new BlockOutContainerGui(container, Minecraft.getInstance().player.inventory, getKey(), root);
 
-        IGameEngine.getInstance().displayGuiScreen(blockOutGuiDataIGuiContainer);
+        Minecraft.getInstance().displayGuiScreen(blockOutGuiDataIGuiContainer);
     }
 
     @NotNull

@@ -53,12 +53,12 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final Direction facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimension().getType().getId(), entity.getUniqueID(), facing);
+        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimension().getType().getId(), entity.getEntityId(), facing);
     }
 
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int networkId, @Nullable final Direction facing
     );
 
     @NotNull

@@ -1,8 +1,8 @@
 package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class CloseGuiCommandMessage implements IBlockOutServerToClientMessage
@@ -12,8 +12,8 @@ public class CloseGuiCommandMessage implements IBlockOutServerToClientMessage
     }
 
     @Override
-    public void onMessageArrivalAtClient(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx)
     {
-        IGameEngine.getInstance().displayGuiScreen(null);
+        Minecraft.getInstance().displayGuiScreen(null);
     }
 }

@@ -26,7 +26,7 @@ public class ServerUpdateManager implements IUpdateManager
         if (element instanceof RootGuiElement)
         {
             RootGuiElement rootGuiElement = (RootGuiElement) element;
-            rootGuiElement.getUiManager().getProfiler().clearProfiling();
+            rootGuiElement.getUiManager().getProfiler().startTick();
             rootGuiElement.getUiManager().getProfiler().startSection("Global Update");
 
             ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);

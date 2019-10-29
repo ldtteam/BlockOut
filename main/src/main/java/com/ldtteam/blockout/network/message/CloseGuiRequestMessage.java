@@ -2,17 +2,17 @@ package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.jvoxelizer.entity.living.player.IMultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.fml.network.NetworkEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class CloseGuiRequestMessage implements IBlockOutClientToServerMessage
 {
 
     @Override
-    public void onMessageArrivalAtServer(@NotNull final IMessageContext ctx)
+    public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {
-        final IMultiplayerPlayerEntity playerMP = ctx.getSendingPlayer();
-        ProxyHolder.getInstance().getGuiController().closeUI(playerMP.getId());
+        final ServerPlayerEntity playerMP = ctx.getSender();
+        ProxyHolder.getInstance().getGuiController().closeUI(playerMP.getUniqueID());
     }
 }

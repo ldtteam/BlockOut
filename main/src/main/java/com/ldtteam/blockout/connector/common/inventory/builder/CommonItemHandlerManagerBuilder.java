@@ -41,9 +41,9 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final UUID entityId, @Nullable final Direction facing)
+      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int networkId, @Nullable final Direction facing)
     {
-        return withProvider(new CommonEntityBasedProvider(id, dimId, entityId, facing));
+        return withProvider(new CommonEntityBasedProvider(id, dimId, networkId, facing));
     }
 
     @NotNull

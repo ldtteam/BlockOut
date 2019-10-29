@@ -1,18 +1,18 @@
 package com.ldtteam.blockout.network.message.core;
 
-import com.ldtteam.jvoxelizer.networking.messaging.IMessageContext;
-import com.ldtteam.jvoxelizer.util.distribution.executor.IDistributionExecutor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 public interface IBlockOutBidirectionalMessage extends IBlockOutClientToServerMessage, IBlockOutServerToClientMessage
 {
 
     //Since we inherit from interfaces that both override onArrived in there in own way. We merge their behaviour here again.
     @Override
-    default void onArrived(final IMessageContext ctx)
+    default void onArrived(final NetworkEvent.Context ctx)
     {
-        IDistributionExecutor.on(
-          () -> onMessageArrivalAtClient(ctx),
-          () -> onMessageArrivalAtServer(ctx)
-        );
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> onMessageArrivalAtClient(ctx));
+
+        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> onMessageArrivalAtServer(ctx));
     }
 }

@@ -3,16 +3,15 @@ package com.ldtteam.blockout.render.standard;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.color.IColor;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
-import com.ldtteam.jvoxelizer.IGameEngine;
-import com.ldtteam.jvoxelizer.client.gui.IScaledResolution;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.IOpenGl;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.DestinationFactor;
-import com.ldtteam.jvoxelizer.client.renderer.opengl.util.SourceFactor;
-import com.ldtteam.jvoxelizer.client.renderer.texture.ISpriteMap;
+import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.MainWindow;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Deque;
 import java.util.Random;
@@ -25,12 +24,12 @@ public class ScissoringController implements IScissoringController
     private static Random random = new Random(12345);
     private static int    DISPLAYHEIGHT;
     private static int    DISPLAYWIDTH;
-    private static int    GUISCALE;
+    private static double    GUISCALE;
 
     @NotNull
     private final Deque<BoundingBox> scissorsQueue     = new ConcurrentLinkedDeque<>();
     @NotNull
-    private final Deque<IColor>      scissorDebugColor = new ConcurrentLinkedDeque<>();
+    private final Deque<Color>       scissorDebugColor = new ConcurrentLinkedDeque<>();
 
     @NotNull
     private final IRenderingController renderingController;
@@ -58,37 +57,38 @@ public class ScissoringController implements IScissoringController
 
         if (_debugEnabled)
         {
-            IOpenGl.pushMatrix();
-            IOpenGl.enableAlpha();
-            IOpenGl.enableBlend();
-            IOpenGl.blendFunc(SourceFactor.SRC_ALPHA, DestinationFactor.ONE_MINUS_SRC_ALPHA);
-            renderingController.bindTexture(ISpriteMap.getLocationOfBlocksTexture());
+            GlStateManager.pushMatrix();
+            GlStateManager.enableAlphaTest();
+            GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            renderingController.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
             renderingController.drawTexturedModalRect(new Vector2d(-10, -10),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
-            IOpenGl.disableBlend();
-            IOpenGl.disableAlpha();
-            IOpenGl.popMatrix();
+            GlStateManager.disableBlend();
+            GlStateManager.disableAlphaTest();
+            GlStateManager.popMatrix();
         }
     }
 
     private static void disableScissor()
     {
-        IOpenGl.disableScissor();
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        GL11.glPopAttrib();
     }
 
     @NotNull
-    private IColor generateNewDebugDrawColor()
+    private Color generateNewDebugDrawColor()
     {
-        IColor color = IColor.create(random.nextInt());
+        Color color = new Color(random.nextInt());
 
         int attempts = 0;
         while (scissorDebugColor.contains(color) && attempts < 100)
         {
             attempts++;
-            color = IColor.create(random.nextInt());
+            color = new Color(random.nextInt());
         }
 
         return color;
@@ -98,19 +98,26 @@ public class ScissoringController implements IScissoringController
     {
         calcScaleFactor();
 
-        IOpenGl.enableScissor((int) (box.getUpperLeftCoordinate().getX() * GUISCALE),
+        enableScissor((int) (box.getUpperLeftCoordinate().getX() * GUISCALE),
           (int) ((DISPLAYHEIGHT - box.getUpperRightCoordinate().getY()) * GUISCALE),
           (int) ((box.getSize().getX()) * GUISCALE),
           (int) ((box.getSize().getY()) * GUISCALE));
     }
 
+    private static void enableScissor(final int x, final int y, final int w, final int h)
+    {
+        GL11.glPushAttrib(GL11.GL_SCISSOR_BIT);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+        GL11.glScissor(x, y, w, h);
+    }
+
     private static void calcScaleFactor()
     {
-        IGameEngine mc = IGameEngine.getInstance();
-        IScaledResolution sc = IScaledResolution.create(mc);
-        DISPLAYWIDTH = sc.getScaledWidth();
-        DISPLAYHEIGHT = sc.getScaledHeight();
-        GUISCALE = sc.getScaleFactor();
+        Minecraft mc = Minecraft.getInstance();
+        MainWindow window = mc.mainWindow;
+        DISPLAYWIDTH = window.getScaledWidth();
+        DISPLAYHEIGHT = window.getScaledHeight();
+        GUISCALE = window.getGuiScaleFactor();
         DEBUG_BOX = new BoundingBox(new Vector2d(-10000, -10000), new Vector2d(20000, 20000));
     }
 
