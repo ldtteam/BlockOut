@@ -38,16 +38,16 @@ public final class XMLToNBT
 
     static
     {
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> new ByteNBT(Byte.parseByte(byteString.replace("b", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE, (node) -> convertFromValue(node, (byteString) -> ByteNBT.valueOf(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, XMLToNBT::convertToByteArray);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, XMLToNBT::convertToNBTTagCompound);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> new DoubleNBT(Double.parseDouble(doubleString.replace("d", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> new FloatNBT(Float.parseFloat(floatString.replace("f", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> new ShortNBT(Short.parseShort(shortString.replace("s", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> new LongNBT(Long.parseLong(longString.replace("l", "")))));
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> new IntNBT(Integer.parseInt(intString))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE, (node) -> convertFromValue(node, (doubleString) -> DoubleNBT.valueOf(Double.parseDouble(doubleString.replace("d", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT, (node) -> convertFromValue(node, (floatString) -> FloatNBT.valueOf(Float.parseFloat(floatString.replace("f", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT, (node) -> convertFromValue(node, (shortString) -> ShortNBT.valueOf(Short.parseShort(shortString.replace("s", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG, (node) -> convertFromValue(node, (longString) -> LongNBT.valueOf(Long.parseLong(longString.replace("l", "")))));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT, (node) -> convertFromValue(node, (intString) -> IntNBT.valueOf(Integer.parseInt(intString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, XMLToNBT::convertToList);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (node) -> convertFromValue(node, StringNBT::new));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (node) -> convertFromValue(node, StringNBT::valueOf));
     }
     private XMLToNBT()
     {

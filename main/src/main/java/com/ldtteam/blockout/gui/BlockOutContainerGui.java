@@ -10,6 +10,7 @@ import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -84,16 +85,16 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         //Can be done here since both fore and background methods are called by the super
         getInstanceData().getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
-        GlStateManager.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
+        RenderSystem.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
         super.render(mouseX, mouseY, partialTick);
 
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
+        RenderSystem.popMatrix();
 
         getInstanceData().setDrawing(false);
     }

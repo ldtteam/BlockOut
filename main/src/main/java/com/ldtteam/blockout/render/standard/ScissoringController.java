@@ -7,9 +7,11 @@ import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
@@ -57,19 +59,19 @@ public class ScissoringController implements IScissoringController
 
         if (_debugEnabled)
         {
-            GlStateManager.pushMatrix();
-            GlStateManager.enableAlphaTest();
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            renderingController.bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+            RenderSystem.pushMatrix();
+            RenderSystem.enableAlphaTest();
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            renderingController.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
             renderingController.drawTexturedModalRect(new Vector2d(-10, -10),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT),
               new Vector2d(DISPLAYWIDTH, DISPLAYHEIGHT));
-            GlStateManager.disableBlend();
-            GlStateManager.disableAlphaTest();
-            GlStateManager.popMatrix();
+            RenderSystem.disableBlend();
+            RenderSystem.disableAlphaTest();
+            RenderSystem.popMatrix();
         }
     }
 
@@ -114,7 +116,7 @@ public class ScissoringController implements IScissoringController
     private static void calcScaleFactor()
     {
         Minecraft mc = Minecraft.getInstance();
-        MainWindow window = mc.mainWindow;
+        MainWindow window = mc.getMainWindow();
         DISPLAYWIDTH = window.getScaledWidth();
         DISPLAYHEIGHT = window.getScaledHeight();
         GUISCALE = window.getGuiScaleFactor();

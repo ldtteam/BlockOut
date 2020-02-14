@@ -32,7 +32,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
 {
     public static final String                      CONST_STYLE_FILE_PATH = "styles/styles.json";
     private static      SimpleFileBasedStyleManager ourInstance           = new SimpleFileBasedStyleManager();
-    private final       Map<ResourceLocation, IStyle>    styles                = new HashMap();
+    private final       Map<ResourceLocation, IStyle>    styles                = new HashMap<>();
 
     private SimpleFileBasedStyleManager()
     {
@@ -70,8 +70,6 @@ public class SimpleFileBasedStyleManager implements IStyleManager
         ModList.get().applyForEachModContainer(ModContainer::getModId).collect(Collectors.toList());
 
         final Set<String> resourceDomains = ModList.get().applyForEachModContainer(ModContainer::getModId).collect(Collectors.toSet());
-        final IProgressBar loadingBar = IProgressManager.push("Loading BlockOut Styles", resourceDomains.size());
-
         final Gson gson = new GsonBuilder()
                             .registerTypeAdapter(StylesDefinitionDeserializer.CONST_STYLES_DEFINITION_TYPE, StylesDefinitionDeserializer.getInstance())
                             .registerTypeAdapter(StyleDefinitionDeserializer.CONST_STYLE_DEFINTION_TYPE, StyleDefinitionDeserializer.getInstance())
@@ -79,8 +77,6 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                             .create();
 
         resourceDomains.forEach(domain -> {
-            loadingBar.step("Loading styles from: " + domain);
-
             final ResourceLocation stylesLocation = new ResourceLocation(domain.toLowerCase(), CONST_STYLE_FILE_PATH);
             final StylesDefinition stylesDefinition;
             try
@@ -94,11 +90,8 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                 return;
             }
 
-            final IProgressBar domainLoadingBar =
-              IProgressManager.push(String.format("Loading styles from: %s", domain), stylesDefinition.getStyleLocations().size());
             stylesDefinition.getStyleLocations().forEach(styleLocation ->
             {
-                domainLoadingBar.step(String.format("Loading style from: %s", styleLocation));
                 final StyleDefinition styleDefinition;
                 try
                 {
@@ -111,14 +104,10 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                     return;
                 }
 
-                final IProgressBar styleLoadingBar = IProgressManager.push(String.format("Loading style: %s in domain: %s", styleDefinition.getStyleId(), domain),
-                  styleDefinition.getResourceTypeDefinitionLocations().size());
                 final Map<ResourceLocation, IResource> resourcesForStyle =
                   styleDefinition.getResourceTypeDefinitionLocations()
                     .stream()
                     .flatMap(resourceTypeLocation -> {
-                        styleLoadingBar.step("Loading resources from: " + resourceTypeLocation);
-
                         final ResourceTypeDefinition resourceTypeDefinition;
                         try
                         {
@@ -160,13 +149,7 @@ public class SimpleFileBasedStyleManager implements IStyleManager
                 }
 
                 styles.put(styleDefinition.getStyleId(), style);
-
-                IProgressManager.pop(styleLoadingBar);
             });
-
-            IProgressManager.pop(domainLoadingBar);
         });
-
-        IProgressManager.pop(loadingBar);
     }
 }

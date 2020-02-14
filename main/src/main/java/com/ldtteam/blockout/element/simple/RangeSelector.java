@@ -15,6 +15,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -234,11 +235,11 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
 
         final ImageResource leftBackgroundResource = getLeftBackgroundTextureResource();
         final ImageResource selectorRegionBackgroundResource = getSelectedRegionBackgroundTextureResource();
@@ -268,10 +269,10 @@ public class RangeSelector extends AbstractSimpleUIElement implements IClickAcce
         final Vector2d rightBackgroundSize = new Vector2d(getLocalBoundingBox().getSize().getX() - rightBackgroundOffset.getX(), height).nullifyNegatives();
         drawImageResource(controller, rightBackgroundResource, rightBackgroundOffset, rightBackgroundSize);
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.disableBlend();
+        RenderSystem.disableAlphaTest();
         RenderHelper.enableStandardItemLighting();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     public ImageResource getLeftBackgroundTextureResource()

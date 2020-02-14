@@ -2,6 +2,7 @@ package com.ldtteam.blockout.util.color;
 
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 
 import static com.ldtteam.blockout.util.color.ColorUtils.MARKER;
@@ -11,7 +12,7 @@ public class Color
 
     public static void resetOpenGLColoring()
     {
-        GlStateManager.color4f(1f, 1f, 1f, 1f);
+        RenderSystem.color4f(1f, 1f, 1f, 1f);
     }
 
     private final int value;
@@ -130,7 +131,7 @@ public class Color
      */
     public void performOpenGLColoring()
     {
-        GlStateManager.color4f(getRed() / 255F, getGreen() / 255F, getBlue() / 255F, getAlpha() / 255F);
+        RenderSystem.color4f(getRed() / 255F, getGreen() / 255F, getBlue() / 255F, getAlpha() / 255F);
     }
 
     /**

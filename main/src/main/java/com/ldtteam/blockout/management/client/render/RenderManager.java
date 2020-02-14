@@ -10,6 +10,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import org.jetbrains.annotations.NotNull;
 
 public class RenderManager implements IRenderManager
@@ -28,8 +29,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -37,7 +38,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawBackground(renderingController);
         }
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {
@@ -60,8 +61,8 @@ public class RenderManager implements IRenderManager
             return;
         }
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
+        RenderSystem.pushMatrix();
+        RenderSystem.translated(host.getAbsoluteBoundingBox().getLocalOrigin().getX(), host.getAbsoluteBoundingBox().getLocalOrigin().getY(), 0);
 
         if (host instanceof IDrawableUIElement)
         {
@@ -69,7 +70,7 @@ public class RenderManager implements IRenderManager
             iDrawableUIElement.drawForeground(renderingController);
         }
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
 
         if (host instanceof IChildDrawableUIElement)
         {

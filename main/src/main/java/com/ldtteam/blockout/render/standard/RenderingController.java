@@ -9,7 +9,10 @@ import com.ldtteam.blockout.render.core.IScissoringController;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -24,15 +27,20 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IEnviromentBlockReader;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.chunk.IChunkLightProvider;
+import net.minecraft.world.level.ColorResolver;
+import net.minecraft.world.lighting.WorldLightManager;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,21 +106,21 @@ public class RenderingController implements IRenderingController
       @NotNull final Vector2d inTextureSize,
       @NotNull final Vector2d textureSize)
     {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.disableLighting();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color4f(1, 1, 1, 1);
+        RenderSystem.pushMatrix();
+        RenderSystem.enableBlend();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.disableLighting();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.color4f(1, 1, 1, 1);
 
         double x = origin.getX();
         double y = origin.getY();
         double width = size.getX();
         double height = size.getY();
-        double textureX = inTexturePosition.getX();
-        double textureY = inTexturePosition.getY();
-        double textureWidth = inTextureSize.getX() / textureSize.getX();
-        double textureHeight = inTextureSize.getY() / textureSize.getY();
+        float textureX = (float) inTexturePosition.getX();
+        float textureY = (float) inTexturePosition.getY();
+        float textureWidth = (float) (inTextureSize.getX() / textureSize.getX());
+        float textureHeight = (float) (inTextureSize.getY() / textureSize.getY());
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -135,10 +143,10 @@ public class RenderingController implements IRenderingController
           .endVertex();
         tessellator.draw();
 
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableLighting();
-        GlStateManager.popMatrix();
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableLighting();
+        RenderSystem.popMatrix();
     }
 
     /**
@@ -162,16 +170,16 @@ public class RenderingController implements IRenderingController
         }
 
         ResourceLocation fluidStill = fluid.getFluid().getAttributes().getStillTexture();
-        TextureAtlasSprite texture = Minecraft.getInstance().getTextureMap().getAtlasSprite(fluidStill.toString());
+        TextureAtlasSprite texture = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 
         if (texture == null)
         {
-            texture = Minecraft.getInstance().getTextureMap().getAtlasSprite("missingno");
+            texture = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation("missingno"));
         }
 
         final Color fluidColor = new Color(fluid.getFluid().getAttributes().getColor(fluid));
 
-        bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
+        bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
         fluidColor.performOpenGLColoring();
 
         int fullX = w / 16 + 1;
@@ -203,14 +211,14 @@ public class RenderingController implements IRenderingController
         BufferBuilder worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
 
-        worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex((double) icon.getMinU(), (double) icon.getInterpolatedV(h)).endVertex();
+        worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex(icon.getMinU(), icon.getInterpolatedV(h)).endVertex();
         worldrenderer.pos((double) (x + w), (double) (y + h), (double) z)
-          .tex((double) icon.getInterpolatedU(w), (double) icon.getInterpolatedV(h))
+          .tex(icon.getInterpolatedU(w), icon.getInterpolatedV(h))
           .endVertex();
         worldrenderer.pos((double) (x + w), (double) (y + 0), (double) z)
-          .tex((double) icon.getInterpolatedU(w), (double) icon.getInterpolatedV(cutOffVertical))
+          .tex(icon.getInterpolatedU(w), icon.getInterpolatedV(cutOffVertical))
           .endVertex();
-        worldrenderer.pos((double) (x + 0), (double) (y + 0), (double) z).tex((double) icon.getMinU(), (double) icon.getInterpolatedV(cutOffVertical)).endVertex();
+        worldrenderer.pos((double) (x + 0), (double) (y + 0), (double) z).tex(icon.getMinU(), icon.getInterpolatedV(cutOffVertical)).endVertex();
 
         tessellator.draw();
     }
@@ -233,10 +241,10 @@ public class RenderingController implements IRenderingController
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex((double) icon.getMinU(), (double) icon.getMaxV()).endVertex();
-        worldrenderer.pos((double) (x + w), (double) (y + h), (double) z).tex((double) icon.getMaxU(), (double) icon.getMaxV()).endVertex();
-        worldrenderer.pos((double) (x + w), (double) (y + 0), (double) z).tex((double) icon.getMaxU(), (double) icon.getMinV()).endVertex();
-        worldrenderer.pos((double) (x + 0), (double) (y + 0), (double) z).tex((double) icon.getMinU(), (double) icon.getMinV()).endVertex();
+        worldrenderer.pos((double) (x + 0), (double) (y + h), (double) z).tex(icon.getMinU(), icon.getMaxV()).endVertex();
+        worldrenderer.pos((double) (x + w), (double) (y + h), (double) z).tex(icon.getMaxU(), icon.getMaxV()).endVertex();
+        worldrenderer.pos((double) (x + w), (double) (y + 0), (double) z).tex(icon.getMaxU(), icon.getMinV()).endVertex();
+        worldrenderer.pos((double) (x + 0), (double) (y + 0), (double) z).tex(icon.getMinU(), icon.getMinV()).endVertex();
         tessellator.draw();
     }
 
@@ -272,11 +280,11 @@ public class RenderingController implements IRenderingController
         float f5 = colorEnd.getBlueFloat();
         float f6 = colorEnd.getGreenFloat();
         float f7 = colorEnd.getRedFloat();
-        GlStateManager.disableTexture();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.blendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.shadeModel(7425);
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.blendFuncSeparate(770, 771, 1, 0);
+        RenderSystem.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder worldrenderer = tessellator.getBuffer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -285,10 +293,10 @@ public class RenderingController implements IRenderingController
         worldrenderer.pos(box.getUpperLeftCoordinate().getX(), box.getLowerRightCoordinate().getY(), (double) z).color(f7, f6, f5, f4).endVertex();
         worldrenderer.pos(box.getLowerRightCoordinate().getX(), box.getLowerRightCoordinate().getY(), (double) z).color(f7, f6, f5, f4).endVertex();
         tessellator.draw();
-        GlStateManager.shadeModel(7424);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableTexture();
+        RenderSystem.shadeModel(7424);
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableTexture();
     }
 
     @Override
@@ -319,21 +327,21 @@ public class RenderingController implements IRenderingController
         float f3 = color.getAlphaFloat();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
           GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
           GlStateManager.SourceFactor.ONE,
           GlStateManager.DestFactor.ZERO);
-        GlStateManager.color4f(f, f1, f2, f3);
+        RenderSystem.color4f(f, f1, f2, f3);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos(relativeLeft, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeBottom, 0.0D).endVertex();
         bufferbuilder.pos(relativeRight, relativeTop, 0.0D).endVertex();
         bufferbuilder.pos(relativeLeft, relativeTop, 0.0D).endVertex();
         tessellator.draw();
-        GlStateManager.enableTexture();
-        GlStateManager.disableBlend();
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
     }
 
     /**
@@ -346,8 +354,8 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawItemStack(@NotNull ItemStack stack, int x, int y)
     {
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
+        RenderSystem.enableLighting();
+        RenderSystem.enableDepthTest();
         RenderHelper.enableStandardItemLighting();
 
         FontRenderer font = null;
@@ -365,8 +373,8 @@ public class RenderingController implements IRenderingController
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, "");
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableDepthTest();
-        GlStateManager.disableLighting();
+        RenderSystem.enableDepthTest();
+        RenderSystem.disableLighting();
     }
 
     /**
@@ -380,8 +388,8 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawItemStack(@NotNull ItemStack stack, int x, int y, String altText)
     {
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
+        RenderSystem.enableLighting();
+        RenderSystem.enableDepthTest();
         RenderHelper.enableStandardItemLighting();
 
         FontRenderer font = null;
@@ -399,8 +407,8 @@ public class RenderingController implements IRenderingController
         ITEMRENDERER.renderItemOverlayIntoGUI(font, stack, x, y, altText);
 
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableDepthTest();
-        GlStateManager.disableLighting();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableLighting();
     }
 
     @Override
@@ -408,11 +416,27 @@ public class RenderingController implements IRenderingController
     {
         RenderHelper.disableStandardItemLighting();
 
-        final IEnviromentBlockReader blockReader = new IEnviromentBlockReader() {
+
+
+        final ILightReader blockReader = new ILightReader() {
             @Override
-            public Biome getBiome(final BlockPos blockPos)
-            {
-                return Biomes.PLAINS;
+            public WorldLightManager getLightManager() {
+                return null;
+            }
+
+            @Override
+            public int getLightSubtracted(final BlockPos p_226659_1_, final int p_226659_2_) {
+                return 15;
+            }
+
+            @Override
+            public boolean canSeeSky(final BlockPos p_226660_1_) {
+                return true;
+            }
+
+            @Override
+            public int getBlockColor(final BlockPos blockPos, final ColorResolver colorResolver) {
+                return 0;
             }
 
             @Override
@@ -456,11 +480,11 @@ public class RenderingController implements IRenderingController
             }
         };
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translatef(0f, 0f, 0f);
-        GlStateManager.scalef(14.0F, 14.0F, -14.0F);
-        GlStateManager.rotatef(210.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotatef(45.0F, 0.0F, 1.0F, 0.0F);
+        RenderSystem.pushMatrix();
+        RenderSystem.translatef(0f, 0f, 0f);
+        RenderSystem.scalef(14.0F, 14.0F, -14.0F);
+        RenderSystem.rotatef(210.0F, 1.0F, 0.0F, 0.0F);
+        RenderSystem.rotatef(45.0F, 0.0F, 1.0F, 0.0F);
 
         BufferBuilder buf = Tessellator.getInstance().getBuffer();
 
@@ -468,7 +492,7 @@ public class RenderingController implements IRenderingController
 
         try
         {
-            Minecraft.getInstance().getBlockRendererDispatcher().renderBlock(state, new BlockPos(0,0,0), blockReader, buf, new Random(), blockReader.getTileEntity(new BlockPos(0,0,0)).getModelData());
+            Minecraft.getInstance().getBlockRendererDispatcher().renderModel(state, new BlockPos(0,0,0), blockReader, new MatrixStack(), buf, blockReader.getTileEntity(new BlockPos(0,0,0)).getModelData());
         }
         catch (Throwable t)
         {
@@ -480,7 +504,7 @@ public class RenderingController implements IRenderingController
         }
         Tessellator.getInstance().draw();
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     @Override
@@ -546,14 +570,15 @@ public class RenderingController implements IRenderingController
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
-            TextureAtlasSprite textureatlassprite = slotIn.getBackgroundSprite();
+            Pair<ResourceLocation, ResourceLocation> tasPair = slotIn.func_225517_c_();
 
-            if (textureatlassprite != null)
+            if (tasPair != null)
             {
-                GlStateManager.disableLighting();
-                gui.getMinecraft().getTextureManager().bindTexture(slotIn.getBackgroundLocation());
+                RenderSystem.disableLighting();
+                TextureAtlasSprite textureatlassprite = Minecraft.getInstance().getTextureGetter(tasPair.getFirst()).apply(tasPair.getSecond());
+                Minecraft.getInstance().getTextureManager().bindTexture(textureatlassprite.getAtlasTexture().getBasePath());
                 AbstractGui.blit(x, y, (int) Minecraft.getInstance().getItemRenderer().zLevel, 16, 16, textureatlassprite);;
-                GlStateManager.enableLighting();
+                RenderSystem.enableLighting();
                 isDraggingStartSlot = true;
             }
         }
@@ -565,7 +590,7 @@ public class RenderingController implements IRenderingController
                 drawRect(x, y, x + 16, y + 16, new Color(-2130706433));
             }
 
-            GlStateManager.enableDepthTest();
+            RenderSystem.enableDepthTest();
             drawItemStack(itemstack, x, y, s);
         }
 
@@ -595,15 +620,15 @@ public class RenderingController implements IRenderingController
         }
 
         gui.hoveredSlot = gui.getContainer().inventorySlots.get(slot.getSlotIndex());
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepthTest();
+        RenderSystem.disableLighting();
+        RenderSystem.disableDepthTest();
         int x = 1;
         int y = 1;
-        GlStateManager.colorMask(true, true, true, false);
+        RenderSystem.colorMask(true, true, true, false);
         this.drawGradientRect(0, x, y, x + 16, y + 16, -2130706433, -2130706433);
-        GlStateManager.colorMask(true, true, true, true);
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
+        RenderSystem.colorMask(true, true, true, true);
+        RenderSystem.enableLighting();
+        RenderSystem.enableDepthTest();
     }
 
     @Override
@@ -617,11 +642,11 @@ public class RenderingController implements IRenderingController
         float f5 = (float) (endColor >> 16 & 255) / 255.0F;
         float f6 = (float) (endColor >> 8 & 255) / 255.0F;
         float f7 = (float) (endColor & 255) / 255.0F;
-        GlStateManager.disableTexture();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.shadeModel(7425);
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        RenderSystem.shadeModel(7425);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
@@ -630,10 +655,10 @@ public class RenderingController implements IRenderingController
         bufferbuilder.pos((double) left, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
         bufferbuilder.pos((double) right, (double) bottom, (double) zLevel).color(f5, f6, f7, f4).endVertex();
         tessellator.draw();
-        GlStateManager.shadeModel(7424);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableTexture();
+        RenderSystem.shadeModel(7424);
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableTexture();
     }
     
     /**

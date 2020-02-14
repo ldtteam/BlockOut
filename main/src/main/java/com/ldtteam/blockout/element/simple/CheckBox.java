@@ -18,6 +18,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -122,7 +123,7 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
         final ImageResource resource = resourceSupplier.get();
         final Vector2d size = getLocalBoundingBox().getSize();
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -131,7 +132,7 @@ public class CheckBox extends AbstractSimpleUIElement implements IDrawableUIElem
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     @NotNull

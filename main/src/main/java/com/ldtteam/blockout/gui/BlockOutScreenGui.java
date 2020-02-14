@@ -6,6 +6,7 @@ import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -76,38 +77,38 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
         //Can be done here since both fore and background methods are called by the super
         getInstanceData().getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
-        GlStateManager.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
+        RenderSystem.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
         getInstanceData().getRoot().getUiManager().getRenderManager().drawForeground(getInstanceData().getRoot());
 
-        GlStateManager.disableRescaleNormal();
+        RenderSystem.disableRescaleNormal();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepthTest();
+        RenderSystem.disableLighting();
+        RenderSystem.disableDepthTest();
 
         super.render(mouseX, mouseY, partialTickTime);
 
         RenderHelper.enableStandardItemLighting();
-        GlStateManager.pushMatrix();
-        GlStateManager.translated((float)getInstanceData().getGuiLeft(), (float)getInstanceData().getGuiTop(), 0.0d);
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableRescaleNormal();
+        RenderSystem.pushMatrix();
+        RenderSystem.translated((float)getInstanceData().getGuiLeft(), (float)getInstanceData().getGuiTop(), 0.0d);
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.enableRescaleNormal();
 
         RenderHelper.disableStandardItemLighting();
 
         getInstanceData().getRoot().getUiManager().getRenderManager().drawBackground(getInstanceData().getRoot());
 
-        GlStateManager.popMatrix();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
+        RenderSystem.popMatrix();
+        RenderSystem.enableLighting();
+        RenderSystem.enableDepthTest();
         RenderHelper.enableStandardItemLighting();
 
-        GlStateManager.popMatrix();
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
+        RenderSystem.popMatrix();
 
         getInstanceData().setDrawing(false);
     }

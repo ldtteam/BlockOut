@@ -14,6 +14,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -65,13 +66,13 @@ public class ItemIcon extends AbstractSimpleUIElement implements IDrawableUIElem
         final ItemStack stack = resource.getStack();
         if (stack != null && !stack.isEmpty())
         {
-            GlStateManager.pushMatrix();
+            RenderSystem.pushMatrix();
             final Vector2d scalingFactor = resource.getScalingFactor(getLocalBoundingBox().getSize());
-            GlStateManager.scaled(scalingFactor.getX(), scalingFactor.getY(), 1d);
+            RenderSystem.scaled(scalingFactor.getX(), scalingFactor.getY(), 1d);
 
             controller.drawItemStack(stack, 0, 0);
 
-            GlStateManager.popMatrix();
+            RenderSystem.popMatrix();
         }
     }
 

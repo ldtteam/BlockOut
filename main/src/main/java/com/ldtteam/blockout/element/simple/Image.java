@@ -15,6 +15,7 @@ import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,11 +64,11 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
     {
         final ImageResource resource = getIcon();
 
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         Color.resetOpenGLColoring();
 
@@ -78,10 +79,10 @@ public class Image extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlphaTest();
+        RenderSystem.disableBlend();
+        RenderSystem.disableAlphaTest();
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     @Override

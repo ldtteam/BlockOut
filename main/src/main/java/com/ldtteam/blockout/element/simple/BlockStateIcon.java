@@ -13,6 +13,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -60,11 +61,11 @@ public class BlockStateIcon extends AbstractSimpleUIElement implements IDrawable
     @Override
     public void drawBackground(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
 
         controller.drawBlockState(getBlockState(), 0, 0);
 
-        GlStateManager.popMatrix();
+        RenderSystem.popMatrix();
     }
 
     @NotNull

@@ -66,7 +66,7 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             blockOutGui.setRoot(rootGuiElement);
             blockOutGui.getRoot().getUiManager().getRenderManager().setGuiData(blockOutGui);
             blockOutGui.getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getRoot());
-            openContainerScreen.init(Minecraft.getInstance(), Minecraft.getInstance().mainWindow.getScaledWidth(), Minecraft.getInstance().mainWindow.getScaledHeight());
+            openContainerScreen.init(Minecraft.getInstance(), Minecraft.getInstance().getMainWindow().getScaledWidth(), Minecraft.getInstance().getMainWindow().getScaledHeight());
 
             final BlockOutContainer container = openContainerScreen.getContainer();
             container.reinitializeSlots();

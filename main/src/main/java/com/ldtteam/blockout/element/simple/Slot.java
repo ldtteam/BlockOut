@@ -14,6 +14,7 @@ import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -123,12 +124,12 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
         final ImageResource resource = getBackgroundImage();
         final Vector2d scalingFactor = resource.getScalingFactor(size);
 
-        GlStateManager.pushMatrix();
-        GlStateManager.scaled(scalingFactor.getX(), scalingFactor.getY(), 1d);
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepthTest();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.enableBlend();
+        RenderSystem.pushMatrix();
+        RenderSystem.scaled(scalingFactor.getX(), scalingFactor.getY(), 1d);
+        RenderSystem.disableLighting();
+        RenderSystem.disableDepthTest();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.enableBlend();
 
         controller.bindTexture(resource.getDiskLocation());
         controller.drawTexturedModalRect(new Vector2d(),
@@ -137,11 +138,11 @@ public class Slot extends AbstractSimpleUIElement implements IDrawableUIElement
           resource.getSize(),
           resource.getFileSize());
 
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepthTest();
-        GlStateManager.popMatrix();
+        RenderSystem.disableBlend();
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableLighting();
+        RenderSystem.enableDepthTest();
+        RenderSystem.popMatrix();
 
         controller.drawSlotContent(this);
         controller.drawSlotMouseOverlay(this);

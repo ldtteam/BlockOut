@@ -48,21 +48,21 @@ public abstract class NBTBaseConverter<T extends INBT> implements IUIElementData
     static
     {
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE,
-          (component) -> convertToValue(component, (byteString) -> new ByteNBT(Byte.parseByte(byteString.replace("b", "")))));
+          (component) -> convertToValue(component, (byteString) -> ByteNBT.valueOf(Byte.parseByte(byteString.replace("b", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_BYTE_ARRAY, NBTBaseConverter::convertToByteArray);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_COMPOUND, NBTBaseConverter::convertToNBTTagCompound);
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_DOUBLE,
-          (component) -> convertToValue(component, (doubleString) -> new DoubleNBT(Double.parseDouble(doubleString.replace("d", "")))));
+          (component) -> convertToValue(component, (doubleString) -> DoubleNBT.valueOf(Double.parseDouble(doubleString.replace("d", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_FLOAT,
-          (component) -> convertToValue(component, (floatString) -> new FloatNBT(Float.parseFloat(floatString.replace("f", "")))));
+          (component) -> convertToValue(component, (floatString) -> FloatNBT.valueOf(Float.parseFloat(floatString.replace("f", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_SHORT,
-          (component) -> convertToValue(component, (shortString) -> new ShortNBT(Short.parseShort(shortString.replace("s", "")))));
+          (component) -> convertToValue(component, (shortString) -> ShortNBT.valueOf(Short.parseShort(shortString.replace("s", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LONG,
-          (component) -> convertToValue(component, (longString) -> new LongNBT(Long.parseLong(longString.replace("l", "")))));
+          (component) -> convertToValue(component, (longString) -> LongNBT.valueOf(Long.parseLong(longString.replace("l", "")))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_INT,
-          (component) -> convertToValue(component, (intString) -> new IntNBT(Integer.parseInt(intString))));
+          (component) -> convertToValue(component, (intString) -> IntNBT.valueOf(Integer.parseInt(intString))));
         TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_LIST, NBTBaseConverter::convertToList);
-        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (component) -> convertToValue(component, StringNBT::new));
+        TYPE_CONVERSION_FUNCTIONS.put(NBTType.TAG_STRING, (component) -> convertToValue(component, StringNBT::valueOf));
     }
 
     static
@@ -270,7 +270,7 @@ public abstract class NBTBaseConverter<T extends INBT> implements IUIElementData
         final C newInstance = newInstanceCreator.apply(ComponentType.LIST);
 
         newInstance.setList(NBTStreamSupport.streamByteArray(byteArray)
-                              .map(INBT::create)
+                              .map(ByteNBT::valueOf)
                               .map(tag -> NBT_CONVERSION_FUNCTIONS.get(NBTType.TAG_BYTE).apply(tag, newInstanceCreator))
                               .collect(Collectors.toList()));
 

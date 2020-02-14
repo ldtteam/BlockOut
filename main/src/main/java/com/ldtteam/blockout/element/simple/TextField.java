@@ -31,6 +31,7 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -212,11 +213,11 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     public void doDraw(@NotNull final IRenderingController controller)
     {
-        GlStateManager.pushMatrix();
+        RenderSystem.pushMatrix();
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.enableAlphaTest();
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         final int x = 0;
         final int y = 0;
@@ -297,9 +298,9 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             this.drawSelectionBox(x, width, cursorDrawX, drawStartY - 1, selectionDrawEnd - 1, drawStartY + 1 + getFontRenderer().getFontHeight(), selectionColor);
         }
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlphaTest();
-        GlStateManager.popMatrix();
+        RenderSystem.disableBlend();
+        RenderSystem.disableAlphaTest();
+        RenderSystem.popMatrix();
         RenderHelper.enableStandardItemLighting();
     }
 
@@ -467,17 +468,17 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         selectionColor.performOpenGLColoring();
-        GlStateManager.disableTexture();
-        GlStateManager.enableColorLogicOp();
-        GlStateManager.logicOp(GlStateManager.LogicOp.OR_REVERSE);
+        RenderSystem.disableTexture();
+        RenderSystem.enableColorLogicOp();
+        RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos((double) startX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) endY, 0.0D).endVertex();
         bufferbuilder.pos((double) endX, (double) startY, 0.0D).endVertex();
         bufferbuilder.pos((double) startX, (double) startY, 0.0D).endVertex();
         tessellator.draw();
-        GlStateManager.disableColorLogicOp();
-        GlStateManager.enableTexture();
+        RenderSystem.disableColorLogicOp();
+        RenderSystem.enableTexture();
     }
 
     public void setShouldDrawBackground(final boolean drawBackground)
