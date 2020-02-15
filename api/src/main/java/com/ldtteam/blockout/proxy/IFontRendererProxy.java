@@ -1,7 +1,5 @@
 package com.ldtteam.blockout.proxy;
 
-import com.ldtteam.blockout.util.math.Vector2d;
-
 /**
  * The proxy for the font renderer.
  */

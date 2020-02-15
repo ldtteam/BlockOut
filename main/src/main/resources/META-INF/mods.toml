@@ -1,0 +1,25 @@
+modLoader="javafml" #mandatory
+loaderVersion="[30,)" #mandatory (27 is current forge version)
+issueTrackerURL="https://github.com/ldtteam/minecolonies/issues/new" #optional
+[[mods]] #mandatory
+modId="blockout" #mandatory
+version="${file.jarVersion}" #mandatory
+displayName="BlockOut" #mandatory
+credits="Everybody who contributed!" #optional
+authors="LDT Team" #optional
+description='''
+A data driven GUI Library.
+'''
+[[dependencies.blockout]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[31,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+# Here's another dependency
+[[dependencies.blockout]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

@@ -14,19 +14,20 @@ import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
+import com.ldtteam.blockout.util.Constants;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.Set;
 
+@Mod(Constants.MOD_ID)
 public class BlockOut
 {
     private static BlockOut ourInstance = new BlockOut();
 
-    private BlockOut()
+    public BlockOut()
     {
-
         Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onCommonSetup);
         Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onLoadCompleted);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onPlayerLoggedOut);

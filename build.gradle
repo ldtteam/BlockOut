@@ -2,6 +2,9 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
+import java.util.function.Function
+import java.util.stream.Collectors
+
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
@@ -76,6 +79,30 @@ configure(leafProjects) {projectToConfigure ->
         mappings channel: 'snapshot', version: '20200124-1.15.1'
 
         accessTransformer = globalAT
+
+        minecraft {
+            runs {
+                client {
+                    mods {
+                        blockout {
+                            workingDirectory project.file('runClient')
+                            property 'forge.logging.console.level', 'info'
+                            source projectToConfigure.sourceSets.main
+                        }
+                    }
+                }
+
+                server {
+                    mods {
+                        blockout {
+                            workingDirectory project.file('runServer')
+                            property 'forge.logging.console.level', 'info'
+                            sources projectToConfigure.sourceSets.main
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //All projects should be able to shade artifacts into them selfs.
