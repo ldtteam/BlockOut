@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.font;
 
 import com.ldtteam.blockout.util.color.Color;
+import net.minecraft.client.gui.fonts.EmptyGlyph;
 import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.IGlyph;
 import net.minecraft.client.gui.fonts.TexturedGlyph;
@@ -18,7 +19,7 @@ public class MultiColoredFont extends Font {
 
     private final Font wrappedFont;
     private int state = 0;
-    private Color currentColor = Color.;
+    private Color currentColor = new Color(0);
 
     @SuppressWarnings("ConstantConditions")
     public MultiColoredFont(final Font wrappedFont) {
@@ -43,22 +44,28 @@ public class MultiColoredFont extends Font {
             int value = letter & 0xFF;
             switch(state) {
                 case 0:
-                    red = value;
+                    currentColor = new Color(letter, currentColor.getGreen(), currentColor.getBlue(), currentColor.getAlpha());
                     break;
                 case 1:
-                    green = value;
+                    currentColor = new Color(currentColor.getRed(), letter, currentColor.getBlue(), currentColor.getAlpha());
                     break;
                 case 2:
-                    blue = value;
+                    currentColor = new Color(currentColor.getRed(), currentColor.getGreen(), letter, currentColor.getAlpha());
                     break;
+                case 3:
+                    currentColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), letter);
                 default:
-                    this.setColor(1f, 1f, 1f, 1f);
-                    return 0;
+                    this.currentColor = new Color(0);
+                    return new EmptyGlyphReference();
             }
 
-            state = ++state % 3;
+            state = ++state % 4;
 
-            int color = (red << 16) | (green << 8) | blue | (0xff << 24);
+            final Color createdColor = new Color(currentColor.getRGB());
+            currentColor = new Color(0);
+            return new ColorGlyph(createdColor);
+
+            /*int color = currentColor.getRGB();
             if((color & -67108864) == 0) {
                 color |= -16777216;
             }
@@ -71,7 +78,7 @@ public class MultiColoredFont extends Font {
                     ((color >> 8) & 255) / 255f,
                     ((color >> 0) & 255) / 255f,
                     ((color >> 24) & 255) / 255f);
-            return 0;
+            return 0;*/
         }
 
         return this.wrappedFont.findGlyph(letter);
@@ -108,6 +115,14 @@ public class MultiColoredFont extends Font {
 
         public Color getColor() {
             return color;
+        }
+    }
+
+    public static final class EmptyGlyphReference implements IGlyph {
+
+        @Override
+        public float getAdvance() {
+            return 0;
         }
     }
 }

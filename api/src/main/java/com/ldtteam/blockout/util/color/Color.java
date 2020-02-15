@@ -19,6 +19,10 @@ public class Color
 
     public Color(final int value) {this.value = value;}
 
+    public Color(final int red, final int green, final int blue, final int alpha)
+    {
+        this.value = (alpha & 255) << 24 | (red & 255) << 16 | (green & 255) << 8 | (blue & 255);
+    }
 
     /**
      * Returns the red component in the range 0-255 in the default sRGB
