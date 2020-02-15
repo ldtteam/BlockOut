@@ -15,6 +15,7 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
@@ -24,20 +25,28 @@ import java.util.Set;
 @Mod(Constants.MOD_ID)
 public class BlockOut
 {
-    private static BlockOut ourInstance = new BlockOut();
+    private static BlockOut INSTANCE;
 
     public BlockOut()
     {
+        BlockOut.INSTANCE = this;
+
         Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onCommonSetup);
         Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onLoadCompleted);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onPlayerLoggedOut);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickClientTick);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickServerTick);
+
+        ProxyHolder.getInstance().setProxy(
+                DistExecutor.runForDist(
+                        () -> ClientProxy
+                )
+        );
     }
 
     public static BlockOut getInstance()
     {
-        return ourInstance;
+        return INSTANCE;
     }
 
     public IProxy getProxy()

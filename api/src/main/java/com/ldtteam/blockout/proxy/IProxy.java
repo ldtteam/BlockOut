@@ -31,7 +31,7 @@ public interface IProxy
         return ProxyHolder.getInstance();
     }
 
-    void onPreInit();
+    void onCommonSetup();
 
     @NotNull
     IGuiController getGuiController();

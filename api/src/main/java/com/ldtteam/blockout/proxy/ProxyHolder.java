@@ -16,11 +16,9 @@ import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
@@ -40,9 +38,9 @@ public class ProxyHolder implements IProxy
     }
 
     @Override
-    public void onPreInit()
+    public void onCommonSetup()
     {
-        proxy.onPreInit();
+        proxy.onCommonSetup();
     }
 
     @Override

@@ -80,10 +80,11 @@ public class Color
      */
     public String encodeColor()
     {
-        return String.format("%c%c%c",
+        return String.format("%c%c%c%c",
           ((char) (MARKER + (getRed() & 0xFF))),
           ((char) (MARKER + (getGreen() & 0xFF))),
-          ((char) (MARKER + (getBlue() & 0xFF))));
+          ((char) (MARKER + (getBlue() & 0xFF))),
+          ((char) (MARKER + (getAlpha() & 0xFF))));
     }
 
     /**
