@@ -11,9 +11,13 @@ buildscript {
         jcenter()
         maven { url = "https://files.minecraftforge.net/maven" }
         mavenLocal()
+        maven {
+            url 'http://dogforce-games.com/maven'
+        }
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.161-read-gradle-delegation', changing: true
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
     }
 }
