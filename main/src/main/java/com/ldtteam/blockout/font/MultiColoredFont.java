@@ -6,7 +6,6 @@ import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.IGlyph;
 import net.minecraft.client.gui.fonts.TexturedGlyph;
 import net.minecraft.client.gui.fonts.providers.IGlyphProvider;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -18,8 +17,10 @@ import static com.ldtteam.blockout.util.color.ColorUtils.MARKER;
 public class MultiColoredFont extends Font {
 
     private final Font wrappedFont;
-    private int state = 0;
-    private Color currentColor = new Color(0);
+    private int findGlyphState = 0;
+    private Color findGlyphColor = new Color(0);
+    private int getGlyphState = 0;
+    private Color getGlyphColor = new Color(0);
 
     @SuppressWarnings("ConstantConditions")
     public MultiColoredFont(final Font wrappedFont) {
@@ -42,27 +43,30 @@ public class MultiColoredFont extends Font {
     public IGlyph findGlyph(final char letter) {
         if((int) letter >= MARKER && (int) letter <= MARKER + 0xFF) {
             int value = letter & 0xFF;
-            switch(state) {
+            switch(findGlyphState) {
                 case 0:
-                    currentColor = new Color(letter, currentColor.getGreen(), currentColor.getBlue(), currentColor.getAlpha());
+                    findGlyphColor = new Color(value, findGlyphColor.getGreen(), findGlyphColor.getBlue(), findGlyphColor.getAlpha());
                     break;
                 case 1:
-                    currentColor = new Color(currentColor.getRed(), letter, currentColor.getBlue(), currentColor.getAlpha());
+                    findGlyphColor = new Color(findGlyphColor.getRed(), value, findGlyphColor.getBlue(), findGlyphColor.getAlpha());
                     break;
                 case 2:
-                    currentColor = new Color(currentColor.getRed(), currentColor.getGreen(), letter, currentColor.getAlpha());
+                    findGlyphColor = new Color(findGlyphColor.getRed(), findGlyphColor.getGreen(), value, findGlyphColor.getAlpha());
                     break;
                 case 3:
-                    currentColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), letter);
+                    findGlyphColor = new Color(findGlyphColor.getRed(), findGlyphColor.getGreen(), findGlyphColor.getBlue(), value);
                 default:
-                    this.currentColor = new Color(0);
+                    this.findGlyphColor = new Color(0);
+                    this.findGlyphState = 0;
                     return new EmptyGlyphReference();
             }
 
-            state = ++state % 4;
+            findGlyphState = ++findGlyphState % 4;
+            if (findGlyphState != 0)
+                return new EmptyGlyphReference();
 
-            final Color createdColor = new Color(currentColor.getRGB());
-            currentColor = new Color(0);
+            final Color createdColor = new Color(findGlyphColor.getRGB());
+            findGlyphColor = new Color(0);
             return new ColorGlyph(createdColor);
 
             /*int color = currentColor.getRGB();
@@ -85,12 +89,62 @@ public class MultiColoredFont extends Font {
     }
 
     @Override
-    public TexturedGlyph getGlyph(final char character) {
-         return this.wrappedFont.getGlyph(character);
+    public TexturedGlyph getGlyph(final char letter) {
+        if((int) letter >= MARKER && (int) letter <= MARKER + 0xFF) {
+            int value = letter & 0xFF;
+            switch(getGlyphState) {
+                case 0:
+                    getGlyphColor = new Color(value, getGlyphColor.getGreen(), getGlyphColor.getBlue(), getGlyphColor.getAlpha());
+                    break;
+                case 1:
+                    getGlyphColor = new Color(getGlyphColor.getRed(), value, getGlyphColor.getBlue(), getGlyphColor.getAlpha());
+                    break;
+                case 2:
+                    getGlyphColor = new Color(getGlyphColor.getRed(), getGlyphColor.getGreen(), value, getGlyphColor.getAlpha());
+                    break;
+                case 3:
+                    getGlyphColor = new Color(getGlyphColor.getRed(), getGlyphColor.getGreen(), getGlyphColor.getBlue(), value);
+                default:
+                    this.getGlyphColor = new Color(0);
+                    this.getGlyphState = 0;
+                    return new EmptyGlyph();
+            }
+
+            getGlyphState = ++getGlyphState % 4;
+            if (getGlyphState != 0)
+                return new EmptyGlyph();
+
+            final Color createdColor = new Color(getGlyphColor.getRGB());
+            getGlyphColor = new Color(0);
+            return new ColorGlyph(createdColor);
+
+            /*int color = currentColor.getRGB();
+            if((color & -67108864) == 0) {
+                color |= -16777216;
+            }
+
+            if(dropShadow) {
+                color = (color & 16579836) >> 2 | color & -16777216;
+            }
+
+            this.setColor(((color >> 16) & 255) / 255f,
+                    ((color >> 8) & 255) / 255f,
+                    ((color >> 0) & 255) / 255f,
+                    ((color >> 24) & 255) / 255f);
+            return 0;*/
+        }
+
+        return this.wrappedFont.getGlyph(letter);
     }
 
     @Override
     public TexturedGlyph obfuscate(final IGlyph glyph) {
+        if (glyph instanceof EmptyGlyphReference)
+            return new EmptyGlyph();
+        
+        if (glyph instanceof ColorGlyph)
+            return (TexturedGlyph) glyph;
+
         return this.wrappedFont.obfuscate(glyph);
     }
 
@@ -99,12 +153,12 @@ public class MultiColoredFont extends Font {
         return this.wrappedFont.getWhiteGlyph();
     }
 
-    public static final class ColorGlyph extends TexturedGlyph implements IGlyph {
+    public static final class ColorGlyph extends EmptyGlyph implements IGlyph {
 
         private final Color color;
 
         public ColorGlyph(final Color color) {
-            super(RenderType.LINES, RenderType.LINES, 0,0,0,0,0,0,0,0);
+            super();
             this.color = color;
         }
 
