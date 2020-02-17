@@ -1,0 +1,73 @@
+{
+  "id": "http://blockout/blockout#",
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/QName"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "localPart": {
+                  "enum": [
+                    "window"
+                  ]
+                },
+                "namespaceURI": {
+                  "enum": [
+                    "http://blockout/blockout"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "value": {
+          "$ref": "http://blockout/groups#/definitions/WindowType"
+        }
+      },
+      "elementName": {
+        "localPart": "window",
+        "namespaceURI": "http://blockout/blockout"
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "name": {
+          "allOf": [
+            {
+              "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/QName"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "localPart": {
+                  "enum": [
+                    "layout"
+                  ]
+                },
+                "namespaceURI": {
+                  "enum": [
+                    "http://blockout/blockout"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "value": {
+          "$ref": "http://blockout/groups#/definitions/LayoutType"
+        }
+      },
+      "elementName": {
+        "localPart": "layout",
+        "namespaceURI": "http://blockout/blockout"
+      }
+    }
+  ]
+}

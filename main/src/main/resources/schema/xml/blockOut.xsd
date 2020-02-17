@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+        xmlns:types="http://blockout/types"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://blockout/blockout"
+        elementFormDefault="qualified">
+
+    <xs:import schemaLocation="types.xsd" namespace="http://blockout/types"/>
+
+    <xs:element name="window" type="types:windowType"/>
+    <xs:element name="layout" type="types:layoutType"/>
+</xs:schema>
