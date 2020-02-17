@@ -11,6 +11,7 @@ import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
@@ -19,7 +20,6 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
 
@@ -41,6 +41,16 @@ public class ProxyHolder implements IProxy
     public void onCommonSetup()
     {
         proxy.onCommonSetup();
+    }
+
+    @Override
+    public void onClientSetup() {
+        proxy.onClientSetup();
+    }
+
+    @Override
+    public void onDedicatedServerSetup() {
+        proxy.onDedicatedServerSetup();
     }
 
     @Override
@@ -117,7 +127,7 @@ public class ProxyHolder implements IProxy
     @Override
     public II18nProxy getI18nProxy()
     {
-        throw new NotImplementedException();
+        return proxy.getI18nProxy();
     }
 
     @Override
@@ -174,6 +184,12 @@ public class ProxyHolder implements IProxy
     public IReflectionManager getReflectionManager()
     {
         return proxy.getReflectionManager();
+    }
+
+    @NotNull
+    @Override
+    public IBlockOutPluginRegistry getPluginRegistry() {
+        return proxy.getPluginRegistry();
     }
 
     @Override

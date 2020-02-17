@@ -16,6 +16,7 @@ public class EventHandlerInjector
         throw new IllegalArgumentException("Utility Class");
     }
 
+    @SuppressWarnings("unchecked")
     public static void inject(@NotNull final IUIElement target, @NotNull final IEventHandlerProvider provider)
     {
         ProxyHolder.getInstance().getReflectionManager().getFieldsForClass(target.getClass())

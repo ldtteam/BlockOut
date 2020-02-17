@@ -11,6 +11,7 @@ import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
@@ -32,6 +33,10 @@ public interface IProxy
     }
 
     void onCommonSetup();
+
+    void onClientSetup();
+
+    void onDedicatedServerSetup();
 
     @NotNull
     IGuiController getGuiController();
@@ -89,6 +94,9 @@ public interface IProxy
 
     @NotNull
     IReflectionManager getReflectionManager();
+
+    @NotNull
+    IBlockOutPluginRegistry getPluginRegistry();
 
     void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
 

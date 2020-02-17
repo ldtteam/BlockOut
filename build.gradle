@@ -84,14 +84,43 @@ configure(leafProjects) {projectToConfigure ->
 
         accessTransformer = globalAT
 
+        runs {
+            client {
+                mods {
+                    blockout {
+                        workingDirectory project.file('runClient')
+                        property 'forge.logging.console.level', 'info'
+                        source projectToConfigure.sourceSets.main
+                    }
+                }
+            }
+
+            server {
+                mods {
+                    blockout {
+                        workingDirectory project.file('runServer')
+                        property 'forge.logging.console.level', 'info'
+                        source projectToConfigure.sourceSets.main
+                    }
+                }
+            }
+        }
+    }
+
+    projectToConfigure.afterEvaluate { projectToConfigureAfterEvaluate ->
+        def sourceSets = leafProjects.collect { it.sourceSets.main }
         minecraft {
+            mappings channel: 'snapshot', version: '20200124-1.15.1'
+
+            accessTransformer = globalAT
+
             runs {
                 client {
                     mods {
                         blockout {
                             workingDirectory project.file('runClient')
                             property 'forge.logging.console.level', 'info'
-                            source projectToConfigure.sourceSets.main
+                            sources sourceSets
                         }
                     }
                 }
@@ -101,7 +130,7 @@ configure(leafProjects) {projectToConfigure ->
                         blockout {
                             workingDirectory project.file('runServer')
                             property 'forge.logging.console.level', 'info'
-                            sources projectToConfigure.sourceSets.main
+                            sources sourceSets
                         }
                     }
                 }
@@ -115,17 +144,17 @@ configure(leafProjects) {projectToConfigure ->
             transitive = false
         }
         shadeTransitive{}
-        shadeDeobf {
+
+        shadeRuntime {
             transitive = false
         }
-        shadeDeobfTransitive{}
+        shadeRuntimeTransitive{}
 
-        shadeDeobf.extendsFrom shadeDeobfTransitive
-        shade.extendsFrom shadeDeobf
         shade.extendsFrom shadeTransitive
-        
+        shadeRuntime.extendsFrom shadeRuntimeTransitive
+
         compile.extendsFrom shade
-        deobfCompile.extendsFrom shadeDeobf
+        runtime.extendsFrom shadeRuntime
     }
 
     //All mods have the same test harness.
@@ -145,15 +174,26 @@ configure(leafProjects) {projectToConfigure ->
 
     projectToConfigure.afterEvaluate {projectToConfigureAfterEvaluate ->
         jar {
-            from (projectToConfigure.configurations.shade.files){
+            from (projectToConfigureAfterEvaluate.configurations.shade.files) {
                 include '*'
                 into 'META-INF/libraries'
             }
 
+            from (projectToConfigureAfterEvaluate.configurations.shadeRuntime.files) {
+                include '*'
+                into 'META-INF/libraries'
+            }
+
+            def containedDeps = projectToConfigureAfterEvaluate.configurations.shade.files.collect { it.name }.join(' ')
+            if (!projectToConfigureAfterEvaluate.configurations.shadeRuntime.files.isEmpty())
+            {
+                containedDeps = containedDeps + ' ' + projectToConfigureAfterEvaluate.configurations.shadeRuntime.files.collect { it.name }.join(' ')
+            }
+
             manifest {
                 attributes([
-                        'ContainedDeps': projectToConfigure.configurations.shade.files.collect { it.name }.join(' '),
-                        'Maven-Artifact': "${projectToConfigure.group}:${projectToConfigure.archivesBaseName}:${projectToConfigure.version}",
+                        'ContainedDeps': containedDeps,
+                        'Maven-Artifact': "${projectToConfigureAfterEvaluate.group}:${projectToConfigureAfterEvaluate.archivesBaseName}:${projectToConfigureAfterEvaluate.version}",
                         'Timestamp': System.currentTimeMillis(),
                 ])
             }

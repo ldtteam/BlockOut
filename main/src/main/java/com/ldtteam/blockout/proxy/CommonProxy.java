@@ -22,6 +22,8 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.plugins.BlockOutPluginRegistry;
+import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.reflection.ReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
@@ -71,6 +73,16 @@ public class CommonProxy implements IProxy {
         factoryInjectionModules.add(new BaseFactoryInjectionModule());
         factoryInjectionModules.add(new ElementDataFactoryInjectionModule());
         factoryInjectionModules.add(new NBTFactoryInjectionModule());
+    }
+
+    @Override
+    public void onClientSetup() {
+
+    }
+
+    @Override
+    public void onDedicatedServerSetup() {
+
     }
 
     @NotNull
@@ -235,6 +247,12 @@ public class CommonProxy implements IProxy {
     public IReflectionManager getReflectionManager()
     {
         return ReflectionManager.getInstance();
+    }
+
+    @NotNull
+    @Override
+    public IBlockOutPluginRegistry getPluginRegistry() {
+        return BlockOutPluginRegistry.getInstance();
     }
 
     @Override

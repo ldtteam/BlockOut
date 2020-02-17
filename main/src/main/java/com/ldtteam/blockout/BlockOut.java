@@ -8,6 +8,8 @@ import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
+import com.ldtteam.blockout.proxy.ClientProxy;
+import com.ldtteam.blockout.proxy.CommonProxy;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.reflection.ReflectionManager;
@@ -15,9 +17,12 @@ import com.ldtteam.blockout.style.resources.ImageResource;
 import com.ldtteam.blockout.style.resources.ItemStackResource;
 import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLDedicatedServerSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.Set;
@@ -37,9 +42,13 @@ public class BlockOut
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickClientTick);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickServerTick);
 
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onClientSetup));
+        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onDedicatedServerSetup));
+
         ProxyHolder.getInstance().setProxy(
                 DistExecutor.runForDist(
-                        () -> ClientProxy
+                        () -> ClientProxy::new,
+                        () -> CommonProxy::new
                 )
         );
     }
@@ -51,11 +60,13 @@ public class BlockOut
 
     public IProxy getProxy()
     {
-        return ProxyHolder.getInstance();
+        return IProxy.getInstance();
     }
 
     public void onCommonSetup(final FMLCommonSetupEvent event)
     {
+        getProxy().onCommonSetup();
+
         getProxy().getLoaderManager().registerLoader(new ObjectUIElementLoader());
 
         getProxy().getFactoryController().registerFactory(new RootGuiElement.Factory());
@@ -80,6 +91,21 @@ public class BlockOut
         getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
 
         getProxy().getBindingEngine().registerBindingCommand(new DataContextBindingCommand());
+
+        getProxy().getPluginRegistry().performAutomaticDiscovery();
+        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onCommonSetup(event));
+    }
+
+    public void onClientSetup(final FMLClientSetupEvent event)
+    {
+        getProxy().onClientSetup();
+        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onClientSetup(event));
+    }
+
+    public void onDedicatedServerSetup(final FMLDedicatedServerSetupEvent event)
+    {
+        getProxy().onDedicatedServerSetup();
+        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onDedicatedServerSetup(event));
     }
 
     public void onLoadCompleted(final FMLLoadCompleteEvent event)

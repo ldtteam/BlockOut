@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.util.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
 import org.objenesis.strategy.SerializingInstantiatorStrategy;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
@@ -20,7 +21,7 @@ public final class KryoUtil
         final Kryo instance = new Kryo();
         instance.setInstantiatorStrategy(
           new BlockOutInstantiationStrategy(
-            new Kryo.DefaultInstantiatorStrategy(),
+            new DefaultInstantiatorStrategy(),
             new SerializingInstantiatorStrategy(),
             new StdInstantiatorStrategy()
           )

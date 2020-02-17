@@ -18,10 +18,12 @@ public interface IGuiController
         return ProxyHolder.getInstance().getGuiController();
     }
 
+    @SuppressWarnings("unchecked")
     void openUI(@NotNull final PlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer);
 
     void openUI(@NotNull final PlayerEntity player, @NotNull final IGuiKey key);
 
+    @SuppressWarnings("unchecked")
     void openUI(@NotNull final UUID playerId, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer);
 
     void openUI(@NotNull final UUID playerId, @NotNull final IGuiKey key);

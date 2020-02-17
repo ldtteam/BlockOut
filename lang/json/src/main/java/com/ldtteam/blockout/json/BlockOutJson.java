@@ -1,18 +1,23 @@
 package com.ldtteam.blockout.json;
 
-//TODO Fix this, this needs to be a mod that gets loaded and is a child of BlockOutMain.
+import com.ldtteam.blockout.json.util.BlockOutJsonConstants;
+import com.ldtteam.blockout.plugins.IBlockOutPlugin;
+import com.ldtteam.blockout.proxy.IProxy;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-/*public class BlockOutJson implements IJVoxModPlugin
+/**
+ * The BlockOut plugin for JSON based UIs.
+ */
+public class BlockOutJson implements IBlockOutPlugin
 {
     @Override
-    public String getTargetModId()
-    {
-        return "blockout";
+    public ResourceLocation getId() {
+        return BlockOutJsonConstants.PLUGIN_ID;
     }
 
     @Override
-    public void onPreInit()
-    {
-        ProxyHolder.getInstance().getLoaderManager().registerLoader(new JsonLoader());
+    public void onCommonSetup(final FMLCommonSetupEvent commonSetupEvent) {
+        IProxy.getInstance().getLoaderManager().registerLoader(new JsonLoader());
     }
-}*/
+}
