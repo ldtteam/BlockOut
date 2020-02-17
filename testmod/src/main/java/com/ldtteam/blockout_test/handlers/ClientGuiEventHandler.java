@@ -1,59 +1,48 @@
 package com.ldtteam.blockout_test.handlers;
 
-import com.ldtteam.blockout.BlockOutForge;
-import com.ldtteam.blockout.element.simple.Button;
+import com.ldtteam.blockout.element.simple.Button.ButtonConstructionDataBuilder;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiCreateWorld;
+import net.minecraft.client.gui.screen.CreateWorldScreen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-@SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = "blockout_test", value = Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = "blockout_test", value = Dist.CLIENT)
 public class ClientGuiEventHandler
 {
 
     @SubscribeEvent
     public static void onGuiScreenInitGui(final GuiScreenEvent.InitGuiEvent event)
     {
-        if (event.getGui() instanceof GuiCreateWorld)
+        if (event.getGui() instanceof CreateWorldScreen)
         {
-            GuiCreateWorld gui = (GuiCreateWorld) event.getGui();
+            CreateWorldScreen gui = (CreateWorldScreen) event.getGui();
             onCreateWorldGui(gui);
         }
     }
 
-    private static void onCreateWorldGui(@NotNull final GuiCreateWorld worldCreationGui)
+    private static void onCreateWorldGui(@NotNull final CreateWorldScreen worldCreationGui)
     {
-        worldCreationGui.buttonList.add(new GuiButton(1000, worldCreationGui.width / 2 - 200, 60, 90, 20, "Open BO Test"));
-    }
-
-    @SubscribeEvent
-    public static void onGuiScreenActionPerformed(final GuiScreenEvent.ActionPerformedEvent event)
-    {
-        if (event.getGui() instanceof GuiCreateWorld && event.getButton().id == 1000)
-        {
-            onBOTestButtonPressed();
-        }
+        worldCreationGui.addButton(new Button(worldCreationGui.width / 2 - 200, 60, 90, 20, "Open BO Test", button -> onBOTestButtonPressed()));
     }
 
     private static void onBOTestButtonPressed()
     {
         ProxyHolder.getInstance().getClientSideOnlyGuiController().openUI(
-          PlayerEntity.fromForge(Minecraft.getMinecraft().player),
+          Minecraft.getInstance().player,
           iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(new ResourceLocation("blockout_test:gui/button_click_test.json"))
                               .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                   .withControl(
                                                                                     "test_click",
-                                                                                    Button.ButtonConstructionDataBuilder.class,
+                                                                                    ButtonConstructionDataBuilder.class,
                                                                                     buttonConstructionDataBuilder -> {
                                                                                         buttonConstructionDataBuilder
                                                                                           .withClickedEventHandler(

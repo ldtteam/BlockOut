@@ -4,15 +4,9 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.helpers.inventory.InventoryGridHelper;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
-import com.ldtteam.jvoxelizer.dimension.IDimension;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.dimension.Dimension;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.MultiplayerPlayerEntity;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.util.facing.Facing;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,22 +30,22 @@ public class InventoryGridTest implements IBlockOutGuiTest
 
     @Override
     public void onTestButtonClicked(
-      final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
+            final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        IGuiController.getInstance().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+        IGuiController.getInstance().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                            .ofFile(new ResourceLocation("blockout_test:gui/inventory_grid_test.json"))
                                                                                    .usingData(
                                                                                      iBlockOutGuiConstructionDataBuilder -> InventoryGridHelper.initiateChestControlAtPosition(
                                                                                        iBlockOutGuiConstructionDataBuilder,
-                                                                                       Dimension.fromForge(entityPlayer.world),
+                                                                                       entityPlayer.world,
                                                                                        CHEST_CONTROL_ID,
-                                                                                       IBlockCoordinate.create(0, 5, 0),
+                                                                                       new BlockPos(0, 5, 0),
                                                                                        CHEST_INVENTORY_ID,
                                                                                        SLOT_BACKGROUND),
                                                                                      iBlockOutGuiConstructionDataBuilder -> InventoryGridHelper.initiatePlayerInventoryControl(
                                                                                        iBlockOutGuiConstructionDataBuilder,
                                                                                        PLAYER_MAIN_CONTROL_ID,
-                                                                                       MultiplayerPlayerEntity.fromForge(entityPlayer),
+                                                                                       entityPlayer,
                                                                                        PLAYER_MAIN_INVENTORY_ID,
                                                                                        9,
                                                                                        36,
@@ -59,7 +53,7 @@ public class InventoryGridTest implements IBlockOutGuiTest
                                                                                      iBlockOutGuiConstructionDataBuilder -> InventoryGridHelper.initiatePlayerInventoryControl(
                                                                                        iBlockOutGuiConstructionDataBuilder,
                                                                                        PLAYER_TOOL_CONTROL_ID,
-                                                                                       MultiplayerPlayerEntity.fromForge(entityPlayer),
+                                                                                       entityPlayer,
                                                                                        PLAYER_TOOL_INVENTORY_ID,
                                                                                        0,
                                                                                        9,
@@ -69,14 +63,14 @@ public class InventoryGridTest implements IBlockOutGuiTest
                                                                                                                                            .withTileBasedProvider(
                                                                                                                                              CHEST_INVENTORY_ID,
                                                                                                                                              0,
-                                                                                                                                             IBlockCoordinate.create(0,
+                                                                                                                                             new BlockPos(0,
                                                                                                                                                5,
                                                                                                                                                0),
                                                                                                                                              null)
                                                                                                                                            .withEntityBasedProvider(
                                                                                                                                              PLAYER_INVENTORY_ID,
-                                                                                                                                             PlayerEntity.fromForge(entityPlayer),
-                                                                                                                                             Facing.fromForge(EnumFacing.DOWN))
+                                                                                                                                             entityPlayer,
+                                                                                                                                                   Direction.DOWN)
                                                                                                                                            .withWrapped(
                                                                                                                                              PLAYER_MAIN_INVENTORY_ID,
                                                                                                                                              PLAYER_INVENTORY_ID,
@@ -87,6 +81,6 @@ public class InventoryGridTest implements IBlockOutGuiTest
                                                                                                                                              PLAYER_INVENTORY_ID,
                                                                                                                                              0,
                                                                                                                                              9))
-                                                                                                           .forEntity(PlayerEntity.fromForge(entityPlayer)));
+                                                                                                           .forEntity(entityPlayer));
     }
 }

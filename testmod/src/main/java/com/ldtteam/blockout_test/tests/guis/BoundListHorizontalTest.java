@@ -1,15 +1,13 @@
 package com.ldtteam.blockout_test.tests.guis;
 
 import com.google.common.collect.ImmutableList;
-import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.advanced.list.constructiondatabuilder.ListConstructionDataBuilder;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout_test.context.BindingTestContext;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,9 +22,9 @@ public class BoundListHorizontalTest implements IBlockOutGuiTest
 
     @Override
     public void onTestButtonClicked(
-      final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
+      final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+        ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                                       .ofFile(new ResourceLocation(
                                                                                                                         "blockout_test:gui/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
@@ -44,6 +42,6 @@ public class BoundListHorizontalTest implements IBlockOutGuiTest
                                                                                                                                                                                                      "Hello this is 3")
                                                                                                                                                                                                  ))))
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
+                                                                                                                      .forEntity(entityPlayer));
     }
 }

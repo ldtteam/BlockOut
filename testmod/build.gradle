@@ -1,0 +1,6 @@
+dependencies {
+    shadeTransitive project(':main')
+
+    shadeTransitive project(':utils:concepts')
+    shadeTransitive project(':utils:helpers')
+}

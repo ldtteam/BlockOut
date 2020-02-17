@@ -109,6 +109,8 @@ configure(leafProjects) {projectToConfigure ->
 
     projectToConfigure.afterEvaluate { projectToConfigureAfterEvaluate ->
         def sourceSets = leafProjects.collect { it.sourceSets.main }
+        sourceSets.remove(project(':testmod').sourceSets.main);
+
         minecraft {
             mappings channel: 'snapshot', version: '20200124-1.15.1'
 
@@ -122,6 +124,12 @@ configure(leafProjects) {projectToConfigure ->
                             property 'forge.logging.console.level', 'info'
                             sources sourceSets
                         }
+
+                        blockout_test {
+                            workingDirectory project.file('runClient')
+                            property 'forge.logging.console.level', 'info'
+                            source project(':testmod').sourceSets.main
+                        }
                     }
                 }
 
@@ -131,6 +139,12 @@ configure(leafProjects) {projectToConfigure ->
                             workingDirectory project.file('runServer')
                             property 'forge.logging.console.level', 'info'
                             sources sourceSets
+                        }
+
+                        blockout_test {
+                            workingDirectory project.file('runClient')
+                            property 'forge.logging.console.level', 'info'
+                            source project(':testmod').sourceSets.main
                         }
                     }
                 }

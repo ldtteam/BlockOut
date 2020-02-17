@@ -1,13 +1,11 @@
 package com.ldtteam.blockout_test.tests.guis;
 
-import com.ldtteam.blockout.BlockOutForge;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.element.simple.Label;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
-import com.ldtteam.jvoxelizer.launcher.forge_1_12.entity.living.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +24,9 @@ public class CountdownTest implements IBlockOutGuiTest
 
     @Override
     public void onTestButtonClicked(
-      final EntityPlayerMP entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
+            final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
-        ProxyHolder.getInstance().getGuiController().openUI(PlayerEntity.fromForge(entityPlayer), iGuiKeyBuilder -> iGuiKeyBuilder
+        ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
                                                                                                                       .ofFile(new ResourceLocation(
                                                                                                                         "blockout_test:gui/countdown_to_time.json"))
                                                                                                       .usingData(builder -> {
@@ -39,7 +37,7 @@ public class CountdownTest implements IBlockOutGuiTest
                                                                                                             });
                                                                                                       })
                                                                                                       .withDefaultItemHandlerManager()
-                                                                                                                      .forEntity(PlayerEntity.fromForge(entityPlayer)));
+                                                                                                                      .forEntity(entityPlayer));
     }
 
     public class CountdownDataContext
