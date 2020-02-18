@@ -30,6 +30,7 @@ public class NetworkManager
           BlockOutNetworkMessageWrapper::new,
           (msg, context) -> {
             msg.onArrived(context.get());
+            context.get().setPacketHandled(true);
           });
     }
 

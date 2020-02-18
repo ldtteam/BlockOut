@@ -5,4 +5,6 @@ import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 public interface IKeyManager extends IInputManager
 {
     void onKeyPressed(final int character, final KeyboardKey key);
+
+    void onCharacterTyped(final char character, final int modifier);
 }

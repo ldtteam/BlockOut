@@ -24,6 +24,14 @@ public class KeyManager extends AbstractInputManager implements IKeyManager
         );
     }
 
+    @Override
+    public void onCharacterTyped(final char character, final int modifier) {
+        attemptInputInteraction(
+                t -> t.isEnabled() && t.canAcceptCharacterInput(character, modifier),
+                t -> t.onCharacterInput(character, modifier)
+        );
+    }
+
     protected void attemptInputInteraction(
       final IInteractionAcceptanceCallback acceptanceCallback,
       final IInteractionExecutionCallback executionCallback)

@@ -131,6 +131,11 @@ public class ClientProxy extends CommonProxy {
             }
 
             @Override
+            public int drawString(final String stringToDraw, final float x, final float y, final int colorRGB) {
+                return multiColoredFontRenderer.drawString(stringToDraw, x, y, colorRGB);
+            }
+
+            @Override
             public int getFontHeight() {
                 return multiColoredFontRenderer.FONT_HEIGHT;
             }

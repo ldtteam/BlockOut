@@ -11,4 +11,8 @@ public interface IClientSideKeyAcceptingUIElement extends IUIElement
     {
         return false;
     }
+
+    boolean canAcceptCharacterInputClient(final char character, final int modifier);
+
+    default boolean onCharacterPressed(final char character, final int modifier) { return false; }
 }

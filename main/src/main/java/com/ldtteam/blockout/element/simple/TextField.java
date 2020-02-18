@@ -259,7 +259,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         if (!visibleString.isEmpty())
         {
             String s1 = cursorVisible ? visibleString.substring(0, cursorScrollOffset) : visibleString;
-            drawCurrentX = getFontRenderer().drawStringWithShadow(s1, (float) drawStartX, (float) drawStartY, fontColor.getRGB());
+            drawCurrentX = getFontRenderer().drawString(s1, (float) drawStartX, (float) drawStartY, fontColor.getRGB());
         }
 
         boolean drawFullCursor = this.cursorPosition < contents.length() || contents.length() >= this.getMaxStringLength();
@@ -277,7 +277,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
         if (!visibleString.isEmpty() && cursorVisible && cursorScrollOffset < visibleString.length())
         {
-            getFontRenderer().drawStringWithShadow(visibleString.substring(cursorScrollOffset), (float) drawCurrentX, (float) drawStartY, fontColor.getRGB());
+            getFontRenderer().drawString(visibleString.substring(cursorScrollOffset), (float) drawCurrentX, (float) drawStartY, fontColor.getRGB());
         }
 
         if (doDrawCursor)
@@ -720,11 +720,42 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             case KEY_TAB:
                 handleTab();
                 break;
+            case KEY_KP_ENTER:
             case KEY_ENTER:
                 sendToServer(new TextFieldOnEnterPressed(getId()));
                 break;
+            case KEY_KP_0:
+            case KEY_KP_1:
+            case KEY_KP_2:
+            case KEY_KP_3:
+            case KEY_KP_4:
+            case KEY_KP_5:
+            case KEY_KP_6:
+            case KEY_KP_7:
+            case KEY_KP_8:
+            case KEY_KP_9:
+                writeText(String.valueOf(c - KeyboardKey.KEY_KP_0.getCode()));
+                break;
+            case KEY_KP_ADD:
+                writeText("+");
+                break;
+            case KEY_KP_DECIMAL:
+                writeText(",");
+                break;
+            case KEY_KP_DIVIDE:
+                writeText("/");
+                break;
+            case KEY_KP_EQUAL:
+                writeText("=");
+                break;
+            case KEY_KP_MULTIPLY:
+                writeText("*");
+                break;
+            case KEY_KP_SUBTRACT:
+                writeText("-");
+                break;
             default:
-                writeText(Character.toString(c));
+                break;
         }
     }
 
@@ -875,6 +906,17 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
         return true;
     }
 
+    @Override
+    public boolean canAcceptCharacterInputClient(final char character, final int modifier) {
+        return true;
+    }
+
+    @Override
+    public boolean onCharacterPressed(final char character, final int modifier) {
+        this.writeText(Character.toString(character));
+        return true;
+    }
+
     public void raiseOnContentChanged()
     {
         onTyped.raise(this, new TextFieldChangedEventArgs(getContents()));
@@ -930,8 +972,8 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
                 final IDependencyObject<Integer> maxContentLenght = elementData.getFromRawDataWithDefault(CONST_MAX_LENGTH, engine, Integer.MAX_VALUE, Integer.class);
                 final IDependencyObject<String> outerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_OUTER_BACKGROUND_COLOR, engine, "-6250336", String.class);
                 final IDependencyObject<String> innerBackgroundColor = elementData.getFromRawDataWithDefault(CONST_INNER_BACKGROUND_COLOR, engine, "-16777216", String.class);
-                final IDependencyObject<String> enabledFontColor = elementData.getFromRawDataWithDefault(CONST_ENABLED_FONT_COLOR, engine, "14737632", String.class);
-                final IDependencyObject<String> disabledFontColor = elementData.getFromRawDataWithDefault(CONST_DISABLED_FONT_COLOR, engine, "7368816", String.class);
+                final IDependencyObject<String> enabledFontColor = elementData.getFromRawDataWithDefault(CONST_ENABLED_FONT_COLOR, engine, "-2039584", String.class);
+                final IDependencyObject<String> disabledFontColor = elementData.getFromRawDataWithDefault(CONST_DISABLED_FONT_COLOR, engine, "-9408400", String.class);
                 final IDependencyObject<String> cursorColor = elementData.getFromRawDataWithDefault(CONST_CURSOR_COLOR, engine, "-3092272", String.class);
                 final IDependencyObject<String> selectionColor = elementData.getFromRawDataWithDefault(CONST_SELECTION_COLOR, engine, "Blue", String.class);
 

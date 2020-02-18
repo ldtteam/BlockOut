@@ -18,7 +18,11 @@ import java.util.List;
 
 public class MultiColoredFontRenderer extends FontRenderer {
 
+    private static final Color WHITE_COLOR = new Color(255,255,255,255);
+    private static final int WHITE_COLOR_INT = WHITE_COLOR.getRGB();
+
     private Color drawingColor = new Color(255, 255, 255, 255);
+
 
     public MultiColoredFontRenderer(final TextureManager textureManagerIn, final Font fontIn) {
         super(textureManagerIn, new MultiColoredFont(fontIn));
@@ -80,7 +84,7 @@ public class MultiColoredFontRenderer extends FontRenderer {
     @Override
     public int renderString(final String text, final float x, final float y, final int color, final boolean dropShadow, final Matrix4f matrix, final IRenderTypeBuffer buffer, final boolean p_228079_8_, final int p_228079_9_, final int p_228079_10_) {
         this.drawingColor = new Color(color);
-        return super.renderString(this.preProcessString(text, this.drawingColor), x, y, new Color(255,255,255,255).getRGB(), dropShadow, matrix, buffer, p_228079_8_, p_228079_9_, p_228079_10_);
+        return super.renderString(this.preProcessString(text, this.drawingColor), x, y, WHITE_COLOR_INT, dropShadow, matrix, buffer, p_228079_8_, p_228079_9_, p_228079_10_);
     }
 
     @Override
@@ -127,6 +131,9 @@ public class MultiColoredFontRenderer extends FontRenderer {
                 workingString.append(charInString);
             }
         }
+
+        workingString.append(WHITE_COLOR.encodeColor());
+        workingString.append(TextFormatting.RESET.toString());
 
         return workingString.toString();
     }

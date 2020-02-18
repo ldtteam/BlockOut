@@ -20,5 +20,7 @@ public interface INetworkManager
 
     void onKeyPressed(final int character, final KeyboardKey key);
 
+    void onCharacterTyped(final char character, final int modifier);
+
     void onElementChanged(@NotNull final IUIElement changedElement);
 }

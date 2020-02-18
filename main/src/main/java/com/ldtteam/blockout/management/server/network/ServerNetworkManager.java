@@ -65,6 +65,11 @@ public class ServerNetworkManager implements INetworkManager
     }
 
     @Override
+    public void onCharacterTyped(final char character, final int modifier) {
+        //NOOP
+    }
+
+    @Override
     public void onElementChanged(@NotNull final IUIElement changedElement)
     {
         final IUIElementData dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(changedElement);

@@ -25,6 +25,14 @@ public class ClientSideKeyManager implements IClientSideKeyManager
         );
     }
 
+    @Override
+    public boolean onCharacterTyped(final char character, final int modifier) {
+        return attemptInputInteraction(
+                t -> t.isEnabled() && t.canAcceptCharacterInputClient(character, modifier),
+                t -> t.onCharacterPressed(character, modifier)
+        );
+    }
+
     protected boolean attemptInputInteraction(
       final IInteractionAcceptanceCallback acceptanceCallback,
       final IInteractionExecutionCallback executionCallback)

@@ -49,6 +49,12 @@ public class ClientNetworkManager implements INetworkManager
     }
 
     @Override
+    public void onCharacterTyped(final char character, final int modifier)
+    {
+        NetworkManager.sendToServer(new OnCharacterTypedMessage(character, modifier));
+    }
+
+    @Override
     public void onElementChanged(@NotNull final IUIElement changedElement)
     {
         //NOOP

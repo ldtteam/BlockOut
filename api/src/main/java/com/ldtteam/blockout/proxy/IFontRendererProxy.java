@@ -48,6 +48,17 @@ public interface IFontRendererProxy
     int drawStringWithShadow(String stringToDraw, float x, float y, int colorRGB);
 
     /**
+     * Draws a given string without a shadow in a given position and in a given color.
+     *
+     * @param stringToDraw The string to draw.
+     * @param x The x position of the top left corner of the text.
+     * @param y The y position of the top left corner of the text.
+     * @param colorRGB The color to render in.
+     * @return The new X position.
+     */
+    int drawString(String stringToDraw, float x, float y, int colorRGB);
+
+    /**
      * Returns the height of the current font.
      * @return The height of the font.
      */

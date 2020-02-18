@@ -125,8 +125,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     public boolean mouseScrolled(final double mouseX, final double mouseY, final double dWheel)
     {
-        int scaledMouseX = (int) ((mouseX - getGuiLeft()) * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) ((mouseY - getGuiTop()) * getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
 
         int delta = (int) dWheel;
         if (delta != 0)
@@ -137,7 +137,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
             {
                 getInstanceData().getRoot().getUiManager()
                   .getNetworkManager()
-                  .onMouseWheel(scaledMouseX, scaledMouseY, delta);
+                  .onMouseWheel((int) (scaledMouseX - getGuiLeft() * getInstanceData().getScaleFactor().getX()),
+                          (int) (scaledMouseY - getGuiTop() * getInstanceData().getScaleFactor().getY()), delta);
             }
         }
 
@@ -149,8 +150,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     public boolean mouseClicked(final double mouseX, final double mouseY, final int button)
     {
-        int scaledMouseX = (int) ((mouseX - getGuiLeft()) * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) ((mouseY - getGuiTop()) * getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
 
         super.mouseClicked(scaledMouseX, scaledMouseY, button);
 
@@ -160,7 +161,9 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         {
             getInstanceData().getRoot().getUiManager()
               .getNetworkManager()
-              .onMouseClickBegin(scaledMouseX, scaledMouseY, MouseButton.getForCode(button));
+              .onMouseClickBegin((int) (scaledMouseX - getGuiLeft() * getInstanceData().getScaleFactor().getX()),
+                      (int) (scaledMouseY - getGuiTop() * getInstanceData().getScaleFactor().getY()),
+                      MouseButton.getForCode(button));
         }
 
         return true;
@@ -174,8 +177,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
       final double deltaX,
       final double deltaY)
     {
-        int scaledMouseX = (int) ((mouseX - getGuiLeft()) * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) ((mouseY - getGuiTop()) * getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
 
         super.mouseClicked(scaledMouseX, scaledMouseY, button);
 
@@ -185,7 +188,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         {
             getInstanceData().getRoot().getUiManager()
               .getNetworkManager()
-              .onMouseClickMove(scaledMouseX, scaledMouseY, MouseButton.getForCode(button), 0f);
+              .onMouseClickMove((int) (scaledMouseX - getGuiLeft() * getInstanceData().getScaleFactor().getX()),
+                      (int) (scaledMouseY - getGuiTop() * getInstanceData().getScaleFactor().getY()), MouseButton.getForCode(button), 0f);
         }
 
         return true;
@@ -194,8 +198,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     public boolean mouseReleased(final double mouseX, final double mouseY, final int button)
     {
-        int scaledMouseX = (int) ((mouseX - getGuiLeft()) * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) ((mouseY - getGuiTop()) * getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
 
         super.mouseClicked(scaledMouseX, scaledMouseY, button);
 
@@ -205,7 +209,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         {
             getInstanceData().getRoot().getUiManager()
               .getNetworkManager()
-              .onMouseClickEnd(scaledMouseX, scaledMouseY, MouseButton.getForCode(button));
+              .onMouseClickEnd((int) (scaledMouseX - getGuiLeft() * getInstanceData().getScaleFactor().getX()),
+                      (int) (scaledMouseY - getGuiTop() * getInstanceData().getScaleFactor().getY()), MouseButton.getForCode(button));
         }
 
         return true;
@@ -214,8 +219,8 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     public boolean isSlotSelected(final Slot slot, final double mouseX, final double mouseY)
     {
-        int scaledMouseX = (int) ((mouseX - getGuiLeft()) * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) ((mouseY - getGuiTop()) * getInstanceData().getScaleFactor().getY());
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
 
         return ((!getInstanceData().isDrawing() && (!(slot instanceof BlockOutSlot) || ((BlockOutSlot) slot).getUiSlotInstance().isEnabled())) || !(slot instanceof BlockOutSlot)) && super.isSlotSelected(slot, scaledMouseX, scaledMouseY);
     }
@@ -230,9 +235,19 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
             return true;
         }
 
-        if (!getInstanceData().getRoot().getUiManager().getClientSideKeyManager().onKeyPressed(scanCode, key))
+        if (!getInstanceData().getRoot().getUiManager().getClientSideKeyManager().onKeyPressed(keyCode, key))
         {
-            getInstanceData().getRoot().getUiManager().getNetworkManager().onKeyPressed(scanCode, key);
+            getInstanceData().getRoot().getUiManager().getNetworkManager().onKeyPressed(keyCode, key);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean charTyped(final char character, final int modifier) {
+        if (!getInstanceData().getRoot().getUiManager().getClientSideKeyManager().onCharacterTyped(character, modifier))
+        {
+            getInstanceData().getRoot().getUiManager().getNetworkManager().onCharacterTyped(character, modifier);
         }
 
         return true;

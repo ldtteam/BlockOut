@@ -143,4 +143,8 @@ public enum KeyboardKey
     {
         return mappings.get(code);
     }
+
+    public int getCode() {
+        return code;
+    }
 }
