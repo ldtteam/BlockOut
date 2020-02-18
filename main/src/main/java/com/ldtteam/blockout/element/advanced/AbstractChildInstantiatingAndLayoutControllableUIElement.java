@@ -265,7 +265,11 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
     public void scrollTo(double target)
     {
         this.scrollOffset = Clamp.Clamp(0, target, 1);
+        this.getUiManager().getProfiler().startTick();
+        this.getUiManager().getProfiler().startSection(getId() + "_scrollTo");
         updateScrollOffset();
+        this.getUiManager().getProfiler().endSection();
+        this.getUiManager().getProfiler().endTick();
         getParent().getUiManager().getUpdateManager().markDirty();
     }
 

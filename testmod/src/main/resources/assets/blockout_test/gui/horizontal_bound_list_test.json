@@ -13,8 +13,8 @@
       "id": "list",
       "type": "blockout:list",
       "size": "150,150",
-      "scrollBackground": "image:scrollbar_background#horizontal",
-      "scrollForeground": "image:scrollbar_foreground#horizontal",
+      "scrollBackground": "image:scrollbar_background_horizontal",
+      "scrollForeground": "image:scrollbar_foreground_horizontal",
       "template": "template:label_test",
       "orientation": "horizontal",
       "source": "{Binding:this}"

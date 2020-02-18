@@ -412,6 +412,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
             return withDependency("alignments", alignments);
         }
 
+        @SuppressWarnings("unchecked")
         @NotNull
         @Override
         public B withDependency(@NotNull final String fieldName, @NotNull final IDependencyObject<?> dependency)
@@ -420,6 +421,7 @@ public abstract class AbstractSimpleUIElement implements IUIElement
             return (B) this;
         }
 
+        @SuppressWarnings("unchecked")
         @NotNull
         @Override
         public <A> B withEventHandler(

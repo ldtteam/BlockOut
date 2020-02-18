@@ -504,6 +504,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
             return withDependency("alignments", alignments);
         }
 
+        @SuppressWarnings("unchecked")
         @NotNull
         @Override
         public B withDependency(@NotNull final String fieldName, @NotNull final IDependencyObject<?> dependency)
@@ -512,6 +513,7 @@ public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<
             return (B) this;
         }
 
+        @SuppressWarnings("unchecked")
         @NotNull
         @Override
         public <A> B withEventHandler(

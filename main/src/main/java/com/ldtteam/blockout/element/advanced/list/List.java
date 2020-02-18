@@ -367,6 +367,6 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     @Override
     public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
     {
-        scroll(deltaWheel / getTotalContentLength() / -10);
+        scroll(deltaWheel / getTotalContentLength() * -25);
     }
 }
