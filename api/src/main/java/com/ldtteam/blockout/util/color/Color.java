@@ -3,6 +3,8 @@ package com.ldtteam.blockout.util.color;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 import static com.ldtteam.blockout.util.color.ColorUtils.MARKER;
@@ -10,6 +12,7 @@ import static com.ldtteam.blockout.util.color.ColorUtils.MARKER;
 public class Color
 {
 
+    @OnlyIn(Dist.CLIENT)
     public static void resetOpenGLColoring()
     {
         RenderSystem.color4f(1f, 1f, 1f, 1f);
@@ -18,6 +21,11 @@ public class Color
     private final int value;
 
     public Color(final int value) {this.value = value;}
+
+    public Color(final int value, final int alpha)
+    {
+        this.value = (alpha & 255) << 24 | value;
+    }
 
     public Color(final int red, final int green, final int blue, final int alpha)
     {
@@ -134,6 +142,7 @@ public class Color
     /**
      * Convenient Function to perform Coloring of the GL buffer in this color.
      */
+    @OnlyIn(Dist.CLIENT)
     public void performOpenGLColoring()
     {
         RenderSystem.color4f(getRed() / 255F, getGreen() / 255F, getBlue() / 255F, getAlpha() / 255F);

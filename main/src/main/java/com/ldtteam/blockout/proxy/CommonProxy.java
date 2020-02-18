@@ -32,6 +32,8 @@ import com.ldtteam.blockout.style.simple.SimpleFileBasedStyleManager;
 import com.ldtteam.blockout.style.simple.SimpleResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.template.SimpleTemplateEngine;
+import com.ldtteam.blockout.util.color.Color;
+import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
@@ -239,7 +241,13 @@ public class CommonProxy implements IProxy {
     @Override
     public String convertToColorCode(@NotNull final String input)
     {
-        return input;
+        return ColorUtils.convertToFontRendererColor(input);
+    }
+
+    @NotNull
+    @Override
+    public Color convertToColor(@NotNull final String color) {
+        return ColorUtils.convertToColor(color);
     }
 
     @NotNull

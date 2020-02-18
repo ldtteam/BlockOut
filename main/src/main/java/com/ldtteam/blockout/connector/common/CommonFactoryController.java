@@ -48,7 +48,11 @@ public class CommonFactoryController implements IUIElementFactoryController
     @Override
     public <T extends IUIElement> IUIElementData getDataFromElement(@NotNull final T element)
     {
-        return getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
+        element.getParent().getUiManager().getProfiler().startTick();
+        final IUIElementData<?> data = getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());
+        element.getParent().getUiManager().getProfiler().endTick();
+
+        return data;
     }
 
     @SuppressWarnings("unchecked")

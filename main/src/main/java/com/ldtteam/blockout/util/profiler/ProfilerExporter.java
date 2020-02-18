@@ -21,6 +21,6 @@ public final class ProfilerExporter
 
     public static void exportProfiler(@NotNull final IUIElement element)
     {
-      element.getParent().getUiManager().getProfiler().getResults().writeToFile(new File("profiler.json"));
+      element.getParent().getUiManager().getProfiler().getResults().writeToFile(new File(new File("./"), "profile.json"));
     }
 }

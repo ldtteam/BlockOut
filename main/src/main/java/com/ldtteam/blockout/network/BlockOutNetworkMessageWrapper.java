@@ -26,6 +26,12 @@ public class BlockOutNetworkMessageWrapper
         this.message = message;
     }
 
+    public BlockOutNetworkMessageWrapper(final ByteBuf byteBuf)
+    {
+        this.fromBytes(byteBuf);
+        byteBuf.release();
+    }
+
     public void fromBytes(final ByteBuf buf)
     {
         final ByteBuf localBuffer = buf.retain();
@@ -38,7 +44,8 @@ public class BlockOutNetworkMessageWrapper
             buf.readBytes(data);
 
             final Input kryoInput = new Input(data);
-            message = (IBlockOutNetworkMessage) KRYO.readClassAndObject(kryoInput);
+            final Object networkObject = KRYO.readClassAndObject(kryoInput);
+            message = (IBlockOutNetworkMessage) networkObject;
             loaded = true;
         }
     }

@@ -26,12 +26,8 @@ public class NetworkManager
 
         network.registerMessage(0,
           BlockOutNetworkMessageWrapper.class,
-          (msg, packetBuffer) -> msg.toBytes(packetBuffer),
-          packetBuffer -> {
-            final BlockOutNetworkMessageWrapper msg = new BlockOutNetworkMessageWrapper();
-            msg.fromBytes(packetBuffer);
-            return msg;
-          },
+          BlockOutNetworkMessageWrapper::toBytes,
+          BlockOutNetworkMessageWrapper::new,
           (msg, context) -> {
             msg.onArrived(context.get());
           });

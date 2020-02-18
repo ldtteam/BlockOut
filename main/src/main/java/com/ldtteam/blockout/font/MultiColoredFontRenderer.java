@@ -88,7 +88,8 @@ public class MultiColoredFontRenderer extends FontRenderer {
         if (p_228077_1_ instanceof MultiColoredFont.ColorGlyph)
             this.drawingColor = ((MultiColoredFont.ColorGlyph) p_228077_1_).getColor();
 
-        super.drawGlyph(p_228077_1_, p_228077_2_, p_228077_3_, p_228077_4_, p_228077_5_, p_228077_6_, p_228077_7_, p_228077_8_, this.drawingColor.getRed(), this.drawingColor.getGreen(), this.drawingColor.getBlue(), this.drawingColor.getAlpha(), p_228077_13_);
+        //this.drawingColor.getRed(), this.drawingColor.getGreen(), this.drawingColor.getBlue(), this.drawingColor.getAlpha()
+        super.drawGlyph(p_228077_1_, p_228077_2_, p_228077_3_, p_228077_4_, p_228077_5_, p_228077_6_, p_228077_7_, p_228077_8_, this.drawingColor.getRedFloat(), this.drawingColor.getGreenFloat(), this.drawingColor.getBlueFloat(), this.drawingColor.getAlphaFloat(), p_228077_13_);
     }
 
     private String preProcessString(final String text, final Color defaultColor)
@@ -100,11 +101,24 @@ public class MultiColoredFontRenderer extends FontRenderer {
             if (charInString == 167 && index + 1 < text.length()) {
                 TextFormatting textFormatting = TextFormatting.fromFormattingCode(text.charAt(index + 1));
                 if (textFormatting != null) {
-                    if (textFormatting.isNormalStyle()) {
+                    if (textFormatting == TextFormatting.RESET)
+                    {
                         workingString.append(defaultColor.encodeColor());
+                        workingString.append(textFormatting.toString());
+                    }
+                    else if (textFormatting.isNormalStyle()) {
+                        if (textFormatting.getColor() != null)
+                        {
+                            int formattingColor = textFormatting.getColor();
+                            workingString.append(new Color(formattingColor, 255).encodeColor());
+                        }
+                        else
+                        {
+                            workingString.append(textFormatting.toString());
+                        }
                     } else if (textFormatting.getColor() != null) {
                         int formattingColor = textFormatting.getColor();
-                        workingString.append(new Color(formattingColor).encodeColor());
+                        workingString.append(new Color(formattingColor, 255).encodeColor());
                     }
                 }
 

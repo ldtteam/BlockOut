@@ -9,8 +9,8 @@
       "margin": "0,0,0,0",
       "source": "{Binding:this}",
       "template": "template:horizontal_grid",
-      "scrollForeground": "image:scrollbar_foreground#vertical",
-      "scrollBackground": "image:scrollbar_background#vertical"
+      "scrollForeground": "image:scrollbar_foreground_vertical",
+      "scrollBackground": "image:scrollbar_background_vertical"
     }
   ]
 }

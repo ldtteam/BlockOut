@@ -16,8 +16,10 @@ public class NoOpUpdateManager implements IUpdateManager
         if (element instanceof RootGuiElement)
         {
             RootGuiElement rootGuiElement = (RootGuiElement) element;
+            ((RootGuiElement) element).getUiManager().getProfiler().startTick();
             ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);
             childUpdateManager.updateElement(rootGuiElement);
+            ((RootGuiElement) element).getUiManager().getProfiler().endTick();
         }
         else
         {

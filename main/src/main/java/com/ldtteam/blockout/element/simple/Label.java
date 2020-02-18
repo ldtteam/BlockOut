@@ -11,6 +11,7 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.render.core.IRenderingController;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractSimpleUIElement;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -80,7 +81,7 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
 
         ProxyHolder.getInstance()
           .getFontRenderer()
-          .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), 0);
+          .drawSplitString(getTranslatedContents(), 0, 0, (int) getLocalBoundingBox().getSize().getX(), getFontColorEncoded().getRGB());
 
         RenderSystem.disableBlend();
         RenderSystem.enableAlphaTest();
@@ -130,6 +131,11 @@ public class Label extends AbstractSimpleUIElement implements IDrawableUIElement
     public String getFontColor()
     {
         return fontColor.get(this);
+    }
+
+    public Color getFontColorEncoded()
+    {
+        return ProxyHolder.getInstance().convertToColor(getFontColor());
     }
 
     public void setFontColor(String color)

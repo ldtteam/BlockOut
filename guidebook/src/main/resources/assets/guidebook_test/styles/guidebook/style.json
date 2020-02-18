@@ -1,7 +1,0 @@
-{
-  "id": "guidebook_test:guidebook",
-  "types": [
-    "guidebook_test:styles/guidebook/images/images.json",
-    "guidebook_test:styles/guidebook/controls/controls.json"
-  ]
-}

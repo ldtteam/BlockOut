@@ -700,12 +700,12 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
     {
         switch (key)
         {
-            case KEY_LSHIFT:
-            case KEY_RSHIFT:
-            case KEY_LCONTROL:
-            case KEY_RCONTROL:
+            case KEY_LEFT_SHIFT:
+            case KEY_RIGHT_SHIFT:
+            case KEY_LEFT_CONTROL:
+            case KEY_RIGHT_CONTROL:
                 break;
-            case KEY_BACK:
+            case KEY_BACKSPACE:
             case KEY_DELETE:
                 handleDelete(key);
                 break;
@@ -720,7 +720,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
             case KEY_TAB:
                 handleTab();
                 break;
-            case KEY_RETURN:
+            case KEY_ENTER:
                 sendToServer(new TextFieldOnEnterPressed(getId()));
                 break;
             default:
@@ -799,7 +799,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
      */
     private void handleDelete(final KeyboardKey key)
     {
-        final int direction = (key == KeyboardKey.KEY_BACK) ? -1 : 1;
+        final int direction = (key == KeyboardKey.KEY_BACKSPACE) ? -1 : 1;
 
         if (Screen.hasControlDown())
         {

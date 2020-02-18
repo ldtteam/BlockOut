@@ -15,8 +15,8 @@
       "type": "blockout:list",
       "size": "140,240",
       "alignment": "LEFT,RIGHT,TOP,BOTTOM",
-      "scrollBackground": "image:scrollbar_background#vertical",
-      "scrollForeground": "image:scrollbar_foreground#vertical",
+      "scrollBackground": "image:scrollbar_background_vertical",
+      "scrollForeground": "image:scrollbar_foreground_vertical",
       "template": "template:global_test_ui_button",
       "source": "{Binding:this}"
     }

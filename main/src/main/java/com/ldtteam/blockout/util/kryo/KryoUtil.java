@@ -1,6 +1,8 @@
 package com.ldtteam.blockout.util.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.SerializerFactory;
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
 import org.objenesis.strategy.SerializingInstantiatorStrategy;
 import org.objenesis.strategy.StdInstantiatorStrategy;
@@ -26,6 +28,9 @@ public final class KryoUtil
             new StdInstantiatorStrategy()
           )
         );
+
+        instance.setRegistrationRequired(false);
+        instance.setClassLoader(KryoUtil.class.getClassLoader());
 
         return instance;
     }

@@ -8,6 +8,7 @@ import com.ldtteam.blockout.element.simple.*;
 import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
+import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.proxy.ClientProxy;
 import com.ldtteam.blockout.proxy.CommonProxy;
 import com.ldtteam.blockout.proxy.IProxy;
@@ -94,6 +95,8 @@ public class BlockOut
 
         getProxy().getPluginRegistry().performAutomaticDiscovery();
         getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onCommonSetup(event));
+
+        NetworkManager.init();
     }
 
     public void onClientSetup(final FMLClientSetupEvent event)

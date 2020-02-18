@@ -16,6 +16,7 @@ import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
@@ -177,6 +178,13 @@ public class ProxyHolder implements IProxy
     public String convertToColorCode(@NotNull final String input)
     {
         return proxy.convertToColorCode(input);
+    }
+
+    @Override
+    @NotNull
+    public Color convertToColor(@NotNull final String color)
+    {
+        return proxy.convertToColor(color);
     }
 
     @NotNull

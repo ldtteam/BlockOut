@@ -35,8 +35,8 @@
       "size": "140,240",
       "alignment": "LEFT,RIGHT,TOP,BOTTOM",
       "margin": "5,25,5,5",
-      "scrollBackground": "image:scrollbar_background#vertical",
-      "scrollForeground": "image:scrollbar_foreground#vertical",
+      "scrollBackground": "image:scrollbar_background_vertical",
+      "scrollForeground": "image:scrollbar_foreground_vertical",
       "template": "template:label_with_remove_test",
       "source": "{Binding:this}"
     }

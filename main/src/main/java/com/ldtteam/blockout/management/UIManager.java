@@ -59,7 +59,6 @@ public class UIManager implements IUIManager
         this.updateManager = ProxyHolder.getInstance().generateNewUpdateManager(this);
         this.renderManager = DistExecutor.runForDist(() -> () -> ProxyHolder.getInstance().generateNewRenderManager(), () -> () -> null);
         this.profiler = new Profiler(Util.nanoTime(), () -> 0, false);
-        this.profiler.startTick();
     }
 
     @NotNull

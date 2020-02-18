@@ -32,8 +32,9 @@ public class ServerUpdateManager implements IUpdateManager
             ChildUpdateManager childUpdateManager = new ChildUpdateManager(this);
             childUpdateManager.updateElement(rootGuiElement);
             rootGuiElement.getUiManager().getProfiler().endSection();
+            rootGuiElement.getUiManager().getProfiler().endTick();
 
-            File tmpDir = new File("profiler.json");
+            File tmpDir = new File("./profiler.json");
             if (!tmpDir.exists())
             {
                 ProfilerExporter.exportProfiler(element);

@@ -16,6 +16,7 @@ import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
 import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
+import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
@@ -91,6 +92,9 @@ public interface IProxy
 
     @NotNull
     String convertToColorCode(@NotNull final String input);
+
+    @NotNull
+    Color convertToColor(@NotNull String color);
 
     @NotNull
     IReflectionManager getReflectionManager();
