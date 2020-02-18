@@ -34,11 +34,11 @@ public class ServerUpdateManager implements IUpdateManager
             rootGuiElement.getUiManager().getProfiler().endSection();
             rootGuiElement.getUiManager().getProfiler().endTick();
 
-            File tmpDir = new File("./profiler.json");
+/*            File tmpDir = new File("./profiler.json");
             if (!tmpDir.exists())
             {
                 ProfilerExporter.exportProfiler(element);
-            }
+            }*/
 
             final IUIElement focusedElement = rootGuiElement.getUiManager().getFocusManager().getFocusedElement();
             if (!rootGuiElement.getAllCombinedChildElements().values().contains(focusedElement))

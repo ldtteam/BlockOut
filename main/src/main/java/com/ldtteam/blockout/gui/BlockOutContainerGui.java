@@ -219,10 +219,7 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     public boolean isSlotSelected(final Slot slot, final double mouseX, final double mouseY)
     {
-        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
-        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
-
-        return ((!getInstanceData().isDrawing() && (!(slot instanceof BlockOutSlot) || ((BlockOutSlot) slot).getUiSlotInstance().isEnabled())) || !(slot instanceof BlockOutSlot)) && super.isSlotSelected(slot, scaledMouseX, scaledMouseY);
+        return ((!getInstanceData().isDrawing() && (!(slot instanceof BlockOutSlot) || ((BlockOutSlot) slot).getUiSlotInstance().isEnabled())) || !(slot instanceof BlockOutSlot)) && super.isSlotSelected(slot, mouseX, mouseY);
     }
 
     @Override
