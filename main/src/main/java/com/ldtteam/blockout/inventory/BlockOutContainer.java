@@ -1,6 +1,7 @@
 package com.ldtteam.blockout.inventory;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
+import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlot;
 import com.ldtteam.blockout.util.Log;
@@ -222,6 +223,7 @@ public class BlockOutContainer extends Container implements IBlockOutContainer
         final List<com.ldtteam.blockout.element.simple.Slot> slots =getInstanceData().
                                                               getRoot().getAllCombinedChildElements().values().stream()
                                    .filter(element -> element instanceof com.ldtteam.blockout.element.simple.Slot)
+                                   .filter(IUIElement::isVisible)
                                    .map(element -> (com.ldtteam.blockout.element.simple.Slot) element).collect(Collectors.toCollection(LinkedList::new));
 
         for (com.ldtteam.blockout.element.simple.Slot slot :
