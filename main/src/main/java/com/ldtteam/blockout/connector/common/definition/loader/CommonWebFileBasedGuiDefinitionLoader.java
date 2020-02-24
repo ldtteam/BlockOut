@@ -20,9 +20,12 @@ import java.net.URL;
 
 public class CommonWebFileBasedGuiDefinitionLoader implements IGuiDefinitionLoader
 {
+    private static final long serialVersionUID = 5613670902301720076L;
+
     @NotNull
     private final URL url;
 
+    @SuppressWarnings("ConstantConditions")
     private CommonWebFileBasedGuiDefinitionLoader()
     {
         this.url = null;

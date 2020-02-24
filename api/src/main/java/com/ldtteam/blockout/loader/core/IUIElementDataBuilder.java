@@ -5,7 +5,7 @@ import com.ldtteam.blockout.element.IUIElement;
 import java.lang.reflect.Type;
 import java.util.function.Consumer;
 
-public interface IUIElementDataBuilder<D extends IUIElementData>
+public interface IUIElementDataBuilder<D extends IUIElementData<?>>
 {
 
     IUIElementDataBuilder<D> copyFrom(final IUIElementData<?> elementData);

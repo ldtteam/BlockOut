@@ -10,11 +10,16 @@ import org.jetbrains.annotations.Nullable;
 
 public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
 {
+
+    private static final long serialVersionUID = 8196679915085058303L;
+
     @NotNull
     private IGuiKey key;
 
+    @SuppressWarnings("ConstantConditions")
     public OpenGuiRequestMessage()
     {
+        key = null;
     }
 
     public OpenGuiRequestMessage(@NotNull final IGuiKey key)
@@ -22,7 +27,6 @@ public class OpenGuiRequestMessage implements IBlockOutClientToServerMessage
         this.key = key;
     }
 
-    @Nullable
     @Override
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {

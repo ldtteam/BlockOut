@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class CommonRangedBasedProvider implements IItemHandlerProvider
 {
+    private static final long serialVersionUID = -2181178091874381035L;
+
     private final String id;
     private final String wrappedId;
     private final int    minSlot;

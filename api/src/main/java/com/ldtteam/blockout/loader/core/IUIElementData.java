@@ -46,6 +46,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      * @param <T>             The target type.
      * @return A {@link IDependencyObject} that contains the raw data converted to the target type, or the none changeable default value.
      */
+    @SuppressWarnings("unchecked")
     default <T> IDependencyObject<T> getFromRawDataWithProperty(
       @NotNull final String name,
       @NotNull final IBindingEngine engine,
@@ -139,6 +140,7 @@ public interface IUIElementData<C extends IUIElementDataComponent>
      * @param <T>          The target type.
      * @return The converted raw data.
      */
+    @SuppressWarnings("unchecked")
     default <T> T getRawWithoutBinding(
       @NotNull final String name,
       @Nullable final T defaultValue,

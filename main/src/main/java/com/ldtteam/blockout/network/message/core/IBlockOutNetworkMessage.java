@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 public interface IBlockOutNetworkMessage extends Serializable
 {
+
+    long serialVersionUID = -5202348208706760621L;
+
     /**
      * Entrance point to the Message API called by the Network system to tell the message that it arrived on the target side.
      * However this call is still done on the Network thread. As such marshalling is still needed.

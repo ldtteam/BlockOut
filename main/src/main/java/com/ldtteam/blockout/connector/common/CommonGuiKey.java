@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class CommonGuiKey implements IGuiKey
 {
+    private static final long serialVersionUID = 8752574389047506304L;
+
     @NotNull
     private final IGuiDefinitionLoader loader;
 

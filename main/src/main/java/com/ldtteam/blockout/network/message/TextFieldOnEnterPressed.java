@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public class TextFieldOnEnterPressed implements IBlockOutClientToServerMessage
 {
+
+    private static final long serialVersionUID = -1134506085105255805L;
+
     private String controlId = "";
 
     public TextFieldOnEnterPressed(final String controlId)

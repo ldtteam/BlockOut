@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IBlockOutServerToClientMessage extends IBlockOutNetworkMessage
 {
+    long serialVersionUID = 2412330872349662165L;
 
     @Override
     default void onArrived(final NetworkEvent.Context ctx)

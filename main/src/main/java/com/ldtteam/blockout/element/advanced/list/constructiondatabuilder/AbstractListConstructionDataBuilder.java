@@ -41,8 +41,9 @@ public class AbstractListConstructionDataBuilder<B extends AbstractListConstruct
         return withDependency("templateConstructionData", iconConstructionData);
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
-    public B withTemplateConstructionData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder>... callbacks)
+    public final B withTemplateConstructionData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder>... callbacks)
     {
         final BlockOutGuiConstructionDataBuilder builder = new BlockOutGuiConstructionDataBuilder();
 

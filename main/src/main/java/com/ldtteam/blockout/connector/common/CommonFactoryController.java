@@ -32,7 +32,7 @@ public class CommonFactoryController implements IUIElementFactoryController
 
     @NotNull
     @Override
-    public IUIElement getElementFromData(@NotNull final IUIElementData data)
+    public IUIElement getElementFromData(@NotNull final IUIElementData<?> data)
     {
         final String type = data.getMetaData().getType();
 
@@ -46,7 +46,7 @@ public class CommonFactoryController implements IUIElementFactoryController
 
     @NotNull
     @Override
-    public <T extends IUIElement> IUIElementData getDataFromElement(@NotNull final T element)
+    public <T extends IUIElement> IUIElementData<?> getDataFromElement(@NotNull final T element)
     {
         element.getParent().getUiManager().getProfiler().startTick();
         final IUIElementData<?> data = getDataFromElementWithBuilder(element, new ObjectUIElementBuilder());

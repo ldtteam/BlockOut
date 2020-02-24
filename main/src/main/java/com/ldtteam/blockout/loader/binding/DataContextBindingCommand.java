@@ -24,6 +24,7 @@ public class DataContextBindingCommand implements IBindingCommand
         return "((?<getterName>[a-zA-Z_]+)#(?<setterName>[a-zA-Z_]+))|(?<singleName>[a-zA-Z_]+)";
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> IDependencyObject<T> bind(

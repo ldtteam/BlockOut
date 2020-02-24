@@ -32,6 +32,8 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     private static final int CONST_SCROLLBAR_SIZE    = 5;
     private static final int CONST_SCROLLBAR_PADDING = 8;
 
+    private static final long serialVersionUID = -930118618487870715L;
+
     public IDependencyObject<ResourceLocation> scrollBarBackgroundResource;
     public IDependencyObject<ResourceLocation> scrollBarForegroundResource;
     public IDependencyObject<Boolean>     showScrollbar;

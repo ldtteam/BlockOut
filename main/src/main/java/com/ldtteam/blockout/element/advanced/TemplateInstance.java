@@ -30,6 +30,8 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class TemplateInstance extends AbstractChildrenContainingUIElement
 {
 
+    private static final long serialVersionUID = 2800081688752470813L;
+
     public static final class TemplateInstanceConstructionDataBuilder
       extends AbstractChildrenContainingUIElement.SimpleControlConstructionDataBuilder<TemplateInstanceConstructionDataBuilder, TemplateInstance>
     {

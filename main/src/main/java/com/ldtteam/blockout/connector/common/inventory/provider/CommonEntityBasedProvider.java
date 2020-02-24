@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class CommonEntityBasedProvider implements IItemHandlerProvider
 {
+    private static final long serialVersionUID = 371842663405988787L;
+
     @NotNull
     private final String id;
 

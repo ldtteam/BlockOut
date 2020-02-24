@@ -16,5 +16,5 @@ public interface ILoader
      * @return The element.
      */
     @NotNull
-    IUIElementData loadDataFromDefinition(@NotNull final String data) throws Exception;
+    IUIElementData<?> loadDataFromDefinition(@NotNull final String data) throws Exception;
 }

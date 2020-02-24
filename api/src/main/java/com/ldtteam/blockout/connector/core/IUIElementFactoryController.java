@@ -26,7 +26,7 @@ public interface IUIElementFactoryController
      * @return The {@link IUIElement} that has been created using the given {@link IUIElementData}.
      */
     @NotNull
-    IUIElement getElementFromData(@NotNull final IUIElementData data);
+    IUIElement getElementFromData(@NotNull final IUIElementData<?> data);
 
     /**
      * Creates a {@link IUIElementData} from a given {@link IUIElement}. The given {@link IUIElementData} is a {@link java.io.Serializable}.
@@ -35,7 +35,7 @@ public interface IUIElementFactoryController
      * @return A {@link java.io.Serializable} {@link IUIElementData} created from the {@link IUIElement}.
      */
     @NotNull
-    <T extends IUIElement> IUIElementData getDataFromElement(@NotNull final T element);
+    <T extends IUIElement> IUIElementData<?> getDataFromElement(@NotNull final T element);
 
     /**
      * Creates a {@link IUIElementData} from a given {@link IUIElement} using the given builder.

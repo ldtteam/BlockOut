@@ -16,6 +16,8 @@ import java.util.Optional;
 
 public class ObjectUIElementMetaData implements IUIElementMetaData, Serializable
 {
+    private static final long serialVersionUID = 5842870418670469285L;
+
     @NotNull
     private final Map<String, ObjectUIElementDataComponent> object;
     @Nullable

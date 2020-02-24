@@ -15,6 +15,8 @@ import java.util.Objects;
 public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefinitionLoader
 {
 
+    private static final long serialVersionUID = 7644030184707070730L;
+
     @NotNull
     private final String domain;
     @NotNull

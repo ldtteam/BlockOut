@@ -25,7 +25,7 @@ public class CommonLoaderManager implements ILoaderManager
     }
 
     @Override
-    public IUIElementData loadData(@NotNull final IGuiDefinitionLoader dataLoader)
+    public IUIElementData<?> loadData(@NotNull final IGuiDefinitionLoader dataLoader)
     {
         try
         {

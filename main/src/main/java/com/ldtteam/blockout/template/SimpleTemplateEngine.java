@@ -41,7 +41,7 @@ public class SimpleTemplateEngine implements ITemplateEngine
       @NotNull final ResourceLocation resourceId,
       @NotNull final String controlId,
       @NotNull final
-      Function<IUIElementData, IUIElementData> dataOverrideCallback)
+      Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback)
     {
         final TemplateResource templateData;
         try
@@ -62,10 +62,10 @@ public class SimpleTemplateEngine implements ITemplateEngine
     public IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final IUIElementData templateData,
+      @NotNull final IUIElementData<?> templateData,
       @NotNull final String controlId,
       @NotNull final
-      Function<IUIElementData, IUIElementData> dataOverrideCallback)
+      Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback)
     {
         final IUIElement templateCandidate = ProxyHolder.getInstance().getFactoryController().getElementFromData(templateData);
         if (templateCandidate instanceof Template)
@@ -74,6 +74,6 @@ public class SimpleTemplateEngine implements ITemplateEngine
             return template.generateInstance(parent, dataContextProperty, controlId, dataOverrideCallback);
         }
 
-        throw new IllegalArgumentException(String.format("The given IUIElementData does not contain a Template as root control."));
+        throw new IllegalArgumentException(String.format("The given IUIElementData<?> does not contain a Template as root control."));
     }
 }

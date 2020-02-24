@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+@SuppressWarnings("rawtypes")
 public class WrappedUIElementData implements IUIElementData
 {
 
@@ -24,7 +25,7 @@ public class WrappedUIElementData implements IUIElementData
 
     @Nullable
     @Override
-    public Optional getComponentWithName(@NotNull final String name, final boolean isPrimary)
+    public Optional<?> getComponentWithName(@NotNull final String name, final boolean isPrimary)
     {
         return wrapped.getComponentWithName(name);
     }

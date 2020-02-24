@@ -8,18 +8,20 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.mouse.MouseButton;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 public class OnMouseClickBeginMessage implements IBlockOutClientToServerMessage
 {
-    @NotNull
+
+    private static final long serialVersionUID = 942118386920517343L;
+
     private final int         localX;
-    @NotNull
     private final int         localY;
     @NotNull
     private final MouseButton button;
 
-    public OnMouseClickBeginMessage(@NotNull final int localX, @NotNull final int localY, @NotNull final MouseButton button)
+    public OnMouseClickBeginMessage(final int localX, final int localY, @NotNull final MouseButton button)
     {
         this.localX = localX;
         this.localY = localY;
@@ -30,6 +32,8 @@ public class OnMouseClickBeginMessage implements IBlockOutClientToServerMessage
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {
         final ServerPlayerEntity player = ctx.getSender();
+        Validate.notNull(player);
+
         final IGuiKey key = ProxyHolder.getInstance().getGuiController().getOpenUI(player);
         if (key == null)
         {

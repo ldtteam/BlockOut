@@ -19,6 +19,8 @@ import static com.ldtteam.blockout.util.Constants.Controls.Root.KEY_ROOT;
 public class RootGuiElement extends AbstractChildrenContainingUIElement
 {
 
+    private static final long serialVersionUID = -7982598242484156414L;
+
     public static final class RootGuiConstructionDataBuilder extends SimpleControlConstructionDataBuilder<RootGuiConstructionDataBuilder, RootGuiElement>
     {
 

@@ -14,6 +14,8 @@ import java.util.Optional;
 public class TextFieldTabPressedMessage implements IBlockOutClientToServerMessage
 {
 
+    private static final long serialVersionUID = -7709741531384954224L;
+
     private String nextControlId = "";
 
     public TextFieldTabPressedMessage(final String nextControlId)

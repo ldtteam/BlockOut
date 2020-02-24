@@ -19,6 +19,7 @@ import java.util.EnumSet;
 
 public class BaseFactoryInjectionModule extends AbstractModule
 {
+    @SuppressWarnings("unchecked")
     @Override
     protected void configure()
     {
@@ -35,6 +36,6 @@ public class BaseFactoryInjectionModule extends AbstractModule
         bind(new TypeLiteral<IUIElementDataComponentConverter<BoundingBox>>() {}).to(BaseValueComponentConverters.BoundingBoxConverter.class);
         bind(new TypeLiteral<IUIElementDataComponentConverter<Dock>>() {}).to(new TypeLiteral<BaseValueComponentConverters.EnumValueConverter<Dock>>() {});
         bind((Key<IUIElementDataComponentConverter<EnumSet<Dock>>>) Key.get(Constants.ConverterTypes.DOCK_ENUMSET_FACTORY_TYPE)).to(new TypeLiteral<BaseValueComponentConverters.EnumSetValueConverter<Dock>>() {});
-        bind(new TypeLiteral<IUIElementDataComponentConverter<ArrayList>>() {}).to(BaseValueComponentConverters.DummyListContextConverter.class);
+        bind(new TypeLiteral<IUIElementDataComponentConverter<ArrayList<?>>>() {}).to(BaseValueComponentConverters.DummyListContextConverter.class);
     }
 }

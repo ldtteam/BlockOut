@@ -31,6 +31,8 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 public class Template extends AbstractChildrenContainingUIElement
 {
 
+    private static final long serialVersionUID = -6806022634973125190L;
+
     public static final class Factory implements IUIElementFactory<Template>
     {
 
@@ -70,7 +72,7 @@ public class Template extends AbstractChildrenContainingUIElement
     public Template(
       @NotNull final IDependencyObject<ResourceLocation> style,
       @NotNull final String id,
-      @NotNull final IUIElementData ownData)
+      @NotNull final IUIElementData<?> ownData)
     {
         super(KEY_TEMPLATE, style, id, null);
         this.ownData = ownData;
@@ -90,7 +92,7 @@ public class Template extends AbstractChildrenContainingUIElement
       @NotNull final IUIElementHost instanceParent,
       @NotNull final IDependencyObject<Object> boundContext,
       @NotNull final String controlId,
-      @NotNull final Function<IUIElementData, IUIElementData> dataOverrideCallback)
+      @NotNull final Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback)
     {
         final IDependencyObject<List<IUIElementData<?>>> childrenData = ownData.getFromRawDataWithDefault(CONST_CHILDREN,
           SimpleBindingEngine.getInstance(),
@@ -142,6 +144,7 @@ public class Template extends AbstractChildrenContainingUIElement
                 };
             }
 
+            @SuppressWarnings({"rawtypes", "unchecked"})
             @Override
             public IDependencyObject getFromRawDataWithProperty(
               @NotNull final String name,

@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public class TextFieldUpdateContentsMessage implements IBlockOutClientToServerMessage
 {
+
+    private static final long serialVersionUID = 4254765386086488636L;
+
     private String controlId;
     private String newContent;
 

@@ -44,6 +44,7 @@ public class JsonUIElementData implements IUIElementData<JsonUIElementDataCompon
         return Optional.empty();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <D extends IUIElementDataComponent> D toDataComponent(@NotNull final D toWriteInto)
     {

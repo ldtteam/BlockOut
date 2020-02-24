@@ -35,7 +35,7 @@ public interface ITemplateEngine
       @NotNull final IDependencyObject<Object> dataContextProperty,
       @NotNull final ResourceLocation resourceId,
       @NotNull final String controlId,
-      @NotNull final Function<IUIElementData, IUIElementData> dataOverrideCallback);
+      @NotNull final Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback);
 
     /**
      * Generates a new unique {@link IUIElement} that represents the template with a datacontext.
@@ -46,7 +46,7 @@ public interface ITemplateEngine
     default IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final IUIElementData templateData,
+      @NotNull final IUIElementData<?> templateData,
       @NotNull final String controlId)
     {
         return this.generateFromTemplate(parent, dataContextProperty, templateData, controlId, Function.identity());
@@ -55,7 +55,7 @@ public interface ITemplateEngine
     IUIElement generateFromTemplate(
       @NotNull final IUIElementHost parent,
       @NotNull final IDependencyObject<Object> dataContextProperty,
-      @NotNull final IUIElementData templateData,
+      @NotNull final IUIElementData<?> templateData,
       @NotNull final String controlId,
-      @NotNull final Function<IUIElementData, IUIElementData> dataOverrideCallback);
+      @NotNull final Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback);
 }

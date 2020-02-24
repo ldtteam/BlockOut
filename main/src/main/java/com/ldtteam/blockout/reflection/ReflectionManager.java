@@ -59,6 +59,7 @@ public class ReflectionManager implements IReflectionManager
     /**
      * Returns a list off super types of from a given class, including the class itself.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <A> Set<Class<? super A>> getAllSupers(final Class<? super A> clz)
     {
@@ -93,7 +94,7 @@ public class ReflectionManager implements IReflectionManager
     {
         final FieldAccess access = FieldAccess.get(clz);
         final String[] fieldNames = access.getFieldNames();
-        final Class[] fieldTypes = access.getFieldTypes();
+        final Class<?>[] fieldTypes = access.getFieldTypes();
 
         final Set<IFieldReflectionEntry> entries = Sets.newHashSet();
 

@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataComponent>, Serializable
 {
+
+    private static final long serialVersionUID = 7495696922826437117L;
+
     @NotNull
     private final Map<String, ObjectUIElementDataComponent> object;
     @NotNull

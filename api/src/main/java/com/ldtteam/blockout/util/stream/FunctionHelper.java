@@ -19,6 +19,7 @@ public final class FunctionHelper
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     public static <K, T, U> Map.Entry<K, U> castMapValue(@Nullable final Map.Entry<K, T> entry)
     {

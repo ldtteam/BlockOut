@@ -8,16 +8,19 @@ import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 public class OnKeyPressedMessage implements IBlockOutClientToServerMessage
 {
-    @NotNull
+
+    private static final long serialVersionUID = -639129604565133868L;
+
     private final int         character;
     @NotNull
     private final KeyboardKey key;
 
-    public OnKeyPressedMessage(@NotNull final int character, @NotNull final KeyboardKey key)
+    public OnKeyPressedMessage(final int character, @NotNull final KeyboardKey key)
     {
         this.character = character;
         this.key = key;
@@ -27,6 +30,8 @@ public class OnKeyPressedMessage implements IBlockOutClientToServerMessage
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {
         final ServerPlayerEntity player = ctx.getSender();
+        Validate.notNull(player);
+
         final IGuiKey key = ProxyHolder.getInstance().getGuiController().getOpenUI(player);
         if (key == null)
         {

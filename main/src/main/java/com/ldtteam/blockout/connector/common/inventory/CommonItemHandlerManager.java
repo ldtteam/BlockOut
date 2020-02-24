@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class CommonItemHandlerManager implements IItemHandlerManager
 {
+    private static final long serialVersionUID = 1071524214799948285L;
+
     @NotNull
     private final Map<String, IItemHandlerProvider> providerMap;
 

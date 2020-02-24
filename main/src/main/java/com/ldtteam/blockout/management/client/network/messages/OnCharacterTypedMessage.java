@@ -7,9 +7,13 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
-public class OnCharacterTypedMessage implements IBlockOutClientToServerMessage {
+public class OnCharacterTypedMessage implements IBlockOutClientToServerMessage
+{
+
+    private static final long serialVersionUID = -4575156258122501458L;
 
     private final char character;
     private final int modifier;
@@ -22,10 +26,12 @@ public class OnCharacterTypedMessage implements IBlockOutClientToServerMessage {
     @Override
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx) {
         final ServerPlayerEntity player = ctx.getSender();
+        Validate.notNull(player);
+
         final IGuiKey key = ProxyHolder.getInstance().getGuiController().getOpenUI(player);
         if (key == null)
         {
-            Log.getLogger().error("Player is not watching a BlockOut guitemp.");
+            Log.getLogger().error("Player is not watching a BlockOut Gui.");
             return;
         }
 

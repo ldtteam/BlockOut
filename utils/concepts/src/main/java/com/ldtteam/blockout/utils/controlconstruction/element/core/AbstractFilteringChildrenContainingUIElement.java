@@ -21,6 +21,8 @@ import java.util.function.Predicate;
 public abstract class AbstractFilteringChildrenContainingUIElement extends AbstractChildrenContainingUIElement
 {
 
+    private static final long serialVersionUID = -3317283882902565499L;
+
     public AbstractFilteringChildrenContainingUIElement(
       @NotNull final String type,
       @NotNull final IDependencyObject<ResourceLocation> style,

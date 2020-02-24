@@ -72,7 +72,7 @@ public class ServerNetworkManager implements INetworkManager
     @Override
     public void onElementChanged(@NotNull final IUIElement changedElement)
     {
-        final IUIElementData dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(changedElement);
+        final IUIElementData<?> dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(changedElement);
         if (dataCandidate instanceof ObjectUIElementData)
         {
             guiController.getUUIDsOfPlayersWatching(guiKey).forEach(uuid -> NetworkManager.sendTo(new OnElementUpdatedMessage((ObjectUIElementData) dataCandidate), uuid));

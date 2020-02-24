@@ -7,6 +7,8 @@ import net.minecraftforge.fml.network.NetworkEvent;
 public interface IBlockOutBidirectionalMessage extends IBlockOutClientToServerMessage, IBlockOutServerToClientMessage
 {
 
+    long serialVersionUID = 4331323556947802192L;
+
     //Since we inherit from interfaces that both override onArrived in there in own way. We merge their behaviour here again.
     @Override
     default void onArrived(final NetworkEvent.Context ctx)

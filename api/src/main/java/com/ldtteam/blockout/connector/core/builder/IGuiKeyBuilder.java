@@ -31,6 +31,7 @@ public interface IGuiKeyBuilder
 
     IGuiKeyBuilder ofDefinition(@NotNull final IGuiDefinitionLoader definitionLoader);
 
+    @SuppressWarnings("unchecked")
     @NotNull
     default IGuiKeyBuilder usingDefaultData()
     {
@@ -38,6 +39,7 @@ public interface IGuiKeyBuilder
         return usingData();
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder>... builderConsumer);
 
@@ -47,6 +49,7 @@ public interface IGuiKeyBuilder
     @NotNull
     IGuiKeyBuilder withItemHandlerManager(@NotNull final IItemHandlerManager manager);
 
+    @SuppressWarnings("unchecked")
     @NotNull
     default IGuiKeyBuilder withDefaultItemHandlerManager()
     {
@@ -54,6 +57,7 @@ public interface IGuiKeyBuilder
         return withItemHandlerManager();
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     IGuiKeyBuilder withItemHandlerManager(@NotNull final Consumer<IItemHandlerManagerBuilder>... configurer);
 

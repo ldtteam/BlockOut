@@ -7,18 +7,19 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
 public class OnMouseWheelMessage implements IBlockOutClientToServerMessage
 {
-    @NotNull
+
+    private static final long serialVersionUID = -3108580398885540847L;
+
     private final int localX;
-    @NotNull
     private final int localY;
-    @NotNull
     private final int deltaWheel;
 
-    public OnMouseWheelMessage(@NotNull final int localX, @NotNull final int localY, @NotNull final int deltaWheel)
+    public OnMouseWheelMessage(final int localX, final int localY, final int deltaWheel)
     {
         this.localX = localX;
         this.localY = localY;
@@ -29,6 +30,8 @@ public class OnMouseWheelMessage implements IBlockOutClientToServerMessage
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {
         final ServerPlayerEntity player = ctx.getSender();
+        Validate.notNull(player);
+
         final IGuiKey key = ProxyHolder.getInstance().getGuiController().getOpenUI(player);
         if (key == null)
         {

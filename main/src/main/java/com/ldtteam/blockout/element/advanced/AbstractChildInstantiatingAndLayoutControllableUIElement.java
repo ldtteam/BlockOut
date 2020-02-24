@@ -41,6 +41,9 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
  */
 public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement extends AbstractChildrenContainingUIElement implements IChildDrawableUIElement
 {
+
+    private static final long serialVersionUID = -4770739674405505116L;
+
     //Bindable resource binding.
     public IDependencyObject<ResourceLocation>                  templateResource;
     public IDependencyObject<IBlockOutGuiConstructionData> templateConstructionData;
@@ -64,10 +67,10 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
       final IDependencyObject<Object> dataContext,
       final IDependencyObject<Boolean> visible,
       final IDependencyObject<Boolean> enabled,
-      @NotNull final double scrollOffset,
+      final double scrollOffset,
       @NotNull final IDependencyObject<ResourceLocation> templateResource,
       @NotNull final IDependencyObject<Object> source,
-      @NotNull final boolean dataBoundMode,
+      final boolean dataBoundMode,
       @NotNull final IDependencyObject<Orientation> orientation)
     {
         super(type, style, id, parent, alignments, dock, margin, elementSize, padding, dataContext, visible, enabled);
@@ -397,6 +400,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
                     return name.contains("elementSize");
                 }
 
+                @SuppressWarnings("unchecked")
                 @NotNull
                 @Override
                 public <T> IDependencyObject<T> get(@NotNull final String name)

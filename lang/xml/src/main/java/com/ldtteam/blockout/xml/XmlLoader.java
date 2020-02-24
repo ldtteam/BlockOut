@@ -8,8 +8,6 @@ import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
-import java.io.StringBufferInputStream;
-import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 
 public class XmlLoader implements ILoader
@@ -22,7 +20,7 @@ public class XmlLoader implements ILoader
      */
     @NotNull
     @Override
-    public IUIElementData loadDataFromDefinition(@NotNull final String data) throws Exception
+    public IUIElementData<?> loadDataFromDefinition(@NotNull final String data) throws Exception
     {
         try {
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

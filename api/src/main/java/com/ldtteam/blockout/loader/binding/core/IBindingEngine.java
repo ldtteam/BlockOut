@@ -41,5 +41,5 @@ public interface IBindingEngine
      * @return The engine this was called upon.
      */
     @NotNull
-    IBindingEngine registerBindingTransformer(@NotNull IBindingTransformer... transformers);
+    IBindingEngine registerBindingTransformer(@NotNull IBindingTransformer<?, ?>... transformers);
 }

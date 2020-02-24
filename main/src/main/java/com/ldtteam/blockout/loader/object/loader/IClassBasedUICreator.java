@@ -14,5 +14,5 @@ public interface IClassBasedUICreator
      *
      * @param builder The builder to load the ui data into.
      */
-    void build(@NotNull final IUIElementDataBuilder builder);
+    void build(@NotNull final IUIElementDataBuilder<?> builder);
 }

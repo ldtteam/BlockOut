@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 
 public class ClientGuiController implements IGuiController
 {
+    @SuppressWarnings("unchecked")
     @Override
     public void openUI(
       @NotNull final PlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
@@ -36,6 +37,7 @@ public class ClientGuiController implements IGuiController
         openUI(player.getUniqueID(), key);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void openUI(@NotNull final UUID playerId, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {

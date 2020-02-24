@@ -9,7 +9,8 @@ import java.util.UUID;
 
 public class EntityContext implements IContext
 {
-    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
+
+    private static final long serialVersionUID = -3408028208705079936L;
 
     @NotNull
     private UUID entityId = new UUID(0, 0);

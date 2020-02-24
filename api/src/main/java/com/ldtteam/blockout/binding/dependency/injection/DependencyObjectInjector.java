@@ -36,6 +36,7 @@ public final class DependencyObjectInjector
      * @param target   The target object on which binding is performed.
      * @param provider The provider to test against.
      */
+    @SuppressWarnings("static")
     public static void inject(@NotNull final IDependencyReceiver target, @NotNull final IDependencyDataProvider provider)
     {
         ProxyHolder.getInstance().getReflectionManager().getFieldsForClass(target.getClass())

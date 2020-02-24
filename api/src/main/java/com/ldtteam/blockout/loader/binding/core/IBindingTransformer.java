@@ -3,7 +3,16 @@ package com.ldtteam.blockout.loader.binding.core;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import org.jetbrains.annotations.NotNull;
 
-public interface IBindingTransformer
+import java.util.function.Supplier;
+
+/**
+ * Defines a transformer that can be used to transform a binding from one type to another,
+ * This transformation is a duplex connection, and a transform that happens in one way has to be able to happen in the other direction as well.
+ *
+ * @param <F> The type from which the transformation in the reading direction occurs.
+ * @param <T> The type to which the transformation in the reading directions occurs,
+ */
+public interface IBindingTransformer<F, T>
 {
 
     /**
@@ -16,7 +25,13 @@ public interface IBindingTransformer
      */
     String getTransformerName();
 
-    <T> IDependencyObject<T> generateTransformingBind(
-      @NotNull ITransformerBindSupplier bindSupplier
+    /**
+     * Executes the transformation binding.
+     *
+     * @param bindSupplier Provides the 'from' dependency object.
+     * @return The 'to' dependency object (a transformed from object)
+     */
+    IDependencyObject<T> generateTransformingBind(
+      @NotNull Supplier<IDependencyObject<F>> bindSupplier
     );
 }

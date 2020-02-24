@@ -25,8 +25,8 @@ public final class ElementDataComponentConverters
 
         @NotNull
         @Override
-        public IUIElementData readFromElement(
-          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public IUIElementData<?> readFromElement(
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return component.toIUIElementData((IUIElementHost) params[0]);
         }
@@ -52,7 +52,7 @@ public final class ElementDataComponentConverters
         @NotNull
         @Override
         public List<IUIElementData<?>> readFromElement(
-          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return component.getAsList().stream().map(iuiElementDataComponent -> iuiElementDataComponent.toIUIElementData((IUIElementHost) params[0])).collect(Collectors.toList());
         }
@@ -62,9 +62,9 @@ public final class ElementDataComponentConverters
           @NotNull final List<IUIElementData<?>> value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final C listCompound = newComponentInstanceProducer.apply(ComponentType.LIST);
-            listCompound.setList(value.stream().map(iuiElementData -> {
+            listCompound.setList(value.stream().map(elementData -> {
                 final C compound = newComponentInstanceProducer.apply(ComponentType.COMPLEX);
-                return iuiElementData.toDataComponent(compound);
+                return elementData.toDataComponent(compound);
             }).collect(Collectors.toList()));
 
             return listCompound;

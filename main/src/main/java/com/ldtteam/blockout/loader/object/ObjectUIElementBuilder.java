@@ -69,6 +69,7 @@ public class ObjectUIElementBuilder implements IUIElementDataBuilder<ObjectUIEle
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T> IUIElementDataBuilder<ObjectUIElementData> addComponent(final String componentName, final T value, final Type typeToken)
     {

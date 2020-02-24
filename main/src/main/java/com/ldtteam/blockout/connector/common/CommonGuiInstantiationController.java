@@ -26,7 +26,7 @@ public class CommonGuiInstantiationController
     public RootGuiElement instantiateNewGui(@NotNull final IGuiKey key)
     {
         RootGuiElement host;
-        final IUIElementData elementData = ProxyHolder.getInstance().getLoaderManager().loadData(key.getGuiDefinitionLoader());
+        final IUIElementData<?> elementData = ProxyHolder.getInstance().getLoaderManager().loadData(key.getGuiDefinitionLoader());
 
         if (elementData == null)
         {

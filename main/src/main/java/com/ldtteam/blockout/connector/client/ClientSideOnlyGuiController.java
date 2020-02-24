@@ -26,6 +26,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     @Nullable
     private Tuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
 
+    @SuppressWarnings("unchecked")
     @Override
     public void openUI(
       @Nullable final PlayerEntity player, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
@@ -42,6 +43,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         openUI(DUMMY_ID, key);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void openUI(@Nullable final UUID playerId, @NotNull final Consumer<IGuiKeyBuilder>... guiKeyBuilderConsumer)
     {

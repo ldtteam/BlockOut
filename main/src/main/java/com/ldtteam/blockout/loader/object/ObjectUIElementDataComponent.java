@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 public class ObjectUIElementDataComponent implements IUIElementDataComponent, Serializable
 {
+    private static final long serialVersionUID = 7567150150013743697L;
+
     private Serializable serializable;
 
     public ObjectUIElementDataComponent()
@@ -80,12 +82,14 @@ public class ObjectUIElementDataComponent implements IUIElementDataComponent, Se
         serializable = f;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<IUIElementDataComponent> getAsList()
     {
         return ((List<IUIElementDataComponent>) serializable);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Map<String, IUIElementDataComponent> getAsMap()
     {

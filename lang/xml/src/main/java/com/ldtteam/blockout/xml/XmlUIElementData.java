@@ -63,6 +63,7 @@ public class XmlUIElementData implements IUIElementData<XmlUIElementDataComponen
      * @param toWriteInto The component to write the data into.
      * @return The data component containing this element datas data.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <D extends IUIElementDataComponent> D toDataComponent(@NotNull final D toWriteInto)
     {

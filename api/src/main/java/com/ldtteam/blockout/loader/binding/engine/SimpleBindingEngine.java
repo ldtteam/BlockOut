@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -23,8 +24,8 @@ public class SimpleBindingEngine implements IBindingEngine
     private static final String BINDINGCOMMAND_PATTERN = "\\{(" + COMMAND_SYNTAX_KEYWORD + "):(" + COMMAND_DATA_KEYWORD + ")((:)(?<" + TRANSFORMER_NAME + ">.+))*}";
 
     private static SimpleBindingEngine              ourInstance    = new SimpleBindingEngine();
-    private final  Map<Pattern, IBindingCommand>    commandMap     = new LinkedHashMap<>();
-    private final  Map<String, IBindingTransformer> transformerMap = new HashMap<>();
+    private final  Map<Pattern, IBindingCommand>    commandMap     = Collections.synchronizedMap(new LinkedHashMap<>());
+    private final  Map<String, IBindingTransformer<?,?>> transformerMap = new ConcurrentHashMap<>();
 
     private SimpleBindingEngine()
     {
@@ -83,9 +84,9 @@ public class SimpleBindingEngine implements IBindingEngine
 
     @Override
     @NotNull
-    public IBindingEngine registerBindingTransformer(@NotNull final IBindingTransformer... transformers)
+    public IBindingEngine registerBindingTransformer(@NotNull final IBindingTransformer<?,?>... transformers)
     {
-        for (final IBindingTransformer transformer : transformers)
+        for (final IBindingTransformer<?,?> transformer : transformers)
         {
             this.transformerMap.put(transformer.getTransformerName(), transformer);
         }
@@ -99,15 +100,14 @@ public class SimpleBindingEngine implements IBindingEngine
         final String transformerNames = bindingCommandMatcher.group(TRANSFORMER_NAME);
         if (transformerNames != null && !transformerNames.isEmpty())
         {
-            final LinkedHashSet<IBindingTransformer> transformers =
+            final LinkedHashSet<IBindingTransformer<?,?>> transformers =
               Arrays.stream(transformerNames.split(":")).map(transformerMap::get).collect(Collectors.toCollection(LinkedHashSet::new));
 
             IDependencyObject<?> currentDependency = command.bind(bindingCommandMatcher, defaultValue);
-            for (final IBindingTransformer transformer :
+            for (final IBindingTransformer<?,?> transformer :
               transformers)
             {
-                final IDependencyObject finalCurrentDependency = currentDependency;
-                currentDependency = transformer.generateTransformingBind(() -> finalCurrentDependency);
+                currentDependency = processTransform(currentDependency, transformer);
             }
 
             return (IDependencyObject<T>) currentDependency;
@@ -116,5 +116,21 @@ public class SimpleBindingEngine implements IBindingEngine
         {
             return command.bind(bindingCommandMatcher, defaultValue);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <F, T> IDependencyObject<T> processTransform(final IDependencyObject<?> input, final IBindingTransformer<F, T> transformer)
+    {
+        try {
+            final IDependencyObject<F> fromDependency = (IDependencyObject<F>) input;
+            return transformer.generateTransformingBind(() -> fromDependency);
+        }
+        catch (ClassCastException ccEx)
+        {
+            Log.getLogger().error("Failed to process the dependency object: " + input + " the type of its value does not match the input type of the transformer: " + transformer);
+            throw new IllegalArgumentException("Input is not of a valid type for the transformer.", ccEx);
+        }
+
+
     }
 }

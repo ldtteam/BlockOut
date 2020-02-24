@@ -34,6 +34,9 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
 public class Button extends AbstractFilteringChildrenContainingUIElement implements IDrawableUIElement, IClickAcceptingUIElement
 {
+
+    private static final long serialVersionUID = 729925659192171297L;
+
     @NotNull
     public IDependencyObject<ResourceLocation> normalBackgroundImageResource;
     @NotNull

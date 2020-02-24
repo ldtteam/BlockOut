@@ -11,30 +11,34 @@ import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
 {
+
+    private static final long serialVersionUID = -3490030422348525289L;
+
     @NotNull
     private IGuiKey        key;
     @NotNull
-    private IUIElementData data;
-    @NotNull
+    private IUIElementData<?> data;
     private int            windowId;
 
+    @SuppressWarnings({"ConstantConditions", "unused"})
     public OpenGuiCommandMessage()
     {
+        key = null;
+        data = null;
     }
 
-    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final IUIElementData data, @NotNull final int windowId)
+    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final IUIElementData<?> data, final int windowId)
     {
         this.key = key;
         this.data = data;
         this.windowId = windowId;
     }
 
-    @Nullable
     @Override
     public void onMessageArrivalAtClient(@NotNull final NetworkEvent.Context ctx)
     {
@@ -50,6 +54,8 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         root.getUiManager().getUpdateManager().updateElement(root);
         final BlockOutContainer container = new BlockOutContainer(key, root, windowId);
         container.reinitializeSlots();
+
+        Validate.notNull(Minecraft.getInstance().player);
         final BlockOutContainerGui blockOutGuiDataIGuiContainer = new BlockOutContainerGui(container, Minecraft.getInstance().player.inventory, getKey(), root);
 
         Minecraft.getInstance().player.openContainer = container;
@@ -57,7 +63,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     }
 
     @NotNull
-    public IUIElementData getData()
+    public IUIElementData<?> getData()
     {
         return data;
     }
@@ -66,11 +72,5 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     public IGuiKey getKey()
     {
         return key;
-    }
-
-    @NotNull
-    public int getWindowId()
-    {
-        return windowId;
     }
 }

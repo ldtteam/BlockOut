@@ -28,7 +28,7 @@ public class TemplateResource implements IResource
         {
             if (!data.isJsonPrimitive())
             {
-                throw new JsonParseException("IUIElementData needs to reference a file.");
+                throw new JsonParseException("IUIElementData<?> needs to reference a file.");
             }
 
             final ResourceLocation target = new ResourceLocation(data.getAsString());
@@ -37,7 +37,7 @@ public class TemplateResource implements IResource
     }
 
     private final ResourceLocation    id;
-    private final IUIElementData data;
+    private final IUIElementData<?> data;
 
     public TemplateResource(final ResourceLocation id, final ResourceLocation dataLocation)
     {
@@ -52,7 +52,7 @@ public class TemplateResource implements IResource
         return id;
     }
 
-    public IUIElementData getData()
+    public IUIElementData<?> getData()
     {
         return data;
     }

@@ -16,6 +16,8 @@ import org.jetbrains.annotations.Nullable;
 public class CommonTileBasedProvider implements IItemHandlerProvider
 {
 
+    private static final long serialVersionUID = -2390884778025679771L;
+
     @NotNull
     private final String id;
 

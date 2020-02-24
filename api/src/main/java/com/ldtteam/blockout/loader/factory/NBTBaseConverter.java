@@ -308,14 +308,16 @@ public abstract class NBTBaseConverter<T extends INBT> implements IUIElementData
         return getNBTType(component) == type;
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public T readFromElement(
-      @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+      @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
     {
         return (T) TYPE_CONVERSION_FUNCTIONS.get(getNBTType(component)).apply(component);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <C extends IUIElementDataComponent> C writeToElement(
       @NotNull final T value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)

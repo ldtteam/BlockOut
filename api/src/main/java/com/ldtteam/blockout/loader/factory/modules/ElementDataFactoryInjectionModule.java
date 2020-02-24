@@ -14,6 +14,7 @@ import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_F
 public class ElementDataFactoryInjectionModule extends AbstractModule
 {
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void configure()
     {

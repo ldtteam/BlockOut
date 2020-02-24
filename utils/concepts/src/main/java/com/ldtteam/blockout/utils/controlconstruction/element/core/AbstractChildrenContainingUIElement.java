@@ -27,6 +27,9 @@ import static com.ldtteam.blockout.util.Constants.ConverterTypes.CHILDREN_LIST_T
 
 public abstract class AbstractChildrenContainingUIElement extends LinkedHashMap<String, IUIElement> implements IUIElementHost
 {
+
+    private static final long serialVersionUID = -5334219485578587340L;
+
     @NotNull
     private final UUID uniqueIdentifier = UUID.randomUUID();
 

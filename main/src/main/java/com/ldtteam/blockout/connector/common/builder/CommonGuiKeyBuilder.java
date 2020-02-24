@@ -70,6 +70,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public IGuiKeyBuilder usingData(@NotNull final Consumer<IBlockOutGuiConstructionDataBuilder>... builderConsumer)
@@ -94,6 +95,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public IGuiKeyBuilder withItemHandlerManager(@NotNull final Consumer<IItemHandlerManagerBuilder>... configurer)

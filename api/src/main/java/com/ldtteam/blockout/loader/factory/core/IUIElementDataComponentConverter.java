@@ -28,7 +28,7 @@ public interface IUIElementDataComponentConverter<T>
      * @return The instance of T.
      */
     @NotNull
-    T readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params);
+    T readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params);
 
     /**
      * Creates a new component from the given instance of T.

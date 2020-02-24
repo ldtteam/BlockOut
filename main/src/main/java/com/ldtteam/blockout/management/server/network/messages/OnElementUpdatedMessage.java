@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 {
+    private static final long serialVersionUID = 2412330872349662164L;
+
     @NotNull
     private final ObjectUIElementData elementData;
 
@@ -37,9 +39,9 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 
         final BlockOutContainerGui openContainerScreen = (BlockOutContainerGui) openGuiScreen;
 
-        if (openContainerScreen.getInstanceData() instanceof BlockOutGuiData)
+        if (openContainerScreen.getInstanceData() != null)
         {
-            final BlockOutGuiData blockOutGui = (BlockOutGuiData) openContainerScreen.getInstanceData();
+            final BlockOutGuiData blockOutGui = openContainerScreen.getInstanceData();
             final IUIElement containedElement = ProxyHolder.getInstance().getFactoryController().getElementFromData(elementData);
             if (!(containedElement instanceof RootGuiElement))
             {

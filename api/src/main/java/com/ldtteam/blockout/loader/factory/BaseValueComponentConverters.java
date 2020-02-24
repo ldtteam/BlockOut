@@ -13,6 +13,7 @@ import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter
 import com.ldtteam.blockout.util.math.BoundingBox;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +38,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public String readFromElement(@NotNull final IUIElementDataComponent component, final IUIElementData sourceData, @NotNull final Object... params)
+        public String readFromElement(@NotNull final IUIElementDataComponent component, final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             if (!component.isString())
             {
@@ -69,8 +70,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Boolean readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Boolean readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read a boolean value from a null source.");
+
             if (!component.isBool())
             {
                 throw new IllegalArgumentException("Required a component of type boolean.");
@@ -101,8 +104,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Double readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Double readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read a double value from a null source.");
+
             if (!component.isNumber())
             {
                 throw new IllegalArgumentException("Required a component of type double.");
@@ -133,8 +138,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Float readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Float readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read a float value from a null source.");
+
             if (!component.isNumber())
             {
                 throw new IllegalArgumentException("Required a component of type float.");
@@ -165,8 +172,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Integer readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public Integer readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read an integer value from a null source.");
+
             if (!component.isNumber())
             {
                 throw new IllegalArgumentException("Required a component of type integer.");
@@ -197,7 +206,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public ResourceLocation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return new ResourceLocation(component.getAsString());
         }
@@ -224,8 +233,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public E readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public E readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read an enum value from a null source.");
+
             final Class<E> clz = (Class<E>) params[0];
             return E.valueOf(clz, component.getAsString());
         }
@@ -252,8 +263,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public EnumSet<E> readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public EnumSet<E> readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read an EnumSet instance from a null source.");
+
             final Class<E> clz = (Class<E>) params[0];
             final String contents = component.getAsString();
 
@@ -265,7 +278,7 @@ public final class BaseValueComponentConverters
           @NotNull final EnumSet<E> value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             final C newInstance = newComponentInstanceProducer.apply(ComponentType.STRING);
-            newInstance.setString(value.stream().map(Enum::name).reduce((s1, s2) -> s1 + "," + s2).orElse(""));
+            newInstance.setString(value.stream().map(Enum<E>::name).reduce((s1, s2) -> s1 + "," + s2).orElse(""));
 
             return newInstance;
         }
@@ -281,8 +294,10 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public AxisDistance readFromElement(@NotNull final IUIElementDataComponent component, @NotNull final IUIElementData sourceData, @NotNull final Object... params)
+        public AxisDistance readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
+            Validate.notNull(sourceData, "Cannot read an AxisDistance value from a null source.");
+
             final AxisDistanceBuilder builder = new AxisDistanceBuilder();
             builder.readFromString(sourceData.getMetaData().getParent().map(IUIElement::getElementSize).orElse(new Vector2d()), component.getAsString());
 
@@ -311,7 +326,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public EnumSet<Alignment> readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return component.isNumber()
                      ? Alignment.fromInt(component.getAsInteger())
@@ -340,7 +355,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public Orientation readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return Orientation.fromString(component.getAsString());
         }
@@ -367,7 +382,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public Vector2d readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return Vector2d.fromString(component.getAsString());
         }
@@ -394,7 +409,7 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public BoundingBox readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public BoundingBox readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return BoundingBox.fromString(component.getAsString());
         }
@@ -410,7 +425,7 @@ public final class BaseValueComponentConverters
         }
     }
 
-    public static final class DummyListContextConverter implements IUIElementDataComponentConverter<ArrayList>
+    public static final class DummyListContextConverter implements IUIElementDataComponentConverter<ArrayList<?>>
     {
 
         @Override
@@ -421,15 +436,15 @@ public final class BaseValueComponentConverters
 
         @NotNull
         @Override
-        public ArrayList readFromElement(
-          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public ArrayList<?> readFromElement(
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             return Lists.newArrayList();
         }
 
         @Override
         public <C extends IUIElementDataComponent> C writeToElement(
-          @NotNull final ArrayList value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
+          @NotNull final ArrayList<?> value, @NotNull final Function<ComponentType, C> newComponentInstanceProducer)
         {
             return newComponentInstanceProducer.apply(ComponentType.LIST);
         }

@@ -30,6 +30,7 @@ public interface IStyle
      * @param <T> The type of {@link IResource} to find.
      * @return The {@link IResource} in an {@link Optional} if it is known and of the right type, else {@link Optional#empty()}.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     default <T extends IResource> Optional<T> getResource(@NotNull final ResourceLocation id)
     {

@@ -18,6 +18,8 @@ import static com.ldtteam.blockout.util.Constants.Controls.Region.KEY_REGION;
 
 public class Region extends AbstractChildrenContainingUIElement
 {
+    private static final long serialVersionUID = 1811576092491061178L;
+
     public Region(
       @NotNull final String id,
       @Nullable final IUIElementHost parent,

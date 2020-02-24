@@ -22,14 +22,14 @@ public class ObjectUIElementMetaDataBuilder implements IUIElementMetaDataBuilder
     }
 
     @Override
-    public IUIElementMetaDataBuilder withId(@NotNull final String string)
+    public IUIElementMetaDataBuilder<ObjectUIElementMetaData> withId(@NotNull final String string)
     {
         componentMap.put(Constants.Controls.General.CONST_ID, new ObjectUIElementDataComponent(string));
         return this;
     }
 
     @Override
-    public IUIElementMetaDataBuilder withType(@NotNull final String type)
+    public IUIElementMetaDataBuilder<ObjectUIElementMetaData> withType(@NotNull final String type)
     {
         final IUIElementDataComponentConverter<String> factory =
           ProxyHolder.getInstance().getInjector().getInstance(Key.get(new TypeLiteral<IUIElementDataComponentConverter<String>>() {}));

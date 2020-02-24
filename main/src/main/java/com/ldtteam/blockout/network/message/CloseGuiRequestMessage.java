@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 public class CloseGuiRequestMessage implements IBlockOutClientToServerMessage
 {
 
+    private static final long serialVersionUID = 4412869561704300648L;
+
     @Override
     public void onMessageArrivalAtServer(@NotNull final NetworkEvent.Context ctx)
     {

@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class CloseGuiCommandMessage implements IBlockOutServerToClientMessage
 {
+
+    private static final long serialVersionUID = 2087308830216529056L;
+
     public CloseGuiCommandMessage()
     {
     }

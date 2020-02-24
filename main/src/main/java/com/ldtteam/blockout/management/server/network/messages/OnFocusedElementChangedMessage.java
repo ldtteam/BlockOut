@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class OnFocusedElementChangedMessage implements IBlockOutServerToClientMessage
 {
+    private static final long serialVersionUID = -4431640542233682978L;
+
     private String focusedElementId;
 
     public OnFocusedElementChangedMessage(@Nullable final IUIElement focusedElement)

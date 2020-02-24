@@ -19,8 +19,8 @@ import java.util.function.Function;
 public final class PropertyCreationHelper
 {
     //Caches used to minimize heavy reflective look ups, but keep memory footprint relatively low.
-    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
-    private static final Cache<Tuple<Class, String>, Optional<Tuple<MethodAccess, Integer>>> SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class<?>, String>, Optional<Tuple<MethodAccess, Integer>>> GETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
+    private static final Cache<Tuple<Class<?>, String>, Optional<Tuple<MethodAccess, Integer>>> SETTER_CACHE = CacheBuilder.newBuilder().maximumSize(10000).build();
 
     private PropertyCreationHelper()
     {
@@ -128,6 +128,7 @@ public final class PropertyCreationHelper
      * @param <T> The type of the property, the returned object by the getter and the consumed object by the setter.
      * @return A property that lazily resolves the getter and setter method name into a property during runtime.
      */
+    @SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "unchecked"})
     public static <T> Property<T> createFromName(
       @NotNull final Optional<String> getMethodName,
       @NotNull final Optional<String> setMethodName)

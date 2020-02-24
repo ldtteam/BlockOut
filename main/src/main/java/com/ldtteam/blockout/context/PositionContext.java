@@ -8,7 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class PositionContext implements IContext
 {
-    private static final long serialVersionUID = Constants.SERIAL_VAR_ID;
+
+    private static final long serialVersionUID = -5202348208706760620L;
 
     private int dimensionId;
 

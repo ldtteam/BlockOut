@@ -31,7 +31,7 @@ public class NBTDependingConverters
         @NotNull
         @Override
         public ItemStack readFromElement(
-          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+          @NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             final CompoundNBT compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
             final ItemStack stack = ItemStack.read(compound);
@@ -60,7 +60,7 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public BlockState readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public BlockState readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             final CompoundNBT compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
             final BlockState state = NBTUtil.readBlockState(compound);
@@ -87,7 +87,7 @@ public class NBTDependingConverters
 
         @NotNull
         @Override
-        public Entity readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData sourceData, @NotNull final Object... params)
+        public Entity readFromElement(@NotNull final IUIElementDataComponent component, @Nullable final IUIElementData<?> sourceData, @NotNull final Object... params)
         {
             final CompoundNBT compound = COMPOUND_NBT_BASE_CONVERTER.readFromElement(component, sourceData, params);
 

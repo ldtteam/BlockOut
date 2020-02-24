@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class OnMouseClickMoveMessage implements IBlockOutClientToServerMessage
 {
+
+    private static final long serialVersionUID = 1450965081769286299L;
+
     @NotNull
     private final int         localX;
     @NotNull
