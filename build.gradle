@@ -364,6 +364,11 @@ project.configure([project]) { rootProject ->
     }
 }
 
+task setupCIWorkspace {
+    doLast {
+        println "Finished setup."
+    }
+}
 
 
 
