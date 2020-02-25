@@ -249,7 +249,7 @@ configure(leafProjects) {projectToConfigure ->
     //Define what to publish and how.
     publishing {
         publications {
-            library(MavenPublication) {
+            maven(MavenPublication) {
                 groupId = project.group
                 artifactId "blockout-$projectIdentifier"
 
@@ -331,7 +331,7 @@ configure(leafProjects) {projectToConfigure ->
     artifactory {
         publish {
             defaults {
-                publications('library')
+                publications('maven')
                 publishBuildInfo = true   //Publish build-info to Artifactory (true by default)
                 publishArtifacts = true   //Publish artifacts to Artifactory (true by default)
                 publishPom = true   //Publish generated POM files to Artifactory (true by default).
