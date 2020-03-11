@@ -6,6 +6,7 @@ import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
@@ -22,7 +23,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     @NotNull
     private IGuiKey        key;
     @NotNull
-    private IUIElementData<?> data;
+    private ObjectUIElementData data;
     private int            windowId;
 
     @SuppressWarnings({"ConstantConditions", "unused"})
@@ -32,7 +33,7 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
         data = null;
     }
 
-    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final IUIElementData<?> data, final int windowId)
+    public OpenGuiCommandMessage(@NotNull final IGuiKey key, @NotNull final ObjectUIElementData data, final int windowId)
     {
         this.key = key;
         this.data = data;

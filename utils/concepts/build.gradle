@@ -1,5 +1,6 @@
 ext {
     projectIdentifier = "utils-concepts"
+    requiresRuns = false
 }
 
 dependencies {

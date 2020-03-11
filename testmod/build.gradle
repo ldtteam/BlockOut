@@ -4,3 +4,49 @@ dependencies {
     shadeTransitive project(':utils:concepts')
     shadeTransitive project(':utils:helpers')
 }
+
+minecraft {
+    runs {
+        client {
+            mods {
+                blockout {
+                    workingDirectory project.file('runClient')
+                    property 'forge.logging.console.level', 'info'
+                    source project(':main').sourceSets.main
+                    source project(':api').sourceSets.main
+                    source project(':lang:json').sourceSets.main
+                    source project(':lang:xml').sourceSets.main
+                    source project(':utils:concepts').sourceSets.main
+                    source project(':utils:helpers').sourceSets.main
+                }
+
+                blockout_test {
+                    workingDirectory project.file('runClient')
+                    property 'forge.logging.console.level', 'info'
+                    source project(':testmod').sourceSets.main
+                }
+            }
+        }
+
+        server {
+            mods {
+                blockout {
+                    workingDirectory project.file('runServer')
+                    property 'forge.logging.console.level', 'info'
+                    source project(':main').sourceSets.main
+                    source project(':api').sourceSets.main
+                    source project(':lang:json').sourceSets.main
+                    source project(':lang:xml').sourceSets.main
+                    source project(':utils:concepts').sourceSets.main
+                    source project(':utils:helpers').sourceSets.main
+                }
+
+                blockout_test {
+                    workingDirectory project.file('runServer')
+                    property 'forge.logging.console.level', 'info'
+                    source project(':testmod').sourceSets.main
+                }
+            }
+        }
+    }
+}

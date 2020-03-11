@@ -9,6 +9,9 @@ import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
+import com.ldtteam.blockout.loader.core.IUIElementData;
+import com.ldtteam.blockout.loader.object.ObjectUIElementData;
+import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
 import com.ldtteam.blockout.network.NetworkManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
@@ -175,8 +178,17 @@ public class ServerGuiController implements IGuiController
         playerMP.getNextWindowId();
         playerMP.closeScreen();
 
-        NetworkManager.sendTo(new OpenGuiCommandMessage(key, ProxyHolder.getInstance().getFactoryController().getDataFromElement(rootGuiElement), playerMP.currentWindowId),
-          playerMP);
+        final IUIElementData<?> dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(rootGuiElement);
+        if (dataCandidate instanceof ObjectUIElementData)
+        {
+            NetworkManager.sendTo(new OpenGuiCommandMessage(key, (ObjectUIElementData) dataCandidate, playerMP.currentWindowId),
+                    playerMP);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Cannot serialize given element into a serializable form of data");
+        }
+
 
         final BlockOutContainer container = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
         playerMP.openContainer = container;

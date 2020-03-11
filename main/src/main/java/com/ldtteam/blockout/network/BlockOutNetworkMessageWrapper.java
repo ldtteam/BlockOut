@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 public class BlockOutNetworkMessageWrapper
 {
 
-    private final Kryo                    KRYO   = KryoUtil.createNewKryo();
+    private static final Kryo                    KRYO   = KryoUtil.createNewKryo();
     private       boolean                 loaded = false;
     private       IBlockOutNetworkMessage message;
 
@@ -29,7 +29,6 @@ public class BlockOutNetworkMessageWrapper
     public BlockOutNetworkMessageWrapper(final ByteBuf byteBuf)
     {
         this.fromBytes(byteBuf);
-        byteBuf.release();
     }
 
     public void fromBytes(final ByteBuf buf)

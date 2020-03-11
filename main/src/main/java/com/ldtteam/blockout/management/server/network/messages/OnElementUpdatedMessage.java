@@ -22,6 +22,11 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
     @NotNull
     private final ObjectUIElementData elementData;
 
+    @SuppressWarnings("ConstantConditions")
+    public OnElementUpdatedMessage() {
+        this.elementData = null;
+    }
+
     public OnElementUpdatedMessage(@NotNull final ObjectUIElementData elementData)
     {
         this.elementData = elementData;
@@ -34,7 +39,7 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 
         if (!(openGuiScreen instanceof BlockOutContainerGui))
         {
-            throw new IllegalStateException("No container open!");
+            return;
         }
 
         final BlockOutContainerGui openContainerScreen = (BlockOutContainerGui) openGuiScreen;

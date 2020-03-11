@@ -2,9 +2,6 @@ import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 
-import java.util.function.Function
-import java.util.stream.Collectors
-
 //We need this in the parent project since it else not discovered by the subprojects.
 buildscript {
     repositories {
@@ -82,75 +79,7 @@ configure(leafProjects) {projectToConfigure ->
 
     minecraft {
         mappings channel: mappings_channel, version: mappings_version
-
         accessTransformer = globalAT
-
-        runs {
-            client {
-                mods {
-                    blockout {
-                        workingDirectory project.file('runClient')
-                        property 'forge.logging.console.level', 'info'
-                        source projectToConfigure.sourceSets.main
-                    }
-                }
-            }
-
-            server {
-                mods {
-                    blockout {
-                        workingDirectory project.file('runServer')
-                        property 'forge.logging.console.level', 'info'
-                        source projectToConfigure.sourceSets.main
-                    }
-                }
-            }
-        }
-    }
-
-    projectToConfigure.afterEvaluate { projectToConfigureAfterEvaluate ->
-        def sourceSets = leafProjects.collect { it.sourceSets.main }
-        sourceSets.remove(project(':testmod').sourceSets.main);
-
-        minecraft {
-            mappings channel: mappings_channel, version: mappings_version
-
-            accessTransformer = globalAT
-
-            runs {
-                client {
-                    mods {
-                        blockout {
-                            workingDirectory project.file('runClient')
-                            property 'forge.logging.console.level', 'info'
-                            sources sourceSets
-                        }
-
-                        blockout_test {
-                            workingDirectory project.file('runClient')
-                            property 'forge.logging.console.level', 'info'
-                            source project(':testmod').sourceSets.main
-                        }
-                    }
-                }
-
-                server {
-                    mods {
-                        blockout {
-                            workingDirectory project.file('runServer')
-                            property 'forge.logging.console.level', 'info'
-                            sources sourceSets
-                        }
-
-                        blockout_test {
-                            workingDirectory project.file('runClient')
-                            property 'forge.logging.console.level', 'info'
-                            source project(':testmod').sourceSets.main
-                        }
-                    }
-                }
-            }
-        }
     }
 
     //All projects should be able to shade artifacts into them selfs.
