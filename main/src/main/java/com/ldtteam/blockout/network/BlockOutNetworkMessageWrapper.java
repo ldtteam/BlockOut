@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream;
 public class BlockOutNetworkMessageWrapper
 {
 
-    private static final Kryo                    KRYO   = KryoUtil.createNewKryo();
+    private static final ThreadLocal<Kryo> KRYO_THREAD_LOCAL = ThreadLocal.withInitial(KryoUtil::createNewKryo);
     private       boolean                 loaded = false;
     private       IBlockOutNetworkMessage message;
 
@@ -43,7 +43,7 @@ public class BlockOutNetworkMessageWrapper
             buf.readBytes(data);
 
             final Input kryoInput = new Input(data);
-            final Object networkObject = KRYO.readClassAndObject(kryoInput);
+            final Object networkObject = KRYO_THREAD_LOCAL.get().readClassAndObject(kryoInput);
             message = (IBlockOutNetworkMessage) networkObject;
             loaded = true;
         }
@@ -56,7 +56,7 @@ public class BlockOutNetworkMessageWrapper
         final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         final Output kryoOutput = new Output(arrayOutputStream);
 
-        KRYO.writeClassAndObject(kryoOutput, message);
+        KRYO_THREAD_LOCAL.get().writeClassAndObject(kryoOutput, message);
 
         kryoOutput.close();
         data = arrayOutputStream.toByteArray();

@@ -1,8 +1,7 @@
 package com.ldtteam.blockout.util.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
-import com.ldtteam.blockout.loader.object.ObjectUIElementData;
+import com.ldtteam.blockout.BlockOut;
 import org.objenesis.strategy.SerializingInstantiatorStrategy;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
@@ -22,16 +21,14 @@ public final class KryoUtil
         final Kryo instance = new Kryo();
         instance.setInstantiatorStrategy(
           new BlockOutInstantiationStrategy(
-            new DefaultInstantiatorStrategy(),
+            new Kryo.DefaultInstantiatorStrategy(),
             new SerializingInstantiatorStrategy(),
             new StdInstantiatorStrategy()
           )
         );
 
         instance.setRegistrationRequired(false);
-        instance.setClassLoader(KryoUtil.class.getClassLoader());
-
-        instance.register(ObjectUIElementData.class);
+        instance.setClassLoader(BlockOut.getInstance().getClass().getClassLoader());
 
         return instance;
     }

@@ -19,7 +19,7 @@ public class ObjectUIElementData implements IUIElementData<ObjectUIElementDataCo
     @NotNull
     private final Map<String, ObjectUIElementDataComponent> object;
     @NotNull
-    private transient final ObjectUIElementMetaData                   metaData;
+    private final ObjectUIElementMetaData                   metaData;
 
     public ObjectUIElementData(@NotNull final Map<String, ObjectUIElementDataComponent> object, @NotNull final ObjectUIElementMetaData metaData)
     {
