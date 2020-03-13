@@ -20,10 +20,13 @@ public class XmlLoader implements ILoader
      */
     @NotNull
     @Override
-    public IUIElementData<?> loadDataFromDefinition(@NotNull final String data) throws Exception
-    {
+    public IUIElementData<?> loadDataFromDefinition(@NotNull final String data) {
         try {
+            if (!data.startsWith("<?xml"))
+                throw new IllegalArgumentException("Not XML! Content in prologue is invalid.");
+
             final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setValidating(false);
             final DocumentBuilder builder = factory.newDocumentBuilder();
 
             final Document document = builder.parse(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));

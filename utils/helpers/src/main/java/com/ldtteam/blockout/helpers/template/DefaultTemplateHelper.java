@@ -15,7 +15,7 @@ public class DefaultTemplateHelper
       @NotNull final IItemHandler iItemHandler,
       @NotNull final ResourceLocation inventoryId,
       @NotNull final ResourceLocation texture,
-      @NotNull final int width
+      final int width
     )
     {
         return generateGrid(
@@ -40,15 +40,14 @@ public class DefaultTemplateHelper
      */
     public static <T> List<GridUtilityWrapper<T>> generateGrid(
       @NotNull final List<T> input,
-      @NotNull final int width,
+      final int width,
       @NotNull final ResourceLocation entryTemplateId
     )
     {
         final List<GridUtilityWrapper<T>> gridList = new ArrayList<>();
-        final int rowCount = input.size() / width;
         for (int i = 0; i < input.size(); i += width)
         {
-            @NotNull final List<T> entries = input.subList(i, (i + width > input.size()) ? input.size() : i + width);
+            @NotNull final List<T> entries = input.subList(i, Math.min(i + width, input.size()));
             gridList.add(new GridUtilityWrapper<>(entries, entryTemplateId));
         }
 

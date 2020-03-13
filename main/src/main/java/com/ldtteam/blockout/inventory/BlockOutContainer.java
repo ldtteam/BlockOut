@@ -6,13 +6,17 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlot;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.itemstack.ItemStackHelper;
+import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -22,27 +26,29 @@ import java.util.stream.Collectors;
 
 public class BlockOutContainer extends Container implements IBlockOutContainer
 {
-
+    private static final Logger LOGGER = LogManager.getLogger();
     private final BlockOutContainerData containerData;
 
-    public BlockOutContainer(@NotNull final IGuiKey key, @NotNull final IUIElementHost root, @NotNull final int windowId)
+    public BlockOutContainer(@NotNull final IGuiKey key, @NotNull final IUIElementHost root, final int windowId)
     {
         super(ContainerTypes.BLOCK_OUT_CONTAINER, windowId);
         this.containerData = new BlockOutContainerData(key, root);
     }
 
+    @NotNull
     @Override
-    public Slot addSlot(final Slot p_75146_1_)
+    public Slot addSlot(final Slot slot)
     {
-        return super.addSlot(p_75146_1_);
+        return super.addSlot(slot);
     }
 
     @Override
-    public boolean canInteractWith(final PlayerEntity playerIn)
+    public boolean canInteractWith(@NotNull final PlayerEntity playerIn)
     {
         return true;
     }
 
+    @NotNull
     @Override
     public ItemStack transferStackInSlot(final PlayerEntity playerEntity, final int index)
     {
@@ -210,11 +216,11 @@ public class BlockOutContainer extends Container implements IBlockOutContainer
     public void reinitializeSlots()
     {
         inventorySlots.clear();
-        getInventory().clear();
+        inventoryItemStacks.clear();
 
         initializeSlots();
 
-        detectAndSendChanges();
+        SideExecutor.runWhenOn(LogicalSide.SERVER, () -> this::detectAndSendChanges);
     }
 
     private void initializeSlots()

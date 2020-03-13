@@ -10,11 +10,10 @@ import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.util.template.TemplateUtils;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
 import com.ldtteam.blockout.element.simple.Region;
 import com.ldtteam.blockout.element.values.*;
-import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.management.render.IRenderManager;
@@ -39,8 +38,7 @@ import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
  * Special element type that is capable of instantiating several child controls from a template depending on the data context.
  * It is also capable of allowing special logic that controls how its child elements are layed-out by overriding {@link #updateScrollOffset()}
  */
-public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement extends AbstractChildrenContainingUIElement implements IChildDrawableUIElement
-{
+public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement extends AbstractChildrenContainingUIElement implements ITemplateInstanceDataProvidingElement {
 
     private static final long serialVersionUID = -4770739674405505116L;
 
@@ -139,11 +137,13 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
         manager.getRenderingController().getScissoringController().pop();
     }
 
+    @Override
     public IBlockOutGuiConstructionData getTemplateConstructionData()
     {
         return templateConstructionData.get(this);
     }
 
+    @Override
     public void setTemplateConstructionData(final @NotNull IBlockOutGuiConstructionData templateConstructionData)
     {
         this.templateConstructionData.set(this, templateConstructionData);
@@ -194,21 +194,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
               getTemplateResource(),
               String.format("%s_%d", getId(), index++));
 
-            if (getTemplateConstructionData() != null)
-            {
-                @NotNull final IBlockOutGuiConstructionData data = getTemplateConstructionData();
-                DependencyObjectInjector.inject(element, data);
-                EventHandlerInjector.inject(element, data);
-
-                if (element instanceof IUIElementHost)
-                {
-                    IUIElementHost iuiElementHost = (IUIElementHost) element;
-                    iuiElementHost.getAllCombinedChildElements().values().forEach(c -> {
-                        DependencyObjectInjector.inject(c, data);
-                        EventHandlerInjector.inject(c, data);
-                    });
-                }
-            }
+            TemplateUtils.insertTemplateConstructionDataInto(this, element);
 
             wrapNewElementAndRegister(element);
         }

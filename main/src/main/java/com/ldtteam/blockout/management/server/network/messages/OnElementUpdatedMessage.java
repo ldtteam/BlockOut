@@ -3,6 +3,7 @@ package com.ldtteam.blockout.management.server.network.messages;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.element.simple.Slot;
 import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
@@ -10,13 +11,17 @@ import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
+import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.fml.network.NetworkEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
 {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static final long serialVersionUID = 2412330872349662164L;
 
     @NotNull
@@ -74,8 +79,10 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
             blockOutGui.getRoot().getUiManager().getRenderManager().setGuiData(blockOutGui);
             blockOutGui.getRoot().getUiManager().getUpdateManager().updateElement(blockOutGui.getRoot());
             openContainerScreen.init(Minecraft.getInstance(), Minecraft.getInstance().getMainWindow().getScaledWidth(), Minecraft.getInstance().getMainWindow().getScaledHeight());
+            uiManager.getUpdateManager().updateElement(rootGuiElement);
 
             final BlockOutContainer container = openContainerScreen.getContainer();
+            container.getInstanceData().setRoot(rootGuiElement);
             container.reinitializeSlots();
         }
         else

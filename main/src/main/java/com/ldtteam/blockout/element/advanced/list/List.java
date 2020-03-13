@@ -50,11 +50,11 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
       @NotNull final IDependencyObject<Object> dataContext,
       @NotNull final IDependencyObject<Boolean> visible,
       @NotNull final IDependencyObject<Boolean> enabled,
-      @NotNull final boolean dataBoundMode,
+      final boolean dataBoundMode,
       @NotNull final IDependencyObject<ResourceLocation> templateResource,
       @NotNull final IDependencyObject<ResourceLocation> scrollBarBackgroundResource,
       @NotNull final IDependencyObject<ResourceLocation> scrollBarForegroundResource,
-      @NotNull final double scrollOffset,
+      final double scrollOffset,
       @NotNull final IDependencyObject<Orientation> orientation,
       @NotNull final IDependencyObject<Boolean> showScrollbar,
       @NotNull final IDependencyObject<Object> source)
@@ -70,6 +70,7 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
         this.showScrollbar = showScrollbar;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public AxisDistance getPadding()
     {
@@ -369,6 +370,6 @@ public class List extends AbstractChildInstantiatingAndLayoutControllableUIEleme
     @Override
     public void onMouseScroll(final int localX, final int localY, final int deltaWheel)
     {
-        scroll(deltaWheel / getTotalContentLength() * -25);
+        scroll(deltaWheel / getTotalContentLength() * -18);
     }
 }

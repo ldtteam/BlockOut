@@ -2,17 +2,16 @@ package com.ldtteam.blockout.element.advanced;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.binding.dependency.injection.DependencyObjectInjector;
 import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.data.BlockOutGuiConstructionData;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.util.template.TemplateUtils;
 import com.ldtteam.blockout.utils.controlconstruction.element.core.AbstractChildrenContainingUIElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
-import com.ldtteam.blockout.event.injector.EventHandlerInjector;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.math.Vector2d;
@@ -27,7 +26,7 @@ import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.CONS
 import static com.ldtteam.blockout.util.Constants.Controls.TemplateInstance.KEY_TEMPLATE_INSTANCE;
 import static com.ldtteam.blockout.util.Constants.Resources.MISSING;
 
-public class TemplateInstance extends AbstractChildrenContainingUIElement
+public class TemplateInstance extends AbstractChildrenContainingUIElement implements ITemplateInstanceDataProvidingElement
 {
 
     private static final long serialVersionUID = 2800081688752470813L;
@@ -167,21 +166,7 @@ public class TemplateInstance extends AbstractChildrenContainingUIElement
               resolvedTemplateResource,
               getId() + "_instance");
 
-            if (getTemplateConstructionData() != null)
-            {
-                @NotNull final IBlockOutGuiConstructionData data = getTemplateConstructionData();
-                DependencyObjectInjector.inject(element, data);
-                EventHandlerInjector.inject(element, data);
-
-                if (element instanceof IUIElementHost)
-                {
-                    IUIElementHost iuiElementHost = (IUIElementHost) element;
-                    iuiElementHost.getAllCombinedChildElements().values().forEach(c -> {
-                        DependencyObjectInjector.inject(c, data);
-                        EventHandlerInjector.inject(c, data);
-                    });
-                }
-            }
+            TemplateUtils.insertTemplateConstructionDataInto(this, element);
 
             put(element.getId(), element);
             getParent().getUiManager().getProfiler().endSection();
