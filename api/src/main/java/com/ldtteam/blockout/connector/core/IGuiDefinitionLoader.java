@@ -4,9 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-public interface IGuiDefinitionLoader extends Serializable
+public interface IGuiDefinitionLoader<T>
 {
-
     @NotNull
-    String getGuiDefinition();
+    String getGuiDefinition(T loadFrom);
 }

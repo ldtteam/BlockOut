@@ -2,15 +2,15 @@ package com.ldtteam.blockout.proxy;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.ldtteam.blockout.connector.core.IGuiController;
-import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.connector.core.ILoaderManager;
-import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
+import com.ldtteam.blockout.builder.IBuilderManager;
+import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.connector.core.*;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.network.INetworkingManager;
 import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
@@ -18,8 +18,6 @@ import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +38,16 @@ public interface IProxy
     void onDedicatedServerSetup();
 
     @NotNull
+    IBuilderManager getBuilderManager();
+
+    @NotNull
     IGuiController getGuiController();
 
     @NotNull
     ILoaderManager getLoaderManager();
+
+    @NotNull
+    IDefinitionLoaderManager getDefinitionLoaderManager();
 
     @NotNull
     IUIElementFactoryController getFactoryController();
@@ -101,6 +105,12 @@ public interface IProxy
 
     @NotNull
     IBlockOutPluginRegistry getPluginRegistry();
+
+    @NotNull
+    IClientTickManager getClientTickManager();
+
+    @NotNull
+    INetworkingManager getNetworkingManager();
 
     void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule);
 

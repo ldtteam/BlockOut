@@ -2,7 +2,7 @@ package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.core.IUIElementData;
@@ -45,12 +45,12 @@ public class OpenGuiCommandMessage implements IBlockOutServerToClientMessage
     {
         final IUIElement element = ProxyHolder.getInstance().getFactoryController().getElementFromData(getData());
 
-        if (!(element instanceof RootGuiElement))
+        if (!(element instanceof IRootGuiElement))
         {
             throw new IllegalStateException("Root element is not a RootGuiElement");
         }
 
-        final RootGuiElement root = (RootGuiElement) element;
+        final IRootGuiElement root = (IRootGuiElement) element;
         root.setUiManager(new UIManager(root, getKey()));
         root.getUiManager().getUpdateManager().updateElement(root);
         final BlockOutContainer container = new BlockOutContainer(key, root, windowId);

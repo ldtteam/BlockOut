@@ -211,5 +211,9 @@ public class Constants
             public static final String CONST_LEFT_SELECTOR_BACKGROUND  = "leftSelectorBackground";
             public static final String CONST_RIGHT_SELECTOR_BACKGROUND = "rightSelectorBackground";
         }
+
+        public static class Wrapper {
+            public static final String KEY_WRAPPER = String.format("%s:wrapper", MOD_ID);
+        }
     }
 }

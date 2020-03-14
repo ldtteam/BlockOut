@@ -5,7 +5,7 @@ import com.google.common.cache.CacheBuilder;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.template.Template;
+import com.ldtteam.blockout.element.advanced.template.ITemplate;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.style.resources.TemplateResource;
@@ -68,12 +68,12 @@ public class SimpleTemplateEngine implements ITemplateEngine
       Function<IUIElementData<?>, IUIElementData<?>> dataOverrideCallback)
     {
         final IUIElement templateCandidate = ProxyHolder.getInstance().getFactoryController().getElementFromData(templateData);
-        if (templateCandidate instanceof Template)
+        if (templateCandidate instanceof ITemplate)
         {
-            Template template = (Template) templateCandidate;
+            ITemplate template = (ITemplate) templateCandidate;
             return template.generateInstance(parent, dataContextProperty, controlId, dataOverrideCallback);
         }
 
-        throw new IllegalArgumentException(String.format("The given IUIElementData<?> does not contain a Template as root control."));
+        throw new IllegalArgumentException("The given IUIElementData<?> does not contain a Template as root control.");
     }
 }

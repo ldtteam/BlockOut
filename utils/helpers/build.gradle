@@ -5,5 +5,5 @@ ext {
 
 dependencies {
     shadeTransitive project(':api')
-    shadeTransitive project(':main')
+    shadeTransitive project(':controls:implementations')
 }

@@ -300,7 +300,8 @@ project.configure([project]) { rootProject ->
 
     dependencies {
         minimalImplementation project(':api')
-        fullImplementation project(':utils:concepts')
+        fullImplementation project(':controls:concepts')
+        fullImplementation project(':controls:implementations')
         fullImplementation project(':utils:helpers')
 
         minimalRuntime project(':main')

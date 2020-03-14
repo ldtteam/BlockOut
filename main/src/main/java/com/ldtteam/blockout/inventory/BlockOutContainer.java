@@ -3,6 +3,7 @@ package com.ldtteam.blockout.inventory;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.simple.IInventorySlotUIElement;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlot;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.itemstack.ItemStackHelper;
@@ -226,13 +227,13 @@ public class BlockOutContainer extends Container implements IBlockOutContainer
     private void initializeSlots()
     {
         int slotIndex = 0;
-        final List<com.ldtteam.blockout.element.simple.Slot> slots =getInstanceData().
+        final List<IInventorySlotUIElement> slots =getInstanceData().
                                                               getRoot().getAllCombinedChildElements().values().stream()
-                                   .filter(element -> element instanceof com.ldtteam.blockout.element.simple.Slot)
+                                   .filter(element -> element instanceof IInventorySlotUIElement)
                                    .filter(IUIElement::isVisible)
-                                   .map(element -> (com.ldtteam.blockout.element.simple.Slot) element).collect(Collectors.toCollection(LinkedList::new));
+                                   .map(element -> (IInventorySlotUIElement) element).collect(Collectors.toCollection(LinkedList::new));
 
-        for (com.ldtteam.blockout.element.simple.Slot slot :
+        for (IInventorySlotUIElement slot :
           slots)
         {
             final IItemHandler itemHandler = getInstanceData().getKey().getItemHandlerManager().getItemHandlerFromId(slot.getInventoryId());

@@ -21,15 +21,7 @@ public interface IGuiKeyBuilder
 {
 
     @NotNull
-    IGuiKeyBuilder ofWebResource(@NotNull final URL url);
-
-    @NotNull
-    IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location);
-
-    @NotNull
-    IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz);
-
-    IGuiKeyBuilder ofDefinition(@NotNull final IGuiDefinitionLoader definitionLoader);
+    IGuiKeyBuilder from(Object dataSource);
 
     @SuppressWarnings("unchecked")
     @NotNull

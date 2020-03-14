@@ -1,15 +1,10 @@
 package com.ldtteam.blockout;
 
 import com.ldtteam.blockout.compat.UpdateHandler;
-import com.ldtteam.blockout.element.advanced.TemplateInstance;
-import com.ldtteam.blockout.element.advanced.list.factory.ListFactory;
-import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.*;
-import com.ldtteam.blockout.element.template.Template;
 import com.ldtteam.blockout.loader.binding.DataContextBindingCommand;
 import com.ldtteam.blockout.loader.binding.transformer.IntToStringTransformer;
 import com.ldtteam.blockout.loader.object.loader.ObjectUIElementLoader;
-import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.proxy.ClientProxy;
 import com.ldtteam.blockout.proxy.CommonProxy;
 import com.ldtteam.blockout.proxy.IProxy;
@@ -60,62 +55,36 @@ public class BlockOut
         return INSTANCE;
     }
 
-    public IProxy getProxy()
-    {
-        return IProxy.getInstance();
-    }
-
     public void onCommonSetup(final FMLCommonSetupEvent event)
     {
-        getProxy().onCommonSetup();
+        IProxy.getInstance().onCommonSetup();
 
-        getProxy().getLoaderManager().registerLoader(new ObjectUIElementLoader());
+        IProxy.getInstance().getLoaderManager().registerLoader(new ObjectUIElementLoader());
 
-        getProxy().getFactoryController().registerFactory(new RootGuiElement.Factory());
-        getProxy().getFactoryController().registerFactory(new Image.Factory());
-        getProxy().getFactoryController().registerFactory(new Slot.Factory());
-        getProxy().getFactoryController().registerFactory(new Button.Factory());
-        getProxy().getFactoryController().registerFactory(new CheckBox.Factory());
-        getProxy().getFactoryController().registerFactory(new Label.Factory());
-        getProxy().getFactoryController().registerFactory(new TextField.Factory());
-        getProxy().getFactoryController().registerFactory(new BlockStateIcon.Factory());
-        getProxy().getFactoryController().registerFactory(new TemplateInstance.Factory());
-        getProxy().getFactoryController().registerFactory(new RangeSelector.Factory());
+        IProxy.getInstance().getBindingEngine().registerBindingCommand(new DataContextBindingCommand());
+        IProxy.getInstance().getBindingEngine().registerBindingTransformer(new IntToStringTransformer());
 
-        getProxy().getFactoryController().registerFactory(new Region.Factory());
-        getProxy().getFactoryController().registerFactory(new Template.Factory());
-        getProxy().getFactoryController().registerFactory(new ItemIcon.Factory());
+        IProxy.getInstance().getPluginRegistry().performAutomaticDiscovery();
+        IProxy.getInstance().getPluginRegistry().getPlugins().values().forEach(p -> p.onCommonSetup(event));
 
-        getProxy().getFactoryController().registerFactory(new ListFactory());
-
-        getProxy().getResourceLoaderManager().registerTypeLoader(new ImageResource.Loader());
-        getProxy().getResourceLoaderManager().registerTypeLoader(new ItemStackResource.Loader());
-        getProxy().getResourceLoaderManager().registerTypeLoader(new TemplateResource.Loader());
-
-        getProxy().getBindingEngine().registerBindingCommand(new DataContextBindingCommand());
-        getProxy().getBindingEngine().registerBindingTransformer(new IntToStringTransformer());
-
-        getProxy().getPluginRegistry().performAutomaticDiscovery();
-        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onCommonSetup(event));
-
-        NetworkManager.init();
+        NetworkingManager.getInstance().init();
     }
 
     public void onClientSetup(final FMLClientSetupEvent event)
     {
-        getProxy().onClientSetup();
-        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onClientSetup(event));
+        IProxy.getInstance().onClientSetup();
+        IProxy.getInstance().getPluginRegistry().getPlugins().values().forEach(p -> p.onClientSetup(event));
     }
 
     public void onDedicatedServerSetup(final FMLDedicatedServerSetupEvent event)
     {
-        getProxy().onDedicatedServerSetup();
-        getProxy().getPluginRegistry().getPlugins().values().forEach(p -> p.onDedicatedServerSetup(event));
+        IProxy.getInstance().onDedicatedServerSetup();
+        IProxy.getInstance().getPluginRegistry().getPlugins().values().forEach(p -> p.onDedicatedServerSetup(event));
     }
 
     public void onLoadCompleted(final FMLLoadCompleteEvent event)
     {
-        getProxy().getStyleManager().loadStyles();
+        IProxy.getInstance().getStyleManager().loadStyles();
 
         final Set<Class<?>> clzs = ProxyHolder.getInstance().getFactoryController().getAllKnownTypes();
         clzs.forEach(clz -> {

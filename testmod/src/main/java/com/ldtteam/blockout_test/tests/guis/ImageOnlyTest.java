@@ -22,7 +22,7 @@ public class ImageOnlyTest implements IBlockOutGuiTest
             final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(new ResourceLocation(
+                                                                                                                      .from(new ResourceLocation(
                                                                                                                         "blockout_test:gui/image_only_test.json"))
                                                                                                       .usingDefaultData()
                                                                                                       .withDefaultItemHandlerManager()

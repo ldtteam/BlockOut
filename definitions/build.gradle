@@ -1,0 +1,8 @@
+ext {
+    projectIdentifier = "definitions"
+    requiresRuns = false
+}
+
+dependencies {
+    shadeTransitive project(':api')
+}

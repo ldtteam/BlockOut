@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management.client.network.messages;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
@@ -41,7 +41,7 @@ public class OnMouseClickBeginMessage implements IBlockOutClientToServerMessage
             return;
         }
 
-        final RootGuiElement rootGuiElement = (RootGuiElement) ProxyHolder.getInstance().getGuiController().getRoot(key);
+        final IRootGuiElement rootGuiElement = ProxyHolder.getInstance().getGuiController().getRoot(key);
         if (rootGuiElement == null)
         {
             Log.getLogger().error("Player seems to be watching an unknown Gui.");

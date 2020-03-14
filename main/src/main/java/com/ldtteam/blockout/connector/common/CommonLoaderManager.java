@@ -25,7 +25,7 @@ public class CommonLoaderManager implements ILoaderManager
     }
 
     @Override
-    public IUIElementData<?> loadData(@NotNull final IGuiDefinitionLoader dataLoader)
+    public IUIElementData<?> loadData(@NotNull final String dataToLoad)
     {
         try
         {
@@ -33,7 +33,7 @@ public class CommonLoaderManager implements ILoaderManager
                                                      .map(l -> {
                                                          try
                                                          {
-                                                             return new LoadingResult(l.loadDataFromDefinition(dataLoader.getGuiDefinition()), null, "");
+                                                             return new LoadingResult(l.loadDataFromDefinition(dataToLoad), null, "");
                                                          }
                                                          catch (Exception e)
                                                          {

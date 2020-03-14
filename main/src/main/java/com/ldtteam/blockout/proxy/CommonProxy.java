@@ -4,12 +4,13 @@ import com.google.common.collect.Sets;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.ldtteam.blockout.builder.CommonBuilderManager;
+import com.ldtteam.blockout.builder.IBuilderManager;
+import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.connector.common.CommonDefinitionLoaderManager;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
 import com.ldtteam.blockout.connector.common.CommonLoaderManager;
-import com.ldtteam.blockout.connector.core.IGuiController;
-import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.connector.core.ILoaderManager;
-import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
+import com.ldtteam.blockout.connector.core.*;
 import com.ldtteam.blockout.connector.server.ServerGuiController;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.loader.binding.engine.SimpleBindingEngine;
@@ -22,6 +23,8 @@ import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.network.INetworkingManager;
+import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.plugins.BlockOutPluginRegistry;
 import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
@@ -55,8 +58,10 @@ import java.util.Set;
 
 public class CommonProxy implements IProxy {
 
+    private final CommonBuilderManager builderManager;
     private final ServerGuiController controller;
     private final CommonLoaderManager commonLoaderManager;
+    private final CommonDefinitionLoaderManager commonDefinitionLoaderManager;
     private final CommonFactoryController commonFactoryController;
     private final Set<Module> factoryInjectionModules = Sets.newConcurrentHashSet();
 
@@ -64,8 +69,10 @@ public class CommonProxy implements IProxy {
 
     public CommonProxy()
     {
+        builderManager = new CommonBuilderManager();
         controller = new ServerGuiController();
         commonLoaderManager = new CommonLoaderManager();
+        commonDefinitionLoaderManager = new CommonDefinitionLoaderManager();
         commonFactoryController = new CommonFactoryController();
     }
 
@@ -89,6 +96,12 @@ public class CommonProxy implements IProxy {
 
     @NotNull
     @Override
+    public IBuilderManager getBuilderManager() {
+        return builderManager;
+    }
+
+    @NotNull
+    @Override
     public IGuiController getGuiController()
     {
         return controller;
@@ -99,6 +112,12 @@ public class CommonProxy implements IProxy {
     public ILoaderManager getLoaderManager()
     {
         return commonLoaderManager;
+    }
+
+    @NotNull
+    @Override
+    public IDefinitionLoaderManager getDefinitionLoaderManager() {
+        return commonDefinitionLoaderManager;
     }
 
     @NotNull
@@ -261,6 +280,18 @@ public class CommonProxy implements IProxy {
     @Override
     public IBlockOutPluginRegistry getPluginRegistry() {
         return BlockOutPluginRegistry.getInstance();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public IClientTickManager getClientTickManager() {
+        return null;
+    }
+
+    @NotNull
+    @Override
+    public INetworkingManager getNetworkingManager() {
+        return NetworkingManager.getInstance();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.render.standard;
 
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.element.simple.Slot;
+import com.ldtteam.blockout.element.simple.IInventorySlotUIElement;
 import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
@@ -22,7 +22,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.fluid.IFluidState;
@@ -33,20 +32,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.chunk.IChunkLightProvider;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.lighting.WorldLightManager;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Random;
 
 public class RenderingController implements IRenderingController
 {
@@ -510,12 +503,12 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawSlotContent(@NotNull final IUIElement element)
     {
-        if (!(element instanceof Slot))
+        if (!(element instanceof IInventorySlotUIElement))
         {
             return;
         }
 
-        final Slot slot = (Slot) element;
+        final IInventorySlotUIElement slot = (IInventorySlotUIElement) element;
 
         final BlockOutContainerGui gui = (BlockOutContainerGui) Minecraft.getInstance().currentScreen;
 
@@ -605,12 +598,12 @@ public class RenderingController implements IRenderingController
     @Override
     public void drawSlotMouseOverlay(@NotNull final IUIElement element)
     {
-        if (!(element instanceof Slot))
+        if (!(element instanceof IInventorySlotUIElement))
         {
             return;
         }
 
-        final Slot slot = (Slot) element;
+        final IInventorySlotUIElement slot = (IInventorySlotUIElement) element;
         
         final BlockOutContainerGui gui = (BlockOutContainerGui) Minecraft.getInstance().currentScreen;
 

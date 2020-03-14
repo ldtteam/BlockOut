@@ -25,7 +25,7 @@ public class BoundListHorizontalTest implements IBlockOutGuiTest
       final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(new ResourceLocation(
+                                                                                                                      .from(new ResourceLocation(
                                                                                                                         "blockout_test:gui/horizontal_bound_list_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("list",

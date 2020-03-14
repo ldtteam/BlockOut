@@ -1,7 +1,6 @@
 dependencies {
     shadeTransitive project(':main')
 
-    shadeTransitive project(':utils:concepts')
     shadeTransitive project(':utils:helpers')
 }
 
@@ -14,9 +13,12 @@ minecraft {
                     property 'forge.logging.console.level', 'info'
                     source project(':main').sourceSets.main
                     source project(':api').sourceSets.main
+                    source project(':styling').sourceSets.main
+                    source project(':definitions').sourceSets.main
                     source project(':lang:json').sourceSets.main
                     source project(':lang:xml').sourceSets.main
-                    source project(':utils:concepts').sourceSets.main
+                    source project(':controls:concepts').sourceSets.main
+                    source project(':controls:implementations').sourceSets.main
                     source project(':utils:helpers').sourceSets.main
                 }
 
@@ -35,9 +37,12 @@ minecraft {
                     property 'forge.logging.console.level', 'info'
                     source project(':main').sourceSets.main
                     source project(':api').sourceSets.main
+                    source project(':styling').sourceSets.main
+                    source project(':definitions').sourceSets.main
                     source project(':lang:json').sourceSets.main
                     source project(':lang:xml').sourceSets.main
-                    source project(':utils:concepts').sourceSets.main
+                    source project(':controls:concepts').sourceSets.main
+                    source project(':controls:implementations').sourceSets.main
                     source project(':utils:helpers').sourceSets.main
                 }
 

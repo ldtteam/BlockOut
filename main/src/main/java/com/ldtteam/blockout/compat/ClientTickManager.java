@@ -3,8 +3,7 @@ package com.ldtteam.blockout.compat;
 /**
  * Manages the client tick systems of BlockOut.
  */
-public class ClientTickManager
-{
+public class ClientTickManager implements IClientTickManager {
     private static ClientTickManager ourInstance = new ClientTickManager();
     private        long              tickCount   = 0;
 
@@ -27,6 +26,7 @@ public class ClientTickManager
      *
      * @return The tick count.
      */
+    @Override
     public long getTickCount()
     {
         return tickCount;

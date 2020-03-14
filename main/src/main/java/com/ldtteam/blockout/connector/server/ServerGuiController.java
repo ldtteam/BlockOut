@@ -7,14 +7,14 @@ import com.ldtteam.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
-import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
-import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
-import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
+import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 public class ServerGuiController implements IGuiController
 {
 
-    private final Map<IGuiKey, RootGuiElement> openUis        = new HashMap<>();
+    private final Map<IGuiKey, IRootGuiElement> openUis        = new HashMap<>();
     private final Map<IGuiKey, List<UUID>>     watchers       = new HashMap<>();
     private final Map<UUID, IGuiKey>           playerWatching = new HashMap<>();
 
@@ -79,7 +79,7 @@ public class ServerGuiController implements IGuiController
             return;
         }
 
-        RootGuiElement host;
+        IRootGuiElement host;
 
         if (!openUis.containsKey(key))
         {
@@ -144,7 +144,7 @@ public class ServerGuiController implements IGuiController
 
         try
         {
-            NetworkManager.sendTo(new CloseGuiCommandMessage(), player);
+            IProxy.getInstance().getNetworkingManager().sendTo(new CloseGuiCommandMessage(), player);
         }
         catch (Exception ex)
         {
@@ -168,12 +168,12 @@ public class ServerGuiController implements IGuiController
 
     @Nullable
     @Override
-    public RootGuiElement getRoot(@NotNull final IGuiKey guiKey)
+    public IRootGuiElement getRoot(@NotNull final IGuiKey guiKey)
     {
         return openUis.get(guiKey);
     }
 
-    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement, @NotNull final ServerPlayerEntity playerMP)
+    private void openGui(@NotNull final IGuiKey key, @NotNull final IRootGuiElement rootGuiElement, @NotNull final ServerPlayerEntity playerMP)
     {
         playerMP.getNextWindowId();
         playerMP.closeScreen();
@@ -181,7 +181,7 @@ public class ServerGuiController implements IGuiController
         final IUIElementData<?> dataCandidate = ProxyHolder.getInstance().getFactoryController().getDataFromElement(rootGuiElement);
         if (dataCandidate instanceof ObjectUIElementData)
         {
-            NetworkManager.sendTo(new OpenGuiCommandMessage(key, (ObjectUIElementData) dataCandidate, playerMP.currentWindowId),
+            IProxy.getInstance().getNetworkingManager().sendTo(new OpenGuiCommandMessage(key, (ObjectUIElementData) dataCandidate, playerMP.currentWindowId),
                     playerMP);
         }
         else
@@ -190,8 +190,7 @@ public class ServerGuiController implements IGuiController
         }
 
 
-        final BlockOutContainer container = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
-        playerMP.openContainer = container;
+        playerMP.openContainer = new BlockOutContainer(key, openUis.get(key), playerMP.currentWindowId);
         playerMP.openContainer.addListener(playerMP);
 
 
@@ -214,12 +213,12 @@ public class ServerGuiController implements IGuiController
         return ImmutableList.copyOf(watchers.get(key));
     }
 
-    public ImmutableMap<IGuiKey, RootGuiElement> getOpenUis()
+    public ImmutableMap<IGuiKey, IRootGuiElement> getOpenUis()
     {
         return ImmutableMap.copyOf(openUis);
     }
 
-    public ImmutableList<RootGuiElement> getOpenRoots()
+    public ImmutableList<IRootGuiElement> getOpenRoots()
     {
         return ImmutableList.copyOf(openUis.values());
     }

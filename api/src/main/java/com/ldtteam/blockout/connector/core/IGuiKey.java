@@ -11,7 +11,7 @@ public interface IGuiKey extends Serializable
 {
 
     @NotNull
-    IGuiDefinitionLoader getGuiDefinitionLoader();
+    Object getDataSource();
 
     @NotNull
     IBlockOutGuiConstructionData getConstructionData();

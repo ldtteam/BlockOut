@@ -33,7 +33,7 @@ public class InventoryGridTest implements IBlockOutGuiTest
             final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         IGuiController.getInstance().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                           .ofFile(new ResourceLocation("blockout_test:gui/inventory_grid_test.json"))
+                                                                                                           .from(new ResourceLocation("blockout_test:gui/inventory_grid_test.json"))
                                                                                    .usingData(
                                                                                      iBlockOutGuiConstructionDataBuilder -> InventoryGridHelper.initiateChestControlAtPosition(
                                                                                        iBlockOutGuiConstructionDataBuilder,

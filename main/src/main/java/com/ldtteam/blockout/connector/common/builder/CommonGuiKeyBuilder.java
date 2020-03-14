@@ -4,11 +4,7 @@ import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.builder.data.builder.BlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.connector.common.CommonGuiKey;
-import com.ldtteam.blockout.connector.common.definition.loader.CommonClassBasedDefinitionLoader;
-import com.ldtteam.blockout.connector.common.definition.loader.CommonResourceLocationBasedGuiDefinitionLoader;
-import com.ldtteam.blockout.connector.common.definition.loader.CommonWebFileBasedGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.common.inventory.builder.CommonItemHandlerManagerBuilder;
-import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
@@ -18,12 +14,10 @@ import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -31,7 +25,7 @@ import java.util.function.Consumer;
 public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 {
     @NotNull
-    private IGuiDefinitionLoader                guiDefinitionLoader;
+    private Object dataSource;
     @NotNull
     private IBlockOutGuiConstructionDataBuilder blockOutGuiConstructionDataBuilder = new BlockOutGuiConstructionDataBuilder();
     @NotNull
@@ -41,32 +35,8 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder ofWebResource(@NotNull final URL url)
-    {
-        this.guiDefinitionLoader = new CommonWebFileBasedGuiDefinitionLoader(url);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public IGuiKeyBuilder ofFile(@NotNull final ResourceLocation location)
-    {
-        this.guiDefinitionLoader = new CommonResourceLocationBasedGuiDefinitionLoader(location);
-        return this;
-    }
-
-    @NotNull
-    @Override
-    public IGuiKeyBuilder ofClass(@NotNull final Class<?> clazz)
-    {
-        this.guiDefinitionLoader = new CommonClassBasedDefinitionLoader(clazz);
-        return this;
-    }
-
-    @Override
-    public IGuiKeyBuilder ofDefinition(@NotNull final IGuiDefinitionLoader definitionLoader)
-    {
-        this.guiDefinitionLoader = definitionLoader;
+    public IGuiKeyBuilder from(final Object dataSource) {
+        this.dataSource = dataSource;
         return this;
     }
 
@@ -159,7 +129,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
     public IGuiKey build()
     {
         return new CommonGuiKey(
-          guiDefinitionLoader,
+          dataSource,
           blockOutGuiConstructionDataBuilder.build(),
           context,
           iItemHandlerManagerBuilder.build()

@@ -1,5 +1,7 @@
 package com.ldtteam.blockout.proxy;
 
+import com.ldtteam.blockout.compat.ClientTickManager;
+import com.ldtteam.blockout.compat.IClientTickManager;
 import com.ldtteam.blockout.connector.client.ClientGuiController;
 import com.ldtteam.blockout.connector.client.ClientSideOnlyGuiController;
 import com.ldtteam.blockout.connector.core.IGuiController;
@@ -162,5 +164,10 @@ public class ClientProxy extends CommonProxy {
     public String convertToColorCode(@NotNull final String input)
     {
         return ColorUtils.convertToFontRendererColor(input);
+    }
+
+    @Override
+    public IClientTickManager getClientTickManager() {
+        return ClientTickManager.getInstance();
     }
 }

@@ -1,0 +1,10 @@
+ext {
+    projectIdentifier = "controls-implementations"
+    requiresRuns = false
+}
+
+dependencies {
+    shadeTransitive project(':api')
+    shadeTransitive project(':styling')
+    shadeTransitive project(':controls:concepts')
+}

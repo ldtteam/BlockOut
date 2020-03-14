@@ -27,7 +27,7 @@ public class CountdownTest implements IBlockOutGuiTest
             final ServerPlayerEntity entityPlayer, final Button button, final Button.ButtonClickedEventArgs eventArgs)
     {
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(new ResourceLocation(
+                                                                                                                      .from(new ResourceLocation(
                                                                                                                         "blockout_test:gui/countdown_to_time.json"))
                                                                                                       .usingData(builder -> {
                                                                                                           builder.withControl("countdown",

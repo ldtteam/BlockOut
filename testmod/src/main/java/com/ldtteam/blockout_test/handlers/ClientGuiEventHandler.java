@@ -38,7 +38,7 @@ public class ClientGuiEventHandler
     {
         ProxyHolder.getInstance().getClientSideOnlyGuiController().openUI(
           Minecraft.getInstance().player,
-          iGuiKeyBuilder -> iGuiKeyBuilder.ofFile(new ResourceLocation("blockout_test:gui/button_click_test.json"))
+          iGuiKeyBuilder -> iGuiKeyBuilder.from(new ResourceLocation("blockout_test:gui/button_click_test.json"))
                               .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                   .withControl(
                                                                                     "test_click",

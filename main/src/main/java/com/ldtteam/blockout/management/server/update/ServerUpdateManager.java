@@ -1,15 +1,12 @@
 package com.ldtteam.blockout.management.server.update;
 
 import com.ldtteam.blockout.element.IUIElement;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.management.IUIManager;
-import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.management.common.update.ChildUpdateManager;
+import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.Log;
-import com.ldtteam.blockout.util.profiler.ProfilerExporter;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class ServerUpdateManager implements IUpdateManager
 {
@@ -23,9 +20,9 @@ public class ServerUpdateManager implements IUpdateManager
     @Override
     public void updateElement(@NotNull final IUIElement element)
     {
-        if (element instanceof RootGuiElement)
+        if (element instanceof IRootGuiElement)
         {
-            RootGuiElement rootGuiElement = (RootGuiElement) element;
+            IRootGuiElement rootGuiElement = (IRootGuiElement) element;
             rootGuiElement.getUiManager().getProfiler().startTick();
             rootGuiElement.getUiManager().getProfiler().startSection("Global Update");
 

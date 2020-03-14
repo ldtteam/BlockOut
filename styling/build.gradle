@@ -1,0 +1,8 @@
+ext {
+    projectIdentifier = "styling"
+    requiresRuns = false
+}
+
+dependencies {
+    shadeTransitive project(':api')
+}

@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.management;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.element.root.RootGuiElement;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.management.client.input.ClientSideClickManager;
 import com.ldtteam.blockout.management.client.input.ClientSideKeyManager;
 import com.ldtteam.blockout.management.client.input.ClientSideScrollManager;
@@ -50,9 +50,9 @@ public class UIManager implements IUIManager
     @NotNull
     private final Profiler                profiler;
     @NotNull
-    private       RootGuiElement           rootGuiElement;
+    private       IRootGuiElement           rootGuiElement;
 
-    public UIManager(@NotNull final RootGuiElement rootGuiElement, @NotNull final IGuiKey key)
+    public UIManager(@NotNull final IRootGuiElement rootGuiElement, @NotNull final IGuiKey key)
     {
         this.rootGuiElement = rootGuiElement;
         this.networkManager = ProxyHolder.getInstance().generateNewNetworkManagerForGui(key);
@@ -63,7 +63,7 @@ public class UIManager implements IUIManager
 
     @NotNull
     @Override
-    public RootGuiElement getHost()
+    public IRootGuiElement getHost()
     {
         return rootGuiElement;
     }
@@ -144,7 +144,7 @@ public class UIManager implements IUIManager
         return profiler;
     }
 
-    public void setRootGuiElement(@NotNull final RootGuiElement rootGuiElement)
+    public void setRootGuiElement(@NotNull final IRootGuiElement rootGuiElement)
     {
         this.rootGuiElement = rootGuiElement;
     }

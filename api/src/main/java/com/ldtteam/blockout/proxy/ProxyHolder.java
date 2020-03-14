@@ -2,15 +2,15 @@ package com.ldtteam.blockout.proxy;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.ldtteam.blockout.connector.core.IGuiController;
-import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.connector.core.ILoaderManager;
-import com.ldtteam.blockout.connector.core.IUIElementFactoryController;
+import com.ldtteam.blockout.builder.IBuilderManager;
+import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.connector.core.*;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
+import com.ldtteam.blockout.network.INetworkingManager;
 import com.ldtteam.blockout.plugins.IBlockOutPluginRegistry;
 import com.ldtteam.blockout.reflection.IReflectionManager;
 import com.ldtteam.blockout.style.core.IStyleManager;
@@ -54,6 +54,12 @@ public class ProxyHolder implements IProxy
         proxy.onDedicatedServerSetup();
     }
 
+    @NotNull
+    @Override
+    public IBuilderManager getBuilderManager() {
+        return proxy.getBuilderManager();
+    }
+
     @Override
     @NotNull
     public IGuiController getGuiController()
@@ -66,6 +72,12 @@ public class ProxyHolder implements IProxy
     public ILoaderManager getLoaderManager()
     {
         return proxy.getLoaderManager();
+    }
+
+    @NotNull
+    @Override
+    public IDefinitionLoaderManager getDefinitionLoaderManager() {
+        return proxy.getDefinitionLoaderManager();
     }
 
     @Override
@@ -204,6 +216,18 @@ public class ProxyHolder implements IProxy
     public void registerFactoryInjectionModule(@NotNull final Module factoryInjectionModule)
     {
         proxy.registerFactoryInjectionModule(factoryInjectionModule);
+    }
+
+    @NotNull
+    @Override
+    public IClientTickManager getClientTickManager() {
+        return proxy.getClientTickManager();
+    }
+
+    @NotNull
+    @Override
+    public INetworkingManager getNetworkingManager() {
+        return proxy.getNetworkingManager();
     }
 
     public Boolean isReady()

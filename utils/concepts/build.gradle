@@ -1,8 +1,0 @@
-ext {
-    projectIdentifier = "utils-concepts"
-    requiresRuns = false
-}
-
-dependencies {
-    shadeTransitive project(':api')
-}

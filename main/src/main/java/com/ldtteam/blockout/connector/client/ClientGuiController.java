@@ -4,10 +4,11 @@ import com.ldtteam.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
-import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.network.NetworkManager;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
+import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.network.message.CloseGuiRequestMessage;
 import com.ldtteam.blockout.network.message.OpenGuiRequestMessage;
+import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,7 +57,7 @@ public class ClientGuiController implements IGuiController
             return;
         }
 
-        NetworkManager.sendToServer(new OpenGuiRequestMessage(key));
+        IProxy.getInstance().getNetworkingManager().sendToServer(new OpenGuiRequestMessage(key));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class ClientGuiController implements IGuiController
             return;
         }
 
-        NetworkManager.sendToServer(new CloseGuiRequestMessage());
+        IProxy.getInstance().getNetworkingManager().sendToServer(new CloseGuiRequestMessage());
     }
 
     @Nullable
@@ -93,7 +94,7 @@ public class ClientGuiController implements IGuiController
 
     @Nullable
     @Override
-    public RootGuiElement getRoot(@NotNull final IGuiKey guiKey)
+    public IRootGuiElement getRoot(@NotNull final IGuiKey guiKey)
     {
         return null;
     }

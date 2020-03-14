@@ -2,6 +2,7 @@ package com.ldtteam.blockout.connector.core;
 
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,5 +40,5 @@ public interface IGuiController
     IGuiKey getOpenUI(@NotNull final UUID player);
 
     @Nullable
-    IUIElementHost getRoot(@NotNull final IGuiKey guiKey);
+    IRootGuiElement getRoot(@NotNull final IGuiKey guiKey);
 }

@@ -27,7 +27,7 @@ public class TextFieldInputTest implements IBlockOutGuiTest
         final TextFieldContext context = new TextFieldContext();
 
         ProxyHolder.getInstance().getGuiController().openUI(entityPlayer, iGuiKeyBuilder -> iGuiKeyBuilder
-                                                                                                                      .ofFile(new ResourceLocation(
+                                                                                                                      .from(new ResourceLocation(
                                                                                                                         "blockout_test:gui/textfield_binding_test.json"))
                                                                                                       .usingData(iBlockOutGuiConstructionDataBuilder -> iBlockOutGuiConstructionDataBuilder
                                                                                                                                                           .withControl("input",

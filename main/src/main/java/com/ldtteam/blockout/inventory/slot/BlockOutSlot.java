@@ -1,15 +1,15 @@
 package com.ldtteam.blockout.inventory.slot;
 
-import com.ldtteam.blockout.element.simple.Slot;
+import com.ldtteam.blockout.element.simple.IInventorySlotUIElement;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class BlockOutSlot extends SlotItemHandler
 {
 
-    private final Slot uiSlotInstance;
+    private final IInventorySlotUIElement uiSlotInstance;
 
-    public BlockOutSlot(final IItemHandler itemHandler, final Slot uiSlotInstance)
+    public BlockOutSlot(final IItemHandler itemHandler, final IInventorySlotUIElement uiSlotInstance)
     {
         super(itemHandler,
           uiSlotInstance.getInventoryIndex(),
@@ -28,7 +28,7 @@ public class BlockOutSlot extends SlotItemHandler
         this.uiSlotInstance = uiSlotInstance;
     }
 
-    public Slot getUiSlotInstance()
+    public IInventorySlotUIElement getUiSlotInstance()
     {
         return uiSlotInstance;
     }

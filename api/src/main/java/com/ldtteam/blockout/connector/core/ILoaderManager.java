@@ -8,5 +8,5 @@ public interface ILoaderManager
 {
     void registerLoader(@NotNull ILoader loader);
 
-    IUIElementData<?> loadData(@NotNull final IGuiDefinitionLoader dataLoader);
+    IUIElementData<?> loadData(@NotNull final String dataToLoad);
 }

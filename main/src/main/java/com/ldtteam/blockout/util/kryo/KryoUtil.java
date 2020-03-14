@@ -28,7 +28,8 @@ public final class KryoUtil
         );
 
         instance.setRegistrationRequired(false);
-        instance.setClassLoader(BlockOut.getInstance().getClass().getClassLoader());
+        if (BlockOut.getInstance() != null)
+            instance.setClassLoader(BlockOut.getInstance().getClass().getClassLoader());
 
         return instance;
     }

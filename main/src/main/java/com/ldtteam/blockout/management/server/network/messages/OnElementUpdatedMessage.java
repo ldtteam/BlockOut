@@ -2,8 +2,7 @@ package com.ldtteam.blockout.management.server.network.messages;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
-import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.Slot;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.gui.BlockOutContainerGui;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
@@ -11,7 +10,6 @@ import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.UIManager;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -53,18 +51,18 @@ public class OnElementUpdatedMessage implements IBlockOutServerToClientMessage
         {
             final BlockOutGuiData blockOutGui = openContainerScreen.getInstanceData();
             final IUIElement containedElement = ProxyHolder.getInstance().getFactoryController().getElementFromData(elementData);
-            if (!(containedElement instanceof RootGuiElement))
+            if (!(containedElement instanceof IRootGuiElement))
             {
                 throw new IllegalStateException("The synced element is not a root.");
             }
 
             final IUIElementHost root = blockOutGui.getRoot();
-            if (!(root instanceof RootGuiElement))
+            if (!(root instanceof IRootGuiElement))
             {
                 throw new IllegalStateException("The client root is not a root instance");
             }
 
-            final RootGuiElement rootGuiElement = (RootGuiElement) containedElement;
+            final IRootGuiElement rootGuiElement = (IRootGuiElement) containedElement;
             final UIManager uiManager = (UIManager) blockOutGui.getRoot().getUiManager();
 
             uiManager.setRootGuiElement(rootGuiElement);

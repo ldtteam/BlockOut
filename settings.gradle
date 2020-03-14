@@ -1,8 +1,11 @@
 rootProject.name = 'blockout'
 
 include 'api'
-include 'utils:concepts'
+include 'styling'
+include 'definitions'
 include 'utils:helpers'
+include 'controls:concepts'
+include 'controls:implementations'
 include 'lang:json'
 include 'lang:xml'
 include 'main'

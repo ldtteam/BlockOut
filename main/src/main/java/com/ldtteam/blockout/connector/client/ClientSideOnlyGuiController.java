@@ -5,8 +5,8 @@ import com.ldtteam.blockout.connector.common.builder.CommonGuiKeyBuilder;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
-import com.ldtteam.blockout.element.root.RootGuiElement;
-import com.ldtteam.blockout.element.simple.Slot;
+import com.ldtteam.blockout.element.root.IRootGuiElement;
+import com.ldtteam.blockout.element.simple.IInventorySlotUIElement;
 import com.ldtteam.blockout.gui.BlockOutScreenGui;
 import com.ldtteam.blockout.util.Log;
 import net.minecraft.client.Minecraft;
@@ -24,7 +24,7 @@ public class ClientSideOnlyGuiController implements IGuiController
     private static final UUID DUMMY_ID = new UUID(0, 0);
 
     @Nullable
-    private Tuple<IGuiKey, RootGuiElement> openClientSideOnlyGui = null;
+    private Tuple<IGuiKey, IRootGuiElement> openClientSideOnlyGui = null;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -63,13 +63,13 @@ public class ClientSideOnlyGuiController implements IGuiController
             throw new IllegalArgumentException("Can not build a ClientSide only gui with inventory support.");
         }
 
-        RootGuiElement host;
+        IRootGuiElement host;
 
         try
         {
             host = CommonGuiInstantiationController.getInstance().instantiateNewGui(key);
 
-            if (host.getAllCombinedChildElements().entrySet().stream().anyMatch(e -> e instanceof Slot))
+            if (host.getAllCombinedChildElements().entrySet().stream().anyMatch(e -> e instanceof IInventorySlotUIElement))
             {
                 throw new IllegalArgumentException("Can not open UI that holds Slots. Inventories are not supported in ClientSide only gui's.");
             }
@@ -135,7 +135,7 @@ public class ClientSideOnlyGuiController implements IGuiController
 
     @Nullable
     @Override
-    public RootGuiElement getRoot(@Nullable final IGuiKey guiKey)
+    public IRootGuiElement getRoot(@Nullable final IGuiKey guiKey)
     {
         if (guiKey == null && openClientSideOnlyGui == null)
         {
@@ -155,7 +155,7 @@ public class ClientSideOnlyGuiController implements IGuiController
         return null;
     }
 
-    private void openGui(@NotNull final IGuiKey key, @NotNull final RootGuiElement rootGuiElement)
+    private void openGui(@NotNull final IGuiKey key, @NotNull final IRootGuiElement rootGuiElement)
     {
         Minecraft.getInstance().displayGuiScreen(new BlockOutScreenGui(key, rootGuiElement));
     }
