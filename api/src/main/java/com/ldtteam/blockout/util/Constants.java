@@ -102,6 +102,11 @@ public class Constants
             public static final String KEY_ROOT = String.format("%s:root", MOD_ID);
         }
 
+        public static class TooltipHost
+        {
+            public static final String KEY_TOOLTIP_HOST = String.format("%s:tooltip_host", MOD_ID);
+        }
+
         public static class Slot
         {
             public static final String KEY_SLOT = String.format("%s:slot", MOD_ID);

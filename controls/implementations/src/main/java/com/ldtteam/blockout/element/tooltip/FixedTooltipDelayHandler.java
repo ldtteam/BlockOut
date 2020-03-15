@@ -1,8 +1,9 @@
-package com.ldtteam.blockout.tooltip;
+package com.ldtteam.blockout.element.tooltip;
 
 import com.ldtteam.blockout.proxy.IProxy;
+import com.ldtteam.blockout.tooltip.ITooltipDelayHandler;
 
-public class CommonTooltipDelayHandler implements ITooltipDelayHandler {
+public class FixedTooltipDelayHandler implements ITooltipDelayHandler {
 
     private int currentDelay = 40;
     private long lastResetOn = -1;
