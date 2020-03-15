@@ -83,7 +83,7 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
 
         RenderSystem.pushMatrix();
 
-        getInstanceData().getRoot().getUiManager().getRenderManager().drawForeground(getInstanceData().getRoot());
+        getInstanceData().getRoot().getUiManager().getRenderManager().drawBackground(getInstanceData().getRoot());
 
         RenderSystem.disableRescaleNormal();
         RenderHelper.disableStandardItemLighting();
@@ -100,7 +100,8 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
 
         RenderHelper.disableStandardItemLighting();
 
-        getInstanceData().getRoot().getUiManager().getRenderManager().drawBackground(getInstanceData().getRoot());
+        getInstanceData().getRoot().getUiManager().getRenderManager().drawForeground(getInstanceData().getRoot());
+        getInstanceData().getRoot().getUiManager().getRenderManager().drawTooltip(getInstanceData().getRoot(), scaledMouseX, scaledMouseY);
 
         RenderSystem.popMatrix();
         RenderSystem.enableLighting();

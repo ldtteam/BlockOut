@@ -2,12 +2,14 @@ package com.ldtteam.blockout.management.client.render;
 
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
+import com.ldtteam.blockout.element.IUIElementWithTooltip;
 import com.ldtteam.blockout.element.drawable.IChildDrawableUIElement;
 import com.ldtteam.blockout.element.drawable.IDrawableUIElement;
 import com.ldtteam.blockout.gui.BlockOutGuiData;
 import com.ldtteam.blockout.management.render.IRenderManager;
 import com.ldtteam.blockout.render.core.IRenderingController;
 import com.ldtteam.blockout.render.standard.RenderingController;
+import com.ldtteam.blockout.tooltip.ITooltipHost;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -83,6 +85,40 @@ public class RenderManager implements IRenderManager
             IUIElementHost iuiElementHost = (IUIElementHost) host;
             iuiElementHost.values().forEach(this::drawForeground);
         }
+    }
+
+    @Override
+    public boolean drawTooltip(@NotNull final IUIElement host, final int absoluteMouseX, final int absoluteMouseY) {
+        boolean childDrew = false;
+        if (host instanceof IUIElementHost)
+        {
+            childDrew = ((IUIElementHost) host).values().stream().anyMatch(u -> drawTooltip(u, absoluteMouseX, absoluteMouseY));
+        }
+
+        if (childDrew)
+            return true;
+
+        if (host instanceof IUIElementWithTooltip)
+        {
+            final IUIElementWithTooltip iuiElementWithTooltip = (IUIElementWithTooltip) host;
+            final ITooltipHost tooltipHost = iuiElementWithTooltip.getTooltipHost();
+            if (!tooltipHost.shouldDisplayTooltip(absoluteMouseX, absoluteMouseY))
+                return false;
+
+            final Vector2d mousePosition = new Vector2d(absoluteMouseX, absoluteMouseY);
+
+            RenderSystem.pushMatrix();
+            RenderSystem.translated(mousePosition.getX(), mousePosition.getY(), 0);
+
+            this.drawBackground(tooltipHost);
+            this.drawForeground(tooltipHost);
+
+            RenderSystem.popMatrix();
+
+            return true;
+        }
+
+        return false;
     }
 
     @NotNull

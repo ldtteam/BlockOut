@@ -102,7 +102,11 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     @Override
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY)
     {
+        int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
+        int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
+
         getInstanceData().getRoot().getUiManager().getRenderManager().drawForeground(getInstanceData().getRoot());
+        getInstanceData().getRoot().getUiManager().getRenderManager().drawTooltip(getInstanceData().getRoot(), scaledMouseX, scaledMouseY);
     }
 
     @Override

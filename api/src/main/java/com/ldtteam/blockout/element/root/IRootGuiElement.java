@@ -5,5 +5,13 @@ import com.ldtteam.blockout.management.IUIManager;
 import org.jetbrains.annotations.NotNull;
 
 public interface IRootGuiElement extends IUIElementHost {
+
     void setUiManager(@NotNull IUIManager manager);
+
+    @NotNull
+    @Override
+    default IUIElementHost getParent()
+    {
+        return this;
+    }
 }

@@ -13,6 +13,8 @@ public interface IRenderManager
 
     void drawForeground(@NotNull final IUIElement host);
 
+    boolean drawTooltip(@NotNull final IUIElement host, int absoluteMouseX, int absoluteMouseY);
+
     @NotNull
     IRenderingController getRenderingController();
 
