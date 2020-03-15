@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.proxy;
 
-import com.ldtteam.blockout.compat.ClientTickManager;
-import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.compat.CommonTickManager;
+import com.ldtteam.blockout.compat.ITickManager;
 import com.ldtteam.blockout.connector.client.ClientGuiController;
 import com.ldtteam.blockout.connector.client.ClientSideOnlyGuiController;
 import com.ldtteam.blockout.connector.core.IGuiController;
@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.resource.ISelectiveResourceReloadListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,11 +36,14 @@ public class ClientProxy extends CommonProxy {
     private final ClientSideOnlyGuiController clientSideOnlyGuiController;
     @NotNull
     private FontRenderer multiColoredFontRenderer;
+    @NotNull
+    private final CommonTickManager clientSideTickManager;
 
     public ClientProxy()
     {
         guiController = new ClientGuiController();
         clientSideOnlyGuiController = new ClientSideOnlyGuiController();
+        clientSideTickManager = new CommonTickManager();
     }
 
     @Override
@@ -167,7 +169,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public IClientTickManager getClientTickManager() {
-        return ClientTickManager.getInstance();
+    public ITickManager getTickManager() {
+        return SideExecutor.runForSide(() -> () -> this.clientSideTickManager, () -> super::getTickManager);
     }
 }

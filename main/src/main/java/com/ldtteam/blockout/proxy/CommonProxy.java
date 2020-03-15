@@ -6,7 +6,8 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.ldtteam.blockout.builder.CommonBuilderManager;
 import com.ldtteam.blockout.builder.IBuilderManager;
-import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.compat.CommonTickManager;
+import com.ldtteam.blockout.compat.ITickManager;
 import com.ldtteam.blockout.connector.common.CommonDefinitionLoaderManager;
 import com.ldtteam.blockout.connector.common.CommonFactoryController;
 import com.ldtteam.blockout.connector.common.CommonLoaderManager;
@@ -47,12 +48,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLServiceProvider;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.io.InputStream;
 import java.util.Set;
 
@@ -63,6 +62,7 @@ public class CommonProxy implements IProxy {
     private final CommonLoaderManager commonLoaderManager;
     private final CommonDefinitionLoaderManager commonDefinitionLoaderManager;
     private final CommonFactoryController commonFactoryController;
+    private final CommonTickManager commonTickManager;
     private final Set<Module> factoryInjectionModules = Sets.newConcurrentHashSet();
 
     private Injector injector;
@@ -74,6 +74,7 @@ public class CommonProxy implements IProxy {
         commonLoaderManager = new CommonLoaderManager();
         commonDefinitionLoaderManager = new CommonDefinitionLoaderManager();
         commonFactoryController = new CommonFactoryController();
+        commonTickManager = new CommonTickManager();
     }
 
     @Override
@@ -282,10 +283,10 @@ public class CommonProxy implements IProxy {
         return BlockOutPluginRegistry.getInstance();
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @NotNull
     @Override
-    public IClientTickManager getClientTickManager() {
-        return null;
+    public ITickManager getTickManager() {
+        return commonTickManager;
     }
 
     @NotNull

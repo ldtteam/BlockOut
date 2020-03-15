@@ -16,7 +16,6 @@ public interface ITooltipHost extends IUIElementHost, IRootGuiElement {
 
     default boolean shouldDisplayTooltip(final int mouseX, final int mouseY)
     {
-        getTooltipDelayHandler().onRenderTick();
         if (!getTooltipDelayHandler().shouldDisplay())
             return false;
 

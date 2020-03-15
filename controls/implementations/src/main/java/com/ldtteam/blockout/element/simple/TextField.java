@@ -319,7 +319,7 @@ public class TextField extends AbstractSimpleUIElement implements IDrawableUIEle
 
     private long getCursorCounter()
     {
-        return IProxy.getInstance().getClientTickManager().getTickCount();
+        return IProxy.getInstance().getTickManager().getTickCount();
     }
 
     /**

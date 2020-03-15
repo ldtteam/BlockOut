@@ -3,7 +3,7 @@ package com.ldtteam.blockout.proxy;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.ldtteam.blockout.builder.IBuilderManager;
-import com.ldtteam.blockout.compat.IClientTickManager;
+import com.ldtteam.blockout.compat.ITickManager;
 import com.ldtteam.blockout.connector.core.*;
 import com.ldtteam.blockout.loader.binding.core.IBindingEngine;
 import com.ldtteam.blockout.management.IUIManager;
@@ -220,8 +220,8 @@ public class ProxyHolder implements IProxy
 
     @NotNull
     @Override
-    public IClientTickManager getClientTickManager() {
-        return proxy.getClientTickManager();
+    public ITickManager getTickManager() {
+        return proxy.getTickManager();
     }
 
     @NotNull
