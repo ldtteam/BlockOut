@@ -2,23 +2,16 @@
 .gradle/
 classes/
 build/
-eclipse/
 logs/
 mods/
 out/
-run/
 *.iml
 *.ipr
 *.iws
-MinecraftForge*.txt
-CREDITS*
-LICENSE-fml*
 *changelog.txt
 README.txt
-/bin/
+bin/
 *.hprof
-/.gradle/
-/build/
 
 # Exclude all Mac DS_Store files
 /**/.DS_Store
@@ -27,17 +20,12 @@ README.txt
 /**/Thumbs.db
 
 # Eclipse stuff
-/.settings/
-/.project
-/.classpath
-/MineColonies_Client.launch
-/MineColonies_Server.launch
-
-# Old launcher (different case)
-/minecolonies_Client.launch
-/minecolonies_Server.launch
+.settings/
+.project
+.classpath
+.vscode/
+*.launch
 
 tools/.api_key
 
-**/run**/**
 run**

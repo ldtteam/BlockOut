@@ -15,17 +15,7 @@ public class Constants
     public static final String MOD_ID   = "blockout";
     public static final String MOD_NAME = "BlockOut";
 
-    public static final String VERSION       = "@VERSION@";
-    public static final String MC_VERSION    = "@MCVERSION@";
-    public static final String FORGE_VERSION = "required:forge;";
     public static final String NETWORK_NAME  = MOD_ID + ":network";
-
-    public static final String PROXY_CLIENT = "com.ldtteam.blockout.proxy.ClientProxy";
-    public static final String PROXY_COMMON = "com.ldtteam.blockout.proxy.CommonProxy";
-
-    public static final String DEBUG = "@DEBUG@";
-
-    public static final Long SERIAL_VAR_ID = Long.valueOf(MC_VERSION.hashCode());
 
     public static class Styles
     {

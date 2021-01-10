@@ -13,8 +13,8 @@ buildscript {
         }
     }
     dependencies {
-        //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.161-read-gradle-delegation', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.161-read-gradle-delegation', changing: true
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
     }
 }
@@ -60,6 +60,7 @@ configure(leafProjects) {projectToConfigure ->
     //Setup the plugins that we need.
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'idea'
+    apply plugin: 'eclipse'
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
