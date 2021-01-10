@@ -19,9 +19,9 @@ import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.math.BoundingBox;
-import com.ldtteam.blockout.util.math.Clamp;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -251,7 +251,7 @@ public abstract class AbstractChildInstantiatingAndLayoutControllableUIElement e
      */
     public void scrollTo(double target)
     {
-        this.scrollOffset = Clamp.Clamp(0, target, 1);
+        this.scrollOffset = MathHelper.clamp(target, 0, 1);
         this.getUiManager().getProfiler().startTick();
         this.getUiManager().getProfiler().startSection(getId() + "_scrollTo");
         updateScrollOffset();

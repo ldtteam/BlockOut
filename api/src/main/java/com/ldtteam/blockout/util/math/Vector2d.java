@@ -69,6 +69,26 @@ public final class Vector2d
         return y;
     }
 
+    /**
+     * Getter for the X-Coordinate.
+     *
+     * @return The X-Coordinate.
+     */
+    public float getXf()
+    {
+        return (float) x;
+    }
+
+    /**
+     * Getter for the Y-Coordinate
+     *
+     * @return The Y-Coordinate
+     */
+    public float getYf()
+    {
+        return (float) y;
+    }
+
     @NotNull
     public static Vector2d fromString(@NotNull final String string)
     {

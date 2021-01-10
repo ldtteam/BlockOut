@@ -10,9 +10,6 @@ import com.ldtteam.blockout.proxy.CommonProxy;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.reflection.ReflectionManager;
-import com.ldtteam.blockout.style.resources.ImageResource;
-import com.ldtteam.blockout.style.resources.ItemStackResource;
-import com.ldtteam.blockout.style.resources.TemplateResource;
 import com.ldtteam.blockout.util.Constants;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -39,15 +36,10 @@ public class BlockOut
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickClientTick);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickServerTick);
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onClientSetup));
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onDedicatedServerSetup));
+        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onClientSetup));
+        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onDedicatedServerSetup));
 
-        ProxyHolder.getInstance().setProxy(
-                DistExecutor.runForDist(
-                        () -> ClientProxy::new,
-                        () -> CommonProxy::new
-                )
-        );
+        ProxyHolder.getInstance().setProxy(DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new));
     }
 
     public static BlockOut getInstance()

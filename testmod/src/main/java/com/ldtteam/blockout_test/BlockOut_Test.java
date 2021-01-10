@@ -2,9 +2,9 @@ package com.ldtteam.blockout_test;
 
 import com.ldtteam.blockout_test.command.CommandOpenTestGui;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 
 @Mod("blockout_test")
 public class BlockOut_Test
@@ -24,8 +24,8 @@ public class BlockOut_Test
     }
 
     @SubscribeEvent
-    public void onFMLServerStarting(final FMLServerStartingEvent event)
+    public void onFMLServerStarting(final RegisterCommandsEvent event)
     {
-        CommandOpenTestGui.register(event.getCommandDispatcher());
+        CommandOpenTestGui.register(event.getDispatcher());
     }
 }

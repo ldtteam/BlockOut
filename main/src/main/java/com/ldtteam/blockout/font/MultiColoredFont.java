@@ -7,9 +7,9 @@ import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.IGlyph;
 import net.minecraft.client.gui.fonts.TexturedGlyph;
 import net.minecraft.client.gui.fonts.providers.IGlyphProvider;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -163,7 +163,7 @@ public class MultiColoredFont extends Font {
         private final Color color;
 
         public ColorGlyph(final Color color) {
-            super(RenderType.text(new ResourceLocation("default/0")), RenderType.textSeeThrough(new ResourceLocation("default/0")), 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            super(RenderType.getText(new ResourceLocation("default/0")), RenderType.getTextSeeThrough(new ResourceLocation("default/0")), 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             this.color = color;
         }
 

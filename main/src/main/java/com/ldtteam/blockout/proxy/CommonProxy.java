@@ -43,7 +43,6 @@ import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -183,7 +182,8 @@ public class CommonProxy implements IProxy {
     @Override
     public World getDimensionFromDimensionId(@NotNull final int dimId)
     {
-        return ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.getById(dimId));
+        return null;
+        //return ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.getById(dimId));
     }
 
     @SuppressWarnings({"NullableProblems"})

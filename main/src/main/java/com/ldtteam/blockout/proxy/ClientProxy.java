@@ -17,7 +17,7 @@ import com.ldtteam.blockout.management.server.network.ServerNetworkManager;
 import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.management.update.IUpdateManager;
 import com.ldtteam.blockout.util.color.ColorUtils;
-import com.ldtteam.blockout.util.side.SideExecutor;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
@@ -55,7 +55,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public IGuiController getGuiController()
     {
-        return SideExecutor.runForSide(
+        return DistExecutor.runForDist(
                 () -> () -> guiController,
                 () -> super::getGuiController
         );
@@ -72,7 +72,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public INetworkManager generateNewNetworkManagerForGui(@NotNull final IGuiKey key)
     {
-        return SideExecutor.runForSide(
+        return DistExecutor.runForDist(
                 () -> ClientNetworkManager::new,
                 () -> () -> new ServerNetworkManager(key)
         );
@@ -82,7 +82,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public IUpdateManager generateNewUpdateManager(@NotNull final IUIManager manager)
     {
-        return SideExecutor.runForSide(
+        return DistExecutor.runForDist(
                 () -> NoOpUpdateManager::new,
                 () -> () -> new ServerUpdateManager(manager)
         );
@@ -92,7 +92,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public World getDimensionFromDimensionId(@NotNull final int dimId)
     {
-        return SideExecutor.runForSide(
+        return DistExecutor.runForDist(
                 () -> () -> Minecraft.getInstance().world,
                 () -> () -> super.getDimensionFromDimensionId(dimId)
         );
@@ -155,7 +155,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public IGuiController getClientSideOnlyGuiController()
     {
-        return SideExecutor.runForSide(
+        return DistExecutor.runForDist(
                 () -> () -> clientSideOnlyGuiController,
                 () -> () -> null
         );
@@ -170,6 +170,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public ITickManager getTickManager() {
-        return SideExecutor.runForSide(() -> () -> this.clientSideTickManager, () -> super::getTickManager);
+        return DistExecutor.runForDist(() -> () -> this.clientSideTickManager, () -> super::getTickManager);
     }
 }

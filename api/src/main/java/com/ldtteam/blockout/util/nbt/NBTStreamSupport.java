@@ -4,7 +4,6 @@ import net.minecraft.nbt.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public final class NBTStreamSupport

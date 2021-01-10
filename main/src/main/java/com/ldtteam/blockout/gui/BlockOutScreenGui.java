@@ -5,6 +5,7 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
@@ -67,7 +68,7 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
     }
 
     @Override
-    public void render(final int mouseX, final int mouseY, final float partialTickTime)
+    public void render(final MatrixStack ms, final int mouseX, final int mouseY, final float partialTickTime)
     {
         getInstanceData().setDrawing(true);
 
@@ -77,11 +78,11 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
         //Can be done here since both fore and background methods are called by the super
         getInstanceData().getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
 
-        RenderSystem.pushMatrix();
+        ms.push();
 
-        RenderSystem.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
+        ms.scale(1 / getInstanceData().getScaleFactor().getXf(), 1 / getInstanceData().getScaleFactor().getYf(), 1f);
 
-        RenderSystem.pushMatrix();
+        ms.push();
 
         getInstanceData().getRoot().getUiManager().getRenderManager().drawBackground(getInstanceData().getRoot());
 
@@ -90,11 +91,11 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
         RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
 
-        super.render(mouseX, mouseY, partialTickTime);
+        super.render(ms, mouseX, mouseY, partialTickTime);
 
         RenderHelper.enableStandardItemLighting();
-        RenderSystem.pushMatrix();
-        RenderSystem.translated((float)getInstanceData().getGuiLeft(), (float)getInstanceData().getGuiTop(), 0.0d);
+        ms.push();
+        ms.translate((float)getInstanceData().getGuiLeft(), (float)getInstanceData().getGuiTop(), 0.0d);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.enableRescaleNormal();
 
@@ -103,13 +104,13 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
         getInstanceData().getRoot().getUiManager().getRenderManager().drawForeground(getInstanceData().getRoot());
         getInstanceData().getRoot().getUiManager().getRenderManager().drawTooltip(getInstanceData().getRoot(), scaledMouseX, scaledMouseY);
 
-        RenderSystem.popMatrix();
+        ms.pop();
         RenderSystem.enableLighting();
         RenderSystem.enableDepthTest();
         RenderHelper.enableStandardItemLighting();
 
-        RenderSystem.popMatrix();
-        RenderSystem.popMatrix();
+        ms.pop();
+        ms.pop();
 
         getInstanceData().setDrawing(false);
     }

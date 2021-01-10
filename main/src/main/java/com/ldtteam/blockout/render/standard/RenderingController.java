@@ -24,7 +24,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.ILightReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.lighting.WorldLightManager;
@@ -163,11 +161,11 @@ public class RenderingController implements IRenderingController
         }
 
         ResourceLocation fluidStill = fluid.getFluid().getAttributes().getStillTexture();
-        TextureAtlasSprite texture = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
+        TextureAtlasSprite texture = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(fluidStill);
 
         if (texture == null)
         {
-            texture = Minecraft.getInstance().getTextureGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation("missingno"));
+            texture = Minecraft.getInstance().getAtlasSpriteGetter(PlayerContainer.LOCATION_BLOCKS_TEXTURE).apply(new ResourceLocation("missingno"));
         }
 
         final Color fluidColor = new Color(fluid.getFluid().getAttributes().getColor(fluid));
@@ -405,8 +403,10 @@ public class RenderingController implements IRenderingController
     }
 
     @Override
+    // TODO: draw blockstate? itemstack should be enough, this is probably overkill
     public void drawBlockState(@NotNull final BlockState state, final int x, final int y)
     {
+        /*
         RenderHelper.disableStandardItemLighting();
 
 
@@ -498,6 +498,7 @@ public class RenderingController implements IRenderingController
         Tessellator.getInstance().draw();
 
         RenderSystem.popMatrix();
+        */
     }
 
     @Override
@@ -563,14 +564,14 @@ public class RenderingController implements IRenderingController
 
         if (itemstack.isEmpty() && slotIn.isEnabled())
         {
-            Pair<ResourceLocation, ResourceLocation> tasPair = slotIn.func_225517_c_();
+            Pair<ResourceLocation, ResourceLocation> tasPair = slotIn.getBackground();
 
             if (tasPair != null)
             {
                 RenderSystem.disableLighting();
-                TextureAtlasSprite textureatlassprite = Minecraft.getInstance().getTextureGetter(tasPair.getFirst()).apply(tasPair.getSecond());
-                Minecraft.getInstance().getTextureManager().bindTexture(textureatlassprite.getAtlasTexture().getBasePath());
-                AbstractGui.blit(x, y, (int) Minecraft.getInstance().getItemRenderer().zLevel, 16, 16, textureatlassprite);;
+                TextureAtlasSprite textureatlassprite = Minecraft.getInstance().getAtlasSpriteGetter(tasPair.getFirst()).apply(tasPair.getSecond());
+                Minecraft.getInstance().getTextureManager().bindTexture(textureatlassprite.getAtlasTexture().getTextureLocation());
+                AbstractGui.blit(null /*TODO:matrixstack*/, x, y, (int) Minecraft.getInstance().getItemRenderer().zLevel, 16, 16, textureatlassprite);;
                 RenderSystem.enableLighting();
                 isDraggingStartSlot = true;
             }

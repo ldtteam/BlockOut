@@ -10,11 +10,13 @@ public enum MouseButton
     OTHER;
 
     private static final Map<Integer, MouseButton> mappings = new HashMap<>();
+
     static
     {
         mappings.put(0, LEFT);
         mappings.put(1, RIGHT);
     }
+
     public static MouseButton getForCode(final int code)
     {
         if (mappings.containsKey(code))
