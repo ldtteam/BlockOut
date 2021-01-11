@@ -36,10 +36,10 @@ public class BlockOut
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickClientTick);
         Mod.EventBusSubscriber.Bus.FORGE.bus().get().addListener(UpdateHandler::onTickServerTick);
 
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onClientSetup));
-        DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onDedicatedServerSetup));
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onClientSetup));
+        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> Mod.EventBusSubscriber.Bus.MOD.bus().get().addListener(this::onDedicatedServerSetup));
 
-        ProxyHolder.getInstance().setProxy(DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new));
+        ProxyHolder.getInstance().setProxy(DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new));
     }
 
     public static BlockOut getInstance()

@@ -1,6 +1,7 @@
 modLoader="javafml" #mandatory
-loaderVersion="[30,)" #mandatory (27 is current forge version)
+loaderVersion="[35,)" #mandatory (27 is current forge version)
 issueTrackerURL="https://github.com/ldtteam/minecolonies/issues/new" #optional
+license="GPL 3.0"
 [[mods]] #mandatory
 modId="blockout" #mandatory
 version="${file.jarVersion}" #mandatory
@@ -13,13 +14,13 @@ A data driven GUI Library.
 [[dependencies.blockout]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[31,)" #mandatory
+    versionRange="[35,)" #mandatory
     ordering="NONE"
     side="BOTH"
 # Here's another dependency
 [[dependencies.blockout]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.4]"
     ordering="NONE"
     side="BOTH"

@@ -24,7 +24,7 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final TileEntity tileEntity, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, tileEntity.getWorld().getDimension().getType().getId(), tileEntity.getPos(), facing);
+        return this.withTileBasedProvider(id, 0/* tileEntity.getWorld().getDimension().getType().getId() */, tileEntity.getPos(), facing);
     }
 
     @NotNull
@@ -45,7 +45,7 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final World world, @NotNull final BlockPos blockPos, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, world.getDimension().getType().getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
+        return this.withTileBasedProvider(id, 0/* world.getDimension().getType().getId() */, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
     }
 
     @NotNull
@@ -53,7 +53,7 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final Direction facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimension().getType().getId(), entity.getEntityId(), facing);
+        return this.withEntityBasedProvider(id, 0/* entity.getEntityWorld().getDimension().getType().getId() */, entity.getEntityId(), facing);
     }
 
     @NotNull

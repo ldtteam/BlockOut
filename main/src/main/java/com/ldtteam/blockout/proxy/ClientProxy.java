@@ -6,7 +6,7 @@ import com.ldtteam.blockout.connector.client.ClientGuiController;
 import com.ldtteam.blockout.connector.client.ClientSideOnlyGuiController;
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
-import com.ldtteam.blockout.font.MultiColoredFontRenderer;
+//import com.ldtteam.blockout.font.MultiColoredFontRenderer;
 import com.ldtteam.blockout.management.IUIManager;
 import com.ldtteam.blockout.management.client.network.ClientNetworkManager;
 import com.ldtteam.blockout.management.client.render.RenderManager;
@@ -48,7 +48,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void onClientSetup() {
-        this.initializeFontRenderer();
+        //this.initializeFontRenderer();
     }
 
     @NotNull
@@ -106,6 +106,7 @@ public class ClientProxy extends CommonProxy {
         return new RenderManager();
     }
 
+    /*
     private void initializeFontRenderer()
     {
         multiColoredFontRenderer = new MultiColoredFontRenderer(
@@ -150,6 +151,7 @@ public class ClientProxy extends CommonProxy {
             }
         };
     }
+    */
 
     @NotNull
     @Override

@@ -31,7 +31,7 @@ public class PositionContext implements IContext
 
     public PositionContext(@NotNull final World world, @NotNull final BlockPos pos)
     {
-        this.dimensionId = world.getDimension().getType().getId();
+        this.dimensionId = 0;//world.getDimension().getType().getId();
         this.x = pos.getX();
         this.y = pos.getY();
         this.z = pos.getZ();
