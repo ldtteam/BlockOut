@@ -7,14 +7,14 @@ import com.ldtteam.blockout.element.simple.IInventorySlotUIElement;
 import com.ldtteam.blockout.inventory.slot.BlockOutSlot;
 import com.ldtteam.blockout.util.Log;
 import com.ldtteam.blockout.util.itemstack.ItemStackHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -217,7 +217,7 @@ public class BlockOutContainer extends Container implements IBlockOutContainer
 
         initializeSlots();
 
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> this::detectAndSendChanges);
+        SideExecutor.runWhenOn(LogicalSide.SERVER, () -> this::detectAndSendChanges);
     }
 
     private void initializeSlots()

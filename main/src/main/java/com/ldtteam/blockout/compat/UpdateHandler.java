@@ -7,13 +7,13 @@ import com.ldtteam.blockout.management.server.update.ServerUpdateManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.Log;
-import net.minecraftforge.fml.DistExecutor;
+import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.Container;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.time.StopWatch;
 
@@ -39,7 +39,7 @@ public class UpdateHandler
             return;
         }
 
-        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
+        SideExecutor.runWhenOn(LogicalSide.CLIENT, () -> () -> {
             if (Minecraft.getInstance().currentScreen instanceof BlockOutContainerGui)
             {
                 final BlockOutContainerGui blockOutGui = (BlockOutContainerGui) Minecraft.getInstance().currentScreen;
@@ -57,7 +57,7 @@ public class UpdateHandler
             return;
         }
 
-        DistExecutor.runWhenOn(Dist.DEDICATED_SERVER, () -> () -> {
+        SideExecutor.runWhenOn(LogicalSide.SERVER, () -> () -> {
             ServerGuiController guiController = (ServerGuiController) ProxyHolder.getInstance().getGuiController();
 
             guiController.getOpenUis().forEach((key, value) -> {
