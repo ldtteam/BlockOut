@@ -3,9 +3,6 @@ dependencies {
 
     shadeRuntimeTransitive project(':definitions')
 
-    shadeRuntimeTransitive project(':lang:json')
-    shadeRuntimeTransitive project(':lang:xml')
-
     shadeRuntimeTransitive project(':controls:concepts')
     shadeRuntimeTransitive project(':controls:implementations')
 
@@ -23,8 +20,6 @@ minecraft {
                     source project(':api').sourceSets.main
                     source project(':styling').sourceSets.main
                     source project(':definitions').sourceSets.main
-                    source project(':lang:json').sourceSets.main
-                    source project(':lang:xml').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
                     source project(':utils:helpers').sourceSets.main
@@ -41,8 +36,6 @@ minecraft {
                     source project(':api').sourceSets.main
                     source project(':styling').sourceSets.main
                     source project(':definitions').sourceSets.main
-                    source project(':lang:json').sourceSets.main
-                    source project(':lang:xml').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
                     source project(':utils:helpers').sourceSets.main
