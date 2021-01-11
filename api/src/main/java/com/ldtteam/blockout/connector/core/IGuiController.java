@@ -1,10 +1,8 @@
 package com.ldtteam.blockout.connector.core;
 
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
-import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.proxy.ProxyHolder;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

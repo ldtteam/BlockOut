@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Objects;
 
 public class CommonResourceLocationBasedGuiDefinitionLoader implements IGuiDefinitionLoader<ResourceLocation>
 {

@@ -5,7 +5,6 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.builder.IGuiKeyBuilder;
 import com.ldtteam.blockout.element.root.IRootGuiElement;
-import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.network.message.CloseGuiRequestMessage;
 import com.ldtteam.blockout.network.message.OpenGuiRequestMessage;
 import com.ldtteam.blockout.proxy.IProxy;

@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.element.core;
 
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-import static com.ldtteam.blockout.util.Constants.Controls.Region.KEY_REGION;
 import static com.ldtteam.blockout.util.Constants.Controls.Wrapper.KEY_WRAPPER;
 
 public class Wrapper extends AbstractChildrenContainingUIElement

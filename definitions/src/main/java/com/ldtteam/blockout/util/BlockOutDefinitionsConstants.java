@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.util;
 
-import com.ldtteam.blockout.util.Constants;
 import net.minecraft.util.ResourceLocation;
 
 public final class BlockOutDefinitionsConstants {

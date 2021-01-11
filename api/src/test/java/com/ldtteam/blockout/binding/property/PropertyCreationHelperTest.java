@@ -1,11 +1,8 @@
 package com.ldtteam.blockout.binding.property;
 
 import com.ldtteam.blockout.AbstractBlockOutApiTest;
-import com.ldtteam.blockout.binding.dependency.DummyInjectionTarget;
-import junitparams.JUnitParamsRunner;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Optional;
 

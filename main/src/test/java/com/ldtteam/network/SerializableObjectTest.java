@@ -2,13 +2,8 @@ package com.ldtteam.network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
-import com.ldtteam.blockout.connector.common.CommonGuiKey;
-import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.loader.object.ObjectUIElementBuilder;
-import com.ldtteam.blockout.loader.object.ObjectUIElementData;
-import com.ldtteam.blockout.loader.object.ObjectUIElementMetaDataBuilder;
 import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
-import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
 import com.ldtteam.blockout.util.kryo.KryoUtil;
 import net.minecraft.util.ResourceLocation;
 import com.ldtteam.test.AbstractBlockOutTest;

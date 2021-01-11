@@ -1,8 +1,5 @@
 package com.ldtteam.blockout.binding.dependency;
 
-import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
-import com.ldtteam.blockout.binding.dependency.IDependencyObject;
-import com.ldtteam.blockout.binding.dependency.IDependencyReceiver;
 import org.jetbrains.annotations.NotNull;
 
 /**

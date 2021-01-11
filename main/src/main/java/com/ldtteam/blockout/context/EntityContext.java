@@ -1,7 +1,6 @@
 package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.blockout.util.Constants;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 

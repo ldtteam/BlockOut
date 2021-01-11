@@ -11,7 +11,6 @@ import com.ldtteam.blockout.element.root.IRootGuiElement;
 import com.ldtteam.blockout.inventory.BlockOutContainer;
 import com.ldtteam.blockout.loader.core.IUIElementData;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
-import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.network.message.CloseGuiCommandMessage;
 import com.ldtteam.blockout.network.message.OpenGuiCommandMessage;
 import com.ldtteam.blockout.proxy.IProxy;

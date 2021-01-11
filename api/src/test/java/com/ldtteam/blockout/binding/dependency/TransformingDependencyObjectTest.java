@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.binding.dependency;
 
-import com.google.common.base.Functions;
 import com.ldtteam.blockout.AbstractBlockOutApiTest;
 import com.ldtteam.blockout.binding.property.Property;
 import org.junit.Assert;

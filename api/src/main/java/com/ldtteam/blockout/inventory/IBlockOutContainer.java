@@ -1,7 +1,5 @@
 package com.ldtteam.blockout.inventory;
 
-import com.ldtteam.blockout.gui.BlockOutGuiData;
-
 /**
  * Represents a BlockOut container with its additional data.
  */

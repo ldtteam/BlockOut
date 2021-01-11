@@ -2,7 +2,6 @@ package com.ldtteam.blockout.network.message;
 
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.element.root.IRootGuiElement;
-import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.simple.TextField;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.proxy.ProxyHolder;

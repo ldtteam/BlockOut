@@ -9,8 +9,6 @@ import org.junit.runner.RunWith;
 
 import java.util.EnumSet;
 
-import static org.junit.Assert.*;
-
 @RunWith(JUnitParamsRunner.class)
 public class AlignmentTest extends AbstractBlockOutApiTest
 {

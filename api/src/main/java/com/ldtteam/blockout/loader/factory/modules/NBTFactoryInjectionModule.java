@@ -6,11 +6,9 @@ import com.ldtteam.blockout.loader.factory.NBTBaseConverter;
 import com.ldtteam.blockout.loader.factory.NBTDependingConverters;
 import com.ldtteam.blockout.loader.factory.core.IUIElementDataComponentConverter;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraftforge.common.extensions.IForgeBlockState;
 
 public class NBTFactoryInjectionModule extends AbstractModule
 {

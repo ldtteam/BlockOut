@@ -1,6 +1,5 @@
 package com.ldtteam.blockout.connector.common;
 
-import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.core.ILoaderManager;
 import com.ldtteam.blockout.loader.ILoader;
 import com.ldtteam.blockout.loader.core.IUIElementData;

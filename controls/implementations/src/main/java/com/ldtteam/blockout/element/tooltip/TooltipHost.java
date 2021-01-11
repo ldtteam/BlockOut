@@ -3,10 +3,8 @@ package com.ldtteam.blockout.element.tooltip;
 import com.ldtteam.blockout.binding.dependency.IDependencyObject;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.IUIElement;
-import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.IUIElementWithTooltip;
 import com.ldtteam.blockout.element.core.AbstractChildrenContainingUIElement;
-import com.ldtteam.blockout.element.root.RootGuiElement;
 import com.ldtteam.blockout.element.values.Alignment;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.element.values.Dock;
@@ -21,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.Objects;
 
-import static com.ldtteam.blockout.util.Constants.Controls.Root.KEY_ROOT;
 import static com.ldtteam.blockout.util.Constants.Controls.TooltipHost.KEY_TOOLTIP_HOST;
 
 public class TooltipHost extends AbstractChildrenContainingUIElement implements ITooltipHost {

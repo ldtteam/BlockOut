@@ -17,7 +17,6 @@ import com.ldtteam.blockout.util.Log;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;

@@ -2,7 +2,6 @@ package com.ldtteam.blockout.connector.core.builder;
 
 import com.ldtteam.blockout.builder.core.IBlockOutGuiConstructionData;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
-import com.ldtteam.blockout.connector.core.IGuiDefinitionLoader;
 import com.ldtteam.blockout.connector.core.IGuiKey;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
@@ -10,10 +9,8 @@ import com.ldtteam.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
 import java.util.UUID;
 import java.util.function.Consumer;
 

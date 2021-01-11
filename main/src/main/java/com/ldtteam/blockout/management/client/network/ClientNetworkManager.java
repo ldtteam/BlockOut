@@ -3,7 +3,6 @@ package com.ldtteam.blockout.management.client.network;
 import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.management.client.network.messages.*;
-import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.mouse.MouseButton;

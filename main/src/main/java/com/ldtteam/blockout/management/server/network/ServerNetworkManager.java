@@ -8,7 +8,6 @@ import com.ldtteam.blockout.management.network.INetworkManager;
 import com.ldtteam.blockout.loader.object.ObjectUIElementData;
 import com.ldtteam.blockout.management.server.network.messages.OnElementUpdatedMessage;
 import com.ldtteam.blockout.management.server.network.messages.OnFocusedElementChangedMessage;
-import com.ldtteam.blockout.network.NetworkingManager;
 import com.ldtteam.blockout.proxy.IProxy;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;

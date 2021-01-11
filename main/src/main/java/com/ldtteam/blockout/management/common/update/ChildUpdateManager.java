@@ -4,7 +4,6 @@ import com.ldtteam.blockout.element.IUIElement;
 import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.IUIElementWithTooltip;
 import com.ldtteam.blockout.management.update.IUpdateManager;
-import com.ldtteam.blockout.tooltip.ITooltipHost;
 import org.jetbrains.annotations.NotNull;
 
 public final class ChildUpdateManager implements IUpdateManager
