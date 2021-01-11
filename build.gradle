@@ -306,8 +306,6 @@ project.configure([project]) { rootProject ->
         fullImplementation project(':utils:helpers')
 
         minimalRuntime project(':main')
-        fullRuntime project(':lang:json')
-        fullRuntime project(':lang:xml')
     }
 
     rootProject.afterEvaluate { rootProjectAfterEvaluate ->

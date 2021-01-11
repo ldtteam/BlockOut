@@ -6,8 +6,6 @@ include 'definitions'
 include 'utils:helpers'
 include 'controls:concepts'
 include 'controls:implementations'
-include 'lang:json'
-include 'lang:xml'
 include 'main'
 include 'testmod'
 
