@@ -1,7 +1,5 @@
 dependencies {
     shadeTransitive project(':main')
-
-    shadeTransitive project(':utils:helpers')
 }
 
 minecraft {
@@ -17,7 +15,6 @@ minecraft {
                     source project(':definitions').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
-                    source project(':utils:helpers').sourceSets.main
                 }
 
                 blockout_test {
@@ -39,7 +36,6 @@ minecraft {
                     source project(':definitions').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
-                    source project(':utils:helpers').sourceSets.main
                 }
 
                 blockout_test {

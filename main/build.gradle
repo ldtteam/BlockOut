@@ -5,8 +5,6 @@ dependencies {
 
     shadeRuntimeTransitive project(':controls:concepts')
     shadeRuntimeTransitive project(':controls:implementations')
-
-    shadeRuntimeTransitive project(':utils:helpers')
 }
 
 minecraft {
@@ -22,7 +20,6 @@ minecraft {
                     source project(':definitions').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
-                    source project(':utils:helpers').sourceSets.main
                 }
             }
         }
@@ -38,7 +35,6 @@ minecraft {
                     source project(':definitions').sourceSets.main
                     source project(':controls:concepts').sourceSets.main
                     source project(':controls:implementations').sourceSets.main
-                    source project(':utils:helpers').sourceSets.main
                 }
             }
         }

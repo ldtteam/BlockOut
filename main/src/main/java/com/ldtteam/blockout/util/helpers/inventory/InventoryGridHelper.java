@@ -1,9 +1,9 @@
-package com.ldtteam.blockout.helpers.inventory;
+package com.ldtteam.blockout.util.helpers.inventory;
 
 import com.ldtteam.blockout.binding.dependency.DependencyObjectHelper;
 import com.ldtteam.blockout.builder.core.builder.IBlockOutGuiConstructionDataBuilder;
 import com.ldtteam.blockout.element.core.TemplateInstance;
-import com.ldtteam.blockout.helpers.template.DefaultTemplateHelper;
+import com.ldtteam.blockout.util.helpers.template.DefaultTemplateHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;

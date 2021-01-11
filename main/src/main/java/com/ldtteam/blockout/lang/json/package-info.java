@@ -1,4 +1,4 @@
 /**
  * This package holds the JSON implementation of the BlockOut loader.
  */
-package com.ldtteam.blockout.json;
+package com.ldtteam.blockout.lang.json;

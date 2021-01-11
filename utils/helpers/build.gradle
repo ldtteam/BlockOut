@@ -1,9 +1,0 @@
-ext {
-    projectIdentifier = "utils-helpers"
-    requiresRuns = false
-}
-
-dependencies {
-    shadeTransitive project(':api')
-    shadeTransitive project(':controls:implementations')
-}

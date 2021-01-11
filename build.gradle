@@ -303,7 +303,6 @@ project.configure([project]) { rootProject ->
         minimalImplementation project(':api')
         fullImplementation project(':controls:concepts')
         fullImplementation project(':controls:implementations')
-        fullImplementation project(':utils:helpers')
 
         minimalRuntime project(':main')
     }

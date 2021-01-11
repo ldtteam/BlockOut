@@ -1,4 +1,4 @@
-package com.ldtteam.blockout.helpers.template;
+package com.ldtteam.blockout.util.helpers.template;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;

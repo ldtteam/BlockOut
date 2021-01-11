@@ -2,7 +2,7 @@ package com.ldtteam.blockout_test.tests.guis;
 
 import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.element.simple.Button;
-import com.ldtteam.blockout.helpers.inventory.InventoryGridHelper;
+import com.ldtteam.blockout.util.helpers.inventory.InventoryGridHelper;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
