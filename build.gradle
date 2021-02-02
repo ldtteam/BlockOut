@@ -15,7 +15,7 @@ buildscript {
     dependencies {
         //classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.161-read-gradle-delegation', changing: true
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:latest.release"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.20.0"
     }
 }
 
