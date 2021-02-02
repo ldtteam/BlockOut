@@ -112,7 +112,7 @@ configure(leafProjects) {projectToConfigure ->
 
         api 'com.intellij:annotations:+@jar'
         
-        testImplementation 'junit:junit:4.11'
+        testImplementation 'junit:junit:4.13.1'
         testImplementation "org.mockito:mockito-core:1.+"
         testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
         testImplementation group: 'org.powermock', name: 'powermock-api-mockito', version: '1.7.4'
