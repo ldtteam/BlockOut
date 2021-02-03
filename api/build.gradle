@@ -1,6 +1,6 @@
 dependencies {
     shadeTransitive ('com.google.inject:guice:4.2.3')
-    shadeTransitive ('com.esotericsoftware:kryo:4.0.2') {
+    shadeTransitive ('com.esotericsoftware:kryo:5.0.3') {
         exclude group: 'org.ow2.asm', module: 'asm'
         exclude group: 'org.esotericsoftware', module: 'reflectasm'
     }
