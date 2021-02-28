@@ -5,9 +5,11 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +24,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     private final String id;
 
     @NotNull
-    private final int dimId;
+    private final RegistryKey<World> dimId;
     @NotNull
     private final int x;
     @NotNull
@@ -35,7 +37,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
 
     public CommonTileBasedProvider(
       @NotNull final ResourceLocation id,
-      @NotNull final int dimId,
+      @NotNull final RegistryKey<World> dimId,
       @NotNull final int x,
       @NotNull final int y,
       @NotNull final int z,
@@ -53,7 +55,7 @@ public class CommonTileBasedProvider implements IItemHandlerProvider
     public int hashCode()
     {
         int result = getId().hashCode();
-        result = 31 * result + dimId;
+        result = 31 * result + dimId.hashCode();
         result = 31 * result + x;
         result = 31 * result + y;
         result = 31 * result + z;

@@ -4,6 +4,7 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.proxy.ProxyHolder;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -21,13 +22,13 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     private final String id;
 
     @NotNull
-    private final int     dimId;
+    private final RegistryKey<World> dimId;
     @NotNull
     private final int    entityNetworkId;
     @Nullable
     private final Direction facing;
 
-    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int entityNetworkId, @Nullable final Direction facing)
+    public CommonEntityBasedProvider(@NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final int entityNetworkId, @Nullable final Direction facing)
     {
         this.id = id.toString();
         this.dimId = dimId;
@@ -39,7 +40,7 @@ public class CommonEntityBasedProvider implements IItemHandlerProvider
     public int hashCode()
     {
         int result = getId().hashCode();
-        result = 31 * result + dimId;
+        result = 31 * result + dimId.hashCode();
         result = 31 * result + entityNetworkId;
         result = 31 * result + (facing != null ? facing.hashCode() : 0);
         return result;

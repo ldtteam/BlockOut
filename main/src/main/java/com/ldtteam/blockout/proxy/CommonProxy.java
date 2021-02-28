@@ -41,9 +41,10 @@ import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.image.ImageUtil;
 import com.ldtteam.blockout.util.math.Vector2d;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -181,9 +182,9 @@ public class CommonProxy implements IProxy {
 
     @NotNull
     @Override
-    public World getDimensionFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final RegistryKey<World> dimId)
     {
-        return ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.getById(dimId));
+        return ServerLifecycleHooks.getCurrentServer().getWorld(dimId);
     }
 
     @SuppressWarnings({"NullableProblems"})

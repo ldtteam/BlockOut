@@ -18,6 +18,7 @@ import com.ldtteam.blockout.style.core.resources.loader.IResourceLoaderManager;
 import com.ldtteam.blockout.template.ITemplateEngine;
 import com.ldtteam.blockout.util.color.Color;
 import com.ldtteam.blockout.util.math.Vector2d;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -117,7 +118,7 @@ public class ProxyHolder implements IProxy
 
     @Override
     @NotNull
-    public World getDimensionFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final RegistryKey<World> dimId)
     {
         return proxy.getDimensionFromDimensionId(dimId);
     }

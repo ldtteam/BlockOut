@@ -9,6 +9,7 @@ import com.ldtteam.blockout.proxy.ProxyHolder;
 import com.ldtteam.blockout.util.keyboard.KeyboardKey;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -74,8 +75,9 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         getInstanceData().getRoot().getUiManager().getUpdateManager().updateElement(getInstanceData().getRoot());
     }
 
+
     @Override
-    public void render(final int mouseX, final int mouseY, final float partialTick)
+    public void render(final MatrixStack matrixStack, int mouseX, final int mouseY, final float partialTick)
     {
         getInstanceData().setDrawing(true);
 
@@ -85,13 +87,13 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
         //Can be done here since both fore and background methods are called by the super
         getInstanceData().getRoot().getUiManager().getRenderManager().getRenderingController().setMousePosition(scaledMouseX, scaledMouseY);
 
-        RenderSystem.pushMatrix();
+        matrixStack.push();
 
         RenderSystem.scaled(1 / getInstanceData().getScaleFactor().getX(), 1 / getInstanceData().getScaleFactor().getY(), 1d);
 
-        RenderSystem.pushMatrix();
+        matrixStack.push();
 
-        super.render(mouseX, mouseY, partialTick);
+        super.render(matrixStack,mouseX, mouseY, partialTick);
 
         RenderSystem.popMatrix();
         RenderSystem.popMatrix();
@@ -100,7 +102,7 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY)
+    protected void drawGuiContainerForegroundLayer(final MatrixStack matrixStack,final int mouseX, final int mouseY)
     {
         int scaledMouseX = (int) (mouseX * getInstanceData().getScaleFactor().getX());
         int scaledMouseY = (int) (mouseY * getInstanceData().getScaleFactor().getY());
@@ -110,21 +112,11 @@ public class BlockOutContainerGui extends ContainerScreen<BlockOutContainer> imp
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY)
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, final int mouseX, final int mouseY)
     {
         getInstanceData().getRoot().getUiManager().getRenderManager().drawBackground(getInstanceData().getRoot());
     }
 
-    @Override
-    public void drawSlot(final Slot slotIn)
-    {
-        if (getInstanceData().isDrawing() && slotIn instanceof BlockOutSlot)
-        {
-            return;
-        }
-
-        super.drawSlot(slotIn);
-    }
 
     @Override
     public boolean mouseScrolled(final double mouseX, final double mouseY, final double dWheel)

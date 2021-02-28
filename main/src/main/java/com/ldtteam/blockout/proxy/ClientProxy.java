@@ -20,6 +20,7 @@ import com.ldtteam.blockout.util.color.ColorUtils;
 import com.ldtteam.blockout.util.side.SideExecutor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -90,7 +91,7 @@ public class ClientProxy extends CommonProxy {
 
     @NotNull
     @Override
-    public World getDimensionFromDimensionId(@NotNull final int dimId)
+    public World getDimensionFromDimensionId(@NotNull final RegistryKey<World> dimId)
     {
         return SideExecutor.runForSide(
                 () -> () -> Minecraft.getInstance().world,

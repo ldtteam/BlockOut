@@ -1,7 +1,7 @@
 package com.ldtteam.blockout.context;
 
 import com.ldtteam.blockout.context.core.IContext;
-import com.ldtteam.blockout.util.Constants;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +11,7 @@ public class PositionContext implements IContext
 
     private static final long serialVersionUID = -5202348208706760620L;
 
-    private int dimensionId;
+    private RegistryKey<World> dimensionId;
 
     private int x;
     private int y;
@@ -21,7 +21,7 @@ public class PositionContext implements IContext
     {
     }
 
-    public PositionContext(final int dimensionId, final int x, final int y, final int z)
+    public PositionContext(final RegistryKey<World> dimensionId, final int x, final int y, final int z)
     {
         this.dimensionId = dimensionId;
         this.x = x;
@@ -31,7 +31,7 @@ public class PositionContext implements IContext
 
     public PositionContext(@NotNull final World world, @NotNull final BlockPos pos)
     {
-        this.dimensionId = world.getDimension().getType().getId();
+        this.dimensionId = world.getDimensionKey();
         this.x = pos.getX();
         this.y = pos.getY();
         this.z = pos.getZ();
@@ -40,7 +40,7 @@ public class PositionContext implements IContext
     @Override
     public int hashCode()
     {
-        int result = getDimensionId();
+        int result = getDimensionId().hashCode();
         result = 31 * result + getX();
         result = 31 * result + getY();
         result = 31 * result + getZ();
@@ -87,7 +87,7 @@ public class PositionContext implements IContext
                  '}';
     }
 
-    public int getDimensionId()
+    public RegistryKey<World> getDimensionId()
     {
         return dimensionId;
     }

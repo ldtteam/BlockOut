@@ -7,9 +7,9 @@ import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.IGlyph;
 import net.minecraft.client.gui.fonts.TexturedGlyph;
 import net.minecraft.client.gui.fonts.providers.IGlyphProvider;
-import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -43,106 +43,6 @@ public class MultiColoredFont extends Font {
     }
 
     @Override
-    public IGlyph findGlyph(final char letter) {
-        if((int) letter >= MARKER && (int) letter <= MARKER + 0xFF) {
-            int value = letter & 0xFF;
-            switch(findGlyphState) {
-                case 0:
-                    findGlyphColor = new Color(value, findGlyphColor.getGreen(), findGlyphColor.getBlue(), findGlyphColor.getAlpha());
-                    break;
-                case 1:
-                    findGlyphColor = new Color(findGlyphColor.getRed(), value, findGlyphColor.getBlue(), findGlyphColor.getAlpha());
-                    break;
-                case 2:
-                    findGlyphColor = new Color(findGlyphColor.getRed(), findGlyphColor.getGreen(), value, findGlyphColor.getAlpha());
-                    break;
-                case 3:
-                    findGlyphColor = new Color(findGlyphColor.getRed(), findGlyphColor.getGreen(), findGlyphColor.getBlue(), value);
-                    break;
-                default:
-                    this.findGlyphColor = new Color(0);
-                    this.findGlyphState = 0;
-                    return new EmptyGlyphReference();
-            }
-
-            findGlyphState = ++findGlyphState % 4;
-            if (findGlyphState != 0)
-                return new EmptyGlyphReference();
-
-            final Color createdColor = new Color(findGlyphColor.getRGB());
-            findGlyphColor = new Color(0);
-            return new ColorGlyph(createdColor);
-
-            /*int color = currentColor.getRGB();
-            if((color & -67108864) == 0) {
-                color |= -16777216;
-            }
-
-            if(dropShadow) {
-                color = (color & 16579836) >> 2 | color & -16777216;
-            }
-
-            this.setColor(((color >> 16) & 255) / 255f,
-                    ((color >> 8) & 255) / 255f,
-                    ((color >> 0) & 255) / 255f,
-                    ((color >> 24) & 255) / 255f);
-            return 0;*/
-        }
-
-        return this.wrappedFont.findGlyph(letter);
-    }
-
-    @Override
-    public TexturedGlyph getGlyph(final char letter) {
-        if((int) letter >= MARKER && (int) letter <= MARKER + 0xFF) {
-            int value = letter & 0xFF;
-            switch(getGlyphState) {
-                case 0:
-                    getGlyphColor = new Color(value, getGlyphColor.getGreen(), getGlyphColor.getBlue(), getGlyphColor.getAlpha());
-                    break;
-                case 1:
-                    getGlyphColor = new Color(getGlyphColor.getRed(), value, getGlyphColor.getBlue(), getGlyphColor.getAlpha());
-                    break;
-                case 2:
-                    getGlyphColor = new Color(getGlyphColor.getRed(), getGlyphColor.getGreen(), value, getGlyphColor.getAlpha());
-                    break;
-                case 3:
-                    getGlyphColor = new Color(getGlyphColor.getRed(), getGlyphColor.getGreen(), getGlyphColor.getBlue(), value);
-                    break;
-                default:
-                    this.getGlyphColor = new Color(0);
-                    this.getGlyphState = 0;
-                    return new EmptyGlyph();
-            }
-
-            getGlyphState = ++getGlyphState % 4;
-            if (getGlyphState != 0)
-                return new EmptyGlyph();
-
-            final Color createdColor = new Color(getGlyphColor.getRGB());
-            getGlyphColor = new Color(0);
-            return new ColorGlyph(createdColor);
-
-            /*int color = currentColor.getRGB();
-            if((color & -67108864) == 0) {
-                color |= -16777216;
-            }
-
-            if(dropShadow) {
-                color = (color & 16579836) >> 2 | color & -16777216;
-            }
-
-            this.setColor(((color >> 16) & 255) / 255f,
-                    ((color >> 8) & 255) / 255f,
-                    ((color >> 0) & 255) / 255f,
-                    ((color >> 24) & 255) / 255f);
-            return 0;*/
-        }
-
-        return this.wrappedFont.getGlyph(letter);
-    }
-
-    @Override
     public TexturedGlyph obfuscate(final IGlyph glyph) {
         if (glyph instanceof EmptyGlyphReference)
             return new EmptyGlyph();
@@ -163,7 +63,7 @@ public class MultiColoredFont extends Font {
         private final Color color;
 
         public ColorGlyph(final Color color) {
-            super(RenderType.text(new ResourceLocation("default/0")), RenderType.textSeeThrough(new ResourceLocation("default/0")), 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+            super(RenderType.getText(new ResourceLocation("default/0")), RenderType.getTextSeeThrough(new ResourceLocation("default/0")), 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
             this.color = color;
         }
 

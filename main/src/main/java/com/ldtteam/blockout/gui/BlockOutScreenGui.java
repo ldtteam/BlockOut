@@ -5,6 +5,7 @@ import com.ldtteam.blockout.element.IUIElementHost;
 import com.ldtteam.blockout.element.values.AxisDistance;
 import com.ldtteam.blockout.util.math.Vector2d;
 import com.ldtteam.blockout.util.mouse.MouseButton;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.screen.Screen;
@@ -67,7 +68,7 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
     }
 
     @Override
-    public void render(final int mouseX, final int mouseY, final float partialTickTime)
+    public void render(final MatrixStack matrixStack, int mouseX, final int mouseY, final float partialTickTime)
     {
         getInstanceData().setDrawing(true);
 
@@ -90,7 +91,7 @@ public class BlockOutScreenGui extends Screen implements IBlockOutGui
         RenderSystem.disableLighting();
         RenderSystem.disableDepthTest();
 
-        super.render(mouseX, mouseY, partialTickTime);
+        super.render(matrixStack,mouseX, mouseY, partialTickTime);
 
         RenderHelper.enableStandardItemLighting();
         RenderSystem.pushMatrix();

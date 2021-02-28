@@ -8,6 +8,7 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import com.ldtteam.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
@@ -60,7 +61,7 @@ public interface IGuiKeyBuilder
     IGuiKeyBuilder forEntity(@NotNull final Entity entity);
 
     @NotNull
-    IGuiKeyBuilder forPosition(@NotNull final int dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z);
+    IGuiKeyBuilder forPosition(@NotNull final RegistryKey<World> dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z);
 
     @NotNull
     IGuiKeyBuilder forPosition(@NotNull final World world, @NotNull final BlockPos blockPos);

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.fonts.Font;
 import net.minecraft.client.gui.fonts.TexturedGlyph;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.Matrix4f;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;

@@ -3,7 +3,9 @@ package com.ldtteam.blockout.network;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.UUID;
@@ -47,7 +49,7 @@ public interface INetworkingManager {
      * @param message     The message to send
      * @param dimensionId The dimension id to target
      */
-    void sendToDimension(IBlockOutServerToClientMessage message, DimensionType dimensionId);
+    void sendToDimension(IBlockOutServerToClientMessage message, RegistryKey<World> dimensionId);
 
     /**
      * Send this message to the server.

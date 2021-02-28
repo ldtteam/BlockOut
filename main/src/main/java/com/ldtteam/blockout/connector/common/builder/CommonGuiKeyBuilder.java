@@ -14,6 +14,7 @@ import com.ldtteam.blockout.context.EntityContext;
 import com.ldtteam.blockout.context.PositionContext;
 import com.ldtteam.blockout.context.core.IContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +95,7 @@ public class CommonGuiKeyBuilder implements IGuiKeyBuilder
 
     @NotNull
     @Override
-    public IGuiKeyBuilder forPosition(@NotNull final int dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z)
+    public IGuiKeyBuilder forPosition(@NotNull final RegistryKey<World> dimensionId, @NotNull final int x, @NotNull final int y, @NotNull final int z)
     {
         this.context = new PositionContext(dimensionId, x, y, z);
         return this;
