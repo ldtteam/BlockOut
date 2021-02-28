@@ -4,10 +4,13 @@ import com.ldtteam.blockout.connector.core.IGuiController;
 import com.ldtteam.blockout.element.simple.Button;
 import com.ldtteam.blockout.helpers.inventory.InventoryGridHelper;
 import com.ldtteam.blockout_test.tests.IBlockOutGuiTest;
+import net.minecraft.client.world.DimensionRenderInfo;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 public class InventoryGridTest implements IBlockOutGuiTest
@@ -62,7 +65,7 @@ public class InventoryGridTest implements IBlockOutGuiTest
                                                                                    .withItemHandlerManager(iItemHandlerManagerBuilder -> iItemHandlerManagerBuilder
                                                                                                                                            .withTileBasedProvider(
                                                                                                                                              CHEST_INVENTORY_ID,
-                                                                                                                                             0,
+                                                                                                                                             World.OVERWORLD,
                                                                                                                                              new BlockPos(0,
                                                                                                                                                5,
                                                                                                                                                0),

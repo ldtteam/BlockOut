@@ -5,13 +5,12 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public interface IItemHandlerManagerBuilder
 {
@@ -24,12 +23,12 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final TileEntity tileEntity, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, tileEntity.getWorld().getDimension().getType().getId(), tileEntity.getPos(), facing);
+        return this.withTileBasedProvider(id, tileEntity.getWorld().getDimensionKey(), tileEntity.getPos(), facing);
     }
 
     @NotNull
     default IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final BlockPos blockPos, @Nullable Direction facing
+            @NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final BlockPos blockPos, @Nullable Direction facing
     )
     {
         return this.withTileBasedProvider(id, dimId, blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
@@ -37,7 +36,7 @@ public interface IItemHandlerManagerBuilder
 
     @NotNull
     IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
+            @NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final
     Direction facing);
 
     @NotNull
@@ -45,7 +44,7 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final World world, @NotNull final BlockPos blockPos, @Nullable Direction facing
     )
     {
-        return this.withTileBasedProvider(id, world.getDimension().getType().getId(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
+        return this.withTileBasedProvider(id, world.getDimensionKey(), blockPos.getX(), blockPos.getY(), blockPos.getZ(), facing);
     }
 
     @NotNull
@@ -53,12 +52,12 @@ public interface IItemHandlerManagerBuilder
       @NotNull final ResourceLocation id, @NotNull final Entity entity, @Nullable final Direction facing
     )
     {
-        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimension().getType().getId(), entity.getEntityId(), facing);
+        return this.withEntityBasedProvider(id, entity.getEntityWorld().getDimensionKey(), entity.getEntityId(), facing);
     }
 
     @NotNull
     IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int networkId, @Nullable final Direction facing
+            @NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final int networkId, @Nullable final Direction facing
     );
 
     @NotNull

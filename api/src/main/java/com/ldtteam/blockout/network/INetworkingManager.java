@@ -3,7 +3,7 @@ package com.ldtteam.blockout.network;
 import com.ldtteam.blockout.network.message.core.IBlockOutClientToServerMessage;
 import com.ldtteam.blockout.network.message.core.IBlockOutServerToClientMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.UUID;

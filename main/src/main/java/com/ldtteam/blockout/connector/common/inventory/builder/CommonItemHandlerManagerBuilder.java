@@ -9,12 +9,13 @@ import com.ldtteam.blockout.connector.core.inventory.IItemHandlerManager;
 import com.ldtteam.blockout.connector.core.inventory.IItemHandlerProvider;
 import com.ldtteam.blockout.connector.core.inventory.builder.IItemHandlerManagerBuilder;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuilder
 {
@@ -33,7 +34,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withTileBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final Direction facing)
+            @NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final int x, @NotNull final int y, @NotNull final int z, @Nullable final Direction facing)
     {
         return withProvider(new CommonTileBasedProvider(id, dimId, x, y, z, facing));
     }
@@ -41,7 +42,7 @@ public class CommonItemHandlerManagerBuilder implements IItemHandlerManagerBuild
     @NotNull
     @Override
     public IItemHandlerManagerBuilder withEntityBasedProvider(
-      @NotNull final ResourceLocation id, @NotNull final int dimId, @NotNull final int networkId, @Nullable final Direction facing)
+            @NotNull final ResourceLocation id, @NotNull final RegistryKey<World> dimId, @NotNull final int networkId, @Nullable final Direction facing)
     {
         return withProvider(new CommonEntityBasedProvider(id, dimId, networkId, facing));
     }
